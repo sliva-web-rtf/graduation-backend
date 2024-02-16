@@ -9,7 +9,7 @@ public interface ILoggedUserAccessor
     /// Get current logged user identifier.
     /// </summary>
     /// <returns>Current user identifier.</returns>
-    int GetCurrentUserId();
+    Guid GetCurrentUserId();
 
     /// <summary>
     /// Return true if there is any user authenticated.

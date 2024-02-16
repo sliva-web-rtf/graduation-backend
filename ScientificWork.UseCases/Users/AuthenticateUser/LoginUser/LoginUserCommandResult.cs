@@ -8,7 +8,7 @@ public class LoginUserCommandResult
     /// <summary>
     /// Logged user id (if success).
     /// </summary>
-    public int UserId { get; set; }
+    public Guid UserId { get; set; }
 
     /// <summary>
     /// New refresh token.

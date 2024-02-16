@@ -17,7 +17,7 @@ internal class LoggedUserAccessor : ILoggedUserAccessor
     }
 
     /// <inheritdoc />
-    public int GetCurrentUserId()
+    public Guid GetCurrentUserId()
     {
         if (httpContextAccessor.HttpContext == null)
         {

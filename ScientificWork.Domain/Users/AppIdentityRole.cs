@@ -5,6 +5,6 @@ namespace ScientificWork.Domain.Users;
 /// <summary>
 /// Custom application identity role.
 /// </summary>
-public class AppIdentityRole : IdentityRole<int>
+public class AppIdentityRole : IdentityRole<Guid>
 {
 }

@@ -1,4 +1,4 @@
-﻿using ScientificWork.Domain.Professors;
+﻿using ScientificWork.Domain.Common;
 using ScientificWork.Domain.ScientificAreas;
 using ScientificWork.Domain.ScientificInterests;
 using ScientificWork.Domain.ScientificWorks.Enums;
@@ -9,7 +9,7 @@ namespace ScientificWork.Domain.ScientificWorks;
 /// <summary>
 /// Scientific work.
 /// </summary>
-public class ScientificWork
+public class ScientificWork : Entity<Guid>
 {
     public int Id { get; private set; }
 
@@ -31,9 +31,15 @@ public class ScientificWork
 
     public int ProfessorId { get; set; }
 
-    public ICollection<Student> Students { get; set; }
+    private readonly List<Student> students = new();
 
-    public ICollection<ScientificInterest> ScientificInterests { get; set; }
+    public ICollection<Student> Students => students;
 
-    public ICollection<ScientificArea> ScientificAreas { get; set; }
+    private readonly List<ScientificInterest> scientificInterests = new();
+
+    public ICollection<ScientificInterest> ScientificInterests => scientificInterests;
+
+    private readonly List<ScientificArea> scientificAreas = new();
+
+    public ICollection<ScientificArea> ScientificAreas => scientificAreas;
 }

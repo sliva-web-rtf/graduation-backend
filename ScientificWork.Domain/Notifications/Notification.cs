@@ -1,8 +1,9 @@
-﻿using ScientificWork.Domain.Users;
+﻿using ScientificWork.Domain.Common;
+using ScientificWork.Domain.Users;
 
 namespace ScientificWork.Domain.Notifications;
 
-public class Notification
+public class Notification : Entity<Guid>
 {
     public int Id { get; private set; }
 

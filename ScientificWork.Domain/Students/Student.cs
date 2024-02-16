@@ -10,7 +10,7 @@ namespace ScientificWork.Domain.Students;
 /// <summary>
 /// Student.
 /// </summary>
-public class Student
+public class Student : User
 {
     [Key]
     [ForeignKey("User")]
@@ -32,11 +32,19 @@ public class Student
 
     public string Сontacts { get; set; }
 
-    public ICollection<Professor> FavoriteProfessors { get; set; }
+    private readonly List<Professor> favoriteProfessors = new();
 
-    public ICollection<ScientificWorks.ScientificWork> ScientificWorks { get; set; }
+    public ICollection<Professor> FavoriteProfessors => favoriteProfessors;
 
-    public ICollection<ScientificInterest> ScientificInterests { get; set; }
+    private readonly List<ScientificWorks.ScientificWork> scientificWorks = new();
 
-    public ICollection<ScientificArea> ScientificAreas { get; set; }
+    public ICollection<ScientificWorks.ScientificWork> ScientificWorks => scientificWorks;
+
+    private readonly List<ScientificInterest> scientificInterests = new();
+
+    public ICollection<ScientificInterest> ScientificInterests => scientificInterests;
+
+    private readonly List<ScientificArea> scientificAreas = new();
+
+    public ICollection<ScientificArea> ScientificAreas => scientificAreas;
 }

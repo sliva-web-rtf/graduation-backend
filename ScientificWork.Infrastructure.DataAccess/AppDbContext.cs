@@ -13,7 +13,7 @@ namespace ScientificWork.Infrastructure.DataAccess;
 /// <summary>
 /// Application unit of work.
 /// </summary>
-public class AppDbContext : IdentityDbContext<User, AppIdentityRole, int>, IAppDbContext, IDataProtectionKeyContext
+public class AppDbContext : IdentityDbContext<User, AppIdentityRole, Guid>, IAppDbContext, IDataProtectionKeyContext
 {
     /// <inheritdoc/>
     public DbSet<DataProtectionKey> DataProtectionKeys { get; private set; }

@@ -10,5 +10,5 @@ public record GetUserByIdQuery : IRequest<UserDetailsDto>
     /// <summary>
     /// User id.
     /// </summary>
-    public int UserId { get; init; }
+    public Guid UserId { get; init; }
 }

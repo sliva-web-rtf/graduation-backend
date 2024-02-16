@@ -13,15 +13,15 @@ public static class ClaimsPrincipalExtensions
     /// <param name="principal">Claims principal.</param>
     /// <param name="userId">Current logged user id or -1.</param>
     /// <returns><c>True</c> if there is logged user.</returns>
-    public static bool TryGetCurrentUserId(this ClaimsPrincipal principal, out int userId)
+    public static bool TryGetCurrentUserId(this ClaimsPrincipal principal, out Guid userId)
     {
         var currentUserId = principal.FindFirstValue(ClaimTypes.NameIdentifier);
         if (!string.IsNullOrEmpty(currentUserId))
         {
-            userId = int.Parse(currentUserId);
+            userId = Guid.Parse(currentUserId);
             return true;
         }
-        userId = -1;
+        userId = Guid.Empty;
         return false;
     }
 
@@ -30,9 +30,9 @@ public static class ClaimsPrincipalExtensions
     /// </summary>
     /// <param name="principal">Claims principal.</param>
     /// <returns>User id.</returns>
-    public static int GetCurrentUserId(this ClaimsPrincipal principal)
+    public static Guid GetCurrentUserId(this ClaimsPrincipal principal)
     {
-        if (TryGetCurrentUserId(principal, out int userId))
+        if (TryGetCurrentUserId(principal, out Guid userId))
         {
             return userId;
         }

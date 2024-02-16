@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ScientificWork.Domain.Common;
 using ScientificWork.Domain.ScientificAreas;
 using ScientificWork.Domain.ScientificInterests;
 using ScientificWork.Domain.Students;
@@ -10,7 +11,7 @@ namespace ScientificWork.Domain.Professors;
 /// <summary>
 /// Professor.
 /// </summary>
-public class Professor
+public class Professor : User
 {
     [Key]
     [ForeignKey("User")]
@@ -44,11 +45,19 @@ public class Professor
 
     public string Сontacts { get; set; }
 
-    public ICollection<ScientificWorks.ScientificWork> ScientificWorks { get; set; }
+    private readonly List<ScientificWorks.ScientificWork> scientificWorks = new();
 
-    public ICollection<Student> FavoriteStudent { get; set; }
+    public IReadOnlyList<ScientificWorks.ScientificWork> ScientificWorks => scientificWorks.AsReadOnly();
 
-    public ICollection<ScientificInterest> ScientificInterests { get; set; }
+    private readonly List<Student> favoriteStudents = new();
 
-    public ICollection<ScientificArea> ScientificAreas { get; set; }
+    public IReadOnlyList<Student> FavoriteStudents => favoriteStudents;
+
+    private readonly List<ScientificInterest> scientificInterests = new();
+
+    public ICollection<ScientificInterest> ScientificInterests => scientificInterests;
+
+    private readonly List<ScientificArea> scientificAreas = new();
+
+    public ICollection<ScientificArea> ScientificAreas => scientificAreas;
 }

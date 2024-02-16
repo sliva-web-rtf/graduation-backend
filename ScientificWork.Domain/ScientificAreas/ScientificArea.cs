@@ -1,4 +1,5 @@
-﻿using ScientificWork.Domain.Professors;
+﻿using ScientificWork.Domain.Common;
+using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.Students;
 
 namespace ScientificWork.Domain.ScientificAreas;
@@ -6,15 +7,21 @@ namespace ScientificWork.Domain.ScientificAreas;
 /// <summary>
 /// Scientific area.
 /// </summary>
-public class ScientificArea
+public class ScientificArea : Entity<Guid>
 {
     public int Id { get; private set; }
 
     public string Name { get; set; }
 
-    public ICollection<Student> Students { get; set; }
+    private readonly List<Student> students = new();
 
-    public ICollection<Professor> Professors { get; set; }
+    public ICollection<Student> Students => students;
 
-    public ICollection<ScientificWorks.ScientificWork> ScientificWorks { get; set; }
+    private readonly List<Professor> professors = new();
+
+    public ICollection<Professor> Professors => professors;
+
+    private readonly List<ScientificWorks.ScientificWork> scientificWorks = new();
+
+    public ICollection<ScientificWorks.ScientificWork> ScientificWorks => scientificWorks;
 }

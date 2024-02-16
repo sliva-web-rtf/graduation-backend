@@ -2,15 +2,13 @@
 using Microsoft.AspNetCore.Identity;
 using Saritasa.Tools.Common.Utils;
 using ScientificWork.Domain.Notifications;
-using ScientificWork.Domain.Professors;
-using ScientificWork.Domain.Students;
 
 namespace ScientificWork.Domain.Users;
 
 /// <summary>
 /// Custom application user entity.
 /// </summary>
-public class User : IdentityUser<int>
+public class User : IdentityUser<Guid>
 {
     /// <summary>
     /// First name.
@@ -57,5 +55,7 @@ public class User : IdentityUser<int>
     /// </summary>
     public DateTime? RemovedAt { get; set; }
 
-    public ICollection<Notification> Notifications { get; set; }
+    private readonly List<Notification> notifications = new();
+
+    public ICollection<Notification> Notifications => notifications;
 }
