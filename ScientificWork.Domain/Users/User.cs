@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using Saritasa.Tools.Common.Utils;
+using ScientificWork.Domain.Notifications;
 using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.Students;
 
@@ -55,4 +56,6 @@ public class User : IdentityUser<int>
     /// Indicates when the user was removed.
     /// </summary>
     public DateTime? RemovedAt { get; set; }
+
+    public ICollection<Notification> Notifications { get; set; }
 }

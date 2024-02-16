@@ -1,5 +1,7 @@
 ﻿using ScientificWork.Domain.Professors;
+using ScientificWork.Domain.ScientificAreas;
 using ScientificWork.Domain.ScientificInterests;
+using ScientificWork.Domain.ScientificWorks.Enums;
 using ScientificWork.Domain.Students;
 
 namespace ScientificWork.Domain.ScientificWorks;
@@ -15,15 +17,15 @@ public class ScientificWork
 
     public string Titile { get; set; }
 
-    public string FieldOfScience { get; set; }
-
     public int Limit { get; set; }
+
+    public string Problem { get; set; }
+
+    public string Relevance { get; set; }
 
     public int Fullness { get; set; }
 
-    public bool Approve { get; set; }
-
-    public int Term { get; set; }
+    public WorkStatus WorkStatus { get; set; }
 
     public DateTime CreateAt { get; set; }
 
@@ -32,4 +34,6 @@ public class ScientificWork
     public ICollection<Student> Students { get; set; }
 
     public ICollection<ScientificInterest> ScientificInterests { get; set; }
+
+    public ICollection<ScientificArea> ScientificAreas { get; set; }
 }
