@@ -46,8 +46,6 @@ public class Professor
 
     public ICollection<ScientificWorks.ScientificWork> ScientificWorks { get; set; }
 
-    public ICollection<Student> FavoriteStudent { get; set; }
-
     public ICollection<ScientificInterest> ScientificInterests { get; set; }
 
     public ICollection<ScientificArea> ScientificAreas { get; set; }

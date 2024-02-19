@@ -27,6 +27,12 @@ public class User : IdentityUser<int>
     required public string LastName { get; set; }
 
     /// <summary>
+    /// Patronymic.
+    /// </summary>
+    [MaxLength(255)]
+    public string? Patronymic { get; set; }
+
+    /// <summary>
     /// Full name, concat of first name and last name.
     /// </summary>
     public string FullName => StringUtils.JoinIgnoreEmpty(separator: " ", FirstName, LastName);
@@ -58,4 +64,6 @@ public class User : IdentityUser<int>
     public DateTime? RemovedAt { get; set; }
 
     public ICollection<Notification> Notifications { get; set; }
+
+    public int AvatarImageId { get; set; }
 }

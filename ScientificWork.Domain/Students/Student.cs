@@ -28,11 +28,9 @@ public class Student
 
     public string? RISCUri { get; set; }
 
-    public string URPUri { get; set; }
+    public string? URPUri { get; set; }
 
     public string Сontacts { get; set; }
-
-    public ICollection<Professor> FavoriteProfessors { get; set; }
 
     public ICollection<ScientificWorks.ScientificWork> ScientificWorks { get; set; }
 

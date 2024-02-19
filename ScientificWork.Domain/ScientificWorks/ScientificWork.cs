@@ -29,7 +29,9 @@ public class ScientificWork
 
     public DateTime CreateAt { get; set; }
 
-    public int ProfessorId { get; set; }
+    public int? ProfessorId { get; set; }
+
+    public int ImageId { get; set; }
 
     public ICollection<Student> Students { get; set; }
 
