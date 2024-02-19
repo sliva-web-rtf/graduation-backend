@@ -29,7 +29,9 @@ public class ScientificWork : Entity<Guid>
 
     public DateTime CreateAt { get; set; }
 
-    public int ProfessorId { get; set; }
+    public int? ProfessorId { get; set; }
+
+    public int ImageId { get; set; }
 
     private readonly List<Student> students = new();
 

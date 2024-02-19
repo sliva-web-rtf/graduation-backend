@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.ScientificAreas;
 using ScientificWork.Domain.ScientificInterests;
 using ScientificWork.Domain.Users;
@@ -28,15 +27,11 @@ public class Student : User
 
     public string? RISCUri { get; set; }
 
-    public string URPUri { get; set; }
+    public string? URPUri { get; set; }
 
     public string Сontacts { get; set; }
 
-    private readonly List<Professor> favoriteProfessors = new();
-
-    public ICollection<Professor> FavoriteProfessors => favoriteProfessors;
-
-    private readonly List<ScientificWorks.ScientificWork> scientificWorks = new();
+   private readonly List<ScientificWorks.ScientificWork> scientificWorks = new();
 
     public ICollection<ScientificWorks.ScientificWork> ScientificWorks => scientificWorks;
 

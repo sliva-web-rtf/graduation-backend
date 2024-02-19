@@ -1,9 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using ScientificWork.Domain.Common;
 using ScientificWork.Domain.ScientificAreas;
 using ScientificWork.Domain.ScientificInterests;
-using ScientificWork.Domain.Students;
 using ScientificWork.Domain.Users;
 
 namespace ScientificWork.Domain.Professors;
@@ -48,10 +46,6 @@ public class Professor : User
     private readonly List<ScientificWorks.ScientificWork> scientificWorks = new();
 
     public IReadOnlyList<ScientificWorks.ScientificWork> ScientificWorks => scientificWorks.AsReadOnly();
-
-    private readonly List<Student> favoriteStudents = new();
-
-    public IReadOnlyList<Student> FavoriteStudents => favoriteStudents;
 
     private readonly List<ScientificInterest> scientificInterests = new();
 

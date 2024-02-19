@@ -50,7 +50,8 @@ public class Startup
 
         // Health check.
         var databaseConnectionString = configuration.GetConnectionString("AppDatabase")
-            ?? throw new ArgumentNullException("ConnectionStrings:AppDatabase", "Database connection string is not initialized");
+                                       ?? throw new ArgumentNullException("ConnectionStrings:AppDatabase",
+                                           "Database connection string is not initialized");
         services.AddHealthChecks()
             .AddNpgSql(databaseConnectionString);
 
@@ -76,14 +77,14 @@ public class Startup
         var jwtSecretKey = configuration["Jwt:SecretKey"] ?? throw new ArgumentNullException("Jwt:SecretKey");
         var jwtIssuer = configuration["Jwt:Issuer"] ?? throw new ArgumentNullException("Jwt:Issuer");
         services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(new JwtBearerOptionsSetup(
-            jwtSecretKey,
-            jwtIssuer).Setup
-        );
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(new JwtBearerOptionsSetup(
+                jwtSecretKey,
+                jwtIssuer).Setup
+            );
 
         // Database.
         services.AddDbContext<AppDbContext>(
@@ -114,11 +115,8 @@ public class Startup
     public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
     {
         // Swagger
-        if (!environment.IsProduction())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI(new SwaggerUIOptionsSetup().Setup);
-        }
+        app.UseSwagger();
+        app.UseSwaggerUI(new SwaggerUIOptionsSetup().Setup);
 
         // Custom middlewares.
         app.UseMiddleware<ApiExceptionMiddleware>();
@@ -128,10 +126,7 @@ public class Startup
 
         // CORS.
         app.UseCors(CorsOptionsSetup.CorsPolicyName);
-        app.UseForwardedHeaders(new ForwardedHeadersOptions
-        {
-            ForwardedHeaders = ForwardedHeaders.All
-        });
+        app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.All });
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>

@@ -25,6 +25,12 @@ public class User : IdentityUser<Guid>
     required public string LastName { get; set; }
 
     /// <summary>
+    /// Patronymic.
+    /// </summary>
+    [MaxLength(255)]
+    public string? Patronymic { get; set; }
+
+    /// <summary>
     /// Full name, concat of first name and last name.
     /// </summary>
     public string FullName => StringUtils.JoinIgnoreEmpty(separator: " ", FirstName, LastName);
@@ -54,6 +60,8 @@ public class User : IdentityUser<Guid>
     /// Indicates when the user was removed.
     /// </summary>
     public DateTime? RemovedAt { get; set; }
+
+    public int AvatarImageId { get; set; }
 
     private readonly List<Notification> notifications = new();
 
