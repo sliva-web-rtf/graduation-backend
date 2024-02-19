@@ -9,8 +9,6 @@ namespace ScientificWork.Domain.ScientificInterests;
 /// </summary>
 public class ScientificInterest : Entity<Guid>
 {
-    public int Id { get; private set; }
-
     public string Name { get; set; }
 
     private readonly List<Student> students = new();

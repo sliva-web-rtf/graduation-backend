@@ -11,12 +11,6 @@ namespace ScientificWork.Domain.Students;
 /// </summary>
 public class Student : User
 {
-    [Key]
-    [ForeignKey("User")]
-    public int Id { get; private set; }
-
-    public User User { get; set; }
-
     public string? Degree { get; set; }
 
     public int PublicationsCount { get; set; }
@@ -31,7 +25,7 @@ public class Student : User
 
     public string Сontacts { get; set; }
 
-   private readonly List<ScientificWorks.ScientificWork> scientificWorks = new();
+    private readonly List<ScientificWorks.ScientificWork> scientificWorks = new();
 
     public ICollection<ScientificWorks.ScientificWork> ScientificWorks => scientificWorks;
 

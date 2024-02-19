@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using ScientificWork.Domain.Notifications;
 using ScientificWork.Domain.Professors;
+using ScientificWork.Domain.ScientificAreas;
 using ScientificWork.Domain.ScientificInterests;
 using ScientificWork.Domain.Students;
 using ScientificWork.Domain.Users;
@@ -29,6 +31,10 @@ public class AppDbContext : IdentityDbContext<User, AppIdentityRole, Guid>, IApp
 
     /// <inheritdoc/>
     public DbSet<ScientificInterest> ScientificInterests { get; private set; }
+
+    public DbSet<Notification> Notifications { get; private set; }
+
+    public DbSet<ScientificArea> ScientificAreas { get; private set; }
 
     /// <summary>
     /// Constructor.

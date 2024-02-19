@@ -12,7 +12,7 @@ using ScientificWork.Infrastructure.DataAccess;
 namespace ScientificWork.Infrastructure.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240207183939_Init")]
+    [Migration("20240219191214_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -46,7 +46,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.ToTable("DataProtectionKeys");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -62,8 +62,8 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsUnicode(false)
                         .HasColumnType("text");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -72,7 +72,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -88,8 +88,8 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsUnicode(false)
                         .HasColumnType("text");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -98,7 +98,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.ToTable("AspNetUserClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .IsUnicode(false)
@@ -112,8 +112,8 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsUnicode(false)
                         .HasColumnType("text");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -122,13 +122,13 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.ToTable("AspNetUserLogins", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -137,10 +137,10 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("LoginProvider")
                         .IsUnicode(false)
@@ -159,13 +159,28 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ProfessorScientificArea", b =>
+                {
+                    b.Property<Guid>("ProfessorsId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ScientificAreasId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("ProfessorsId", "ScientificAreasId");
+
+                    b.HasIndex("ScientificAreasId");
+
+                    b.ToTable("ProfessorScientificArea");
+                });
+
             modelBuilder.Entity("ProfessorScientificInterest", b =>
                 {
-                    b.Property<int>("ProfessorsId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ProfessorsId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("ScientificInterestsId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ScientificInterestsId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("ProfessorsId", "ScientificInterestsId");
 
@@ -174,28 +189,43 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.ToTable("ProfessorScientificInterest");
                 });
 
-            modelBuilder.Entity("ProfessorStudent", b =>
+            modelBuilder.Entity("ScientificAreaScientificWork", b =>
                 {
-                    b.Property<int>("FavoriteProfessorsId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ScientificAreasId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("FavoriteStudentId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ScientificWorksId")
+                        .HasColumnType("uuid");
 
-                    b.HasKey("FavoriteProfessorsId", "FavoriteStudentId");
+                    b.HasKey("ScientificAreasId", "ScientificWorksId");
 
-                    b.HasIndex("FavoriteStudentId");
+                    b.HasIndex("ScientificWorksId");
 
-                    b.ToTable("ProfessorStudent");
+                    b.ToTable("ScientificAreaScientificWork");
+                });
+
+            modelBuilder.Entity("ScientificAreaStudent", b =>
+                {
+                    b.Property<Guid>("ScientificAreasId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("StudentsId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("ScientificAreasId", "StudentsId");
+
+                    b.HasIndex("StudentsId");
+
+                    b.ToTable("ScientificAreaStudent");
                 });
 
             modelBuilder.Entity("ScientificInterestScientificWork", b =>
                 {
-                    b.Property<int>("ScientificInterestsId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ScientificInterestsId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("ScientificWorksId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ScientificWorksId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("ScientificInterestsId", "ScientificWorksId");
 
@@ -206,11 +236,11 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
             modelBuilder.Entity("ScientificInterestStudent", b =>
                 {
-                    b.Property<int>("ScientificInterestsId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ScientificInterestsId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("StudentsId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("StudentsId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("ScientificInterestsId", "StudentsId");
 
@@ -219,49 +249,51 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.ToTable("ScientificInterestStudent");
                 });
 
-            modelBuilder.Entity("ScientificWork.Domain.Professors.Professor", b =>
+            modelBuilder.Entity("ScientificWork.Domain.Notifications.Notification", b =>
                 {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("Auditorium")
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Message")
                         .IsRequired()
                         .IsUnicode(false)
                         .HasColumnType("text");
 
-                    b.Property<string>("Degree")
-                        .IsRequired()
-                        .IsUnicode(false)
-                        .HasColumnType("text");
+                    b.Property<Guid>("ReceiverId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("Fullness")
-                        .HasColumnType("integer");
+                    b.HasKey("Id");
 
-                    b.Property<int>("Limit")
-                        .HasColumnType("integer");
+                    b.HasIndex("ReceiverId");
 
-                    b.Property<string>("Post")
-                        .IsRequired()
-                        .IsUnicode(false)
-                        .HasColumnType("text");
+                    b.ToTable("Notifications");
+                });
 
-                    b.Property<string>("Titile")
+            modelBuilder.Entity("ScientificWork.Domain.ScientificAreas.ScientificArea", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .IsUnicode(false)
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Professors");
+                    b.ToTable("ScientificAreas");
                 });
 
             modelBuilder.Entity("ScientificWork.Domain.ScientificInterests.ScientificInterest", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -275,25 +307,18 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
             modelBuilder.Entity("ScientificWork.Domain.ScientificWorks.ScientificWork", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Approve")
-                        .HasColumnType("boolean");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("FieldOfScience")
-                        .IsRequired()
-                        .IsUnicode(false)
-                        .HasColumnType("text");
-
                     b.Property<int>("Fullness")
                         .HasColumnType("integer");
+
+                    b.Property<Guid>("ImageId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("Limit")
                         .HasColumnType("integer");
@@ -303,16 +328,26 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsUnicode(false)
                         .HasColumnType("text");
 
-                    b.Property<int>("ProfessorId")
-                        .HasColumnType("integer");
+                    b.Property<string>("Problem")
+                        .IsRequired()
+                        .IsUnicode(false)
+                        .HasColumnType("text");
 
-                    b.Property<int>("Term")
-                        .HasColumnType("integer");
+                    b.Property<Guid?>("ProfessorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Relevance")
+                        .IsRequired()
+                        .IsUnicode(false)
+                        .HasColumnType("text");
 
                     b.Property<string>("Titile")
                         .IsRequired()
                         .IsUnicode(false)
                         .HasColumnType("text");
+
+                    b.Property<int>("WorkStatus")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -321,27 +356,11 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.ToTable("ScientificWorks");
                 });
 
-            modelBuilder.Entity("ScientificWork.Domain.Students.Student", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Degree")
-                        .IsUnicode(false)
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Students");
-                });
-
             modelBuilder.Entity("ScientificWork.Domain.Users.AppIdentityRole", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -369,14 +388,15 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
             modelBuilder.Entity("ScientificWork.Domain.Users.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
+
+                    b.Property<Guid>("AvatarImageId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -434,6 +454,11 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsUnicode(false)
                         .HasColumnType("text");
 
+                    b.Property<string>("Patronymic")
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("character varying(255)");
+
                     b.Property<string>("PhoneNumber")
                         .IsUnicode(false)
                         .HasColumnType("text");
@@ -478,16 +503,18 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.HasIndex(new[] { "NormalizedEmail" }, "NormalizedEmail")
                         .IsUnique();
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("Users", (string)null);
+
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("ScientificWorkStudent", b =>
                 {
-                    b.Property<int>("ScientificWorksId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("ScientificWorksId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int>("StudentsId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("StudentsId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("ScientificWorksId", "StudentsId");
 
@@ -496,7 +523,101 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.ToTable("ScientificWorkStudent");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+            modelBuilder.Entity("ScientificWork.Domain.Professors.Professor", b =>
+                {
+                    b.HasBaseType("ScientificWork.Domain.Users.User");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .IsUnicode(false)
+                        .HasColumnType("text");
+
+                    b.Property<string>("Degree")
+                        .IsRequired()
+                        .IsUnicode(false)
+                        .HasColumnType("text");
+
+                    b.Property<int>("Fullness")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("HIndex")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Limit")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Post")
+                        .IsRequired()
+                        .IsUnicode(false)
+                        .HasColumnType("text");
+
+                    b.Property<int>("PublicationsCount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("RISCUri")
+                        .IsUnicode(false)
+                        .HasColumnType("text");
+
+                    b.Property<string>("ScopusUri")
+                        .IsUnicode(false)
+                        .HasColumnType("text");
+
+                    b.Property<string>("Titile")
+                        .IsRequired()
+                        .IsUnicode(false)
+                        .HasColumnType("text");
+
+                    b.Property<string>("URPUri")
+                        .IsRequired()
+                        .IsUnicode(false)
+                        .HasColumnType("text");
+
+                    b.Property<int>("WorkExperienceYears")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Сontacts")
+                        .IsRequired()
+                        .IsUnicode(false)
+                        .HasColumnType("text");
+
+                    b.ToTable("Professors", (string)null);
+                });
+
+            modelBuilder.Entity("ScientificWork.Domain.Students.Student", b =>
+                {
+                    b.HasBaseType("ScientificWork.Domain.Users.User");
+
+                    b.Property<string>("Degree")
+                        .IsUnicode(false)
+                        .HasColumnType("text");
+
+                    b.Property<int>("HIndex")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PublicationsCount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("RISCUri")
+                        .IsUnicode(false)
+                        .HasColumnType("text");
+
+                    b.Property<string>("ScopusUri")
+                        .IsUnicode(false)
+                        .HasColumnType("text");
+
+                    b.Property<string>("URPUri")
+                        .IsUnicode(false)
+                        .HasColumnType("text");
+
+                    b.Property<string>("Сontacts")
+                        .IsRequired()
+                        .IsUnicode(false)
+                        .HasColumnType("text");
+
+                    b.ToTable("Students", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("ScientificWork.Domain.Users.AppIdentityRole", null)
                         .WithMany()
@@ -505,7 +626,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
                     b.HasOne("ScientificWork.Domain.Users.User", null)
                         .WithMany()
@@ -514,7 +635,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
                     b.HasOne("ScientificWork.Domain.Users.User", null)
                         .WithMany()
@@ -523,7 +644,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
                     b.HasOne("ScientificWork.Domain.Users.AppIdentityRole", null)
                         .WithMany()
@@ -538,11 +659,26 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
                     b.HasOne("ScientificWork.Domain.Users.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ProfessorScientificArea", b =>
+                {
+                    b.HasOne("ScientificWork.Domain.Professors.Professor", null)
+                        .WithMany()
+                        .HasForeignKey("ProfessorsId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ScientificWork.Domain.ScientificAreas.ScientificArea", null)
+                        .WithMany()
+                        .HasForeignKey("ScientificAreasId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
@@ -562,17 +698,32 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ProfessorStudent", b =>
+            modelBuilder.Entity("ScientificAreaScientificWork", b =>
                 {
-                    b.HasOne("ScientificWork.Domain.Professors.Professor", null)
+                    b.HasOne("ScientificWork.Domain.ScientificAreas.ScientificArea", null)
                         .WithMany()
-                        .HasForeignKey("FavoriteProfessorsId")
+                        .HasForeignKey("ScientificAreasId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ScientificWork.Domain.ScientificWorks.ScientificWork", null)
+                        .WithMany()
+                        .HasForeignKey("ScientificWorksId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ScientificAreaStudent", b =>
+                {
+                    b.HasOne("ScientificWork.Domain.ScientificAreas.ScientificArea", null)
+                        .WithMany()
+                        .HasForeignKey("ScientificAreasId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("ScientificWork.Domain.Students.Student", null)
                         .WithMany()
-                        .HasForeignKey("FavoriteStudentId")
+                        .HasForeignKey("StudentsId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
@@ -607,15 +758,15 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ScientificWork.Domain.Professors.Professor", b =>
+            modelBuilder.Entity("ScientificWork.Domain.Notifications.Notification", b =>
                 {
-                    b.HasOne("ScientificWork.Domain.Users.User", "User")
-                        .WithMany()
-                        .HasForeignKey("Id")
+                    b.HasOne("ScientificWork.Domain.Users.User", "Receiver")
+                        .WithMany("Notifications")
+                        .HasForeignKey("ReceiverId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("Receiver");
                 });
 
             modelBuilder.Entity("ScientificWork.Domain.ScientificWorks.ScientificWork", b =>
@@ -623,19 +774,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.HasOne("ScientificWork.Domain.Professors.Professor", null)
                         .WithMany("ScientificWorks")
                         .HasForeignKey("ProfessorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ScientificWork.Domain.Students.Student", b =>
-                {
-                    b.HasOne("ScientificWork.Domain.Users.User", "User")
-                        .WithMany()
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("ScientificWorkStudent", b =>
@@ -651,6 +790,29 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .HasForeignKey("StudentsId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ScientificWork.Domain.Professors.Professor", b =>
+                {
+                    b.HasOne("ScientificWork.Domain.Users.User", null)
+                        .WithOne()
+                        .HasForeignKey("ScientificWork.Domain.Professors.Professor", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ScientificWork.Domain.Students.Student", b =>
+                {
+                    b.HasOne("ScientificWork.Domain.Users.User", null)
+                        .WithOne()
+                        .HasForeignKey("ScientificWork.Domain.Students.Student", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ScientificWork.Domain.Users.User", b =>
+                {
+                    b.Navigation("Notifications");
                 });
 
             modelBuilder.Entity("ScientificWork.Domain.Professors.Professor", b =>

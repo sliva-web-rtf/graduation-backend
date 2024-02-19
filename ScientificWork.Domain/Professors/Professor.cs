@@ -11,12 +11,6 @@ namespace ScientificWork.Domain.Professors;
 /// </summary>
 public class Professor : User
 {
-    [Key]
-    [ForeignKey("User")]
-    public int Id { get; private set; }
-
-    public User User { get; set; }
-
     public string Address { get; set; }
 
     public string Degree { get; set; }

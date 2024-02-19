@@ -5,13 +5,11 @@ namespace ScientificWork.Domain.Notifications;
 
 public class Notification : Entity<Guid>
 {
-    public int Id { get; private set; }
-
     public string Message { get; set; }
 
     public DateTime DateTime { get; set; }
 
-    public User User { get; set; }
+    public User Receiver { get; set; }
 
-    public int UserId { get; set; }
+    public Guid ReceiverId { get; set; }
 }

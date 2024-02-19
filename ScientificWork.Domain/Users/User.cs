@@ -61,7 +61,7 @@ public class User : IdentityUser<Guid>
     /// </summary>
     public DateTime? RemovedAt { get; set; }
 
-    public int AvatarImageId { get; set; }
+    public Guid AvatarImageId { get; set; }
 
     private readonly List<Notification> notifications = new();
 

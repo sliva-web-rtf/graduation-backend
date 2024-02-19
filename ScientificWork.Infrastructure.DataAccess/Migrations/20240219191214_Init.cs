@@ -16,8 +16,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "character varying(256)", unicode: false, maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "character varying(256)", unicode: false, maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "text", unicode: false, nullable: true)
@@ -25,39 +24,6 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    FirstName = table.Column<string>(type: "character varying(255)", unicode: false, maxLength: 255, nullable: false),
-                    LastName = table.Column<string>(type: "character varying(255)", unicode: false, maxLength: 255, nullable: false),
-                    LastLogin = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    LastTokenResetAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now() at time zone 'UTC'"),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now() at time zone 'UTC'"),
-                    RemovedAt = table.Column<DateTime>(type: "timestamp", nullable: true, comment: "For soft-deletes"),
-                    UserName = table.Column<string>(type: "character varying(256)", unicode: false, maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "character varying(256)", unicode: false, maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "character varying(256)", unicode: false, maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "character varying(256)", unicode: false, maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    PasswordHash = table.Column<string>(type: "text", unicode: false, nullable: true),
-                    SecurityStamp = table.Column<string>(type: "text", unicode: false, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "text", unicode: false, nullable: true),
-                    PhoneNumber = table.Column<string>(type: "text", unicode: false, nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -75,11 +41,22 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ScientificAreas",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", unicode: false, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ScientificAreas", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ScientificInterests",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", unicode: false, nullable: false)
                 },
                 constraints: table =>
@@ -88,12 +65,46 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FirstName = table.Column<string>(type: "character varying(255)", unicode: false, maxLength: 255, nullable: false),
+                    LastName = table.Column<string>(type: "character varying(255)", unicode: false, maxLength: 255, nullable: false),
+                    Patronymic = table.Column<string>(type: "character varying(255)", unicode: false, maxLength: 255, nullable: true),
+                    LastLogin = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    LastTokenResetAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now() at time zone 'UTC'"),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now() at time zone 'UTC'"),
+                    RemovedAt = table.Column<DateTime>(type: "timestamp", nullable: true, comment: "For soft-deletes"),
+                    AvatarImageId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserName = table.Column<string>(type: "character varying(256)", unicode: false, maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "character varying(256)", unicode: false, maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "character varying(256)", unicode: false, maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "character varying(256)", unicode: false, maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
+                    PasswordHash = table.Column<string>(type: "text", unicode: false, nullable: true),
+                    SecurityStamp = table.Column<string>(type: "text", unicode: false, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "text", unicode: false, nullable: true),
+                    PhoneNumber = table.Column<string>(type: "text", unicode: false, nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "boolean", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    RoleId = table.Column<int>(type: "integer", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uuid", nullable: false),
                     ClaimType = table.Column<string>(type: "text", unicode: false, nullable: true),
                     ClaimValue = table.Column<string>(type: "text", unicode: false, nullable: true)
                 },
@@ -114,7 +125,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     ClaimType = table.Column<string>(type: "text", unicode: false, nullable: true),
                     ClaimValue = table.Column<string>(type: "text", unicode: false, nullable: true)
                 },
@@ -122,9 +133,9 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                        name: "FK_AspNetUserClaims_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "AspNetUsers",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -136,15 +147,15 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     LoginProvider = table.Column<string>(type: "text", unicode: false, nullable: false),
                     ProviderKey = table.Column<string>(type: "text", unicode: false, nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "text", unicode: false, nullable: true),
-                    UserId = table.Column<int>(type: "integer", nullable: false)
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
                     table.ForeignKey(
-                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                        name: "FK_AspNetUserLogins_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "AspNetUsers",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -153,8 +164,8 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(type: "integer", nullable: false),
-                    RoleId = table.Column<int>(type: "integer", nullable: false)
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -166,9 +177,9 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                        name: "FK_AspNetUserRoles_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "AspNetUsers",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -177,7 +188,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     LoginProvider = table.Column<string>(type: "text", unicode: false, nullable: false),
                     Name = table.Column<string>(type: "text", unicode: false, nullable: false),
                     Value = table.Column<string>(type: "text", unicode: false, nullable: true)
@@ -186,9 +197,29 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
                     table.ForeignKey(
-                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
+                        name: "FK_AspNetUserTokens_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "AspNetUsers",
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Message = table.Column<string>(type: "text", unicode: false, nullable: false),
+                    DateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ReceiverId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Notifications_Users_ReceiverId",
+                        column: x => x.ReceiverId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -197,39 +228,76 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 name: "Professors",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false),
-                    Auditorium = table.Column<string>(type: "text", unicode: false, nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Address = table.Column<string>(type: "text", unicode: false, nullable: false),
                     Degree = table.Column<string>(type: "text", unicode: false, nullable: false),
                     Limit = table.Column<int>(type: "integer", nullable: false),
                     Fullness = table.Column<int>(type: "integer", nullable: false),
                     Post = table.Column<string>(type: "text", unicode: false, nullable: false),
-                    Titile = table.Column<string>(type: "text", unicode: false, nullable: false)
+                    PublicationsCount = table.Column<int>(type: "integer", nullable: false),
+                    WorkExperienceYears = table.Column<int>(type: "integer", nullable: false),
+                    Titile = table.Column<string>(type: "text", unicode: false, nullable: false),
+                    HIndex = table.Column<int>(type: "integer", nullable: false),
+                    ScopusUri = table.Column<string>(type: "text", unicode: false, nullable: true),
+                    RISCUri = table.Column<string>(type: "text", unicode: false, nullable: true),
+                    URPUri = table.Column<string>(type: "text", unicode: false, nullable: false),
+                    Сontacts = table.Column<string>(type: "text", unicode: false, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Professors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Professors_AspNetUsers_Id",
+                        name: "FK_Professors_Users_Id",
                         column: x => x.Id,
-                        principalTable: "AspNetUsers",
+                        principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Students",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false),
-                    Degree = table.Column<string>(type: "text", unicode: false, nullable: true)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Degree = table.Column<string>(type: "text", unicode: false, nullable: true),
+                    PublicationsCount = table.Column<int>(type: "integer", nullable: false),
+                    HIndex = table.Column<int>(type: "integer", nullable: false),
+                    ScopusUri = table.Column<string>(type: "text", unicode: false, nullable: true),
+                    RISCUri = table.Column<string>(type: "text", unicode: false, nullable: true),
+                    URPUri = table.Column<string>(type: "text", unicode: false, nullable: true),
+                    Сontacts = table.Column<string>(type: "text", unicode: false, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Students", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Students_AspNetUsers_Id",
+                        name: "FK_Students_Users_Id",
                         column: x => x.Id,
-                        principalTable: "AspNetUsers",
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProfessorScientificArea",
+                columns: table => new
+                {
+                    ProfessorsId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ScientificAreasId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProfessorScientificArea", x => new { x.ProfessorsId, x.ScientificAreasId });
+                    table.ForeignKey(
+                        name: "FK_ProfessorScientificArea_Professors_ProfessorsId",
+                        column: x => x.ProfessorsId,
+                        principalTable: "Professors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ProfessorScientificArea_ScientificAreas_ScientificAreasId",
+                        column: x => x.ScientificAreasId,
+                        principalTable: "ScientificAreas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -238,8 +306,8 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 name: "ProfessorScientificInterest",
                 columns: table => new
                 {
-                    ProfessorsId = table.Column<int>(type: "integer", nullable: false),
-                    ScientificInterestsId = table.Column<int>(type: "integer", nullable: false)
+                    ProfessorsId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ScientificInterestsId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -262,17 +330,17 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 name: "ScientificWorks",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", unicode: false, nullable: false),
                     Titile = table.Column<string>(type: "text", unicode: false, nullable: false),
-                    FieldOfScience = table.Column<string>(type: "text", unicode: false, nullable: false),
                     Limit = table.Column<int>(type: "integer", nullable: false),
+                    Problem = table.Column<string>(type: "text", unicode: false, nullable: false),
+                    Relevance = table.Column<string>(type: "text", unicode: false, nullable: false),
                     Fullness = table.Column<int>(type: "integer", nullable: false),
-                    Approve = table.Column<bool>(type: "boolean", nullable: false),
-                    Term = table.Column<int>(type: "integer", nullable: false),
+                    WorkStatus = table.Column<int>(type: "integer", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ProfessorId = table.Column<int>(type: "integer", nullable: false)
+                    ProfessorId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ImageId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -286,24 +354,24 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProfessorStudent",
+                name: "ScientificAreaStudent",
                 columns: table => new
                 {
-                    FavoriteProfessorsId = table.Column<int>(type: "integer", nullable: false),
-                    FavoriteStudentId = table.Column<int>(type: "integer", nullable: false)
+                    ScientificAreasId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StudentsId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProfessorStudent", x => new { x.FavoriteProfessorsId, x.FavoriteStudentId });
+                    table.PrimaryKey("PK_ScientificAreaStudent", x => new { x.ScientificAreasId, x.StudentsId });
                     table.ForeignKey(
-                        name: "FK_ProfessorStudent_Professors_FavoriteProfessorsId",
-                        column: x => x.FavoriteProfessorsId,
-                        principalTable: "Professors",
+                        name: "FK_ScientificAreaStudent_ScientificAreas_ScientificAreasId",
+                        column: x => x.ScientificAreasId,
+                        principalTable: "ScientificAreas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ProfessorStudent_Students_FavoriteStudentId",
-                        column: x => x.FavoriteStudentId,
+                        name: "FK_ScientificAreaStudent_Students_StudentsId",
+                        column: x => x.StudentsId,
                         principalTable: "Students",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -313,8 +381,8 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 name: "ScientificInterestStudent",
                 columns: table => new
                 {
-                    ScientificInterestsId = table.Column<int>(type: "integer", nullable: false),
-                    StudentsId = table.Column<int>(type: "integer", nullable: false)
+                    ScientificInterestsId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StudentsId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -334,11 +402,35 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ScientificAreaScientificWork",
+                columns: table => new
+                {
+                    ScientificAreasId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ScientificWorksId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ScientificAreaScientificWork", x => new { x.ScientificAreasId, x.ScientificWorksId });
+                    table.ForeignKey(
+                        name: "FK_ScientificAreaScientificWork_ScientificAreas_ScientificArea~",
+                        column: x => x.ScientificAreasId,
+                        principalTable: "ScientificAreas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ScientificAreaScientificWork_ScientificWorks_ScientificWork~",
+                        column: x => x.ScientificWorksId,
+                        principalTable: "ScientificWorks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ScientificInterestScientificWork",
                 columns: table => new
                 {
-                    ScientificInterestsId = table.Column<int>(type: "integer", nullable: false),
-                    ScientificWorksId = table.Column<int>(type: "integer", nullable: false)
+                    ScientificInterestsId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ScientificWorksId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -361,8 +453,8 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 name: "ScientificWorkStudent",
                 columns: table => new
                 {
-                    ScientificWorksId = table.Column<int>(type: "integer", nullable: false),
-                    StudentsId = table.Column<int>(type: "integer", nullable: false)
+                    ScientificWorksId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StudentsId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -408,31 +500,14 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "Email",
-                table: "AspNetUsers",
-                column: "Email");
+                name: "IX_Notifications_ReceiverId",
+                table: "Notifications",
+                column: "ReceiverId");
 
             migrationBuilder.CreateIndex(
-                name: "EmailIndex",
-                table: "AspNetUsers",
-                column: "NormalizedEmail");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_RemovedAt",
-                table: "AspNetUsers",
-                column: "RemovedAt");
-
-            migrationBuilder.CreateIndex(
-                name: "NormalizedEmail",
-                table: "AspNetUsers",
-                column: "NormalizedEmail",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "UserNameIndex",
-                table: "AspNetUsers",
-                column: "NormalizedUserName",
-                unique: true);
+                name: "IX_ProfessorScientificArea_ScientificAreasId",
+                table: "ProfessorScientificArea",
+                column: "ScientificAreasId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProfessorScientificInterest_ScientificInterestsId",
@@ -440,9 +515,14 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 column: "ScientificInterestsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProfessorStudent_FavoriteStudentId",
-                table: "ProfessorStudent",
-                column: "FavoriteStudentId");
+                name: "IX_ScientificAreaScientificWork_ScientificWorksId",
+                table: "ScientificAreaScientificWork",
+                column: "ScientificWorksId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScientificAreaStudent_StudentsId",
+                table: "ScientificAreaStudent",
+                column: "StudentsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ScientificInterestScientificWork_ScientificWorksId",
@@ -463,6 +543,33 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 name: "IX_ScientificWorkStudent_StudentsId",
                 table: "ScientificWorkStudent",
                 column: "StudentsId");
+
+            migrationBuilder.CreateIndex(
+                name: "Email",
+                table: "Users",
+                column: "Email");
+
+            migrationBuilder.CreateIndex(
+                name: "EmailIndex",
+                table: "Users",
+                column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_RemovedAt",
+                table: "Users",
+                column: "RemovedAt");
+
+            migrationBuilder.CreateIndex(
+                name: "NormalizedEmail",
+                table: "Users",
+                column: "NormalizedEmail",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "UserNameIndex",
+                table: "Users",
+                column: "NormalizedUserName",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -487,10 +594,19 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 name: "DataProtectionKeys");
 
             migrationBuilder.DropTable(
+                name: "Notifications");
+
+            migrationBuilder.DropTable(
+                name: "ProfessorScientificArea");
+
+            migrationBuilder.DropTable(
                 name: "ProfessorScientificInterest");
 
             migrationBuilder.DropTable(
-                name: "ProfessorStudent");
+                name: "ScientificAreaScientificWork");
+
+            migrationBuilder.DropTable(
+                name: "ScientificAreaStudent");
 
             migrationBuilder.DropTable(
                 name: "ScientificInterestScientificWork");
@@ -505,6 +621,9 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "ScientificAreas");
+
+            migrationBuilder.DropTable(
                 name: "ScientificInterests");
 
             migrationBuilder.DropTable(
@@ -517,7 +636,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 name: "Professors");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Users");
         }
     }
 }

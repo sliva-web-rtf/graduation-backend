@@ -11,8 +11,6 @@ namespace ScientificWork.Domain.ScientificWorks;
 /// </summary>
 public class ScientificWork : Entity<Guid>
 {
-    public int Id { get; private set; }
-
     public string Name { get; set; }
 
     public string Titile { get; set; }
@@ -29,9 +27,9 @@ public class ScientificWork : Entity<Guid>
 
     public DateTime CreateAt { get; set; }
 
-    public int? ProfessorId { get; set; }
+    public Guid? ProfessorId { get; set; }
 
-    public int ImageId { get; set; }
+    public Guid ImageId { get; set; }
 
     private readonly List<Student> students = new();
 

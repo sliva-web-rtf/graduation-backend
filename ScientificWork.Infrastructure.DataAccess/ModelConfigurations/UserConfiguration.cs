@@ -12,6 +12,7 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
     /// <inheritdoc />
     public void Configure(EntityTypeBuilder<User> builder)
     {
+        builder.ToTable("Users");
         builder.HasIndex(e => e.Email, "Email");
         builder.HasIndex(e => e.NormalizedEmail, "NormalizedEmail").IsUnique();
         builder.HasIndex(e => e.RemovedAt);

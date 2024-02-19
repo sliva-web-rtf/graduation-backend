@@ -15,8 +15,4 @@
     <ProjectReference Include="..\ScientificWork.Infrastructure.Abstractions\ScientificWork.Infrastructure.Abstractions.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 </Project>
