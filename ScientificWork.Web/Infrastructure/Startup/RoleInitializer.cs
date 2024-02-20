@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using ScientificWork.Domain.Admins;
 using ScientificWork.Domain.Users;
 
 namespace ScientificWork.Web.Infrastructure.Startup;
@@ -28,12 +29,10 @@ public static class RoleInitializer
             }
         }
 
-        var admin = new User
-        {
-            Email = configuration["AdminOptions:Email"],
-            FirstName = "Admin",
-            LastName = "Adminov"
-        };
+        var admin = SystemAdmin.Create(
+            email: configuration["AdminOptions:Email"]!,
+            firstName: "Admin",
+            lastName: "Adminov");
 
         var isAdmin = await userManager.FindByEmailAsync(admin.Email);
 

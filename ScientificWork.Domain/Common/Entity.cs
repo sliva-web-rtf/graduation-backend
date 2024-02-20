@@ -5,6 +5,10 @@ public abstract class Entity<TId> : Entity, IEquatable<Entity<TId>>
 {
     public TId Id { get; }
 
+    public DateTime CreatedAt { get; }
+
+    public DateTime UpdatedAt { get; }
+
     protected Entity(TId id)
     {
         Id = id;
@@ -35,7 +39,7 @@ public abstract class Entity<TId> : Entity, IEquatable<Entity<TId>>
 
     public bool Equals(Entity<TId>? other)
     {
-        return Equals((object?) other);
+        return Equals((object?)other);
     }
 
     public override int GetHashCode()

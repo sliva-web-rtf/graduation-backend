@@ -9,7 +9,7 @@ public class Notification : Entity<Guid>
 
     public DateTime DateTime { get; set; }
 
-    public User Receiver { get; set; }
-
     public Guid ReceiverId { get; set; }
+
+    public User Receiver { get; set; }
 }

@@ -484,6 +484,9 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsUnicode(false)
                         .HasColumnType("character varying(256)");
 
+                    b.Property<int>("UserStatus")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -518,6 +521,13 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.HasIndex("StudentsId");
 
                     b.ToTable("ScientificWorkStudent");
+                });
+
+            modelBuilder.Entity("ScientificWork.Domain.Admins.SystemAdmin", b =>
+                {
+                    b.HasBaseType("ScientificWork.Domain.Users.User");
+
+                    b.ToTable("SystemAdmins", (string)null);
                 });
 
             modelBuilder.Entity("ScientificWork.Domain.Professors.Professor", b =>
@@ -789,6 +799,15 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ScientificWork.Domain.Admins.SystemAdmin", b =>
+                {
+                    b.HasOne("ScientificWork.Domain.Users.User", null)
+                        .WithOne()
+                        .HasForeignKey("ScientificWork.Domain.Admins.SystemAdmin", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ScientificWork.Domain.Professors.Professor", b =>
                 {
                     b.HasOne("ScientificWork.Domain.Users.User", null)
@@ -804,6 +823,31 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .WithOne()
                         .HasForeignKey("ScientificWork.Domain.Students.Student", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("ScientificWork.Domain.Students.ValueObjects.StudentSearchStatus", "SearchStatus", b1 =>
+                        {
+                            b1.Property<Guid>("StudentId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<bool>("CommandSearching")
+                                .HasColumnType("boolean");
+
+                            b1.Property<bool>("ProfessorSearching")
+                                .HasColumnType("boolean");
+
+                            b1.Property<int>("Status")
+                                .HasColumnType("integer");
+
+                            b1.HasKey("StudentId");
+
+                            b1.ToTable("Students");
+
+                            b1.WithOwner()
+                                .HasForeignKey("StudentId");
+                        });
+
+                    b.Navigation("SearchStatus")
                         .IsRequired();
                 });
 

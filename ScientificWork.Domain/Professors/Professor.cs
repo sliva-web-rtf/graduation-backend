@@ -11,31 +11,31 @@ namespace ScientificWork.Domain.Professors;
 /// </summary>
 public class Professor : User
 {
-    public string Address { get; set; }
+    public string Address { get; private set; }
 
-    public string Degree { get; set; }
+    public string Degree { get; private set; }
 
-    public int Limit { get; set; }
+    public int Limit { get; private set; }
 
-    public int Fullness { get; set; }
+    public int Fullness { get; private set; }
 
-    public string Post { get; set; }
+    public string Post { get; private set; }
 
-    public int PublicationsCount { get; set; }
+    public int PublicationsCount { get; private set; }
 
-    public int WorkExperienceYears { get; set; }
+    public int WorkExperienceYears { get; private set; }
 
-    public string Titile { get; set; }
+    public string Titile { get; private set; }
 
-    public int HIndex { get; set; }
+    public int HIndex { get; private set; }
 
-    public string? ScopusUri { get; set; }
+    public string? ScopusUri { get; private set; }
 
-    public string? RISCUri { get; set; }
+    public string? RISCUri { get; private set; }
 
-    public string URPUri { get; set; }
+    public string URPUri { get; private set; }
 
-    public string Сontacts { get; set; }
+    public string Сontacts { get; private set; }
 
     private readonly List<ScientificWorks.ScientificWork> scientificWorks = new();
 
@@ -48,4 +48,8 @@ public class Professor : User
     private readonly List<ScientificArea> scientificAreas = new();
 
     public ICollection<ScientificArea> ScientificAreas => scientificAreas;
+
+    public Professor(Guid id) : base(id)
+    {
+    }
 }

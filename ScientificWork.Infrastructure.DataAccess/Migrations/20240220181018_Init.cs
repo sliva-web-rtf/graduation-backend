@@ -77,6 +77,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     CreatedAt = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now() at time zone 'UTC'"),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now() at time zone 'UTC'"),
                     RemovedAt = table.Column<DateTime>(type: "timestamp", nullable: true, comment: "For soft-deletes"),
+                    UserStatus = table.Column<int>(type: "integer", nullable: false),
                     AvatarImageId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", unicode: false, maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", unicode: false, maxLength: 256, nullable: true),
@@ -265,13 +266,33 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     ScopusUri = table.Column<string>(type: "text", unicode: false, nullable: true),
                     RISCUri = table.Column<string>(type: "text", unicode: false, nullable: true),
                     URPUri = table.Column<string>(type: "text", unicode: false, nullable: true),
-                    Сontacts = table.Column<string>(type: "text", unicode: false, nullable: false)
+                    Сontacts = table.Column<string>(type: "text", unicode: false, nullable: false),
+                    SearchStatus_Status = table.Column<int>(type: "integer", nullable: false),
+                    SearchStatus_CommandSearching = table.Column<bool>(type: "boolean", nullable: false),
+                    SearchStatus_ProfessorSearching = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Students", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Students_Users_Id",
+                        column: x => x.Id,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SystemAdmins",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SystemAdmins", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SystemAdmins_Users_Id",
                         column: x => x.Id,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -616,6 +637,9 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "ScientificWorkStudent");
+
+            migrationBuilder.DropTable(
+                name: "SystemAdmins");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

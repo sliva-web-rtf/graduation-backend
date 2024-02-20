@@ -11,25 +11,25 @@ namespace ScientificWork.Domain.ScientificWorks;
 /// </summary>
 public class ScientificWork : Entity<Guid>
 {
-    public string Name { get; set; }
+    public string Name { get; private set; }
 
-    public string Titile { get; set; }
+    public string Titile { get; private set; }
 
-    public int Limit { get; set; }
+    public int Limit { get; private set; }
 
-    public string Problem { get; set; }
+    public string Problem { get; private set; }
 
-    public string Relevance { get; set; }
+    public string Relevance { get; private set; }
 
-    public int Fullness { get; set; }
+    public int Fullness { get; private set; }
 
-    public WorkStatus WorkStatus { get; set; }
+    public WorkStatus WorkStatus { get; private set; }
 
-    public DateTime CreateAt { get; set; }
+    public DateTime CreateAt { get; private set; }
 
-    public Guid? ProfessorId { get; set; }
+    public Guid? ProfessorId { get; private set; }
 
-    public Guid ImageId { get; set; }
+    public Guid ImageId { get; private set; }
 
     private readonly List<Student> students = new();
 

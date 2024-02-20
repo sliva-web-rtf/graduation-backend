@@ -48,7 +48,7 @@ internal class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Login
         logger.LogInformation("User with email {email} has logged in.", user.Email);
 
         // Update last login date.
-        user.LastLogin = DateTime.UtcNow;
+        user.UpdateLastLogin();
         await signInManager.UserManager.UpdateAsync(user);
 
         // Combine refresh token with user id.
