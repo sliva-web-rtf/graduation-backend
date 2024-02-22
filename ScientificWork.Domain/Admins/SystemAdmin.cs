@@ -13,6 +13,7 @@ public class SystemAdmin : User
         Email = email;
         FirstName = firstName;
         LastName = lastName;
+        UserName = Email;
     }
 
     public static SystemAdmin Create(

@@ -75,9 +75,9 @@ public class Startup
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
         services.Configure<IdentityOptions>(new IdentityOptionsSetup().Setup);
-        services.AddIdentityCore<Professor>().AddEntityFrameworkStores<AppDbContext>();
-        services.AddIdentityCore<Student>().AddEntityFrameworkStores<AppDbContext>();
-        services.AddIdentityCore<SystemAdmin>().AddEntityFrameworkStores<AppDbContext>();
+        services.AddIdentityCore<Professor>().AddRoles<AppIdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+        services.AddIdentityCore<Student>().AddRoles<AppIdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+        services.AddIdentityCore<SystemAdmin>().AddRoles<AppIdentityRole>().AddEntityFrameworkStores<AppDbContext>();
 
         // JWT.
         var jwtSecretKey = configuration["Jwt:SecretKey"] ?? throw new ArgumentNullException("Jwt:SecretKey");

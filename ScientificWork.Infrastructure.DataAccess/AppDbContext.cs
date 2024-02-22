@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -16,7 +17,10 @@ namespace ScientificWork.Infrastructure.DataAccess;
 /// <summary>
 /// Application unit of work.
 /// </summary>
-public class AppDbContext : IdentityDbContext<User, AppIdentityRole, Guid>, IAppDbContext, IDataProtectionKeyContext
+public class AppDbContext
+    : IdentityDbContext<User, AppIdentityRole, Guid>,
+    IAppDbContext,
+    IDataProtectionKeyContext
 {
     /// <inheritdoc/>
     public DbSet<DataProtectionKey> DataProtectionKeys { get; private set; }
