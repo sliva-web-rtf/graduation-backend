@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ScientificWork.Domain.Admins;
+using ScientificWork.Domain.Professors;
+using ScientificWork.Domain.Students;
 using ScientificWork.Domain.Users;
 using ScientificWork.Infrastructure.DataAccess;
 using ScientificWork.Web.Infrastructure.Middlewares;
@@ -72,6 +75,9 @@ public class Startup
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
         services.Configure<IdentityOptions>(new IdentityOptionsSetup().Setup);
+        services.AddIdentityCore<Professor>().AddEntityFrameworkStores<AppDbContext>();
+        services.AddIdentityCore<Student>().AddEntityFrameworkStores<AppDbContext>();
+        services.AddIdentityCore<SystemAdmin>().AddEntityFrameworkStores<AppDbContext>();
 
         // JWT.
         var jwtSecretKey = configuration["Jwt:SecretKey"] ?? throw new ArgumentNullException("Jwt:SecretKey");
@@ -89,7 +95,8 @@ public class Startup
         // Database.
         services.AddDbContext<AppDbContext>(
             new DbContextOptionsSetup(databaseConnectionString).Setup);
-        services.AddAsyncInitializer<DatabaseInitializer>();
+        services.AddAsyncInitializer<DatabaseInitializer>()
+            .AddAsyncInitializer<RoleInitializer>();
 
         // Logging.
         services.AddLogging(new LoggingOptionsSetup(configuration, environment).Setup);

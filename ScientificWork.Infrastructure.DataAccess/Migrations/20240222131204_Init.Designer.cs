@@ -12,7 +12,7 @@ using ScientificWork.Infrastructure.DataAccess;
 namespace ScientificWork.Infrastructure.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240220181018_Init")]
+    [Migration("20240222131204_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -247,6 +247,27 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.HasIndex("StudentsId");
 
                     b.ToTable("ScientificInterestStudent");
+                });
+
+            modelBuilder.Entity("ScientificWork.Domain.Favorites.ProfessorFavoriteStudent", b =>
+                {
+                    b.Property<Guid>("ProfessorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("AddedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("ProfessorId", "StudentId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("ProfessorFavoriteStudent");
                 });
 
             modelBuilder.Entity("ScientificWork.Domain.Notifications.Notification", b =>
@@ -538,12 +559,10 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.HasBaseType("ScientificWork.Domain.Users.User");
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .IsUnicode(false)
                         .HasColumnType("text");
 
                     b.Property<string>("Degree")
-                        .IsRequired()
                         .IsUnicode(false)
                         .HasColumnType("text");
 
@@ -557,7 +576,6 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Post")
-                        .IsRequired()
                         .IsUnicode(false)
                         .HasColumnType("text");
 
@@ -573,12 +591,10 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Titile")
-                        .IsRequired()
                         .IsUnicode(false)
                         .HasColumnType("text");
 
                     b.Property<string>("URPUri")
-                        .IsRequired()
                         .IsUnicode(false)
                         .HasColumnType("text");
 
@@ -586,7 +602,6 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Сontacts")
-                        .IsRequired()
                         .IsUnicode(false)
                         .HasColumnType("text");
 
@@ -620,7 +635,6 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Сontacts")
-                        .IsRequired()
                         .IsUnicode(false)
                         .HasColumnType("text");
 
@@ -768,6 +782,25 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ScientificWork.Domain.Favorites.ProfessorFavoriteStudent", b =>
+                {
+                    b.HasOne("ScientificWork.Domain.Professors.Professor", "Professor")
+                        .WithMany("ProfessorFavoriteStudents")
+                        .HasForeignKey("ProfessorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ScientificWork.Domain.Students.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Professor");
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("ScientificWork.Domain.Notifications.Notification", b =>
                 {
                     b.HasOne("ScientificWork.Domain.Users.User", "Receiver")
@@ -850,8 +883,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                                 .HasForeignKey("StudentId");
                         });
 
-                    b.Navigation("SearchStatus")
-                        .IsRequired();
+                    b.Navigation("SearchStatus");
                 });
 
             modelBuilder.Entity("ScientificWork.Domain.Users.User", b =>
@@ -861,6 +893,8 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
             modelBuilder.Entity("ScientificWork.Domain.Professors.Professor", b =>
                 {
+                    b.Navigation("ProfessorFavoriteStudents");
+
                     b.Navigation("ScientificWorks");
                 });
 #pragma warning restore 612, 618

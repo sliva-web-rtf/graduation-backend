@@ -79,4 +79,9 @@ public abstract class User : IdentityUser<Guid>
     {
         LastLogin = DateTime.UtcNow;
     }
+
+    public User()
+    {
+
+    }
 }

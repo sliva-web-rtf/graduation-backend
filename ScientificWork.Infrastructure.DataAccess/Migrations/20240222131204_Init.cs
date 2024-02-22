@@ -230,19 +230,19 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Address = table.Column<string>(type: "text", unicode: false, nullable: false),
-                    Degree = table.Column<string>(type: "text", unicode: false, nullable: false),
+                    Address = table.Column<string>(type: "text", unicode: false, nullable: true),
+                    Degree = table.Column<string>(type: "text", unicode: false, nullable: true),
                     Limit = table.Column<int>(type: "integer", nullable: false),
                     Fullness = table.Column<int>(type: "integer", nullable: false),
-                    Post = table.Column<string>(type: "text", unicode: false, nullable: false),
+                    Post = table.Column<string>(type: "text", unicode: false, nullable: true),
                     PublicationsCount = table.Column<int>(type: "integer", nullable: false),
                     WorkExperienceYears = table.Column<int>(type: "integer", nullable: false),
-                    Titile = table.Column<string>(type: "text", unicode: false, nullable: false),
+                    Titile = table.Column<string>(type: "text", unicode: false, nullable: true),
                     HIndex = table.Column<int>(type: "integer", nullable: false),
                     ScopusUri = table.Column<string>(type: "text", unicode: false, nullable: true),
                     RISCUri = table.Column<string>(type: "text", unicode: false, nullable: true),
-                    URPUri = table.Column<string>(type: "text", unicode: false, nullable: false),
-                    Сontacts = table.Column<string>(type: "text", unicode: false, nullable: false)
+                    URPUri = table.Column<string>(type: "text", unicode: false, nullable: true),
+                    Сontacts = table.Column<string>(type: "text", unicode: false, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -266,10 +266,10 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     ScopusUri = table.Column<string>(type: "text", unicode: false, nullable: true),
                     RISCUri = table.Column<string>(type: "text", unicode: false, nullable: true),
                     URPUri = table.Column<string>(type: "text", unicode: false, nullable: true),
-                    Сontacts = table.Column<string>(type: "text", unicode: false, nullable: false),
-                    SearchStatus_Status = table.Column<int>(type: "integer", nullable: false),
-                    SearchStatus_CommandSearching = table.Column<bool>(type: "boolean", nullable: false),
-                    SearchStatus_ProfessorSearching = table.Column<bool>(type: "boolean", nullable: false)
+                    Сontacts = table.Column<string>(type: "text", unicode: false, nullable: true),
+                    SearchStatus_Status = table.Column<int>(type: "integer", nullable: true),
+                    SearchStatus_CommandSearching = table.Column<bool>(type: "boolean", nullable: true),
+                    SearchStatus_ProfessorSearching = table.Column<bool>(type: "boolean", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -372,6 +372,32 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         principalTable: "Professors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProfessorFavoriteStudent",
+                columns: table => new
+                {
+                    ProfessorId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StudentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    AddedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProfessorFavoriteStudent", x => new { x.ProfessorId, x.StudentId });
+                    table.ForeignKey(
+                        name: "FK_ProfessorFavoriteStudent_Professors_ProfessorId",
+                        column: x => x.ProfessorId,
+                        principalTable: "Professors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ProfessorFavoriteStudent_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -526,6 +552,11 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 column: "ReceiverId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProfessorFavoriteStudent_StudentId",
+                table: "ProfessorFavoriteStudent",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProfessorScientificArea_ScientificAreasId",
                 table: "ProfessorScientificArea",
                 column: "ScientificAreasId");
@@ -616,6 +647,9 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Notifications");
+
+            migrationBuilder.DropTable(
+                name: "ProfessorFavoriteStudent");
 
             migrationBuilder.DropTable(
                 name: "ProfessorScientificArea");

@@ -22,9 +22,9 @@ public class Student : User
 
     public string? URPUri { get; private set; }
 
-    public string Сontacts { get; private set; }
+    public string? Сontacts { get; private set; }
 
-    public StudentSearchStatus SearchStatus { get; private set; }
+    public StudentSearchStatus? SearchStatus { get; private set; }
 
     private readonly List<ScientificWorks.ScientificWork> scientificWorks = new();
 
@@ -40,5 +40,11 @@ public class Student : User
 
     public Student(Guid id) : base(id)
     {
+        //TODO
+        Email = "test2@test.com";
+        UserName = Email;
+        FirstName = Email;
+        LastName = Email;
+        EmailConfirmed = true;
     }
 }

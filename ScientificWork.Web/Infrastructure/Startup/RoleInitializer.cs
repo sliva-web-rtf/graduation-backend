@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Extensions.Hosting.AsyncInitialization;
+using Microsoft.AspNetCore.Identity;
 using ScientificWork.Domain.Admins;
 using ScientificWork.Domain.Users;
 
@@ -7,17 +8,21 @@ namespace ScientificWork.Web.Infrastructure.Startup;
 /// <summary>
 /// Role init.
 /// </summary>
-public static class RoleInitializer
+public class RoleInitializer : IAsyncInitializer
 {
-    /// <summary>
-    /// Creating roles at the first launch of the program.
-    /// </summary>
-    /// <param name="serviceProvider"></param>
-    /// <param name="configuration"></param>
-    public static async Task CreateRolesAsync(IServiceProvider serviceProvider, IConfiguration configuration)
+    private readonly IServiceProvider serviceProvider;
+    private readonly IConfiguration configuration;
+
+    public RoleInitializer(IServiceProvider serviceProvider, IConfiguration configuration)
     {
-        var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-        var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+        this.serviceProvider = serviceProvider;
+        this.configuration = configuration;
+    }
+
+    public async Task InitializeAsync(CancellationToken cancellationToken)
+    {
+        var roleManager = serviceProvider.GetRequiredService<RoleManager<AppIdentityRole>>();
+        var userManager = serviceProvider.GetRequiredService<UserManager<SystemAdmin>>();
         var roleNames = new[] { "admin", "student", "professor" };
 
         foreach (var roleName in roleNames)
@@ -25,7 +30,7 @@ public static class RoleInitializer
             var roleExist = await roleManager.RoleExistsAsync(roleName);
             if (!roleExist)
             {
-                await roleManager.CreateAsync(new IdentityRole(roleName));
+                await roleManager.CreateAsync(new AppIdentityRole(roleName));
             }
         }
 

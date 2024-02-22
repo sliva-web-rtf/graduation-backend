@@ -7,4 +7,8 @@ namespace ScientificWork.Domain.Users;
 /// </summary>
 public class AppIdentityRole : IdentityRole<Guid>
 {
+    public AppIdentityRole(string name)
+        : base(name)
+    {
+    }
 }
