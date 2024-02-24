@@ -30,25 +30,25 @@ public class Student : User
 
     private readonly List<ScientificWorks.ScientificWork> scientificWorks = new();
 
-    public ICollection<ScientificWorks.ScientificWork> ScientificWorks => scientificWorks;
+    public IReadOnlyList<ScientificWorks.ScientificWork> ScientificWorks => scientificWorks.AsReadOnly();
 
     private readonly List<ScientificInterest> scientificInterests = new();
 
-    public ICollection<ScientificInterest> ScientificInterests => scientificInterests;
+    public IReadOnlyList<ScientificInterest> ScientificInterests => scientificInterests.AsReadOnly();
 
     private readonly List<ScientificArea> scientificAreas = new();
 
-    public ICollection<ScientificArea> ScientificAreas => scientificAreas;
+    public IReadOnlyList<ScientificArea> ScientificAreas => scientificAreas.AsReadOnly();
 
     #region FavoriteStudents
 
     private readonly List<Student> favoriteStudents = new();
 
-    public ICollection<Student> FavoriteStudents => favoriteStudents;
+    public IReadOnlyList<Student> FavoriteStudents => favoriteStudents.AsReadOnly();
 
     private readonly List<StudentFavoriteStudent> studentFavoriteStudents = new();
 
-    public ICollection<StudentFavoriteStudent> StudentFavoriteStudents => studentFavoriteStudents;
+    public IReadOnlyList<StudentFavoriteStudent> StudentFavoriteStudents => studentFavoriteStudents.AsReadOnly();
 
     #endregion
 
@@ -56,11 +56,11 @@ public class Student : User
 
     private readonly List<Professor> favoriteProfessors = new();
 
-    public ICollection<Professor> FavoriteProfessors => favoriteProfessors;
+    public IReadOnlyList<Professor> FavoriteProfessors => favoriteProfessors.AsReadOnly();
 
     private readonly List<StudentFavoriteProfessor> studentFavoriteProfessors = new();
 
-    public ICollection<StudentFavoriteProfessor> StudentFavoriteProfessors => studentFavoriteProfessors;
+    public IReadOnlyList<StudentFavoriteProfessor> StudentFavoriteProfessors => studentFavoriteProfessors.AsReadOnly();
 
     #endregion
 
@@ -68,11 +68,11 @@ public class Student : User
 
     private readonly List<ScientificWorks.ScientificWork> favoriteScientificWorks = new();
 
-    public ICollection<ScientificWorks.ScientificWork> FavoriteScientificWorks => favoriteScientificWorks;
+    public IReadOnlyList<ScientificWorks.ScientificWork> FavoriteScientificWorks => favoriteScientificWorks.AsReadOnly();
 
     private readonly List<StudentFavoriteScientificWork> studentFavoriteScientificWorks = new();
 
-    public ICollection<StudentFavoriteScientificWork> StudentFavoriteScientificWorks => studentFavoriteScientificWorks;
+    public IReadOnlyList<StudentFavoriteScientificWork> StudentFavoriteScientificWorks => studentFavoriteScientificWorks.AsReadOnly();
 
     #endregion
 

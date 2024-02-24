@@ -26,6 +26,22 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
             .HasComment("For soft-deletes")
             .HasColumnType("timestamp");
 
-        builder.HasQueryFilter(user => user.RemovedAt == null);
+        // builder.HasQueryFilter(user => user.RemovedAt == null);
+
+        ConfigureProperties(builder);
+    }
+
+    private void ConfigureProperties(EntityTypeBuilder<User> builder)
+    {
+        builder.Property(u => u.FirstName)
+            .IsRequired()
+            .HasMaxLength(255);
+
+        builder.Property(u => u.LastName)
+            .IsRequired()
+            .HasMaxLength(255);
+
+        builder.Property(u => u.Patronymic)
+            .HasMaxLength(255);
     }
 }

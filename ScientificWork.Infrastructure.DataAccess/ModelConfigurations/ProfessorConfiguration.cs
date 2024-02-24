@@ -10,6 +10,9 @@ public class ProfessorConfiguration : IEntityTypeConfiguration<Professor>
     public void Configure(EntityTypeBuilder<Professor> builder)
     {
         builder.ToTable("Professors");
+        builder.HasMany(p => p.ScientificWorks)
+            .WithOne(p => p.Professor)
+            .HasForeignKey(p => p.ProfessorId);
 
         ConfigureProfessorFavoriteScientificWorks(builder);
         ConfigureProfessorFavoriteStudents(builder);
@@ -28,10 +31,11 @@ public class ProfessorConfiguration : IEntityTypeConfiguration<Professor>
     private void ConfigureProfessorFavoriteScientificWorks(EntityTypeBuilder<Professor> builder)
     {
         builder.HasMany(p => p.ProfessorFavoriteScientificWorks)
-            .WithOne(pfs => pfs.Professor);
+            .WithOne(pfs => pfs.Professor)
+            .HasForeignKey(p => p.ProfessorId);
 
-        builder.HasMany(d => d.FavoriteScientificWorks)
-            .WithMany()
-            .UsingEntity<ProfessorFavoriteScientificWork>();
+        // builder.HasMany(d => d.FavoriteScientificWorks)
+        //     .WithMany()
+        //     .UsingEntity<ProfessorFavoriteScientificWork>();
     }
 }

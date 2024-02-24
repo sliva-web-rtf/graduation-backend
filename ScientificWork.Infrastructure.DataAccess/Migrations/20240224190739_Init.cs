@@ -360,7 +360,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     Fullness = table.Column<int>(type: "integer", nullable: false),
                     WorkStatus = table.Column<int>(type: "integer", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ProfessorId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ProfessorId = table.Column<Guid>(type: "uuid", nullable: false),
                     ImageId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
@@ -371,7 +371,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         column: x => x.ProfessorId,
                         principalTable: "Professors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -506,7 +506,6 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 {
                     ProfessorId = table.Column<Guid>(type: "uuid", nullable: false),
                     ScientificWorkId = table.Column<Guid>(type: "uuid", nullable: false),
-                    FavoriteScientificWorksId = table.Column<Guid>(type: "uuid", nullable: false),
                     AddedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false)
                 },
@@ -519,12 +518,6 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         principalTable: "Professors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ProfessorFavoriteScientificWork_ScientificWorks_FavoriteSci~",
-                        column: x => x.FavoriteScientificWorksId,
-                        principalTable: "ScientificWorks",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ProfessorFavoriteScientificWork_ScientificWorks_ScientificW~",
                         column: x => x.ScientificWorkId,
@@ -661,11 +654,6 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 name: "IX_Notifications_ReceiverId",
                 table: "Notifications",
                 column: "ReceiverId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProfessorFavoriteScientificWork_FavoriteScientificWorksId",
-                table: "ProfessorFavoriteScientificWork",
-                column: "FavoriteScientificWorksId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProfessorFavoriteScientificWork_ScientificWorkId",

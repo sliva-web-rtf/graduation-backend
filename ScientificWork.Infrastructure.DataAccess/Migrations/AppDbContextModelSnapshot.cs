@@ -257,15 +257,10 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.Property<DateTime>("AddedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("FavoriteScientificWorksId")
-                        .HasColumnType("uuid");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
                     b.HasKey("ProfessorId", "ScientificWorkId");
-
-                    b.HasIndex("FavoriteScientificWorksId");
 
                     b.HasIndex("ScientificWorkId");
 
@@ -440,7 +435,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsUnicode(false)
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("ProfessorId")
+                    b.Property<Guid>("ProfessorId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Relevance")
@@ -870,12 +865,6 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
             modelBuilder.Entity("ScientificWork.Domain.Favorites.ProfessorFavoriteScientificWork", b =>
                 {
-                    b.HasOne("ScientificWork.Domain.ScientificWorks.ScientificWork", null)
-                        .WithMany()
-                        .HasForeignKey("FavoriteScientificWorksId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ScientificWork.Domain.Professors.Professor", "Professor")
                         .WithMany("ProfessorFavoriteScientificWorks")
                         .HasForeignKey("ProfessorId")
@@ -982,10 +971,13 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
             modelBuilder.Entity("ScientificWork.Domain.ScientificWorks.ScientificWork", b =>
                 {
-                    b.HasOne("ScientificWork.Domain.Professors.Professor", null)
+                    b.HasOne("ScientificWork.Domain.Professors.Professor", "Professor")
                         .WithMany("ScientificWorks")
                         .HasForeignKey("ProfessorId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Professor");
                 });
 
             modelBuilder.Entity("ScientificWorkStudent", b =>

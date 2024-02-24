@@ -13,13 +13,13 @@ public class ScientificArea : Entity<Guid>
 
     private readonly List<Student> students = new();
 
-    public ICollection<Student> Students => students;
+    public IReadOnlyList<Student> Students => students.AsReadOnly();
 
     private readonly List<Professor> professors = new();
 
-    public ICollection<Professor> Professors => professors;
+    public IReadOnlyList<Professor> Professors => professors.AsReadOnly();
 
     private readonly List<ScientificWorks.ScientificWork> scientificWorks = new();
 
-    public ICollection<ScientificWorks.ScientificWork> ScientificWorks => scientificWorks;
+    public IReadOnlyList<ScientificWorks.ScientificWork> ScientificWorks => scientificWorks.AsReadOnly();
 }

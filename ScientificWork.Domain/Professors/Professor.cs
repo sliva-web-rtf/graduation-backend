@@ -1,4 +1,5 @@
-﻿using ScientificWork.Domain.Favorites;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using ScientificWork.Domain.Favorites;
 using ScientificWork.Domain.ScientificAreas;
 using ScientificWork.Domain.ScientificInterests;
 using ScientificWork.Domain.Students;
@@ -43,21 +44,21 @@ public class Professor : User
 
     private readonly List<ScientificInterest> scientificInterests = new();
 
-    public ICollection<ScientificInterest> ScientificInterests => scientificInterests;
+    public IReadOnlyList<ScientificInterest> ScientificInterests => scientificInterests.AsReadOnly();
 
     private readonly List<ScientificArea> scientificAreas = new();
 
-    public ICollection<ScientificArea> ScientificAreas => scientificAreas;
+    public IReadOnlyList<ScientificArea> ScientificAreas => scientificAreas.AsReadOnly();
 
     #region FavoriteStudents
 
     private readonly List<Student> favoriteStudents = new();
 
-    public ICollection<Student> FavoriteStudents => favoriteStudents;
+    public IReadOnlyList<Student> FavoriteStudents => favoriteStudents.AsReadOnly();
 
     private readonly List<ProfessorFavoriteStudent> professorFavoriteStudents = new();
 
-    public ICollection<ProfessorFavoriteStudent> ProfessorFavoriteStudents => professorFavoriteStudents;
+    public IReadOnlyList<ProfessorFavoriteStudent> ProfessorFavoriteStudents => professorFavoriteStudents.AsReadOnly();
 
     #endregion
 
@@ -65,12 +66,12 @@ public class Professor : User
 
     private readonly List<ScientificWorks.ScientificWork> favoriteScientificWorks = new();
 
-    public ICollection<ScientificWorks.ScientificWork> FavoriteScientificWorks => favoriteScientificWorks;
+    public IReadOnlyList<ScientificWorks.ScientificWork> FavoriteScientificWorks => favoriteScientificWorks.AsReadOnly();
 
     private readonly List<ProfessorFavoriteScientificWork> professorFavoriteScientificWorks = new();
 
-    public ICollection<ProfessorFavoriteScientificWork> ProfessorFavoriteScientificWorks =>
-        professorFavoriteScientificWorks;
+    public IReadOnlyList<ProfessorFavoriteScientificWork> ProfessorFavoriteScientificWorks =>
+        professorFavoriteScientificWorks.AsReadOnly();
 
     #endregion
 
@@ -88,5 +89,11 @@ public class Professor : User
     {
         var professorFavoriteStudent = ProfessorFavoriteStudent.Create(Id, studentId);
         professorFavoriteStudents.Add(professorFavoriteStudent);
+    }
+
+    public void AddFavoriteScientificWork(Guid scientificWorkId)
+    {
+        var professorFavoriteStudent = ProfessorFavoriteScientificWork.Create(Id, scientificWorkId);
+        professorFavoriteScientificWorks.Add(professorFavoriteStudent);
     }
 }

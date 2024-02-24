@@ -1,4 +1,6 @@
 ﻿using ScientificWork.Domain.Common;
+using ScientificWork.Domain.Favorites;
+using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.ScientificAreas;
 using ScientificWork.Domain.ScientificInterests;
 using ScientificWork.Domain.ScientificWorks.Enums;
@@ -27,19 +29,38 @@ public class ScientificWork : Entity<Guid>
 
     public DateTime CreateAt { get; private set; }
 
-    public Guid? ProfessorId { get; private set; }
+    public Guid ProfessorId { get; private set; }
+
+    public Professor Professor { get; private set; }
 
     public Guid ImageId { get; private set; }
 
     private readonly List<Student> students = new();
 
-    public ICollection<Student> Students => students;
+    public IReadOnlyList<Student> Students => students.AsReadOnly();
 
     private readonly List<ScientificInterest> scientificInterests = new();
 
-    public ICollection<ScientificInterest> ScientificInterests => scientificInterests;
+    public IReadOnlyList<ScientificInterest> ScientificInterests => scientificInterests.AsReadOnly();
 
     private readonly List<ScientificArea> scientificAreas = new();
 
-    public ICollection<ScientificArea> ScientificAreas => scientificAreas;
+    public IReadOnlyList<ScientificArea> ScientificAreas => scientificAreas.AsReadOnly();
+
+    private ScientificWork(
+        Guid id,
+        Guid professorId)
+        : base(id)
+    {
+        Name = "a";
+        Titile = Name;
+        Problem = Name;
+        Relevance = Name;
+        ProfessorId = professorId;
+    }
+
+    public static ScientificWork Create(Guid professorId)
+    {
+        return new ScientificWork(Guid.NewGuid(), professorId);
+    }
 }
