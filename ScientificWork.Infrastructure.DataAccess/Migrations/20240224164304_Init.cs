@@ -449,6 +449,91 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "StudentFavoriteProfessor",
+                columns: table => new
+                {
+                    StudentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProfessorId = table.Column<Guid>(type: "uuid", nullable: false),
+                    AddedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentFavoriteProfessor", x => new { x.StudentId, x.ProfessorId });
+                    table.ForeignKey(
+                        name: "FK_StudentFavoriteProfessor_Professors_ProfessorId",
+                        column: x => x.ProfessorId,
+                        principalTable: "Professors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudentFavoriteProfessor_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StudentFavoriteStudent",
+                columns: table => new
+                {
+                    StudentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    FavoriteStudentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    AddedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentFavoriteStudent", x => new { x.StudentId, x.FavoriteStudentId });
+                    table.ForeignKey(
+                        name: "FK_StudentFavoriteStudent_Students_FavoriteStudentId",
+                        column: x => x.FavoriteStudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudentFavoriteStudent_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProfessorFavoriteScientificWork",
+                columns: table => new
+                {
+                    ProfessorId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ScientificWorkId = table.Column<Guid>(type: "uuid", nullable: false),
+                    FavoriteScientificWorksId = table.Column<Guid>(type: "uuid", nullable: false),
+                    AddedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProfessorFavoriteScientificWork", x => new { x.ProfessorId, x.ScientificWorkId });
+                    table.ForeignKey(
+                        name: "FK_ProfessorFavoriteScientificWork_Professors_ProfessorId",
+                        column: x => x.ProfessorId,
+                        principalTable: "Professors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ProfessorFavoriteScientificWork_ScientificWorks_FavoriteSci~",
+                        column: x => x.FavoriteScientificWorksId,
+                        principalTable: "ScientificWorks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProfessorFavoriteScientificWork_ScientificWorks_ScientificW~",
+                        column: x => x.ScientificWorkId,
+                        principalTable: "ScientificWorks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ScientificAreaScientificWork",
                 columns: table => new
                 {
@@ -511,10 +596,36 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         column: x => x.ScientificWorksId,
                         principalTable: "ScientificWorks",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ScientificWorkStudent_Students_StudentsId",
                         column: x => x.StudentsId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StudentFavoriteScientificWork",
+                columns: table => new
+                {
+                    StudentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ScientificWorkId = table.Column<Guid>(type: "uuid", nullable: false),
+                    AddedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentFavoriteScientificWork", x => new { x.StudentId, x.ScientificWorkId });
+                    table.ForeignKey(
+                        name: "FK_StudentFavoriteScientificWork_ScientificWorks_ScientificWor~",
+                        column: x => x.ScientificWorkId,
+                        principalTable: "ScientificWorks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudentFavoriteScientificWork_Students_StudentId",
+                        column: x => x.StudentId,
                         principalTable: "Students",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -550,6 +661,16 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 name: "IX_Notifications_ReceiverId",
                 table: "Notifications",
                 column: "ReceiverId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProfessorFavoriteScientificWork_FavoriteScientificWorksId",
+                table: "ProfessorFavoriteScientificWork",
+                column: "FavoriteScientificWorksId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProfessorFavoriteScientificWork_ScientificWorkId",
+                table: "ProfessorFavoriteScientificWork",
+                column: "ScientificWorkId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProfessorFavoriteStudent_StudentId",
@@ -595,6 +716,21 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 name: "IX_ScientificWorkStudent_StudentsId",
                 table: "ScientificWorkStudent",
                 column: "StudentsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentFavoriteProfessor_ProfessorId",
+                table: "StudentFavoriteProfessor",
+                column: "ProfessorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentFavoriteScientificWork_ScientificWorkId",
+                table: "StudentFavoriteScientificWork",
+                column: "ScientificWorkId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentFavoriteStudent_FavoriteStudentId",
+                table: "StudentFavoriteStudent",
+                column: "FavoriteStudentId");
 
             migrationBuilder.CreateIndex(
                 name: "Email",
@@ -649,6 +785,9 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 name: "Notifications");
 
             migrationBuilder.DropTable(
+                name: "ProfessorFavoriteScientificWork");
+
+            migrationBuilder.DropTable(
                 name: "ProfessorFavoriteStudent");
 
             migrationBuilder.DropTable(
@@ -671,6 +810,15 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "ScientificWorkStudent");
+
+            migrationBuilder.DropTable(
+                name: "StudentFavoriteProfessor");
+
+            migrationBuilder.DropTable(
+                name: "StudentFavoriteScientificWork");
+
+            migrationBuilder.DropTable(
+                name: "StudentFavoriteStudent");
 
             migrationBuilder.DropTable(
                 name: "SystemAdmins");

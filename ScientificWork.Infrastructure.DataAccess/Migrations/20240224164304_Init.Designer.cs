@@ -12,7 +12,7 @@ using ScientificWork.Infrastructure.DataAccess;
 namespace ScientificWork.Infrastructure.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240222131204_Init")]
+    [Migration("20240224164304_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -249,6 +249,32 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.ToTable("ScientificInterestStudent");
                 });
 
+            modelBuilder.Entity("ScientificWork.Domain.Favorites.ProfessorFavoriteScientificWork", b =>
+                {
+                    b.Property<Guid>("ProfessorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ScientificWorkId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("AddedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("FavoriteScientificWorksId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("ProfessorId", "ScientificWorkId");
+
+                    b.HasIndex("FavoriteScientificWorksId");
+
+                    b.HasIndex("ScientificWorkId");
+
+                    b.ToTable("ProfessorFavoriteScientificWork");
+                });
+
             modelBuilder.Entity("ScientificWork.Domain.Favorites.ProfessorFavoriteStudent", b =>
                 {
                     b.Property<Guid>("ProfessorId")
@@ -268,6 +294,69 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.HasIndex("StudentId");
 
                     b.ToTable("ProfessorFavoriteStudent");
+                });
+
+            modelBuilder.Entity("ScientificWork.Domain.Favorites.StudentFavoriteProfessor", b =>
+                {
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ProfessorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("AddedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("StudentId", "ProfessorId");
+
+                    b.HasIndex("ProfessorId");
+
+                    b.ToTable("StudentFavoriteProfessor");
+                });
+
+            modelBuilder.Entity("ScientificWork.Domain.Favorites.StudentFavoriteScientificWork", b =>
+                {
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ScientificWorkId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("AddedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("StudentId", "ScientificWorkId");
+
+                    b.HasIndex("ScientificWorkId");
+
+                    b.ToTable("StudentFavoriteScientificWork");
+                });
+
+            modelBuilder.Entity("ScientificWork.Domain.Favorites.StudentFavoriteStudent", b =>
+                {
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("FavoriteStudentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("AddedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("StudentId", "FavoriteStudentId");
+
+                    b.HasIndex("FavoriteStudentId");
+
+                    b.ToTable("StudentFavoriteStudent");
                 });
 
             modelBuilder.Entity("ScientificWork.Domain.Notifications.Notification", b =>
@@ -782,6 +871,31 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ScientificWork.Domain.Favorites.ProfessorFavoriteScientificWork", b =>
+                {
+                    b.HasOne("ScientificWork.Domain.ScientificWorks.ScientificWork", null)
+                        .WithMany()
+                        .HasForeignKey("FavoriteScientificWorksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ScientificWork.Domain.Professors.Professor", "Professor")
+                        .WithMany("ProfessorFavoriteScientificWorks")
+                        .HasForeignKey("ProfessorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ScientificWork.Domain.ScientificWorks.ScientificWork", "ScientificWork")
+                        .WithMany()
+                        .HasForeignKey("ScientificWorkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Professor");
+
+                    b.Navigation("ScientificWork");
+                });
+
             modelBuilder.Entity("ScientificWork.Domain.Favorites.ProfessorFavoriteStudent", b =>
                 {
                     b.HasOne("ScientificWork.Domain.Professors.Professor", "Professor")
@@ -797,6 +911,63 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Professor");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("ScientificWork.Domain.Favorites.StudentFavoriteProfessor", b =>
+                {
+                    b.HasOne("ScientificWork.Domain.Professors.Professor", "Professor")
+                        .WithMany()
+                        .HasForeignKey("ProfessorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ScientificWork.Domain.Students.Student", "Student")
+                        .WithMany("StudentFavoriteProfessors")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Professor");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("ScientificWork.Domain.Favorites.StudentFavoriteScientificWork", b =>
+                {
+                    b.HasOne("ScientificWork.Domain.ScientificWorks.ScientificWork", "ScientificWork")
+                        .WithMany()
+                        .HasForeignKey("ScientificWorkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ScientificWork.Domain.Students.Student", "Student")
+                        .WithMany("StudentFavoriteScientificWorks")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ScientificWork");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("ScientificWork.Domain.Favorites.StudentFavoriteStudent", b =>
+                {
+                    b.HasOne("ScientificWork.Domain.Students.Student", "FavoriteStudent")
+                        .WithMany()
+                        .HasForeignKey("FavoriteStudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ScientificWork.Domain.Students.Student", "Student")
+                        .WithMany("StudentFavoriteStudents")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("FavoriteStudent");
 
                     b.Navigation("Student");
                 });
@@ -825,13 +996,13 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.HasOne("ScientificWork.Domain.ScientificWorks.ScientificWork", null)
                         .WithMany()
                         .HasForeignKey("ScientificWorksId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ScientificWork.Domain.Students.Student", null)
                         .WithMany()
                         .HasForeignKey("StudentsId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -893,9 +1064,20 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
             modelBuilder.Entity("ScientificWork.Domain.Professors.Professor", b =>
                 {
+                    b.Navigation("ProfessorFavoriteScientificWorks");
+
                     b.Navigation("ProfessorFavoriteStudents");
 
                     b.Navigation("ScientificWorks");
+                });
+
+            modelBuilder.Entity("ScientificWork.Domain.Students.Student", b =>
+                {
+                    b.Navigation("StudentFavoriteProfessors");
+
+                    b.Navigation("StudentFavoriteScientificWorks");
+
+                    b.Navigation("StudentFavoriteStudents");
                 });
 #pragma warning restore 612, 618
         }

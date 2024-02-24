@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using ScientificWork.Domain.Favorites;
+﻿using ScientificWork.Domain.Favorites;
 using ScientificWork.Domain.ScientificAreas;
 using ScientificWork.Domain.ScientificInterests;
 using ScientificWork.Domain.Students;
@@ -51,6 +49,8 @@ public class Professor : User
 
     public ICollection<ScientificArea> ScientificAreas => scientificAreas;
 
+    #region FavoriteStudents
+
     private readonly List<Student> favoriteStudents = new();
 
     public ICollection<Student> FavoriteStudents => favoriteStudents;
@@ -59,9 +59,20 @@ public class Professor : User
 
     public ICollection<ProfessorFavoriteStudent> ProfessorFavoriteStudents => professorFavoriteStudents;
 
-    // private readonly List<ProfessorFavoriteScientificWork> favoriteScientificWork = new();
-    //
-    // public ICollection<ProfessorFavoriteScientificWork> FavoriteScientificWork => favoriteScientificWork;
+    #endregion
+
+    #region FavoriteScientificWorks
+
+    private readonly List<ScientificWorks.ScientificWork> favoriteScientificWorks = new();
+
+    public ICollection<ScientificWorks.ScientificWork> FavoriteScientificWorks => favoriteScientificWorks;
+
+    private readonly List<ProfessorFavoriteScientificWork> professorFavoriteScientificWorks = new();
+
+    public ICollection<ProfessorFavoriteScientificWork> ProfessorFavoriteScientificWorks =>
+        professorFavoriteScientificWorks;
+
+    #endregion
 
     public Professor(Guid id) : base(id)
     {

@@ -1,4 +1,6 @@
-﻿using ScientificWork.Domain.ScientificAreas;
+﻿using ScientificWork.Domain.Favorites;
+using ScientificWork.Domain.Professors;
+using ScientificWork.Domain.ScientificAreas;
 using ScientificWork.Domain.ScientificInterests;
 using ScientificWork.Domain.Students.ValueObjects;
 using ScientificWork.Domain.Users;
@@ -37,6 +39,42 @@ public class Student : User
     private readonly List<ScientificArea> scientificAreas = new();
 
     public ICollection<ScientificArea> ScientificAreas => scientificAreas;
+
+    #region FavoriteStudents
+
+    private readonly List<Student> favoriteStudents = new();
+
+    public ICollection<Student> FavoriteStudents => favoriteStudents;
+
+    private readonly List<StudentFavoriteStudent> studentFavoriteStudents = new();
+
+    public ICollection<StudentFavoriteStudent> StudentFavoriteStudents => studentFavoriteStudents;
+
+    #endregion
+
+    #region FavoriteProfessors
+
+    private readonly List<Professor> favoriteProfessors = new();
+
+    public ICollection<Professor> FavoriteProfessors => favoriteProfessors;
+
+    private readonly List<StudentFavoriteProfessor> studentFavoriteProfessors = new();
+
+    public ICollection<StudentFavoriteProfessor> StudentFavoriteProfessors => studentFavoriteProfessors;
+
+    #endregion
+
+    #region FavoriteScientificWorks
+
+    private readonly List<ScientificWorks.ScientificWork> favoriteScientificWorks = new();
+
+    public ICollection<ScientificWorks.ScientificWork> FavoriteScientificWorks => favoriteScientificWorks;
+
+    private readonly List<StudentFavoriteScientificWork> studentFavoriteScientificWorks = new();
+
+    public ICollection<StudentFavoriteScientificWork> StudentFavoriteScientificWorks => studentFavoriteScientificWorks;
+
+    #endregion
 
     public Student(Guid id) : base(id)
     {
