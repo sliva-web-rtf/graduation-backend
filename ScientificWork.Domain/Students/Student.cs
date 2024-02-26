@@ -24,7 +24,7 @@ public class Student : User
 
     public string? URPUri { get; private set; }
 
-    public string? Сontacts { get; private set; }
+    public string? Contacts { get; private set; }
 
     public StudentSearchStatus? SearchStatus { get; private set; }
 
@@ -77,6 +77,48 @@ public class Student : User
         studentFavoriteScientificWorks.AsReadOnly();
 
     #endregion
+
+    private Student(
+        Guid id,
+        string firstName,
+        string lastName,
+        string? patronymic,
+        string email,
+        string? phoneNumber,
+        string? contacts,
+        DateTime createdAt,
+        DateTime updatedAt)
+        : base(id)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        Patronymic = patronymic;
+        Email = email;
+        PhoneNumber = phoneNumber;
+        Contacts = contacts;
+        CreatedAt = createdAt;
+        UpdatedAt = updatedAt;
+    }
+
+    public static Student Create(
+        string firstName,
+        string lastName,
+        string? patronymic,
+        string email,
+        string? phoneNumber,
+        string? contacts)
+    {
+        return new Student(
+            Guid.NewGuid(),
+            firstName,
+            lastName,
+            patronymic,
+            email,
+            phoneNumber,
+            contacts,
+            DateTime.UtcNow,
+            DateTime.UtcNow);
+    }
 
     public void AddScientificAreaSubsections(params ScientificAreaSubsection[] subsection)
     {

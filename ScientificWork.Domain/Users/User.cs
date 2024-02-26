@@ -4,6 +4,8 @@ using Saritasa.Tools.Common.Utils;
 using ScientificWork.Domain.Notifications;
 using ScientificWork.Domain.Users.Enums;
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
 namespace ScientificWork.Domain.Users;
 
 /// <summary>
@@ -82,6 +84,5 @@ public abstract class User : IdentityUser<Guid>
 
     public User()
     {
-
     }
 }

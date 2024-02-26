@@ -34,6 +34,13 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand>
     public async Task Handle(CreateStudentCommand request, CancellationToken cancellationToken)
     {
         var student = mapper.Map<Student>(request);
+        // var student = Student.Create(
+        //     request.FirstName,
+        //     request.LastName,
+        //     request.Patronymic,
+        //     request.Email,
+        //     request.PhoneNumber,
+        //     request.Сontacts);
 
         if (request.ScientificAreaSubsections != null)
         {
