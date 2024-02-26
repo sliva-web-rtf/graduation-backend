@@ -42,4 +42,8 @@ public class ScientificWork : Entity<Guid>
     private readonly List<ScientificArea> scientificAreas = new();
 
     public ICollection<ScientificArea> ScientificAreas => scientificAreas;
+
+    private readonly List<ScientificAreaSubsection> scientificAreaSubsections = new();
+
+    public ICollection<ScientificAreaSubsection> ScientificAreaSubsections => scientificAreaSubsections;
 }

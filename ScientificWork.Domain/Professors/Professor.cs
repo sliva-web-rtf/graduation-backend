@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿
 using ScientificWork.Domain.Favorites;
 using ScientificWork.Domain.ScientificAreas;
 using ScientificWork.Domain.ScientificInterests;
@@ -59,19 +58,13 @@ public class Professor : User
 
     public ICollection<ProfessorFavoriteStudent> ProfessorFavoriteStudents => professorFavoriteStudents;
 
+    private readonly List<ScientificAreaSubsection> scientificAreaSubsections = new();
+
+    public ICollection<ScientificAreaSubsection> ScientificAreaSubsections => scientificAreaSubsections;
+
     // private readonly List<ProfessorFavoriteScientificWork> favoriteScientificWork = new();
     //
     // public ICollection<ProfessorFavoriteScientificWork> FavoriteScientificWork => favoriteScientificWork;
-
-    public Professor(Guid id) : base(id)
-    {
-        //TODO
-        Email = "test@test.com";
-        UserName = Email;
-        FirstName = Email;
-        LastName = Email;
-        EmailConfirmed = true;
-    }
 
     public void AddFavoriteStudent(Guid studentId)
     {

@@ -1,18 +1,20 @@
 ﻿using ScientificWork.Domain.Common;
 using ScientificWork.Domain.Professors;
+using ScientificWork.Domain.Students;
 
 namespace ScientificWork.Domain.ScientificAreas;
 
-/// <summary>
-/// Scientific area.
-/// </summary>
-public class ScientificArea : Entity<Guid>
+public class ScientificAreaSubsection : Entity<Guid>
 {
-    public string Name { get; private set; }
+    public Guid ScientificAreaId { get;  set; }
 
-    private readonly List<ScientificAreaSubsection> scientificAreaSubsections = new();
+    public ScientificArea ScientificArea { get;  set; }
 
-    public ICollection<ScientificAreaSubsection> ScientificAreaSubsections => scientificAreaSubsections;
+    public string Name { get; set; }
+
+    private readonly List<Student> students = new();
+
+    public ICollection<Student> Students => students;
 
     private readonly List<Professor> professors = new();
 

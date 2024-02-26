@@ -37,11 +37,17 @@ public class AppDbContext
     /// <inheritdoc/>
     public DbSet<ScientificInterest> ScientificInterests { get; private set; }
 
-    public DbSet<Notification> Notifications { get; private set; }
-
+    /// <inheritdoc/>
     public DbSet<ScientificArea> ScientificAreas { get; private set; }
 
+    /// <inheritdoc/>
+    public DbSet<Notification> Notifications { get; private set; }
+
+    /// <inheritdoc/>
     public DbSet<SystemAdmin> SystemAdmins { get; private set; }
+
+    /// <inheritdoc/>
+    public DbSet<ScientificAreaSubsection> ScientificAreaSubsections { get; private set; }
 
     /// <summary>
     /// Constructor.

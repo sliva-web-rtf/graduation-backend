@@ -34,17 +34,8 @@ public class Student : User
 
     public ICollection<ScientificInterest> ScientificInterests => scientificInterests;
 
-    private readonly List<ScientificArea> scientificAreas = new();
 
-    public ICollection<ScientificArea> ScientificAreas => scientificAreas;
+    private readonly List<ScientificAreaSubsection> scientificAreaSubsections = new();
 
-    public Student(Guid id) : base(id)
-    {
-        //TODO
-        Email = "test2@test.com";
-        UserName = Email;
-        FirstName = Email;
-        LastName = Email;
-        EmailConfirmed = true;
-    }
+    public ICollection<ScientificAreaSubsection> ScientificAreaSubsections => scientificAreaSubsections;
 }
