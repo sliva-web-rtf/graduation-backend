@@ -36,9 +36,9 @@ public class Student : User
 
     public IReadOnlyList<ScientificInterest> ScientificInterests => scientificInterests.AsReadOnly();
 
-    private readonly List<ScientificArea> scientificAreas = new();
+    private readonly List<ScientificAreaSubsection> scientificAreaSubsections = new();
 
-    public IReadOnlyList<ScientificArea> ScientificAreas => scientificAreas.AsReadOnly();
+    public IReadOnlyList<ScientificAreaSubsection> ScientificAreaSubsections => scientificAreaSubsections.AsReadOnly();
 
     #region FavoriteStudents
 
@@ -68,21 +68,35 @@ public class Student : User
 
     private readonly List<ScientificWorks.ScientificWork> favoriteScientificWorks = new();
 
-    public IReadOnlyList<ScientificWorks.ScientificWork> FavoriteScientificWorks => favoriteScientificWorks.AsReadOnly();
+    public IReadOnlyList<ScientificWorks.ScientificWork> FavoriteScientificWorks =>
+        favoriteScientificWorks.AsReadOnly();
 
     private readonly List<StudentFavoriteScientificWork> studentFavoriteScientificWorks = new();
 
-    public IReadOnlyList<StudentFavoriteScientificWork> StudentFavoriteScientificWorks => studentFavoriteScientificWorks.AsReadOnly();
+    public IReadOnlyList<StudentFavoriteScientificWork> StudentFavoriteScientificWorks =>
+        studentFavoriteScientificWorks.AsReadOnly();
 
     #endregion
 
-    public Student(Guid id) : base(id)
+    public void AddScientificAreaSubsections(params ScientificAreaSubsection[] subsection)
     {
-        //TODO
-        Email = "test2@test.com";
-        UserName = Email;
-        FirstName = Email;
-        LastName = Email;
-        EmailConfirmed = true;
+        scientificAreaSubsections.AddRange(subsection);
+    }
+
+    public void UpdateScientificAreaSubsections(params ScientificAreaSubsection[] subsection)
+    {
+        scientificInterests.Clear();
+        AddScientificAreaSubsections(subsection);
+    }
+
+    public void AddScientificInterest(params ScientificInterest[] subsection)
+    {
+        scientificInterests.AddRange(subsection);
+    }
+
+    public void UpdateScientificInterest(params ScientificInterest[] subsection)
+    {
+        scientificInterests.Clear();
+        AddScientificInterest(subsection);
     }
 }

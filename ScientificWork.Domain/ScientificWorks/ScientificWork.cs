@@ -43,9 +43,9 @@ public class ScientificWork : Entity<Guid>
 
     public IReadOnlyList<ScientificInterest> ScientificInterests => scientificInterests.AsReadOnly();
 
-    private readonly List<ScientificArea> scientificAreas = new();
+    private readonly List<ScientificAreaSubsection> scientificAreaSubsections = new();
 
-    public IReadOnlyList<ScientificArea> ScientificAreas => scientificAreas.AsReadOnly();
+    public ICollection<ScientificAreaSubsection> ScientificAreaSubsections => scientificAreaSubsections;
 
     private ScientificWork(
         Guid id,

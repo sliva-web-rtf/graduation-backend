@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.DataAccess;
@@ -27,17 +26,19 @@ public class TestController : ControllerBase
     [HttpGet]
     public async Task<ActionResult> Test()
     {
-        var professor = new Professor(Guid.NewGuid());
-        var res = await professorManager.CreateAsync(professor);
-        var student = new Student(Guid.NewGuid());
-        var studRes = await studentManager.CreateAsync(student);
-        var work = Domain.ScientificWorks.ScientificWork.Create(professor.Id);
-        await context.ScientificWorks.AddAsync(work);
-        await context.SaveChangesAsync();
-        professor.AddFavoriteScientificWork(work.Id);
-        professor.AddFavoriteStudent(student.Id);
-        await context.SaveChangesAsync();
-        var prof = await context.Professors.FirstAsync(p => p.Id == professor.Id);
-        return Ok(res);
+        // var professor = new Professor(Guid.NewGuid());
+        // var res = await professorManager.CreateAsync(professor);
+        // var student = new Student(Guid.NewGuid());
+        // var studRes = await studentManager.CreateAsync(student);
+        //
+        // var work = Domain.ScientificWorks.ScientificWork.Create(professor.Id);
+        // await context.ScientificWorks.AddAsync(work);
+        // await context.SaveChangesAsync();
+        //
+        // professor.AddFavoriteScientificWork(work.Id);
+        // professor.AddFavoriteStudent(student.Id);
+        // await context.SaveChangesAsync();
+        // var prof = await context.Professors.FirstAsync(p => p.Id == professor.Id);
+        return Ok();
     }
 }

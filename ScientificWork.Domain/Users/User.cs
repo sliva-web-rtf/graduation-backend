@@ -14,16 +14,21 @@ public abstract class User : IdentityUser<Guid>
     /// <summary>
     /// First name.
     /// </summary>
+    [MaxLength(255)]
+    [Required]
     public string FirstName { get; protected set; }
 
     /// <summary>
     /// Last name.
     /// </summary>
+    [MaxLength(255)]
+    [Required]
     public string LastName { get; protected set; }
 
     /// <summary>
     /// Patronymic.
     /// </summary>
+    [MaxLength(255)]
     public string? Patronymic { get; protected set; }
 
     /// <summary>

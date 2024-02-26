@@ -33,9 +33,5 @@ public class ProfessorConfiguration : IEntityTypeConfiguration<Professor>
         builder.HasMany(p => p.ProfessorFavoriteScientificWorks)
             .WithOne(pfs => pfs.Professor)
             .HasForeignKey(p => p.ProfessorId);
-
-        // builder.HasMany(d => d.FavoriteScientificWorks)
-        //     .WithMany()
-        //     .UsingEntity<ProfessorFavoriteScientificWork>();
     }
 }

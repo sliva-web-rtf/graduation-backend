@@ -40,7 +40,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DataProtectionKeys");
+                    b.ToTable("DataProtectionKeys", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -168,7 +168,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
                     b.HasIndex("ScientificAreasId");
 
-                    b.ToTable("ProfessorScientificArea");
+                    b.ToTable("ProfessorScientificArea", (string)null);
                 });
 
             modelBuilder.Entity("ProfessorScientificInterest", b =>
@@ -183,7 +183,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
                     b.HasIndex("ScientificInterestsId");
 
-                    b.ToTable("ProfessorScientificInterest");
+                    b.ToTable("ProfessorScientificInterest", (string)null);
                 });
 
             modelBuilder.Entity("ScientificAreaScientificWork", b =>
@@ -198,7 +198,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
                     b.HasIndex("ScientificWorksId");
 
-                    b.ToTable("ScientificAreaScientificWork");
+                    b.ToTable("ScientificAreaScientificWork", (string)null);
                 });
 
             modelBuilder.Entity("ScientificAreaStudent", b =>
@@ -213,7 +213,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
                     b.HasIndex("StudentsId");
 
-                    b.ToTable("ScientificAreaStudent");
+                    b.ToTable("ScientificAreaStudent", (string)null);
                 });
 
             modelBuilder.Entity("ScientificInterestScientificWork", b =>
@@ -228,7 +228,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
                     b.HasIndex("ScientificWorksId");
 
-                    b.ToTable("ScientificInterestScientificWork");
+                    b.ToTable("ScientificInterestScientificWork", (string)null);
                 });
 
             modelBuilder.Entity("ScientificInterestStudent", b =>
@@ -243,7 +243,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
                     b.HasIndex("StudentsId");
 
-                    b.ToTable("ScientificInterestStudent");
+                    b.ToTable("ScientificInterestStudent", (string)null);
                 });
 
             modelBuilder.Entity("ScientificWork.Domain.Favorites.ProfessorFavoriteScientificWork", b =>
@@ -285,7 +285,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("ProfessorFavoriteStudent");
+                    b.ToTable("ProfessorFavoriteStudent", (string)null);
                 });
 
             modelBuilder.Entity("ScientificWork.Domain.Favorites.StudentFavoriteProfessor", b =>
@@ -372,7 +372,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
                     b.HasIndex("ReceiverId");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("ScientificWork.Domain.ScientificAreas.ScientificArea", b =>
@@ -388,7 +388,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ScientificAreas");
+                    b.ToTable("ScientificAreas", (string)null);
                 });
 
             modelBuilder.Entity("ScientificWork.Domain.ScientificInterests.ScientificInterest", b =>
@@ -404,7 +404,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ScientificInterests");
+                    b.ToTable("ScientificInterests", (string)null);
                 });
 
             modelBuilder.Entity("ScientificWork.Domain.ScientificWorks.ScientificWork", b =>
@@ -455,7 +455,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
                     b.HasIndex("ProfessorId");
 
-                    b.ToTable("ScientificWorks");
+                    b.ToTable("ScientificWorks", (string)null);
                 });
 
             modelBuilder.Entity("ScientificWork.Domain.Users.AppIdentityRole", b =>
@@ -625,7 +625,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
                     b.HasIndex("StudentsId");
 
-                    b.ToTable("ScientificWorkStudent");
+                    b.ToTable("ScientificWorkStudent", (string)null);
                 });
 
             modelBuilder.Entity("ScientificWork.Domain.Admins.SystemAdmin", b =>
@@ -1021,7 +1021,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("ScientificWork.Domain.Students.ValueObjects.StudentSearchStatus", "SearchStatus", b1 =>
+                    b.OwnsOne("ScientificWork.Domain.Students.Student.SearchStatus#ScientificWork.Domain.Students.ValueObjects.StudentSearchStatus", "SearchStatus", b1 =>
                         {
                             b1.Property<Guid>("StudentId")
                                 .HasColumnType("uuid");
@@ -1037,7 +1037,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
                             b1.HasKey("StudentId");
 
-                            b1.ToTable("Students");
+                            b1.ToTable("Students", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("StudentId");

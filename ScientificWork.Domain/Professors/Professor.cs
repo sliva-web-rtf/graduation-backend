@@ -1,4 +1,3 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
 using ScientificWork.Domain.Favorites;
 using ScientificWork.Domain.ScientificAreas;
 using ScientificWork.Domain.ScientificInterests;
@@ -46,9 +45,9 @@ public class Professor : User
 
     public IReadOnlyList<ScientificInterest> ScientificInterests => scientificInterests.AsReadOnly();
 
-    private readonly List<ScientificArea> scientificAreas = new();
+    private readonly List<ScientificAreaSubsection> scientificAreasSubsections = new();
 
-    public IReadOnlyList<ScientificArea> ScientificAreas => scientificAreas.AsReadOnly();
+    public IReadOnlyList<ScientificAreaSubsection> ScientificAreasSubsections => scientificAreasSubsections.AsReadOnly();
 
     #region FavoriteStudents
 
@@ -74,16 +73,6 @@ public class Professor : User
         professorFavoriteScientificWorks.AsReadOnly();
 
     #endregion
-
-    public Professor(Guid id) : base(id)
-    {
-        //TODO
-        Email = "test@test.com";
-        UserName = Email;
-        FirstName = Email;
-        LastName = Email;
-        EmailConfirmed = true;
-    }
 
     public void AddFavoriteStudent(Guid studentId)
     {

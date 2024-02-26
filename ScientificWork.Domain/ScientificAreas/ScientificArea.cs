@@ -15,6 +15,10 @@ public class ScientificArea : Entity<Guid>
 
     public IReadOnlyList<Student> Students => students.AsReadOnly();
 
+    private readonly List<ScientificAreaSubsection> scientificAreaSubsections = new();
+
+    public IReadOnlyList<ScientificAreaSubsection> ScientificAreaSubsections => scientificAreaSubsections.AsReadOnly();
+
     private readonly List<Professor> professors = new();
 
     public IReadOnlyList<Professor> Professors => professors.AsReadOnly();
