@@ -121,6 +121,25 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ScientificAreaSubsections",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ScientificAreaId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", unicode: false, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ScientificAreaSubsections", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ScientificAreaSubsections_ScientificAreas_ScientificAreaId",
+                        column: x => x.ScientificAreaId,
+                        principalTable: "ScientificAreas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
@@ -242,11 +261,18 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     ScopusUri = table.Column<string>(type: "text", unicode: false, nullable: true),
                     RISCUri = table.Column<string>(type: "text", unicode: false, nullable: true),
                     URPUri = table.Column<string>(type: "text", unicode: false, nullable: true),
-                    Сontacts = table.Column<string>(type: "text", unicode: false, nullable: true)
+                    Сontacts = table.Column<string>(type: "text", unicode: false, nullable: true),
+                    ScientificAreaId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Professors", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Professors_ScientificAreas_ScientificAreaId",
+                        column: x => x.ScientificAreaId,
+                        principalTable: "ScientificAreas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Professors_Users_Id",
                         column: x => x.Id,
@@ -266,14 +292,21 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     ScopusUri = table.Column<string>(type: "text", unicode: false, nullable: true),
                     RISCUri = table.Column<string>(type: "text", unicode: false, nullable: true),
                     URPUri = table.Column<string>(type: "text", unicode: false, nullable: true),
-                    Сontacts = table.Column<string>(type: "text", unicode: false, nullable: true),
+                    Contacts = table.Column<string>(type: "text", unicode: false, nullable: true),
                     SearchStatus_Status = table.Column<int>(type: "integer", nullable: true),
                     SearchStatus_CommandSearching = table.Column<bool>(type: "boolean", nullable: true),
-                    SearchStatus_ProfessorSearching = table.Column<bool>(type: "boolean", nullable: true)
+                    SearchStatus_ProfessorSearching = table.Column<bool>(type: "boolean", nullable: true),
+                    ScientificAreaId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Students", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Students_ScientificAreas_ScientificAreaId",
+                        column: x => x.ScientificAreaId,
+                        principalTable: "ScientificAreas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Students_Users_Id",
                         column: x => x.Id,
@@ -300,25 +333,25 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProfessorScientificArea",
+                name: "ProfessorScientificAreaSubsection",
                 columns: table => new
                 {
                     ProfessorsId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ScientificAreasId = table.Column<Guid>(type: "uuid", nullable: false)
+                    ScientificAreasSubsectionsId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProfessorScientificArea", x => new { x.ProfessorsId, x.ScientificAreasId });
+                    table.PrimaryKey("PK_ProfessorScientificAreaSubsection", x => new { x.ProfessorsId, x.ScientificAreasSubsectionsId });
                     table.ForeignKey(
-                        name: "FK_ProfessorScientificArea_Professors_ProfessorsId",
+                        name: "FK_ProfessorScientificAreaSubsection_Professors_ProfessorsId",
                         column: x => x.ProfessorsId,
                         principalTable: "Professors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ProfessorScientificArea_ScientificAreas_ScientificAreasId",
-                        column: x => x.ScientificAreasId,
-                        principalTable: "ScientificAreas",
+                        name: "FK_ProfessorScientificAreaSubsection_ScientificAreaSubsections~",
+                        column: x => x.ScientificAreasSubsectionsId,
+                        principalTable: "ScientificAreaSubsections",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -361,7 +394,8 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     WorkStatus = table.Column<int>(type: "integer", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ProfessorId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ImageId = table.Column<Guid>(type: "uuid", nullable: false)
+                    ImageId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ScientificAreaId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -372,6 +406,12 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         principalTable: "Professors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ScientificWorks_ScientificAreas_ScientificAreaId",
+                        column: x => x.ScientificAreaId,
+                        principalTable: "ScientificAreas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -401,23 +441,23 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ScientificAreaStudent",
+                name: "ScientificAreaSubsectionStudent",
                 columns: table => new
                 {
-                    ScientificAreasId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ScientificAreaSubsectionsId = table.Column<Guid>(type: "uuid", nullable: false),
                     StudentsId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ScientificAreaStudent", x => new { x.ScientificAreasId, x.StudentsId });
+                    table.PrimaryKey("PK_ScientificAreaSubsectionStudent", x => new { x.ScientificAreaSubsectionsId, x.StudentsId });
                     table.ForeignKey(
-                        name: "FK_ScientificAreaStudent_ScientificAreas_ScientificAreasId",
-                        column: x => x.ScientificAreasId,
-                        principalTable: "ScientificAreas",
+                        name: "FK_ScientificAreaSubsectionStudent_ScientificAreaSubsections_S~",
+                        column: x => x.ScientificAreaSubsectionsId,
+                        principalTable: "ScientificAreaSubsections",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ScientificAreaStudent_Students_StudentsId",
+                        name: "FK_ScientificAreaSubsectionStudent_Students_StudentsId",
                         column: x => x.StudentsId,
                         principalTable: "Students",
                         principalColumn: "Id",
@@ -527,23 +567,23 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ScientificAreaScientificWork",
+                name: "ScientificAreaSubsectionScientificWork",
                 columns: table => new
                 {
-                    ScientificAreasId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ScientificAreaSubsectionsId = table.Column<Guid>(type: "uuid", nullable: false),
                     ScientificWorksId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ScientificAreaScientificWork", x => new { x.ScientificAreasId, x.ScientificWorksId });
+                    table.PrimaryKey("PK_ScientificAreaSubsectionScientificWork", x => new { x.ScientificAreaSubsectionsId, x.ScientificWorksId });
                     table.ForeignKey(
-                        name: "FK_ScientificAreaScientificWork_ScientificAreas_ScientificArea~",
-                        column: x => x.ScientificAreasId,
-                        principalTable: "ScientificAreas",
+                        name: "FK_ScientificAreaSubsectionScientificWork_ScientificAreaSubsec~",
+                        column: x => x.ScientificAreaSubsectionsId,
+                        principalTable: "ScientificAreaSubsections",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ScientificAreaScientificWork_ScientificWorks_ScientificWork~",
+                        name: "FK_ScientificAreaSubsectionScientificWork_ScientificWorks_Scie~",
                         column: x => x.ScientificWorksId,
                         principalTable: "ScientificWorks",
                         principalColumn: "Id",
@@ -666,9 +706,14 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProfessorScientificArea_ScientificAreasId",
-                table: "ProfessorScientificArea",
-                column: "ScientificAreasId");
+                name: "IX_Professors_ScientificAreaId",
+                table: "Professors",
+                column: "ScientificAreaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProfessorScientificAreaSubsection_ScientificAreasSubsection~",
+                table: "ProfessorScientificAreaSubsection",
+                column: "ScientificAreasSubsectionsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProfessorScientificInterest_ScientificInterestsId",
@@ -676,13 +721,18 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 column: "ScientificInterestsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ScientificAreaScientificWork_ScientificWorksId",
-                table: "ScientificAreaScientificWork",
+                name: "IX_ScientificAreaSubsections_ScientificAreaId",
+                table: "ScientificAreaSubsections",
+                column: "ScientificAreaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScientificAreaSubsectionScientificWork_ScientificWorksId",
+                table: "ScientificAreaSubsectionScientificWork",
                 column: "ScientificWorksId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ScientificAreaStudent_StudentsId",
-                table: "ScientificAreaStudent",
+                name: "IX_ScientificAreaSubsectionStudent_StudentsId",
+                table: "ScientificAreaSubsectionStudent",
                 column: "StudentsId");
 
             migrationBuilder.CreateIndex(
@@ -699,6 +749,11 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 name: "IX_ScientificWorks_ProfessorId",
                 table: "ScientificWorks",
                 column: "ProfessorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScientificWorks_ScientificAreaId",
+                table: "ScientificWorks",
+                column: "ScientificAreaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ScientificWorkStudent_StudentsId",
@@ -719,6 +774,11 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 name: "IX_StudentFavoriteStudent_FavoriteStudentId",
                 table: "StudentFavoriteStudent",
                 column: "FavoriteStudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Students_ScientificAreaId",
+                table: "Students",
+                column: "ScientificAreaId");
 
             migrationBuilder.CreateIndex(
                 name: "Email",
@@ -779,16 +839,16 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 name: "ProfessorFavoriteStudent");
 
             migrationBuilder.DropTable(
-                name: "ProfessorScientificArea");
+                name: "ProfessorScientificAreaSubsection");
 
             migrationBuilder.DropTable(
                 name: "ProfessorScientificInterest");
 
             migrationBuilder.DropTable(
-                name: "ScientificAreaScientificWork");
+                name: "ScientificAreaSubsectionScientificWork");
 
             migrationBuilder.DropTable(
-                name: "ScientificAreaStudent");
+                name: "ScientificAreaSubsectionStudent");
 
             migrationBuilder.DropTable(
                 name: "ScientificInterestScientificWork");
@@ -815,7 +875,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "ScientificAreas");
+                name: "ScientificAreaSubsections");
 
             migrationBuilder.DropTable(
                 name: "ScientificInterests");
@@ -828,6 +888,9 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Professors");
+
+            migrationBuilder.DropTable(
+                name: "ScientificAreas");
 
             migrationBuilder.DropTable(
                 name: "Users");

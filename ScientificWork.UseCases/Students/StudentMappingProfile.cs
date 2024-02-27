@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using ScientificWork.Domain.Students;
 using ScientificWork.UseCases.Students.Common.Dtos;
-using ScientificWork.UseCases.Students.CreateStudent;
 using ScientificWork.UseCases.Students.GetStudents;
+using ScientificWork.UseCases.Students.OnBoarding.CreateStudent;
 using ScientificWork.UseCases.Students.UpdateStudent;
 
 namespace ScientificWork.UseCases.Students;

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MediatR;
 
-namespace ScientificWork.UseCases.Students.CreateStudent;
+namespace ScientificWork.UseCases.Students.OnBoarding.CreateStudent;
 
 public record CreateStudentCommand : IRequest
 {

@@ -21,4 +21,8 @@
     <EmbeddedResource Include="**\*.html" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Students\OnBoarding\" />
+  </ItemGroup>
+
 </Project>

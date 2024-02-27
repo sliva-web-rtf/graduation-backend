@@ -12,7 +12,7 @@ using ScientificWork.Infrastructure.DataAccess;
 namespace ScientificWork.Infrastructure.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240224190739_Init")]
+    [Migration("20240227164314_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -159,19 +159,19 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ProfessorScientificArea", b =>
+            modelBuilder.Entity("ProfessorScientificAreaSubsection", b =>
                 {
                     b.Property<Guid>("ProfessorsId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ScientificAreasId")
+                    b.Property<Guid>("ScientificAreasSubsectionsId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("ProfessorsId", "ScientificAreasId");
+                    b.HasKey("ProfessorsId", "ScientificAreasSubsectionsId");
 
-                    b.HasIndex("ScientificAreasId");
+                    b.HasIndex("ScientificAreasSubsectionsId");
 
-                    b.ToTable("ProfessorScientificArea");
+                    b.ToTable("ProfessorScientificAreaSubsection");
                 });
 
             modelBuilder.Entity("ProfessorScientificInterest", b =>
@@ -189,34 +189,34 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.ToTable("ProfessorScientificInterest");
                 });
 
-            modelBuilder.Entity("ScientificAreaScientificWork", b =>
+            modelBuilder.Entity("ScientificAreaSubsectionScientificWork", b =>
                 {
-                    b.Property<Guid>("ScientificAreasId")
+                    b.Property<Guid>("ScientificAreaSubsectionsId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("ScientificWorksId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("ScientificAreasId", "ScientificWorksId");
+                    b.HasKey("ScientificAreaSubsectionsId", "ScientificWorksId");
 
                     b.HasIndex("ScientificWorksId");
 
-                    b.ToTable("ScientificAreaScientificWork");
+                    b.ToTable("ScientificAreaSubsectionScientificWork");
                 });
 
-            modelBuilder.Entity("ScientificAreaStudent", b =>
+            modelBuilder.Entity("ScientificAreaSubsectionStudent", b =>
                 {
-                    b.Property<Guid>("ScientificAreasId")
+                    b.Property<Guid>("ScientificAreaSubsectionsId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("StudentsId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("ScientificAreasId", "StudentsId");
+                    b.HasKey("ScientificAreaSubsectionsId", "StudentsId");
 
                     b.HasIndex("StudentsId");
 
-                    b.ToTable("ScientificAreaStudent");
+                    b.ToTable("ScientificAreaSubsectionStudent");
                 });
 
             modelBuilder.Entity("ScientificInterestScientificWork", b =>
@@ -394,6 +394,27 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.ToTable("ScientificAreas");
                 });
 
+            modelBuilder.Entity("ScientificWork.Domain.ScientificAreas.ScientificAreaSubsection", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .IsUnicode(false)
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ScientificAreaId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ScientificAreaId");
+
+                    b.ToTable("ScientificAreaSubsections");
+                });
+
             modelBuilder.Entity("ScientificWork.Domain.ScientificInterests.ScientificInterest", b =>
                 {
                     b.Property<Guid>("Id")
@@ -446,6 +467,9 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsUnicode(false)
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("ScientificAreaId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Titile")
                         .IsRequired()
                         .IsUnicode(false)
@@ -457,6 +481,8 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ProfessorId");
+
+                    b.HasIndex("ScientificAreaId");
 
                     b.ToTable("ScientificWorks");
                 });
@@ -670,6 +696,9 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsUnicode(false)
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("ScientificAreaId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("ScopusUri")
                         .IsUnicode(false)
                         .HasColumnType("text");
@@ -689,12 +718,18 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsUnicode(false)
                         .HasColumnType("text");
 
+                    b.HasIndex("ScientificAreaId");
+
                     b.ToTable("Professors", (string)null);
                 });
 
             modelBuilder.Entity("ScientificWork.Domain.Students.Student", b =>
                 {
                     b.HasBaseType("ScientificWork.Domain.Users.User");
+
+                    b.Property<string>("Contacts")
+                        .IsUnicode(false)
+                        .HasColumnType("text");
 
                     b.Property<string>("Degree")
                         .IsUnicode(false)
@@ -710,6 +745,9 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsUnicode(false)
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("ScientificAreaId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("ScopusUri")
                         .IsUnicode(false)
                         .HasColumnType("text");
@@ -718,9 +756,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsUnicode(false)
                         .HasColumnType("text");
 
-                    b.Property<string>("Сontacts")
-                        .IsUnicode(false)
-                        .HasColumnType("text");
+                    b.HasIndex("ScientificAreaId");
 
                     b.ToTable("Students", (string)null);
                 });
@@ -776,7 +812,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ProfessorScientificArea", b =>
+            modelBuilder.Entity("ProfessorScientificAreaSubsection", b =>
                 {
                     b.HasOne("ScientificWork.Domain.Professors.Professor", null)
                         .WithMany()
@@ -784,9 +820,9 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ScientificWork.Domain.ScientificAreas.ScientificArea", null)
+                    b.HasOne("ScientificWork.Domain.ScientificAreas.ScientificAreaSubsection", null)
                         .WithMany()
-                        .HasForeignKey("ScientificAreasId")
+                        .HasForeignKey("ScientificAreasSubsectionsId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
@@ -806,11 +842,11 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ScientificAreaScientificWork", b =>
+            modelBuilder.Entity("ScientificAreaSubsectionScientificWork", b =>
                 {
-                    b.HasOne("ScientificWork.Domain.ScientificAreas.ScientificArea", null)
+                    b.HasOne("ScientificWork.Domain.ScientificAreas.ScientificAreaSubsection", null)
                         .WithMany()
-                        .HasForeignKey("ScientificAreasId")
+                        .HasForeignKey("ScientificAreaSubsectionsId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -821,11 +857,11 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ScientificAreaStudent", b =>
+            modelBuilder.Entity("ScientificAreaSubsectionStudent", b =>
                 {
-                    b.HasOne("ScientificWork.Domain.ScientificAreas.ScientificArea", null)
+                    b.HasOne("ScientificWork.Domain.ScientificAreas.ScientificAreaSubsection", null)
                         .WithMany()
-                        .HasForeignKey("ScientificAreasId")
+                        .HasForeignKey("ScientificAreaSubsectionsId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -972,6 +1008,17 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.Navigation("Receiver");
                 });
 
+            modelBuilder.Entity("ScientificWork.Domain.ScientificAreas.ScientificAreaSubsection", b =>
+                {
+                    b.HasOne("ScientificWork.Domain.ScientificAreas.ScientificArea", "ScientificArea")
+                        .WithMany("ScientificAreaSubsections")
+                        .HasForeignKey("ScientificAreaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ScientificArea");
+                });
+
             modelBuilder.Entity("ScientificWork.Domain.ScientificWorks.ScientificWork", b =>
                 {
                     b.HasOne("ScientificWork.Domain.Professors.Professor", "Professor")
@@ -979,6 +1026,11 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .HasForeignKey("ProfessorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("ScientificWork.Domain.ScientificAreas.ScientificArea", null)
+                        .WithMany("ScientificWorks")
+                        .HasForeignKey("ScientificAreaId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Professor");
                 });
@@ -1014,6 +1066,11 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .HasForeignKey("ScientificWork.Domain.Professors.Professor", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("ScientificWork.Domain.ScientificAreas.ScientificArea", null)
+                        .WithMany("Professors")
+                        .HasForeignKey("ScientificAreaId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("ScientificWork.Domain.Students.Student", b =>
@@ -1023,6 +1080,11 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .HasForeignKey("ScientificWork.Domain.Students.Student", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("ScientificWork.Domain.ScientificAreas.ScientificArea", null)
+                        .WithMany("Students")
+                        .HasForeignKey("ScientificAreaId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.OwnsOne("ScientificWork.Domain.Students.ValueObjects.StudentSearchStatus", "SearchStatus", b1 =>
                         {
@@ -1047,6 +1109,17 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         });
 
                     b.Navigation("SearchStatus");
+                });
+
+            modelBuilder.Entity("ScientificWork.Domain.ScientificAreas.ScientificArea", b =>
+                {
+                    b.Navigation("Professors");
+
+                    b.Navigation("ScientificAreaSubsections");
+
+                    b.Navigation("ScientificWorks");
+
+                    b.Navigation("Students");
                 });
 
             modelBuilder.Entity("ScientificWork.Domain.Users.User", b =>

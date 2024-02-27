@@ -31,9 +31,6 @@ internal sealed class Program
 
         var services = scope.ServiceProvider;
 
-        // TODO
-        // await RoleInitializer.CreateRolesAsync(services, builder.Configuration);
-
         commandLineApplication
             .Conventions
             .UseConstructorInjection(services)

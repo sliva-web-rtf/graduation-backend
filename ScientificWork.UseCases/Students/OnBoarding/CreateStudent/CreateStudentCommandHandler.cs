@@ -3,10 +3,12 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Saritasa.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
+using ScientificWork.UseCases.Students.Common.Exceptions;
 
-namespace ScientificWork.UseCases.Students.CreateStudent;
+namespace ScientificWork.UseCases.Students.OnBoarding.CreateStudent;
 
 /// <summary>
 /// Create student command handler.
@@ -33,31 +35,35 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand>
     /// <inheritdoc />
     public async Task Handle(CreateStudentCommand request, CancellationToken cancellationToken)
     {
-        var student = mapper.Map<Student>(request);
-        // var student = Student.Create(
-        //     request.FirstName,
-        //     request.LastName,
-        //     request.Patronymic,
-        //     request.Email,
-        //     request.PhoneNumber,
-        //     request.Сontacts);
+        var student = Student.Create(
+            request.FirstName,
+            request.LastName,
+            request.Patronymic,
+            request.Email,
+            request.PhoneNumber,
+            request.Сontacts);
 
-        if (request.ScientificAreaSubsections != null)
-        {
-            await UpdateScientificAreaSubsectionsAsync(student, request.ScientificAreaSubsections, cancellationToken);
-        }
-
-        if (request.ScientificInterests != null)
-        {
-            await UpdateScientificInterestsAsync(student, request.ScientificInterests, cancellationToken);
-        }
+        // TODO: move to another command
+        // if (request.ScientificAreaSubsections != null)
+        // {
+        //     await UpdateScientificAreaSubsectionsAsync(student, request.ScientificAreaSubsections, cancellationToken);
+        // }
+        //
+        // if (request.ScientificInterests != null)
+        // {
+        //     await UpdateScientificInterestsAsync(student, request.ScientificInterests, cancellationToken);
+        // }
 
         var result = await userManager.CreateAsync(student, request.Password);
-        await userManager.AddToRoleAsync(student, nameof(Student).ToLower());
         if (result.Succeeded)
         {
             logger.LogInformation($"Student id: {student.Id}.");
+            await userManager.AddToRoleAsync(student, nameof(Student).ToLower());
         }
+
+        var errors = result.Errors
+            .ToDictionary(grouping => grouping.Code, grouping => grouping.Description);
+        throw new ValidationException(errors);
     }
 
     private async Task UpdateScientificAreaSubsectionsAsync(Student student, IList<string> scientificAreaSubsections,
