@@ -2,7 +2,6 @@ using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
-using Saritasa.Tools.EntityFrameworkCore;
 using ScientificWork.Domain.Users;
 
 namespace ScientificWork.UseCases.Users.GetUserById;
