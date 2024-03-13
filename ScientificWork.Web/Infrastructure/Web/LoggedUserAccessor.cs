@@ -1,5 +1,3 @@
-
-
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 
 namespace ScientificWork.Web.Infrastructure.Web;

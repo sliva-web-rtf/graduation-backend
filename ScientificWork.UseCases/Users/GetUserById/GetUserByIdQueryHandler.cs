@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 using Saritasa.Tools.EntityFrameworkCore;
 using ScientificWork.Domain.Users;
@@ -36,7 +37,7 @@ internal class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserD
     /// <inheritdoc />
     public async Task<UserDetailsDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await dbContext.Users.GetAsync(u => u.Id == request.UserId, cancellationToken: cancellationToken);
+        var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken: cancellationToken);
         return mapper.Map<UserDetailsDto>(user);
     }
 }

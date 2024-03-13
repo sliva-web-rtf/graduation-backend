@@ -1,9 +1,14 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScientificWork.UseCases.Students.GetStudentProfileById;
 using ScientificWork.UseCases.Students.GetStudents;
-using ScientificWork.UseCases.Students.OnBoarding.CreateStudent;
 using ScientificWork.UseCases.Students.UpdateStudent;
+using ScientificWork.UseCases.Users.OnBoarding.CreateStudent;
+using ScientificWork.UseCases.Users.OnBoarding.UpdateProfileInfo;
+using ScientificWork.UseCases.Users.OnBoarding.UpdateStatusCommand;
+using ScientificWork.UseCases.Users.OnBoarding.UpdateStudentScientificPortfolio;
+using ScientificWork.Web.Infrastructure.Web;
 
 namespace ScientificWork.Web.Controllers;
 
@@ -13,7 +18,8 @@ namespace ScientificWork.Web.Controllers;
 [ApiController]
 [Route("api/student")]
 [ApiExplorerSettings(GroupName = "student")]
-public class StudentController
+[Authorize]
+public class StudentController : ControllerBase
 {
     private readonly IMediator mediator;
 
@@ -28,8 +34,29 @@ public class StudentController
     /// <summary>
     /// Create student.
     /// </summary>
+    [AllowAnonymous]
     [HttpPost("create-student")]
-    public async Task CreateStudent([FromBody] CreateStudentCommand command)
+    public async Task<ActionResult> CreateStudentAsync([FromBody] CreateStudentCommand command)
+    {
+        var result = await mediator.Send(command);
+        return Ok(result);
+    }
+
+    [HttpPut("on-boarding/update-profile-info")]
+    public async Task UpdateProfileInfoAsync(UpdateStudentProfileInfoCommand command)
+    {
+        HttpContext.Items.Add("userId", User.GetCurrentUserId());
+        await mediator.Send(command);
+    }
+
+    [HttpPut("on-boarding/update-scientific-portfolio")]
+    public async Task UpdateScientificPortfolioAsync(UpdateStudentScientificPortfolioCommand command)
+    {
+        await mediator.Send(command);
+    }
+
+    [HttpPut("on-boarding/update-status")]
+    public async Task UpdateStatusAsync(UpdateStatusCommand command)
     {
         await mediator.Send(command);
     }

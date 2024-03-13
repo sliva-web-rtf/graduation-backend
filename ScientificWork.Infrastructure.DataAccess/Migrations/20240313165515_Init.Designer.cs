@@ -12,7 +12,7 @@ using ScientificWork.Infrastructure.DataAccess;
 namespace ScientificWork.Infrastructure.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240227164314_Init")]
+    [Migration("20240313165515_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -535,9 +535,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp")
-                        .HasDefaultValueSql("now() at time zone 'UTC'");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -548,7 +546,6 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .IsUnicode(false)
                         .HasColumnType("character varying(255)");
@@ -557,7 +554,6 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .IsUnicode(false)
                         .HasColumnType("character varying(255)");
@@ -598,8 +594,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("RemovedAt")
-                        .HasColumnType("timestamp")
-                        .HasComment("For soft-deletes");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SecurityStamp")
                         .IsUnicode(false)
@@ -609,9 +604,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp")
-                        .HasDefaultValueSql("now() at time zone 'UTC'");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)

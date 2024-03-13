@@ -16,15 +16,6 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasIndex(e => e.Email, "Email");
         builder.HasIndex(e => e.NormalizedEmail, "NormalizedEmail").IsUnique();
         builder.HasIndex(e => e.RemovedAt);
-        builder.Property(e => e.CreatedAt)
-            .HasColumnType("timestamp")
-            .HasDefaultValueSql("now() at time zone 'UTC'");
-        builder.Property(e => e.UpdatedAt)
-            .HasColumnType("timestamp")
-            .HasDefaultValueSql("now() at time zone 'UTC'");
-        builder.Property(e => e.RemovedAt)
-            .HasComment("For soft-deletes")
-            .HasColumnType("timestamp");
 
         // builder.HasQueryFilter(user => user.RemovedAt == null);
 
@@ -34,11 +25,9 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
     private void ConfigureProperties(EntityTypeBuilder<User> builder)
     {
         builder.Property(u => u.FirstName)
-            .IsRequired()
             .HasMaxLength(255);
 
         builder.Property(u => u.LastName)
-            .IsRequired()
             .HasMaxLength(255);
 
         builder.Property(u => u.Patronymic)

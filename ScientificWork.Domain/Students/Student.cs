@@ -80,42 +80,25 @@ public class Student : User
 
     private Student(
         Guid id,
-        string firstName,
-        string lastName,
-        string? patronymic,
+        string userName,
         string email,
-        string? phoneNumber,
-        string? contacts,
         DateTime createdAt,
         DateTime updatedAt)
         : base(id)
     {
-        FirstName = firstName;
-        LastName = lastName;
-        Patronymic = patronymic;
         Email = email;
-        PhoneNumber = phoneNumber;
-        Contacts = contacts;
+        UserName = userName;
         CreatedAt = createdAt;
         UpdatedAt = updatedAt;
     }
 
     public static Student Create(
-        string firstName,
-        string lastName,
-        string? patronymic,
-        string email,
-        string? phoneNumber,
-        string? contacts)
+        string email)
     {
         return new Student(
             Guid.NewGuid(),
-            firstName,
-            lastName,
-            patronymic,
             email,
-            phoneNumber,
-            contacts,
+            email,
             DateTime.UtcNow,
             DateTime.UtcNow);
     }
@@ -140,5 +123,36 @@ public class Student : User
     {
         scientificInterests.Clear();
         AddScientificInterest(subsection);
+    }
+
+    public void UpdateProfileInformation(
+        string firstName,
+        string lastName,
+        string patronymic,
+        string phoneNumber,
+        string contacts)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        Patronymic = patronymic;
+        PhoneNumber = phoneNumber;
+        Contacts = contacts;
+    }
+
+    public void UpdateScientificPortfolio(
+        string degree,
+        string? urpUri,
+        string? scopusUri,
+        string? riscUri)
+    {
+        Degree = degree;
+        URPUri = urpUri;
+        ScopusUri = scopusUri;
+        RISCUri = riscUri;
+    }
+
+    public void UpdateSearchStatus(StudentSearchStatus status)
+    {
+        SearchStatus = status;
     }
 }

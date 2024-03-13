@@ -8,12 +8,17 @@ public class UserDetailsDto
     /// <summary>
     /// User identifier.
     /// </summary>
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     /// <summary>
-    /// Full user name.
+    /// First name.
     /// </summary>
-    required public string FullName { get; set; }
+    required public string? FirstName { get; set; }
+
+    /// <summary>
+    /// Last name.
+    /// </summary>
+    required public string? LastName { get; set; }
 
     /// <summary>
     /// User email.
