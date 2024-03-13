@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MediatR;
 
-namespace ScientificWork.UseCases.Users.OnBoarding.UpdateStudentScientificPortfolio;
+namespace ScientificWork.UseCases.Users.UpdateStudentScientificPortfolio;
 
 public class UpdateStudentScientificPortfolioCommand : IRequest
 {

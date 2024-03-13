@@ -4,7 +4,7 @@ using Saritasa.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 
-namespace ScientificWork.UseCases.Users.OnBoarding.UpdateProfileInfo;
+namespace ScientificWork.UseCases.Users.UpdateProfileInfo;
 
 public class UpdateProfileInfoCommandHandler : IRequestHandler<UpdateStudentProfileInfoCommand>
 {
@@ -26,6 +26,10 @@ public class UpdateProfileInfoCommandHandler : IRequestHandler<UpdateStudentProf
         {
             throw new NotFoundException($"User with id {userId} not found.");
         }
+
+        await userManager.SetUserNameAsync(user, request.Email);
+        await userManager.SetEmailAsync(user, request.Email);
+        await userManager.UpdateAsync(user);
 
         user.UpdateProfileInformation(
             firstName: request.FirstName,

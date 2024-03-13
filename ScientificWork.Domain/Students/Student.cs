@@ -26,6 +26,8 @@ public class Student : User
 
     public string? Contacts { get; private set; }
 
+    public bool IsRegistrationComplete { get; private set; }
+
     public StudentSearchStatus? SearchStatus { get; private set; }
 
     private readonly List<ScientificWorks.ScientificWork> scientificWorks = new();

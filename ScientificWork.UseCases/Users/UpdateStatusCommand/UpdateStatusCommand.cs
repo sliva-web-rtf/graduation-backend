@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using ScientificWork.Domain.Students.Enums;
 
-namespace ScientificWork.UseCases.Users.OnBoarding.UpdateStatusCommand;
+namespace ScientificWork.UseCases.Users.UpdateStatusCommand;
 
 public class UpdateStatusCommand : IRequest
 {

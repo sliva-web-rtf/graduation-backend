@@ -2,8 +2,8 @@
 using ScientificWork.Domain.Students;
 using ScientificWork.UseCases.Students.Common.Dtos;
 using ScientificWork.UseCases.Students.GetStudents;
-using ScientificWork.UseCases.Students.UpdateStudent;
-using ScientificWork.UseCases.Users.OnBoarding.CreateStudent;
+using ScientificWork.UseCases.Users.CreateStudent;
+using ScientificWork.UseCases.Users.UpdateUserPassword;
 
 namespace ScientificWork.UseCases.Students;
 
@@ -22,7 +22,7 @@ public class StudentMappingProfile : Profile
             .ForMember(x => x.ScientificAreaSubsections, opt => opt.Ignore())
             .ForMember(x => x.UserName, opt => opt.MapFrom(x => x.Email));
 
-        CreateMap<UpdateStudentCommand, Student>()
+        CreateMap<UpdateUserPasswordCommand, Student>()
             .ForMember(x => x.ScientificInterests, opt => opt.Ignore())
             .ForMember(x => x.ScientificAreaSubsections, opt => opt.Ignore())
             .ForMember(x => x.Email, opt => opt.Ignore())
@@ -34,6 +34,9 @@ public class StudentMappingProfile : Profile
 
         CreateMap<Student, StudentDto>()
             .ForMember(x => x.ScientificArea, opt => opt.Ignore())
-            .ForMember(x => x.ScientificInterests, opt => opt.MapFrom(x => x.ScientificInterests.Select(s => s.Name)));
+            .ForMember(x => x.ScientificInterests, opt => opt.MapFrom(x => x.ScientificInterests.Select(s => s.Name)))
+            .ForMember(x => x.Status, opt => opt.MapFrom(student => student.SearchStatus!.Status))
+            .ForMember(x => x.CommandSearching, opt => opt.MapFrom(student => student.SearchStatus!.CommandSearching))
+            .ForMember(x => x.ProfessorSearching, opt => opt.MapFrom(student => student.SearchStatus!.ProfessorSearching));
     }
 }

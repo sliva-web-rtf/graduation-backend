@@ -1,12 +1,13 @@
-﻿using ScientificWork.UseCases.Common.Dtos;
+﻿using ScientificWork.Domain.Students.Enums;
+using ScientificWork.UseCases.Common.Dtos;
 
 namespace ScientificWork.UseCases.Students.Common.Dtos;
 
 public class StudentDto
 {
-    required public string FirstName { get; init; }
+    public string? FirstName { get; init; }
 
-    required public string LastName { get; init; }
+    public string? LastName { get; init; }
 
     public string? Patronymic { get; init; }
 
@@ -14,11 +15,11 @@ public class StudentDto
 
     required public string Email { get; init; }
 
-    public string? Сontacts { get; init; }
+    public string? Contacts { get; init; }
 
-    required public string Degree { get; init; }
+    public string? Degree { get; init; }
 
-    required public IList<ScientificAreasDto> ScientificArea { get; init; }
+    required public IList<ScientificAreasDto> ScientificArea { get; init; } = new List<ScientificAreasDto>();
 
     required public IList<string> ScientificInterests { get; init; }
 
@@ -27,6 +28,12 @@ public class StudentDto
     public string? ScopusUri { get; init; }
 
     public string? RISCUri { get; init; }
+
+    public string? Status { get; set; }
+
+    public bool? CommandSearching { get; set; }
+
+    public bool? ProfessorSearching { get; set; }
 
     public int? PublicationsCount { get; init; }
 

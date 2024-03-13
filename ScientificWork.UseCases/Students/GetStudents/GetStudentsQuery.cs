@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MediatR;
+using Saritasa.Tools.Common.Pagination;
 using ScientificWork.UseCases.Students.Common.Dtos;
 
 namespace ScientificWork.UseCases.Students.GetStudents;
@@ -7,7 +8,7 @@ namespace ScientificWork.UseCases.Students.GetStudents;
 /// <summary>
 /// Get students query.
 /// </summary>
-public class GetStudentsQuery : IRequest<StudentDto>
+public class GetStudentsQuery : IRequest<PagedList<StudentDto>>
 {
     /// <summary>
     /// Page.

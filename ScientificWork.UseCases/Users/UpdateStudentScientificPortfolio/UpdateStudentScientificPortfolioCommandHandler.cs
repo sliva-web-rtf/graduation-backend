@@ -5,7 +5,7 @@ using Saritasa.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 
-namespace ScientificWork.UseCases.Users.OnBoarding.UpdateStudentScientificPortfolio;
+namespace ScientificWork.UseCases.Users.UpdateStudentScientificPortfolio;
 
 public class UpdateStudentScientificPortfolioCommandHandler : IRequestHandler<UpdateStudentScientificPortfolioCommand>
 {

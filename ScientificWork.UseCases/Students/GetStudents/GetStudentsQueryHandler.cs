@@ -10,7 +10,7 @@ using ScientificWork.UseCases.Students.Common.Dtos;
 
 namespace ScientificWork.UseCases.Students.GetStudents;
 
-public class GetStudentsQueryHandler : IRequestHandler<GetStudentsQuery, StudentDto>
+public class GetStudentsQueryHandler : IRequestHandler<GetStudentsQuery, PagedList<StudentDto>>
 {
     private readonly IMapper mapper;
     private readonly UserManager<Student> userManager;
@@ -27,7 +27,7 @@ public class GetStudentsQueryHandler : IRequestHandler<GetStudentsQuery, Student
     }
 
     /// <inheritdoc />
-    public async Task<StudentDto> Handle(GetStudentsQuery request, CancellationToken cancellationToken)
+    public async Task<PagedList<StudentDto>> Handle(GetStudentsQuery request, CancellationToken cancellationToken)
     {
         var studentsRole = await userManager.GetUsersInRoleAsync(nameof(Student).ToLower());
         var students = userManager.Users
@@ -49,9 +49,25 @@ public class GetStudentsQueryHandler : IRequestHandler<GetStudentsQuery, Student
                     .Any(interest => request.ScientificInterests.Contains(interest.Name)));
         }
 
-        var studentsPaged = PagedListFactory.FromSource(students,
+        var studentsResult = await students.ToListAsync(cancellationToken: cancellationToken);
+        var studentDtos = new List<StudentDto>();
+        foreach (var student in studentsResult)
+        {
+            var studentDto = mapper.Map<StudentDto>(student);
+            var scientificAreasDto = student.ScientificAreaSubsections
+                .GroupBy(x => x.ScientificArea.Name)
+                .Select(x => new ScientificAreasDto
+                {
+                    Section = x.Key,
+                    Subsections = x.Select(s => s.Name).ToList()
+                });
+
+            studentDto.ScientificArea.ToList().AddRange(scientificAreasDto);
+            studentDtos.Add(studentDto);
+        }
+        var studentsPaged = PagedListFactory.FromSource(studentDtos,
             page: request.Page, pageSize: request.PageSize);
 
-        return mapper.Map<StudentDto>(studentsPaged);
+        return studentsPaged;
     }
 }

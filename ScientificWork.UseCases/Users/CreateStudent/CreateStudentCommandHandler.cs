@@ -6,7 +6,7 @@ using ScientificWork.Domain.Students;
 using ScientificWork.Domain.Users;
 using ScientificWork.UseCases.Users.AuthenticateUser;
 
-namespace ScientificWork.UseCases.Users.OnBoarding.CreateStudent;
+namespace ScientificWork.UseCases.Users.CreateStudent;
 
 /// <summary>
 /// Create student command handler.
