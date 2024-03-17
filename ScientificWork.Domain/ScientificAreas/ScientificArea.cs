@@ -7,15 +7,17 @@ namespace ScientificWork.Domain.ScientificAreas;
 /// <summary>
 /// Scientific area.
 /// </summary>
-public class ScientificArea : Entity<Guid>
+public class ScientificArea
 {
+    public Guid Id { get; set; }
+
     public string Name { get; private set; }
 
     private readonly List<Student> students = new();
 
     public IReadOnlyList<Student> Students => students.AsReadOnly();
 
-    private readonly List<ScientificAreaSubsection> scientificAreaSubsections = new();
+    private IList<ScientificAreaSubsection> scientificAreaSubsections;
 
     public IReadOnlyList<ScientificAreaSubsection> ScientificAreaSubsections => scientificAreaSubsections.AsReadOnly();
 
@@ -26,4 +28,20 @@ public class ScientificArea : Entity<Guid>
     private readonly List<ScientificWorks.ScientificWork> scientificWorks = new();
 
     public IReadOnlyList<ScientificWorks.ScientificWork> ScientificWorks => scientificWorks.AsReadOnly();
+
+    public ScientificArea(Guid id, string name)
+    {
+        Id = id;
+        Name = name;
+    }
+
+    public void UpdateScientificAreaSubsections(List<ScientificAreaSubsection> scientificAreaSubsections)
+    {
+        this.scientificAreaSubsections = scientificAreaSubsections;
+    }
+
+    public ScientificArea()
+    {
+
+    }
 }

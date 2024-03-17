@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ScientificWork.Infrastructure.DataAccess;
@@ -11,9 +12,11 @@ using ScientificWork.Infrastructure.DataAccess;
 namespace ScientificWork.Infrastructure.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240316121502_ChangeScientificWorkDomain")]
+    partial class ChangeScientificWorkDomain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -935,7 +938,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.ToTable("SystemAdmins", (string)null);
                 });
 
-            modelBuilder.Entity("ScientificWork.Domain.Professors.Professors", b =>
+            modelBuilder.Entity("ScientificWork.Domain.Professors.Professor", b =>
                 {
                     b.HasBaseType("ScientificWork.Domain.Users.User");
 
@@ -1088,7 +1091,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
             modelBuilder.Entity("ProfessorScientificAreaSubsection", b =>
                 {
-                    b.HasOne("ScientificWork.Domain.Professors.Professors", null)
+                    b.HasOne("ScientificWork.Domain.Professors.Professor", null)
                         .WithMany()
                         .HasForeignKey("ProfessorsId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1103,7 +1106,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
             modelBuilder.Entity("ProfessorScientificInterest", b =>
                 {
-                    b.HasOne("ScientificWork.Domain.Professors.Professors", null)
+                    b.HasOne("ScientificWork.Domain.Professors.Professor", null)
                         .WithMany()
                         .HasForeignKey("ProfessorsId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1178,7 +1181,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
             modelBuilder.Entity("ScientificWork.Domain.Favorites.ProfessorFavoriteScientificWork", b =>
                 {
-                    b.HasOne("ScientificWork.Domain.Professors.Professors", "Professors")
+                    b.HasOne("ScientificWork.Domain.Professors.Professor", "Professor")
                         .WithMany("ProfessorFavoriteScientificWorks")
                         .HasForeignKey("ProfessorId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1190,14 +1193,14 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Professors");
+                    b.Navigation("Professor");
 
                     b.Navigation("ScientificWork");
                 });
 
             modelBuilder.Entity("ScientificWork.Domain.Favorites.ProfessorFavoriteStudent", b =>
                 {
-                    b.HasOne("ScientificWork.Domain.Professors.Professors", "Professors")
+                    b.HasOne("ScientificWork.Domain.Professors.Professor", "Professor")
                         .WithMany("ProfessorFavoriteStudents")
                         .HasForeignKey("ProfessorId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1209,14 +1212,14 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Professors");
+                    b.Navigation("Professor");
 
                     b.Navigation("Student");
                 });
 
             modelBuilder.Entity("ScientificWork.Domain.Favorites.StudentFavoriteProfessor", b =>
                 {
-                    b.HasOne("ScientificWork.Domain.Professors.Professors", "Professors")
+                    b.HasOne("ScientificWork.Domain.Professors.Professor", "Professor")
                         .WithMany()
                         .HasForeignKey("ProfessorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1228,7 +1231,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Professors");
+                    b.Navigation("Professor");
 
                     b.Navigation("Student");
                 });
@@ -1295,7 +1298,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
             modelBuilder.Entity("ScientificWork.Domain.ScientificWorks.ScientificWork", b =>
                 {
-                    b.HasOne("ScientificWork.Domain.Professors.Professors", "Professors")
+                    b.HasOne("ScientificWork.Domain.Professors.Professor", "Professor")
                         .WithMany("ScientificWorks")
                         .HasForeignKey("ProfessorId");
 
@@ -1304,7 +1307,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .HasForeignKey("ScientificAreaId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("Professors");
+                    b.Navigation("Professor");
                 });
 
             modelBuilder.Entity("ScientificWorkStudent", b =>
@@ -1331,11 +1334,11 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ScientificWork.Domain.Professors.Professors", b =>
+            modelBuilder.Entity("ScientificWork.Domain.Professors.Professor", b =>
                 {
                     b.HasOne("ScientificWork.Domain.Users.User", null)
                         .WithOne()
-                        .HasForeignKey("ScientificWork.Domain.Professors.Professors", "Id")
+                        .HasForeignKey("ScientificWork.Domain.Professors.Professor", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1399,7 +1402,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.Navigation("Notifications");
                 });
 
-            modelBuilder.Entity("ScientificWork.Domain.Professors.Professors", b =>
+            modelBuilder.Entity("ScientificWork.Domain.Professors.Professor", b =>
                 {
                     b.Navigation("ProfessorFavoriteScientificWorks");
 

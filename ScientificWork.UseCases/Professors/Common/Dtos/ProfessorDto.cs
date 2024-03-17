@@ -1,9 +1,8 @@
-﻿using ScientificWork.Domain.Students.Enums;
-using ScientificWork.UseCases.Common.Dtos;
+﻿using ScientificWork.UseCases.Common.Dtos;
 
-namespace ScientificWork.UseCases.Students.Common.Dtos;
+namespace ScientificWork.UseCases.Professors.Common.Dtos;
 
-public class StudentDto
+public class ProfessorDto
 {
     public Guid Id { get; init; }
 
@@ -21,6 +20,14 @@ public class StudentDto
 
     public string? Degree { get; init; }
 
+    public string? Address { get; private set; }
+
+    public string? Post { get; private set; }
+
+    required public int Limit { get; init; } = 1;
+
+    required public int Fullness { get; init; } = 1;
+
     required public IList<ScientificAreasDto> ScientificArea { get; init; } = new List<ScientificAreasDto>();
 
     required public IList<string> ScientificInterests { get; init; }
@@ -31,13 +38,7 @@ public class StudentDto
 
     public string? RISCUri { get; init; }
 
-    public string? Status { get; set; }
-
-    public bool? CommandSearching { get; set; }
-
-    public bool? ProfessorSearching { get; set; }
-
-    public int? PublicationsCount { get; init; }
+    public int PublicationsCount { get; init; }
 
     public int? HIndex { get; init; }
 }

@@ -4,6 +4,8 @@ namespace ScientificWork.UseCases.ScientificWorks.Common.Dtos;
 
 public class ScientificWorkDto
 {
+    public Guid Id { get; init; }
+
     public string Name { get; init; }
 
     public string Titile { get; init; }

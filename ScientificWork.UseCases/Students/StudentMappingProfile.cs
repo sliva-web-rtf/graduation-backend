@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using ScientificWork.Domain.Students;
 using ScientificWork.UseCases.Students.Common.Dtos;
-using ScientificWork.UseCases.Students.GetStudents;
 using ScientificWork.UseCases.Users.CreateStudent;
 using ScientificWork.UseCases.Users.UpdateUserPassword;
 

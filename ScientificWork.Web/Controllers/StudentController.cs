@@ -105,6 +105,7 @@ public class StudentController : ControllerBase
     [HttpGet("list-students")]
     public async Task<ActionResult> GetStudents([FromQuery] GetStudentsQuery query)
     {
+        HttpContext.Items.Add("userId", User.GetCurrentUserId());
         var res = await mediator.Send(query);
         return Ok(res);
     }

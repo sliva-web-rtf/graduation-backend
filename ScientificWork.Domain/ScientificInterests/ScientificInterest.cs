@@ -22,4 +22,13 @@ public class ScientificInterest : Entity<Guid>
     private readonly List<ScientificWorks.ScientificWork> scientificWorks = new();
 
     public IReadOnlyList<ScientificWorks.ScientificWork> ScientificWorks => scientificWorks.AsReadOnly();
+
+    public ScientificInterest()
+    {
+    }
+
+    public ScientificInterest(string name)
+    {
+        Name = name;
+    }
 }

@@ -21,7 +21,7 @@ public class GetScientificInterestsQueryHandler : IRequestHandler<GetScientificI
     {
         var scientificInterests =
             await dbContext.ScientificInterests
-                .Where(x => x.Name.Contains(request.Search))
+                .Where(x => x.Name.StartsWith(request.Search))
                 .Select(x => x.Name)
                 .ToListAsync(cancellationToken);
 

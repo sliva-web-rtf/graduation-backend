@@ -38,7 +38,10 @@ public class GetStudentProfileByIdQueryHandler : IRequestHandler<GetStudentProfi
                 Subsections = x.Select(s => s.Name).ToList()
             });
 
-        result.ScientificArea.ToList().AddRange(scientificAreasDto);
+        foreach (var dto in scientificAreasDto)
+        {
+            result.ScientificArea.Add(dto);
+        }
 
         return result;
     }
