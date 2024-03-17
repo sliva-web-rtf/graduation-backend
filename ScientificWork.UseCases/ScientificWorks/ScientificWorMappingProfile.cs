@@ -2,6 +2,7 @@
 using ScientificWork.UseCases.ScientificWorks.Common.Dtos;
 using ScientificWork.UseCases.ScientificWorks.CreateScientificWork;
 using ScientificWork.UseCases.ScientificWorks.GetGeneralInformationById;
+using ScientificWork.UseCases.ScientificWorks.GetRecordingSlotById;
 
 namespace ScientificWork.UseCases.ScientificWorks;
 
@@ -16,5 +17,7 @@ public class ScientificWorMappingProfile : Profile
         CreateMap<CreateScientificWorkCommand, Domain.ScientificWorks.ScientificWork>()
             .ForMember(x => x.ScientificInterests, opt => opt.Ignore())
             .ForMember(x => x.ScientificAreaSubsections, opt => opt.Ignore());
+        CreateMap<Domain.ScientificWorks.ScientificWork, GetRecordingSlotByIdResult>()
+            .ForMember(x => x.StudentDtos, opt => opt.Ignore());
     }
 }

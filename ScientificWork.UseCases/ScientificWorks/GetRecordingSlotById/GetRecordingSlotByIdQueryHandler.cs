@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
+using ScientificWork.UseCases.Common.Exceptions;
+using ScientificWork.UseCases.Students.Common.Dtos;
 
 namespace ScientificWork.UseCases.ScientificWorks.GetRecordingSlotById;
 
@@ -19,8 +22,23 @@ public class GetRecordingSlotByIdQueryHandler : IRequestHandler<GetRecordingSlot
     }
 
     /// <inheritdoc />
-    public Task<GetRecordingSlotByIdResult> Handle(GetRecordingSlotByIdQuery request, CancellationToken cancellationToken)
+    public async Task<GetRecordingSlotByIdResult> Handle(GetRecordingSlotByIdQuery request, CancellationToken cancellationToken)
     {
-        throw new Exception();
+        var scientificWork = await dbContext.ScientificWorks
+            .Where(x => x.Id == request.Id)
+            .Include(x => x.Students)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (scientificWork == null)
+        {
+            throw new ScientificWorkNotFoundException($"Not found scientific work with id = {request.Id}");
+        }
+
+        var res = mapper.Map<GetRecordingSlotByIdResult>(scientificWork);
+        res.StudentDtos = scientificWork.Students
+            .Select(x => mapper.Map<StudentDto>(x))
+            .ToList();
+
+        return res;
     }
 }

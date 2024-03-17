@@ -1,9 +1,8 @@
-﻿using ScientificWork.Domain.Students.Enums;
-using ScientificWork.UseCases.Common.Dtos;
+﻿using ScientificWork.UseCases.Common.Dtos;
 
-namespace ScientificWork.UseCases.Students.Common.Dtos;
+namespace ScientificWork.UseCases.Students.GetStudentProfileById;
 
-public class StudentDto
+public record GetStudentProfileByIdResult
 {
     public Guid Id { get; init; }
 

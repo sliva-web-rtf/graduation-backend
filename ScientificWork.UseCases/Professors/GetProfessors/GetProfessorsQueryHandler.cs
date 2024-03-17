@@ -10,7 +10,7 @@ using ScientificWork.UseCases.Professors.Common.Dtos;
 
 namespace ScientificWork.UseCases.Professors.GetProfessors;
 
-public class GetProfessorsQueryHandler : IRequestHandler<GetProfessorsQuery, PagedList<ProfessorDto>>
+public class GetProfessorsQueryHandler : IRequestHandler<GetProfessorsQuery, GetProfessorsResult>
 {
     private readonly IMapper mapper;
     private readonly ILoggedUserAccessor userAccessor;
@@ -30,7 +30,7 @@ public class GetProfessorsQueryHandler : IRequestHandler<GetProfessorsQuery, Pag
     }
 
     /// <inheritdoc />
-    public async Task<PagedList<ProfessorDto>> Handle(GetProfessorsQuery request, CancellationToken cancellationToken)
+    public async Task<GetProfessorsResult> Handle(GetProfessorsQuery request, CancellationToken cancellationToken)
     {
         var favorites = await GetFavoritesProfessorAsync();
 
@@ -52,8 +52,10 @@ public class GetProfessorsQueryHandler : IRequestHandler<GetProfessorsQuery, Pag
             .Include(x => x.ScientificInterests)
             .ToListAsync(cancellationToken: cancellationToken);
 
-        return PagedListFactory.FromSource(mapper.Map<List<ProfessorDto>>(studentsResult),
+        var resProfessors = PagedListFactory.FromSource(mapper.Map<List<ProfessorDto>>(studentsResult),
             page: request.Page, pageSize: request.PageSize);
+
+        return new GetProfessorsResult { Professors = resProfessors, Length = resProfessors.Count(), Page = request.Page };
     }
 
     private async Task<List<Professor>> GetFavoritesProfessorAsync()

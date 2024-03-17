@@ -1,9 +1,10 @@
 ﻿using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.ScientificWorks.Enums;
+using ScientificWork.UseCases.Students.Common.Dtos;
 
 namespace ScientificWork.UseCases.ScientificWorks.GetRecordingSlotById;
 
-public class GetRecordingSlotByIdResult
+public record GetRecordingSlotByIdResult
 {
     public Guid Id { get; init; }
 
@@ -18,4 +19,6 @@ public class GetRecordingSlotByIdResult
     public Professor? Professor { get; init; }
 
     public Guid? ImageId { get; init; }
+
+    public List<StudentDto> StudentDtos { get; set; }
 }

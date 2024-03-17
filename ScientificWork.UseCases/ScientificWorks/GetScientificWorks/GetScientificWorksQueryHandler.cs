@@ -2,14 +2,16 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Saritasa.Tools.Common.Pagination;
 using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 using ScientificWork.UseCases.ScientificWorks.Common.Dtos;
+using ScientificWork.UseCases.ScientificWorks.GetScientificWorksForProfessor;
 
-namespace ScientificWork.UseCases.ScientificWorks.GetScientificWorksForProfessor;
+namespace ScientificWork.UseCases.ScientificWorks.GetScientificWorks;
 
-public class GetScientificWorksQueryHandler : IRequestHandler<GetScientificWorksQuery, List<ScientificWorkDto>>
+public class GetScientificWorksQueryHandler : IRequestHandler<GetScientificWorksQuery, GetScientificWorksResult>
 {
     private readonly IMapper mapper;
     private readonly ILoggedUserAccessor userAccessor;
@@ -20,7 +22,8 @@ public class GetScientificWorksQueryHandler : IRequestHandler<GetScientificWorks
     /// <summary>
     /// Constructor.
     /// </summary>
-    public GetScientificWorksQueryHandler(IMapper mapper, ILoggedUserAccessor userAccessor, IAppDbContext dbContext, UserManager<Professor> professorManager, UserManager<Student> studentManager)
+    public GetScientificWorksQueryHandler(IMapper mapper, ILoggedUserAccessor userAccessor,
+        IAppDbContext dbContext, UserManager<Professor> professorManager, UserManager<Student> studentManager)
     {
         this.mapper = mapper;
         this.userAccessor = userAccessor;
@@ -30,7 +33,7 @@ public class GetScientificWorksQueryHandler : IRequestHandler<GetScientificWorks
     }
 
     /// <inheritdoc />
-    public async Task<List<ScientificWorkDto>> Handle(GetScientificWorksQuery request, CancellationToken cancellationToken)
+    public async Task<GetScientificWorksResult> Handle(GetScientificWorksQuery request, CancellationToken cancellationToken)
     {
         var student = await studentManager.FindByIdAsync(userAccessor.GetCurrentUserId().ToString());
         var result = new List<Domain.ScientificWorks.ScientificWork>();
@@ -50,12 +53,49 @@ public class GetScientificWorksQueryHandler : IRequestHandler<GetScientificWorks
                 .SelectMany(x => x.ScientificWorks));
         }
 
-        var scientificWorks = await dbContext.ScientificWorks
+        var scientificWorks = dbContext.ScientificWorks
             .Include(x => x.ScientificInterests)
-            .Where(x => !result.Contains(x))
-            .OrderBy(x => x.Fullness)
-            .ToListAsync(cancellationToken);
+            .Where(x => !result.Contains(x));
 
-        return mapper.Map<List<ScientificWorkDto>>(scientificWorks);
+        if (request.ScientificAreaSubsections != null)
+        {
+            scientificWorks = FilterByScientificAreaSubsections(scientificWorks, request.ScientificAreaSubsections);
+        }
+
+        if (request.ScientificInterests != null)
+        {
+            scientificWorks = FilterByScientificInterests(scientificWorks, request.ScientificInterests);
+        }
+
+        scientificWorks = scientificWorks.OrderBy(x => x.Fullness);
+
+        var resScientificWorks = PagedListFactory.FromSource(
+            mapper.Map<List<ScientificWorkDto>>(await scientificWorks.ToListAsync(cancellationToken)),
+            page: request.Page, pageSize: request.PageSize);
+
+        return new GetScientificWorksResult
+        {
+            ScientificWorks = resScientificWorks, Page = request.Page, Length = resScientificWorks.Count()
+        };
+    }
+
+    private IQueryable<Domain.ScientificWorks.ScientificWork> FilterByScientificAreaSubsections(
+        IQueryable<Domain.ScientificWorks.ScientificWork> scientificWorks, IList<string> scientificAreaSubsections)
+    {
+        scientificWorks = dbContext.ScientificWorks
+            .Where(x => x.ScientificAreaSubsections
+                .Any(subsection => scientificAreaSubsections.Contains(subsection.Name)));
+
+        return scientificWorks;
+    }
+
+    private IQueryable<Domain.ScientificWorks.ScientificWork> FilterByScientificInterests(
+        IQueryable<Domain.ScientificWorks.ScientificWork> scientificWorks, IList<string> scientificInterests)
+    {
+        scientificWorks = dbContext.ScientificWorks
+            .Where(x => x.ScientificInterests
+                .Any(interest => scientificInterests.Contains(interest.Name)));
+
+        return scientificWorks;
     }
 }

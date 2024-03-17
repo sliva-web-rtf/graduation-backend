@@ -22,4 +22,8 @@
     <EmbeddedResource Include="**\*.html" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Students\Common\Dtos\" />
+  </ItemGroup>
+
 </Project>

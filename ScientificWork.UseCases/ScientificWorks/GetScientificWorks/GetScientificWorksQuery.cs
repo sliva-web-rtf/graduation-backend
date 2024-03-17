@@ -1,8 +1,29 @@
-﻿using MediatR;
-using ScientificWork.UseCases.ScientificWorks.Common.Dtos;
+﻿using System.ComponentModel.DataAnnotations;
+using MediatR;
 
 namespace ScientificWork.UseCases.ScientificWorks.GetScientificWorksForProfessor;
 
-public class GetScientificWorksQuery : IRequest<List<ScientificWorkDto>>
+public class GetScientificWorksQuery : IRequest<GetScientificWorksResult>
 {
+    /// <summary>
+    /// Page.
+    /// </summary>
+    [Required]
+    required public int Page { get; init; } = 1;
+
+    /// <summary>
+    /// Page size.
+    /// </summary>
+    [Required]
+    required public int PageSize { get; init; } = 20;
+
+    /// <summary>
+    /// Scientific area.
+    /// </summary>
+    public IList<string>? ScientificAreaSubsections { get; init; }
+
+    /// <summary>
+    /// Scientific interests.
+    /// </summary>
+    public IList<string>? ScientificInterests { get; init; }
 }

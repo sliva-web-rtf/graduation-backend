@@ -4,11 +4,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ScientificWork.Domain.Professors;
 using ScientificWork.UseCases.Common.Dtos;
-using ScientificWork.UseCases.Professors.Common.Dtos;
 
 namespace ScientificWork.UseCases.Professors.GetProfileById;
 
-public class GetProfileQueryHandler : IRequestHandler<GetProfileQuery, ProfessorDto>
+public class GetProfileQueryHandler : IRequestHandler<GetProfileQuery, GetProfileByIdResult>
 {
     private readonly IMapper mapper;
     private readonly UserManager<Professor> userManager;
@@ -23,10 +22,10 @@ public class GetProfileQueryHandler : IRequestHandler<GetProfileQuery, Professor
     }
 
     /// <inheritdoc />
-    public async Task<ProfessorDto> Handle(GetProfileQuery request, CancellationToken cancellationToken)
+    public async Task<GetProfileByIdResult> Handle(GetProfileQuery request, CancellationToken cancellationToken)
     {
         var professor = await GetStudentByIdAsync(request.ProfessorId, cancellationToken);
-        var result = mapper.Map<ProfessorDto>(professor);
+        var result = mapper.Map<GetProfileByIdResult>(professor);
 
         var scientificAreasDto = professor.ScientificAreasSubsections
             .GroupBy(x => x.ScientificArea.Name)

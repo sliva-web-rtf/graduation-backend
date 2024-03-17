@@ -1,11 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MediatR;
-using Saritasa.Tools.Common.Pagination;
-using ScientificWork.UseCases.Professors.Common.Dtos;
 
 namespace ScientificWork.UseCases.Professors.GetProfessors;
 
-public class GetProfessorsQuery : IRequest<PagedList<ProfessorDto>>
+public class GetProfessorsQuery : IRequest<GetProfessorsResult>
 {
     /// <summary>
     /// Page.

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ScientificWork.Domain.Students;
 using ScientificWork.UseCases.Students.Common.Dtos;
+using ScientificWork.UseCases.Students.GetStudentProfileById;
 using ScientificWork.UseCases.Users.CreateStudent;
 using ScientificWork.UseCases.Users.UpdateUserPassword;
 
@@ -31,8 +32,14 @@ public class StudentMappingProfile : Profile
                 opts.Condition((src, dest, srcMember) => srcMember != null);
             });
 
-        CreateMap<Student, StudentDto>()
+        CreateMap<Student, GetStudentProfileByIdResult>()
             .ForMember(x => x.ScientificArea, opt => opt.Ignore())
+            .ForMember(x => x.ScientificInterests, opt => opt.MapFrom(x => x.ScientificInterests.Select(s => s.Name)))
+            .ForMember(x => x.Status, opt => opt.MapFrom(student => student.SearchStatus!.Status))
+            .ForMember(x => x.CommandSearching, opt => opt.MapFrom(student => student.SearchStatus!.CommandSearching))
+            .ForMember(x => x.ProfessorSearching, opt => opt.MapFrom(student => student.SearchStatus!.ProfessorSearching));
+
+        CreateMap<Student, StudentDto>()
             .ForMember(x => x.ScientificInterests, opt => opt.MapFrom(x => x.ScientificInterests.Select(s => s.Name)))
             .ForMember(x => x.Status, opt => opt.MapFrom(student => student.SearchStatus!.Status))
             .ForMember(x => x.CommandSearching, opt => opt.MapFrom(student => student.SearchStatus!.CommandSearching))

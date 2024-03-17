@@ -81,8 +81,9 @@ public class ScientificWorkController : ControllerBase
     /// List scientific work.
     /// </summary>
     [HttpGet("list-scientific-works")]
-    public async Task<List<ScientificWorkDto>> GetScientificWorks([FromQuery] GetScientificWorksQuery query)
+    public async Task<ActionResult> GetScientificWorks([FromQuery] GetScientificWorksQuery query)
     {
-        return await mediator.Send(query);
+        var res = await mediator.Send(query);
+        return Ok(res);
     }
 }
