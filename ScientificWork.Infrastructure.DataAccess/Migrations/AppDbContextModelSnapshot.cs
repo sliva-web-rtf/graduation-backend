@@ -728,6 +728,9 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.Property<int>("HIndex")
                         .HasColumnType("integer");
 
+                    b.Property<bool>("IsRegistrationComplete")
+                        .HasColumnType("boolean");
+
                     b.Property<int>("PublicationsCount")
                         .HasColumnType("integer");
 

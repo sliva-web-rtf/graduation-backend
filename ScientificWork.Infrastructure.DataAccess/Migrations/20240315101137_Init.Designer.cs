@@ -12,7 +12,7 @@ using ScientificWork.Infrastructure.DataAccess;
 namespace ScientificWork.Infrastructure.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240313165515_Init")]
+    [Migration("20240315101137_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -730,6 +730,9 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
                     b.Property<int>("HIndex")
                         .HasColumnType("integer");
+
+                    b.Property<bool>("IsRegistrationComplete")
+                        .HasColumnType("boolean");
 
                     b.Property<int>("PublicationsCount")
                         .HasColumnType("integer");

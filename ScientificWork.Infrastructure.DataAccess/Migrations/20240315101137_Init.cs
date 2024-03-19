@@ -293,6 +293,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     RISCUri = table.Column<string>(type: "text", unicode: false, nullable: true),
                     URPUri = table.Column<string>(type: "text", unicode: false, nullable: true),
                     Contacts = table.Column<string>(type: "text", unicode: false, nullable: true),
+                    IsRegistrationComplete = table.Column<bool>(type: "boolean", nullable: false),
                     SearchStatus_Status = table.Column<int>(type: "integer", nullable: true),
                     SearchStatus_CommandSearching = table.Column<bool>(type: "boolean", nullable: true),
                     SearchStatus_ProfessorSearching = table.Column<bool>(type: "boolean", nullable: true),

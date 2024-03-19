@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScientificWork.UseCases.Students.GetStudentProfileById;
 using ScientificWork.UseCases.Students.GetStudents;
+using ScientificWork.UseCases.Users.CompleteOnBoarding;
 using ScientificWork.UseCases.Users.CreateStudent;
 using ScientificWork.UseCases.Users.UpdateProfileInfo;
 using ScientificWork.UseCases.Users.UpdateStatusCommand;
@@ -57,6 +58,12 @@ public class StudentController : ControllerBase
 
     [HttpPut("on-boarding/update-status")]
     public async Task UpdateOnBoardingStatusAsync(UpdateStatusCommand command)
+    {
+        await mediator.Send(command);
+    }
+
+    [HttpPost("on-boarding/complete")]
+    public async Task CompleteOnBoardingAsync(CompleteOnBoardingCommand command)
     {
         await mediator.Send(command);
     }
