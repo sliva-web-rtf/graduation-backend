@@ -7,7 +7,7 @@ using ScientificWork.Domain.Users;
 namespace ScientificWork.Domain.Professors;
 
 /// <summary>
-/// Professor.
+/// Professors.
 /// </summary>
 public class Professor : User
 {

@@ -1,4 +1,4 @@
-﻿namespace ScientificWork.UseCases.Students.Common.Exceptions;
+﻿namespace ScientificWork.UseCases.Common.Exceptions;
 
 class UserNotFoundException : Exception
 {

@@ -11,6 +11,7 @@ using ScientificWork.Domain.ScientificInterests;
 using ScientificWork.Domain.Students;
 using ScientificWork.Domain.Users;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
+using ScientificWork.Infrastructure.DataAccess.ModelConfigurations;
 
 namespace ScientificWork.Infrastructure.DataAccess;
 
@@ -60,6 +61,7 @@ public class AppDbContext
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.CreateDefaultScientificArea();
         base.OnModelCreating(modelBuilder);
 
         RestrictCascadeDelete(modelBuilder);

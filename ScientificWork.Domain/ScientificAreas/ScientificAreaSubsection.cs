@@ -1,11 +1,14 @@
-﻿using ScientificWork.Domain.Common;
+﻿using System.ComponentModel.DataAnnotations;
+using ScientificWork.Domain.Common;
 using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.Students;
 
 namespace ScientificWork.Domain.ScientificAreas;
 
-public class ScientificAreaSubsection : Entity<Guid>
+public class ScientificAreaSubsection
 {
+    public Guid Id { get; set; }
+
     public Guid ScientificAreaId { get;  set; }
 
     public ScientificArea ScientificArea { get;  set; }

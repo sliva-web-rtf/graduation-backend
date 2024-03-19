@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.102.2" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.9" />
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.9" />
@@ -19,6 +20,10 @@
 
   <ItemGroup>
     <EmbeddedResource Include="**\*.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Students\Common\Dtos\" />
   </ItemGroup>
 
 </Project>

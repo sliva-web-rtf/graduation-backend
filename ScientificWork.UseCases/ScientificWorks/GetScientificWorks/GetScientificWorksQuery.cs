@@ -1,12 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MediatR;
 
-namespace ScientificWork.UseCases.Students.GetStudents;
+namespace ScientificWork.UseCases.ScientificWorks.GetScientificWorksForProfessor;
 
-/// <summary>
-/// Get students query.
-/// </summary>
-public class GetStudentsQuery : IRequest<GetStudentsResult>
+public class GetScientificWorksQuery : IRequest<GetScientificWorksResult>
 {
     /// <summary>
     /// Page.

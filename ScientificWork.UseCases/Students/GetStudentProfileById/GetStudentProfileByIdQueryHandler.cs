@@ -4,12 +4,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ScientificWork.Domain.Students;
 using ScientificWork.UseCases.Common.Dtos;
-using ScientificWork.UseCases.Students.Common.Dtos;
 using Exception = System.Exception;
 
 namespace ScientificWork.UseCases.Students.GetStudentProfileById;
 
-public class GetStudentProfileByIdQueryHandler : IRequestHandler<GetStudentProfileByIdQuery, StudentDto>
+public class GetStudentProfileByIdQueryHandler : IRequestHandler<GetStudentProfileByIdQuery, GetStudentProfileByIdResult>
 {
     private readonly IMapper mapper;
     private readonly UserManager<Student> userManager;
@@ -24,11 +23,11 @@ public class GetStudentProfileByIdQueryHandler : IRequestHandler<GetStudentProfi
     }
 
     /// <inheritdoc />
-    public async Task<StudentDto> Handle(GetStudentProfileByIdQuery request, CancellationToken cancellationToken)
+    public async Task<GetStudentProfileByIdResult> Handle(GetStudentProfileByIdQuery request, CancellationToken cancellationToken)
     {
         var student = await GetStudentByIdAsync(request.StudentId, cancellationToken);
 
-        var result = mapper.Map<StudentDto>(student);
+        var result = mapper.Map<GetStudentProfileByIdResult>(student);
 
         var scientificAreasDto = student.ScientificAreaSubsections
             .GroupBy(x => x.ScientificArea.Name)
@@ -38,7 +37,10 @@ public class GetStudentProfileByIdQueryHandler : IRequestHandler<GetStudentProfi
                 Subsections = x.Select(s => s.Name).ToList()
             });
 
-        result.ScientificArea.ToList().AddRange(scientificAreasDto);
+        foreach (var dto in scientificAreasDto)
+        {
+            result.ScientificArea.Add(dto);
+        }
 
         return result;
     }

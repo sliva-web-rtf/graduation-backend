@@ -1,8 +1,13 @@
-﻿using ScientificWork.UseCases.Students.Common.Dtos;
+﻿using Saritasa.Tools.Common.Pagination;
+using ScientificWork.UseCases.Students.Common.Dtos;
 
 namespace ScientificWork.UseCases.Students.GetStudents;
 
-public class GetStudentsResult
+public record GetStudentsResult
 {
-    public ICollection<StudentDto> StudentsDtos { get; set; }
+    public PagedList<StudentDto> Students { get; init; }
+
+    public int Page { get; init; }
+
+    public int Length { get; init; }
 }
