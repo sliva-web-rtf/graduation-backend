@@ -26,6 +26,11 @@ public class UserDetailsDto
     required public string Email { get; set; }
 
     /// <summary>
+    /// User role.
+    /// </summary>
+    required public string Role { get; set; }
+
+    /// <summary>
     /// Last login date time.
     /// </summary>
     public DateTime LastLogin { get; set; }
