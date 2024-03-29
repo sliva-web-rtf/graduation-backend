@@ -3,7 +3,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.OpenApi.Models;
 using ScientificWork.UseCases.Common.Pagination;
-using ScientificWork.UseCases.Users.AuthenticateUser;
+using ScientificWork.UseCases.Users;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 
@@ -40,7 +40,7 @@ internal class SwaggerGenOptionsSetup
         // TODO: Add your assemblies here.
         options.IncludeXmlCommentsWithRemarks(GetAssemblyLocationByType(GetType()));
         options.IncludeXmlCommentsWithRemarks(GetAssemblyLocationByType(typeof(PageQueryFilter)));
-        options.IncludeXmlCommentsWithRemarks(GetAssemblyLocationByType(typeof(TokenModel)));
+        options.IncludeXmlCommentsWithRemarks(GetAssemblyLocationByType(typeof(UserMappingProfile)));
         options.IncludeXmlCommentsFromInheritDocs(includeRemarks: true);
 
         // Our custom filters.

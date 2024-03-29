@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScientificWork.Infrastructure.Common", "ScientificWork.Infrastructure.Common\ScientificWork.Infrastructure.Common.csproj", "{22F82411-AF5A-4FD2-8283-B77A0EDAFFAD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{B87930A4-EDC4-406D-98C4-A7BF6D51937D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B87930A4-EDC4-406D-98C4-A7BF6D51937D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B87930A4-EDC4-406D-98C4-A7BF6D51937D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22F82411-AF5A-4FD2-8283-B77A0EDAFFAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22F82411-AF5A-4FD2-8283-B77A0EDAFFAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22F82411-AF5A-4FD2-8283-B77A0EDAFFAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22F82411-AF5A-4FD2-8283-B77A0EDAFFAD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,6 +90,7 @@ Global
 		{BA8C190E-6B6B-4F21-AD82-6CAF7B594D47} = {21047DCA-64CC-4BC4-8552-8AE58285CCB1}
 		{30B19478-60CF-4A1E-8FD7-85D44E88584C} = {21047DCA-64CC-4BC4-8552-8AE58285CCB1}
 		{B87930A4-EDC4-406D-98C4-A7BF6D51937D} = {BA4CB6D2-CEB4-4110-B2CF-410C91B6669F}
+		{22F82411-AF5A-4FD2-8283-B77A0EDAFFAD} = {E7349FE4-516E-473E-97A7-A9AEF627BE2D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AD26F89F-7744-4A57-885E-864E7B7BA0F1}

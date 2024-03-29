@@ -3,6 +3,8 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Saritasa.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Users;
+using ScientificWork.Infrastructure.Abstractions.DTOs;
+using ScientificWork.Infrastructure.Abstractions.Interfaces.Authentication;
 
 namespace ScientificWork.UseCases.Users.AuthenticateUser.RefreshToken;
 
@@ -11,77 +13,38 @@ namespace ScientificWork.UseCases.Users.AuthenticateUser.RefreshToken;
 /// </summary>
 internal class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, TokenModel>
 {
-    private readonly IAuthenticationTokenService tokenService;
     private readonly SignInManager<User> signInManager;
+    private readonly ITokenModelService tokenService;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     public RefreshTokenCommandHandler(
-        IAuthenticationTokenService tokenService,
-        SignInManager<User> signInManager)
+        SignInManager<User> signInManager,
+        ITokenModelService tokenService)
     {
-        this.tokenService = tokenService;
         this.signInManager = signInManager;
+        this.tokenService = tokenService;
     }
 
     /// <inheritdoc />
     public async Task<TokenModel> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
     {
         // Get user.
-        var userId = GetTokenUserId(request.Token);
-        var user = await signInManager.UserManager.FindByIdAsync(userId);
+        var user = await signInManager.UserManager.FindByIdAsync(request.UserId);
         if (user == null)
         {
-            throw new DomainException($"User with identifier {userId} not found.");
+            throw new DomainException($"User with identifier {request.UserId} not found.");
         }
 
         // Validate token.
-        var tokenCreationDate = GetTokenCreationDate(request.Token);
-        if (tokenCreationDate + AuthenticationConstants.RefreshTokenExpire <= DateTime.UtcNow ||
-            tokenCreationDate < user.LastTokenResetAt)
+        var isRefreshTokenValid = await tokenService.ValidateRefreshToken(user, request.RefreshToken);
+        if (!isRefreshTokenValid)
         {
-            throw new DomainException("Token has been expired.");
+            throw new DomainException("Refresh token is invalid.");
         }
 
-        var principal = await signInManager.CreateUserPrincipalAsync(user);
-        return TokenModelGenerator.Generate(tokenService, principal.Claims);
-    }
-
-    private DateTime GetTokenCreationDate(string token)
-    {
-        var tokenClaims = GetTokenClaims(token);
-        var iatClaim = tokenClaims.FirstOrDefault(c => c.Type == AuthenticationConstants.IatClaimType);
-        if (iatClaim == null)
-        {
-            throw new DomainException("Iat claim cannot be found. Invalid token.");
-        }
-
-        var epochExpirationDiff = TimeSpan.FromSeconds(long.Parse(iatClaim.Value));
-        return DateTime.UnixEpoch + epochExpirationDiff;
-    }
-
-    private string GetTokenUserId(string token)
-    {
-        var tokenClaims = GetTokenClaims(token);
-        var userIdClaim = tokenClaims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-        if (userIdClaim == null)
-        {
-            throw new DomainException(
-                "User identifier claim cannot be found. Invalid token.");
-        }
-        return userIdClaim.Value;
-    }
-
-    private IEnumerable<Claim> GetTokenClaims(string token)
-    {
-        try
-        {
-            return tokenService.GetTokenClaims(token);
-        }
-        catch (Exception)
-        {
-            throw new DomainException("Invalid token.");
-        }
+        var tokenModel = await tokenService.Generate(user);
+        return tokenModel;
     }
 }

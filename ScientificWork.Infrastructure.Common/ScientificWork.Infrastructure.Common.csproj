@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ScientificWork.Domain\ScientificWork.Domain.csproj" />
+      <ProjectReference Include="..\ScientificWork.Infrastructure.Abstractions\ScientificWork.Infrastructure.Abstractions.csproj" />
+      <ProjectReference Include="..\ScientificWork.UseCases\ScientificWork.UseCases.csproj" />
+    </ItemGroup>
+
+</Project>

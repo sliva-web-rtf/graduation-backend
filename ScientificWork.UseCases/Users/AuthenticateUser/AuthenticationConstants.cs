@@ -8,7 +8,7 @@ public static class AuthenticationConstants
     /// <summary>
     /// Name of login provider used to keep refresh token for ASP.NET Identity.
     /// </summary>
-    public const string AppLoginProvider = "RedMan";
+    public const string AppLoginProvider = "RefreshTokenProvider";
 
     /// <summary>
     /// Refresh token purpose name for ASP.NET Identity.
@@ -23,10 +23,10 @@ public static class AuthenticationConstants
     /// <summary>
     /// Refresh token expiration time.
     /// </summary>
-    public static readonly TimeSpan RefreshTokenExpire = TimeSpan.FromDays(20);
+    public static readonly TimeSpan RefreshTokenExpire = TimeSpan.FromMinutes(2);
 
     /// <summary>
     /// Access token expiration time.
     /// </summary>
-    public static readonly TimeSpan AccessTokenExpirationTime = TimeSpan.FromHours(3);
+    public static readonly TimeSpan AccessTokenExpirationTime = -TimeSpan.FromSeconds(240);
 }

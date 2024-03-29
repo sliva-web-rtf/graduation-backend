@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using ScientificWork.UseCases.Users.AuthenticateUser;
+﻿using ScientificWork.UseCases.Users;
 
 namespace ScientificWork.Web.Infrastructure.DependencyInjection;
 
@@ -15,6 +14,6 @@ public class AutoMapperModule
     public static void Register(IServiceCollection services)
     {
         services.AddAutoMapper(
-            typeof(TokenModel).Assembly);
+            typeof(UserMappingProfile).Assembly);
     }
 }

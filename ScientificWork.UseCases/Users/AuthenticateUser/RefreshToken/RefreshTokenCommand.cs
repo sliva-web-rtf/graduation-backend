@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MediatR;
+using ScientificWork.Infrastructure.Abstractions.DTOs;
 
 namespace ScientificWork.UseCases.Users.AuthenticateUser.RefreshToken;
 
@@ -12,5 +13,11 @@ public record RefreshTokenCommand : IRequest<TokenModel>
     /// User token.
     /// </summary>
     [Required]
-    required public string Token { get; init; }
+    required public string RefreshToken { get; init; }
+
+    /// <summary>
+    /// User id.
+    /// </summary>
+    [Required]
+    required public string UserId { get; init; }
 }

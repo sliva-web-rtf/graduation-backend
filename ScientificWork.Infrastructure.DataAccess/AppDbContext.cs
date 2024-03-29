@@ -47,6 +47,8 @@ public class AppDbContext
     /// <inheritdoc/>
     public DbSet<SystemAdmin> SystemAdmins { get; private set; }
 
+    public DbSet<UserToken> UserSecurityTokens { get; private set; }
+
     /// <inheritdoc/>
     public DbSet<ScientificAreaSubsection> ScientificAreaSubsections { get; private set; }
 

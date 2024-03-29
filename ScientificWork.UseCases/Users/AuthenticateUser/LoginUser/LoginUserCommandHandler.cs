@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Saritasa.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Users;
+using ScientificWork.Infrastructure.Abstractions.Interfaces.Authentication;
 
 namespace ScientificWork.UseCases.Users.AuthenticateUser.LoginUser;
 
@@ -12,7 +13,7 @@ namespace ScientificWork.UseCases.Users.AuthenticateUser.LoginUser;
 internal class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, LoginUserCommandResult>
 {
     private readonly SignInManager<User> signInManager;
-    private readonly IAuthenticationTokenService tokenService;
+    private readonly ITokenModelService tokenService;
     private readonly ILogger<LoginUserCommandHandler> logger;
 
     /// <summary>
@@ -23,7 +24,7 @@ internal class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Login
     /// <param name="logger">Logger.</param>
     public LoginUserCommandHandler(
         SignInManager<User> signInManager,
-        IAuthenticationTokenService tokenService,
+        ITokenModelService tokenService,
         ILogger<LoginUserCommandHandler> logger)
     {
         this.signInManager = signInManager;
@@ -50,15 +51,12 @@ internal class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Login
         // Update last login date.
         user.UpdateLastLogin();
         await signInManager.UserManager.UpdateAsync(user);
-
-        // Combine refresh token with user id.
-        var principal = await signInManager.CreateUserPrincipalAsync(user);
-
+        var token = await tokenService.Generate(user);
         // Give token.
         return new LoginUserCommandResult
         {
             UserId = user.Id,
-            TokenModel = TokenModelGenerator.Generate(tokenService, principal.Claims)
+            TokenModel = token
         };
     }
 

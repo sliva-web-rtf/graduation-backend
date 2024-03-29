@@ -1,3 +1,5 @@
+using ScientificWork.Infrastructure.Abstractions.DTOs;
+
 namespace ScientificWork.UseCases.Users.AuthenticateUser.LoginUser;
 
 /// <summary>

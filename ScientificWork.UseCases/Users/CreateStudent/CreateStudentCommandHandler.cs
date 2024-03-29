@@ -4,6 +4,8 @@ using Microsoft.Extensions.Logging;
 using Saritasa.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Students;
 using ScientificWork.Domain.Users;
+using ScientificWork.Infrastructure.Abstractions.DTOs;
+using ScientificWork.Infrastructure.Abstractions.Interfaces.Authentication;
 using ScientificWork.UseCases.Users.AuthenticateUser;
 
 namespace ScientificWork.UseCases.Users.CreateStudent;
@@ -15,15 +17,15 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
 {
     private readonly UserManager<Student> userManager;
     private readonly SignInManager<User> signInManager;
+    private readonly ITokenModelService tokenService;
     private readonly ILogger<CreateStudentCommandHandler> logger;
-    private readonly IAuthenticationTokenService tokenService;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     public CreateStudentCommandHandler(UserManager<Student> userManager,
         ILogger<CreateStudentCommandHandler> logger, SignInManager<User> signInManager,
-        IAuthenticationTokenService tokenService)
+        ITokenModelService tokenService)
     {
         this.userManager = userManager;
         this.logger = logger;
@@ -51,16 +53,8 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
         await userManager.UpdateAsync(student);
 
         logger.LogInformation($"Student created successfully. Id: {student.Id}.");
-        var token = await GetAuthenticationToken(student);
+        var token = await tokenService.Generate(student);
 
         return new CreateStudentCommandResult(student.Id, token);
-    }
-
-    private async Task<TokenModel> GetAuthenticationToken(Student student)
-    {
-        var principal = await signInManager.CreateUserPrincipalAsync(student);
-        var token = TokenModelGenerator.Generate(tokenService, principal.Claims);
-
-        return token;
     }
 }

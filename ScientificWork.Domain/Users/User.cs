@@ -73,6 +73,8 @@ public abstract class User : IdentityUser<Guid>
     protected User(Guid id)
     {
         Id = id;
+        CreatedAt = DateTime.UtcNow;
+        UpdatedAt = DateTime.UtcNow;
     }
 
     public void UpdateLastLogin()

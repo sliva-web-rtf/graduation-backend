@@ -1,4 +1,5 @@
-﻿using ScientificWork.UseCases.Users.AuthenticateUser;
+﻿using ScientificWork.Infrastructure.Abstractions.DTOs;
+using ScientificWork.UseCases.Users.AuthenticateUser;
 
 namespace ScientificWork.UseCases.Users.CreateStudent;
 

@@ -8,6 +8,8 @@ using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.Students;
 using ScientificWork.Domain.Users;
 using ScientificWork.Infrastructure.DataAccess;
+using ScientificWork.UseCases.Users.AuthenticateUser;
+using ScientificWork.Web.Infrastructure.Authentication;
 using ScientificWork.Web.Infrastructure.Middlewares;
 using ScientificWork.Web.Infrastructure.Settings;
 using ScientificWork.Web.Infrastructure.Startup;
@@ -70,10 +72,12 @@ public class Startup
         services.AddDataProtection().SetApplicationName("Application")
             .PersistKeysToDbContext<AppDbContext>();
 
+        services.AddHttpContextAccessor();
         // Identity.
         services.AddIdentity<User, AppIdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>()
-            .AddDefaultTokenProviders();
+            .AddDefaultTokenProviders()
+            .AddTokenProvider<RefreshTokenProvider<User>>(AuthenticationConstants.AppLoginProvider);
         services.Configure<IdentityOptions>(new IdentityOptionsSetup().Setup);
         services.AddIdentityCore<Professor>().AddRoles<AppIdentityRole>().AddEntityFrameworkStores<AppDbContext>();
         services.AddIdentityCore<Student>().AddRoles<AppIdentityRole>().AddEntityFrameworkStores<AppDbContext>();

@@ -1,4 +1,4 @@
-﻿namespace ScientificWork.UseCases.Users.AuthenticateUser;
+﻿namespace ScientificWork.Infrastructure.Abstractions.DTOs;
 
 /// <summary>
 /// API generated token model.
@@ -14,4 +14,6 @@ public class TokenModel
     /// Token expiration in seconds.
     /// </summary>
     public long ExpiresIn { get; set; }
+
+    public string RefreshToken { get; set; }
 }

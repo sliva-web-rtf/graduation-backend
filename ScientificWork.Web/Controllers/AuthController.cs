@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ScientificWork.Infrastructure.Abstractions.DTOs;
 using ScientificWork.UseCases.Users.AuthenticateUser;
 using ScientificWork.UseCases.Users.AuthenticateUser.LoginUser;
 using ScientificWork.UseCases.Users.AuthenticateUser.RefreshToken;
