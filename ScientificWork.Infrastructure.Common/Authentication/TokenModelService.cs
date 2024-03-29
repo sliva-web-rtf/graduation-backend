@@ -49,14 +49,18 @@ public class TokenModelService : ITokenModelService
             claims.Union(new[] { iatClaim }),
             AuthenticationConstants.AccessTokenExpirationTime);
 
+        // add 5 min because of jwt realization
+        var accessTokenExpirationTime = AuthenticationConstants.AccessTokenExpirationTime.Add(TimeSpan.FromMinutes(5));
+
         return new TokenModel
         {
             Token = token,
-            ExpiresIn = (int)AuthenticationConstants.AccessTokenExpirationTime.TotalSeconds,
+            ExpiresIn = (int)accessTokenExpirationTime.TotalSeconds,
             RefreshToken = refreshToken
         };
     }
 
+    /// <inheritdoc />
     public Task<bool> ValidateRefreshToken(User user, string token)
     {
         return userManager.VerifyUserTokenAsync(
