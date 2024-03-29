@@ -103,9 +103,10 @@ public class RefreshTokenProvider<TUser> : DataProtectorTokenProvider<TUser> whe
                 return false;
             }
 
-            var dbToken = await dbContext.UserSecurityTokens.FirstOrDefaultAsync(t => t.Token == stamp);
+            var userAgent = contextAccessor.HttpContext!.Request.Headers.UserAgent.FirstOrDefault() ?? "";
 
-            var isEqualsSecurityStamp = dbToken is not null;
+            var isEqualsSecurityStamp = await dbContext.UserSecurityTokens
+                .AnyAsync(t => t.Token == stamp && t.Description == userAgent);
 
             return isEqualsSecurityStamp;
         }
