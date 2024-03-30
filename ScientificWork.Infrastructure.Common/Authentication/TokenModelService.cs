@@ -30,7 +30,7 @@ public class TokenModelService : ITokenModelService
     /// Common code to generate token and fill with claims.
     /// </summary>
     /// <returns>Token model.</returns>
-    public async Task<TokenModel> Generate(User user)
+    public async Task<TokenModel> Generate(User user, bool rememberMe)
     {
         var principal = await signInManager.CreateUserPrincipalAsync(user);
         var claims = principal.Claims;
@@ -40,11 +40,6 @@ public class TokenModelService : ITokenModelService
             epoch.ToString(),
             ClaimValueTypes.Integer64);
 
-        var refreshToken = await userManager.GenerateUserTokenAsync(
-            user,
-            AuthenticationConstants.AppLoginProvider,
-            AuthenticationConstants.RefreshTokensName);
-
         var token = authenticationTokenService.GenerateToken(
             claims.Union(new[] { iatClaim }),
             AuthenticationConstants.AccessTokenExpirationTime);
@@ -52,11 +47,18 @@ public class TokenModelService : ITokenModelService
         // add 5 min because of jwt realization
         var accessTokenExpirationTime = AuthenticationConstants.AccessTokenExpirationTime.Add(TimeSpan.FromMinutes(5));
 
+        string? refreshToken = null;
+        if (rememberMe)
+        {
+            refreshToken = await userManager.GenerateUserTokenAsync(
+                user,
+                AuthenticationConstants.AppLoginProvider,
+                AuthenticationConstants.RefreshTokensName);
+        }
+
         return new TokenModel
         {
-            Token = token,
-            ExpiresIn = (int)accessTokenExpirationTime.TotalSeconds,
-            RefreshToken = refreshToken
+            Token = token, ExpiresIn = (int)accessTokenExpirationTime.TotalSeconds, RefreshToken = refreshToken
         };
     }
 

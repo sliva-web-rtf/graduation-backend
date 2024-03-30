@@ -53,7 +53,7 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
         await userManager.UpdateAsync(student);
 
         logger.LogInformation($"Student created successfully. Id: {student.Id}.");
-        var token = await tokenService.Generate(student);
+        var token = await tokenService.Generate(student, false);
 
         return new CreateStudentCommandResult(student.Id, token);
     }

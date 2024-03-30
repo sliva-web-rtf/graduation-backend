@@ -5,6 +5,8 @@ namespace ScientificWork.UseCases.Users.AuthenticateUser;
 /// </summary>
 public static class AuthenticationConstants
 {
+    public const string ItemsSessionIdKey = "SessionId";
+
     /// <summary>
     /// Name of login provider used to keep refresh token for ASP.NET Identity.
     /// </summary>

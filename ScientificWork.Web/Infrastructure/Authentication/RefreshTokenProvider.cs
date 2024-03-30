@@ -22,7 +22,8 @@ public class RefreshTokenProvider<TUser> : DataProtectorTokenProvider<TUser> whe
         IDataProtectionProvider dataProtectionProvider,
         IOptions<RefreshTokenProviderOptions> options,
         ILogger<DataProtectorTokenProvider<TUser>> logger,
-        AppDbContext dbContext, IHttpContextAccessor contextAccessor)
+        AppDbContext dbContext,
+        IHttpContextAccessor contextAccessor)
         : base(dataProtectionProvider, options, logger)
     {
         this.dbContext = dbContext;
@@ -37,7 +38,10 @@ public class RefreshTokenProvider<TUser> : DataProtectorTokenProvider<TUser> whe
             throw new ArgumentNullException(nameof(user));
         }
 
-        var userAgent = contextAccessor.HttpContext!.Request.Headers.UserAgent.FirstOrDefault() ?? "";
+        if (contextAccessor.HttpContext!.Items[AuthenticationConstants.ItemsSessionIdKey] is not string sessionId)
+        {
+            sessionId = Guid.NewGuid().ToString();
+        }
 
         var ms = new MemoryStream();
         var userId = await manager.GetUserIdAsync(user);
@@ -49,10 +53,10 @@ public class RefreshTokenProvider<TUser> : DataProtectorTokenProvider<TUser> whe
         var parsedUserId = Guid.Parse(userId);
         var stamp = NewSecurityToken();
         var token = await dbContext.UserSecurityTokens
-            .FirstOrDefaultAsync(t => t.Description == userAgent && t.UserId == parsedUserId);
+            .FirstOrDefaultAsync(t => t.Description == sessionId && t.UserId == parsedUserId);
         if (token is null)
         {
-            var newToken = UserToken.Create(parsedUserId, stamp, userAgent);
+            var newToken = UserToken.Create(parsedUserId, stamp, sessionId);
             await dbContext.UserSecurityTokens.AddAsync(newToken);
         }
         else
@@ -63,6 +67,7 @@ public class RefreshTokenProvider<TUser> : DataProtectorTokenProvider<TUser> whe
         await dbContext.SaveChangesAsync();
 
         writer.Write(stamp);
+        writer.Write(sessionId);
 
         var protectedBytes = Protector.Protect(ms.ToArray());
         return Convert.ToBase64String(protectedBytes);
@@ -98,15 +103,15 @@ public class RefreshTokenProvider<TUser> : DataProtectorTokenProvider<TUser> whe
             }
 
             var stamp = reader.ReadString();
+            var sessionId = reader.ReadString();
+            contextAccessor.HttpContext!.Items[AuthenticationConstants.ItemsSessionIdKey] = sessionId;
             if (reader.PeekChar() != -1)
             {
                 return false;
             }
 
-            var userAgent = contextAccessor.HttpContext!.Request.Headers.UserAgent.FirstOrDefault() ?? "";
-
             var isEqualsSecurityStamp = await dbContext.UserSecurityTokens
-                .AnyAsync(t => t.Token == stamp && t.Description == userAgent);
+                .AnyAsync(t => t.Token == stamp && t.Description == sessionId);
 
             return isEqualsSecurityStamp;
         }
