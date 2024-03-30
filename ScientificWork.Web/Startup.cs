@@ -8,6 +8,8 @@ using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.Students;
 using ScientificWork.Domain.Users;
 using ScientificWork.Infrastructure.DataAccess;
+using ScientificWork.UseCases.Common.Settings;
+using ScientificWork.UseCases.Common.Settings.Authentication;
 using ScientificWork.UseCases.Users.AuthenticateUser;
 using ScientificWork.Web.Infrastructure.Authentication;
 using ScientificWork.Web.Infrastructure.Middlewares;
@@ -72,7 +74,7 @@ public class Startup
         services.AddDataProtection().SetApplicationName("Application")
             .PersistKeysToDbContext<AppDbContext>();
 
-        services.AddHttpContextAccessor();
+        services.AddScoped<RefreshTokenCreationOptions>();
         // Identity.
         services.AddIdentity<User, AppIdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>()

@@ -1,12 +1,10 @@
-namespace ScientificWork.UseCases.Users.AuthenticateUser;
+namespace ScientificWork.UseCases.Common.Settings.Authentication;
 
 /// <summary>
 /// Shared constants for authentication.
 /// </summary>
 public static class AuthenticationConstants
 {
-    public const string ItemsSessionIdKey = "SessionId";
-
     /// <summary>
     /// Name of login provider used to keep refresh token for ASP.NET Identity.
     /// </summary>
@@ -25,10 +23,20 @@ public static class AuthenticationConstants
     /// <summary>
     /// Refresh token expiration time.
     /// </summary>
-    public static readonly TimeSpan RefreshTokenExpire = TimeSpan.FromMinutes(2);
+    public static readonly TimeSpan RefreshTokenRememberMeExpire = TimeSpan.FromMinutes(2);
+
+    /// <summary>
+    /// Refresh token when RememberMe clicked expiration time.
+    /// </summary>
+    public static readonly TimeSpan RefreshTokenExpire = TimeSpan.FromSeconds(90);
 
     /// <summary>
     /// Access token expiration time.
     /// </summary>
-    public static readonly TimeSpan AccessTokenExpirationTime = -TimeSpan.FromMinutes(4);
+    public static readonly TimeSpan AccessTokenRememberMeExpirationTime = -TimeSpan.FromMinutes(4);
+
+    /// <summary>
+    /// Access token when RememberMe clicked expiration time.
+    /// </summary>
+    public static readonly TimeSpan AccessTokenExpirationTime = -TimeSpan.FromSeconds(270);
 }

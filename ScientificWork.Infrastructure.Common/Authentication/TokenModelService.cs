@@ -4,6 +4,8 @@ using Saritasa.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Users;
 using ScientificWork.Infrastructure.Abstractions.DTOs;
 using ScientificWork.Infrastructure.Abstractions.Interfaces.Authentication;
+using ScientificWork.UseCases.Common.Settings;
+using ScientificWork.UseCases.Common.Settings.Authentication;
 
 namespace ScientificWork.UseCases.Users.AuthenticateUser;
 
@@ -15,15 +17,18 @@ public class TokenModelService : ITokenModelService
     private readonly IAuthenticationTokenService authenticationTokenService;
     private readonly SignInManager<User> signInManager;
     private readonly UserManager<User> userManager;
+    private readonly RefreshTokenCreationOptions creationOptions;
 
     public TokenModelService(
         IAuthenticationTokenService authenticationTokenService,
         SignInManager<User> signInManager,
-        UserManager<User> userManager)
+        UserManager<User> userManager,
+        RefreshTokenCreationOptions creationOptions)
     {
         this.authenticationTokenService = authenticationTokenService;
         this.signInManager = signInManager;
         this.userManager = userManager;
+        this.creationOptions = creationOptions;
     }
 
     /// <summary>
@@ -40,21 +45,26 @@ public class TokenModelService : ITokenModelService
             epoch.ToString(),
             ClaimValueTypes.Integer64);
 
+        var accessTokenExpirationTime = rememberMe
+            ? AuthenticationConstants.AccessTokenRememberMeExpirationTime
+            : AuthenticationConstants.AccessTokenExpirationTime;
+
         var token = authenticationTokenService.GenerateToken(
             claims.Union(new[] { iatClaim }),
-            AuthenticationConstants.AccessTokenExpirationTime);
+            accessTokenExpirationTime);
 
         // add 5 min because of jwt realization
-        var accessTokenExpirationTime = AuthenticationConstants.AccessTokenExpirationTime.Add(TimeSpan.FromMinutes(5));
+        accessTokenExpirationTime += TimeSpan.FromMinutes(5);
 
-        string? refreshToken = null;
-        if (rememberMe)
+        if (!rememberMe)
         {
-            refreshToken = await userManager.GenerateUserTokenAsync(
-                user,
-                AuthenticationConstants.AppLoginProvider,
-                AuthenticationConstants.RefreshTokensName);
+            creationOptions.TokenLifespan = AuthenticationConstants.RefreshTokenExpire;
         }
+
+        var refreshToken = await userManager.GenerateUserTokenAsync(
+            user,
+            AuthenticationConstants.AppLoginProvider,
+            AuthenticationConstants.RefreshTokensName);
 
         return new TokenModel
         {

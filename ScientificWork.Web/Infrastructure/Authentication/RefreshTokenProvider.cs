@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 using ScientificWork.Domain.Users;
 using ScientificWork.Infrastructure.Common.Encoding;
 using ScientificWork.Infrastructure.DataAccess;
-using ScientificWork.UseCases.Users.AuthenticateUser;
+using ScientificWork.UseCases.Common.Settings.Authentication;
 
 namespace ScientificWork.Web.Infrastructure.Authentication;
 
@@ -15,7 +15,7 @@ namespace ScientificWork.Web.Infrastructure.Authentication;
 public class RefreshTokenProvider<TUser> : DataProtectorTokenProvider<TUser> where TUser : class
 {
     private readonly AppDbContext dbContext;
-    private readonly IHttpContextAccessor contextAccessor;
+    private readonly RefreshTokenCreationOptions creationOptions;
 
     /// <inheritdoc />
     public RefreshTokenProvider(
@@ -23,11 +23,11 @@ public class RefreshTokenProvider<TUser> : DataProtectorTokenProvider<TUser> whe
         IOptions<RefreshTokenProviderOptions> options,
         ILogger<DataProtectorTokenProvider<TUser>> logger,
         AppDbContext dbContext,
-        IHttpContextAccessor contextAccessor)
+        RefreshTokenCreationOptions creationOptions)
         : base(dataProtectionProvider, options, logger)
     {
         this.dbContext = dbContext;
-        this.contextAccessor = contextAccessor;
+        this.creationOptions = creationOptions;
     }
 
     /// <inheritdoc />
@@ -38,16 +38,18 @@ public class RefreshTokenProvider<TUser> : DataProtectorTokenProvider<TUser> whe
             throw new ArgumentNullException(nameof(user));
         }
 
-        if (contextAccessor.HttpContext!.Items[AuthenticationConstants.ItemsSessionIdKey] is not string sessionId)
+        var sessionId = creationOptions.SessionId;
+        if (sessionId is null)
         {
             sessionId = Guid.NewGuid().ToString();
+            creationOptions.SessionId = sessionId;
         }
 
         var ms = new MemoryStream();
         var userId = await manager.GetUserIdAsync(user);
         await using var writer = ms.CreateWriter();
 
-        writer.Write(DateTimeOffset.UtcNow);
+        writer.Write(DateTimeOffset.UtcNow + creationOptions.TokenLifespan);
         writer.Write(userId);
         writer.Write(purpose ?? "");
         var parsedUserId = Guid.Parse(userId);
@@ -82,8 +84,7 @@ public class RefreshTokenProvider<TUser> : DataProtectorTokenProvider<TUser> whe
             var ms = new MemoryStream(unprotectedData);
             using var reader = ms.CreateReader();
 
-            var creationTime = reader.ReadDateTimeOffset();
-            var expirationTime = creationTime + Options.TokenLifespan;
+            var expirationTime = reader.ReadDateTimeOffset();
             if (expirationTime < DateTimeOffset.UtcNow)
             {
                 return false;
@@ -104,7 +105,7 @@ public class RefreshTokenProvider<TUser> : DataProtectorTokenProvider<TUser> whe
 
             var stamp = reader.ReadString();
             var sessionId = reader.ReadString();
-            contextAccessor.HttpContext!.Items[AuthenticationConstants.ItemsSessionIdKey] = sessionId;
+            creationOptions.SessionId = sessionId;
             if (reader.PeekChar() != -1)
             {
                 return false;
@@ -138,7 +139,7 @@ public class RefreshTokenProviderOptions : DataProtectionTokenProviderOptions
     public RefreshTokenProviderOptions()
     {
         Name = AuthenticationConstants.AppLoginProvider;
-        TokenLifespan = AuthenticationConstants.RefreshTokenExpire;
+        TokenLifespan = AuthenticationConstants.RefreshTokenRememberMeExpire;
     }
 }
 
