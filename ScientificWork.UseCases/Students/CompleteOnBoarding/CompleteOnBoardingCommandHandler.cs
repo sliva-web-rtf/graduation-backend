@@ -4,7 +4,7 @@ using Saritasa.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 
-namespace ScientificWork.UseCases.Users.CompleteOnBoarding;
+namespace ScientificWork.UseCases.Students.CompleteOnBoarding;
 
 public class CompleteOnBoardingCommandHandler : IRequestHandler<CompleteOnBoardingCommand>
 {

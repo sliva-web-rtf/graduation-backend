@@ -74,6 +74,31 @@ public class Professor : User
 
     #endregion
 
+    private Professor(
+        Guid id,
+        string userName,
+        string email,
+        DateTime createdAt,
+        DateTime updatedAt)
+        : base(id)
+    {
+        Email = email;
+        UserName = userName;
+        CreatedAt = createdAt;
+        UpdatedAt = updatedAt;
+    }
+
+    public static Professor Create(
+        string email)
+    {
+        return new Professor(
+            Guid.NewGuid(),
+            email,
+            email,
+            DateTime.UtcNow,
+            DateTime.UtcNow);
+    }
+
     public void AddFavoriteStudent(Guid studentId)
     {
         var professorFavoriteStudent = ProfessorFavoriteStudent.Create(Id, studentId);

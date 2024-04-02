@@ -1,10 +1,9 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
-using Saritasa.Tools.Domain.Exceptions;
+using ScientificWork.Domain.Students;
 using ScientificWork.Domain.Users;
 using ScientificWork.Infrastructure.Abstractions.DTOs;
 using ScientificWork.Infrastructure.Abstractions.Interfaces.Authentication;
-using ScientificWork.UseCases.Common.Settings;
 using ScientificWork.UseCases.Common.Settings.Authentication;
 
 namespace ScientificWork.UseCases.Users.AuthenticateUser;
@@ -37,21 +36,10 @@ public class TokenModelService : ITokenModelService
     /// <returns>Token model.</returns>
     public async Task<TokenModel> Generate(User user, bool rememberMe)
     {
-        var principal = await signInManager.CreateUserPrincipalAsync(user);
-        var claims = principal.Claims;
-        var epoch = (long)(DateTime.UtcNow - DateTime.UnixEpoch).TotalSeconds;
-        var iatClaim = new Claim(
-            AuthenticationConstants.IatClaimType,
-            epoch.ToString(),
-            ClaimValueTypes.Integer64);
-
         var accessTokenExpirationTime = rememberMe
             ? AuthenticationConstants.AccessTokenRememberMeExpirationTime
             : AuthenticationConstants.AccessTokenExpirationTime;
-
-        var token = authenticationTokenService.GenerateToken(
-            claims.Union(new[] { iatClaim }),
-            accessTokenExpirationTime);
+        var token = await GetAuthenticationToken(user, accessTokenExpirationTime);
 
         // add 5 min because of jwt realization
         accessTokenExpirationTime += TimeSpan.FromMinutes(5);
@@ -70,6 +58,38 @@ public class TokenModelService : ITokenModelService
         {
             Token = token, ExpiresIn = (int)accessTokenExpirationTime.TotalSeconds, RefreshToken = refreshToken
         };
+    }
+
+    private async Task<string> GetAuthenticationToken(User user, TimeSpan accessTokenExpirationTime)
+    {
+        var claims = await GetUserClaims(user);
+        var token = authenticationTokenService.GenerateToken(claims, accessTokenExpirationTime);
+
+        return token;
+    }
+
+    private async Task<IEnumerable<Claim>> GetUserClaims(User user)
+    {
+        var principal = await signInManager.CreateUserPrincipalAsync(user);
+        var claims = principal.Claims.ToList();
+        var epoch = (long)(DateTime.UtcNow - DateTime.UnixEpoch).TotalSeconds;
+        var iatClaim = new Claim(
+            AuthenticationConstants.IatClaimType,
+            epoch.ToString(),
+            ClaimValueTypes.Integer64);
+
+        if (user is Student student)
+        {
+            var registrationCompleteClaimTypeClaim = new Claim(
+                AuthenticationConstants.RegistrationCompleteClaimType,
+                student.IsRegistrationComplete.ToString(),
+                ClaimValueTypes.Boolean);
+            claims.Add(registrationCompleteClaimTypeClaim);
+        }
+
+        claims.Add(iatClaim);
+
+        return claims;
     }
 
     /// <inheritdoc />

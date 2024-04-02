@@ -1,7 +1,10 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ScientificWork.Domain.Admins;
 using ScientificWork.UseCases.Professors.GetProfessors;
 using ScientificWork.UseCases.Professors.GetProfileById;
+using ScientificWork.UseCases.Professors.UplaodProfessors;
 using ScientificWork.Web.Infrastructure.Web;
 
 namespace ScientificWork.Web.Controllers;
@@ -12,6 +15,7 @@ namespace ScientificWork.Web.Controllers;
 [ApiController]
 [Route("api/professor")]
 [ApiExplorerSettings(GroupName = "professor")]
+[Authorize]
 public class ProfessorController : ControllerBase
 {
     private readonly IMediator mediator;
@@ -43,5 +47,12 @@ public class ProfessorController : ControllerBase
         HttpContext.Items.Add("userId", User.GetCurrentUserId());
         var res = await mediator.Send(query);
         return Ok(res);
+    }
+
+    [HttpPost("upload-professors")]
+    [Authorize(Roles = nameof(SystemAdmin))]
+    public async Task UploadProfessors([FromForm] UploadProfessorsCommand command)
+    {
+        await mediator.Send(command);
     }
 }

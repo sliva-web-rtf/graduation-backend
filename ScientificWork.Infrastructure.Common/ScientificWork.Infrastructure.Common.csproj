@@ -12,4 +12,8 @@
       <ProjectReference Include="..\ScientificWork.UseCases\ScientificWork.UseCases.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MailKit" Version="4.4.0" />
+    </ItemGroup>
+
 </Project>

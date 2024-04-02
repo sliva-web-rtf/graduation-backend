@@ -3,13 +3,17 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using ScientificWork.Domain.Admins;
 using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.Students;
 using ScientificWork.Domain.Users;
+using ScientificWork.Infrastructure.Abstractions.Interfaces.Email;
+using ScientificWork.Infrastructure.Common.Services.Email;
 using ScientificWork.Infrastructure.DataAccess;
 using ScientificWork.UseCases.Common.Settings;
 using ScientificWork.UseCases.Common.Settings.Authentication;
+using ScientificWork.UseCases.Common.Settings.Email;
 using ScientificWork.UseCases.Users.AuthenticateUser;
 using ScientificWork.Web.Infrastructure.Authentication;
 using ScientificWork.Web.Infrastructure.Middlewares;
@@ -73,6 +77,11 @@ public class Startup
         // tokens from different instances will be incompatible.
         services.AddDataProtection().SetApplicationName("Application")
             .PersistKeysToDbContext<AppDbContext>();
+
+        var emailSettings = new EmailSettings();
+        configuration.Bind(EmailSettings.SectionName, emailSettings);
+        services.AddSingleton(Options.Create(emailSettings));
+        services.AddScoped<IEmailSender, EmailSender>();
 
         services.AddScoped<RefreshTokenCreationOptions>();
         // Identity.

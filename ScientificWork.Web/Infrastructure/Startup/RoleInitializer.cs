@@ -1,6 +1,8 @@
 ﻿using Extensions.Hosting.AsyncInitialization;
 using Microsoft.AspNetCore.Identity;
 using ScientificWork.Domain.Admins;
+using ScientificWork.Domain.Professors;
+using ScientificWork.Domain.Students;
 using ScientificWork.Domain.Users;
 
 namespace ScientificWork.Web.Infrastructure.Startup;
@@ -23,7 +25,7 @@ public class RoleInitializer : IAsyncInitializer
     {
         var roleManager = serviceProvider.GetRequiredService<RoleManager<AppIdentityRole>>();
         var userManager = serviceProvider.GetRequiredService<UserManager<SystemAdmin>>();
-        var roleNames = new[] { "admin", "student", "professor" };
+        var roleNames = new[] { nameof(SystemAdmin), nameof(Student), nameof(Professor) };
 
         foreach (var roleName in roleNames)
         {
@@ -46,7 +48,7 @@ public class RoleInitializer : IAsyncInitializer
             var createAdmin = await userManager.CreateAsync(admin, configuration["AdminOptions:Password"]!);
             if (createAdmin.Succeeded)
             {
-                await userManager.AddToRoleAsync(admin, "admin");
+                await userManager.AddToRoleAsync(admin, nameof(SystemAdmin));
             }
         }
     }

@@ -21,6 +21,11 @@ public static class AuthenticationConstants
     public const string IatClaimType = "iat";
 
     /// <summary>
+    /// Issued at date/time claim. https://tools.ietf.org/html/rfc7519#page-10 .
+    /// </summary>
+    public const string RegistrationCompleteClaimType = "registrationComplete";
+
+    /// <summary>
     /// Refresh token expiration time.
     /// </summary>
     public static readonly TimeSpan RefreshTokenRememberMeExpire = TimeSpan.FromMinutes(2);
