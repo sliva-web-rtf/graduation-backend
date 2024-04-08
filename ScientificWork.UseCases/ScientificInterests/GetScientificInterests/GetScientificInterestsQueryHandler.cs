@@ -20,7 +20,7 @@ public class GetScientificInterestsQueryHandler : IRequestHandler<GetScientificI
     public async Task<IList<string>> Handle(GetScientificInterestsQuery request, CancellationToken cancellationToken)
     {
         var scientificInterests = dbContext.ScientificInterests
-                .Where(x => x.Name.StartsWith(request.Search))
+                .Where(x => x.Name.ToLower().StartsWith(request.Search.ToLower()))
                 .Select(x => x.Name);
 
         return PagedListFactory.FromSource(scientificInterests, page: request.Page, pageSize: request.PageSize).ToList();
