@@ -14,10 +14,4 @@ public record RefreshTokenCommand : IRequest<TokenModel>
     /// </summary>
     [Required]
     required public string RefreshToken { get; init; }
-
-    /// <summary>
-    /// User id.
-    /// </summary>
-    [Required]
-    required public string UserId { get; init; }
 }

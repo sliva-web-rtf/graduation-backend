@@ -30,6 +30,8 @@ public class UserDetailsDto
     /// </summary>
     required public IList<string> Roles { get; set; }
 
+    required public bool IsRegistrationComplete { get; set; }
+
     /// <summary>
     /// Last login date time.
     /// </summary>

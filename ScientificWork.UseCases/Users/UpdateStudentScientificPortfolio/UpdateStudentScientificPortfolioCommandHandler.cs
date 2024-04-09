@@ -30,7 +30,7 @@ public class UpdateStudentScientificPortfolioCommandHandler : IRequestHandler<Up
             throw new NotFoundException($"User with id {userId} not found.");
         }
 
-        student.UpdateScientificPortfolio(request.Degree, request.URPUri, request.ScopusUri, request.RISCUri);
+        student.UpdateScientificPortfolio(request.Degree, request.About);
 
         if (request.ScientificAreaSubsections != null)
         {

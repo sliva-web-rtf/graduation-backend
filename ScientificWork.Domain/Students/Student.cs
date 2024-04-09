@@ -19,15 +19,9 @@ public class Student : User
 
     public int HIndex { get; private set; }
 
-    public string? ScopusUri { get; private set; }
-
-    public string? RISCUri { get; private set; }
-
-    public string? URPUri { get; private set; }
+    public string? About { get; private set; }
 
     public string? Contacts { get; private set; }
-
-    public bool IsRegistrationComplete { get; private set; }
 
     public StudentSearchStatus? SearchStatus { get; private set; }
 
@@ -144,14 +138,10 @@ public class Student : User
 
     public void UpdateScientificPortfolio(
         string degree,
-        string? urpUri,
-        string? scopusUri,
-        string? riscUri)
+        string? about)
     {
         Degree = degree;
-        URPUri = urpUri;
-        ScopusUri = scopusUri;
-        RISCUri = riscUri;
+        About = about;
     }
 
     public void UpdateSearchStatus(StudentSearchStatus status)

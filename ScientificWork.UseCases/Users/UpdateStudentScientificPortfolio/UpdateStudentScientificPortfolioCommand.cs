@@ -12,9 +12,5 @@ public class UpdateStudentScientificPortfolioCommand : IRequest
 
     public IList<string>? ScientificInterests { get; init; }
 
-    public string? URPUri { get; init; }
-
-    public string? ScopusUri { get; init; }
-
-    public string? RISCUri { get; init; }
+    public string? About { get; init; }
 }

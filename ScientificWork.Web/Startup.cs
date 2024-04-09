@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
@@ -107,6 +108,13 @@ public class Startup
                 jwtIssuer).Setup
             );
 
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("RegistrationComplete", builder =>
+            {
+                builder.RequireClaim("registrationComplete", "true");
+            });
+        });
         // Database.
         services.AddDbContext<AppDbContext>(
             new DbContextOptionsSetup(databaseConnectionString).Setup);

@@ -25,7 +25,10 @@ public class UploadProfessorsCommandHandler : IRequestHandler<UploadProfessorsCo
         {
             var name = ws.Cell($"A{i}").GetValue<string>();
             var password = ws.Cell($"B{i}").GetValue<string>();
-            await sender.Send(new CreateProfessorCommand(name, password), cancellationToken);
+            if (!string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(password))
+            {
+                await sender.Send(new CreateProfessorCommand(name, password), cancellationToken);
+            }
         }
     }
 }

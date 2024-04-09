@@ -30,11 +30,13 @@ internal class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand,
     /// <inheritdoc />
     public async Task<TokenModel> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
     {
+        var tokenParts = request.RefreshToken.Split("|");
+        var userId = tokenParts[0];
         // Get user.
-        var user = await signInManager.UserManager.FindByIdAsync(request.UserId);
+        var user = await signInManager.UserManager.FindByIdAsync(userId);
         if (user == null)
         {
-            throw new DomainException($"User with identifier {request.UserId} not found.");
+            throw new DomainException($"User with identifier {userId} not found.");
         }
 
         // Validate token.

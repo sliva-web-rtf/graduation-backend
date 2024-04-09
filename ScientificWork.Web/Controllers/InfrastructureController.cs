@@ -1,5 +1,7 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ScientificWork.Domain.Admins;
 using ScientificWork.UseCases.Common.Dtos;
 using ScientificWork.UseCases.ScientificAreas.GetScientificAreas;
 using ScientificWork.UseCases.ScientificInterests.CreateScientificInterests;
@@ -49,6 +51,7 @@ public class InfrastructureController : ControllerBase
     /// <param name="command"></param>
     /// <returns></returns>
     [HttpPost("create-scientific-interests-by-exel")]
+    [Authorize(Roles = nameof(SystemAdmin))]
     public async Task CreateScientificInterests([FromForm] CreateScientificInterestsCommand command)
     {
         await mediator.Send(command);

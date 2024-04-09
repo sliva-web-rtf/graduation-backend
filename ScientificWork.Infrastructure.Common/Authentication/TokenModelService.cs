@@ -54,9 +54,10 @@ public class TokenModelService : ITokenModelService
             AuthenticationConstants.AppLoginProvider,
             AuthenticationConstants.RefreshTokensName);
 
+        var refreshTokenWithUserId = $"{user.Id}|{refreshToken}";
         return new TokenModel
         {
-            Token = token, ExpiresIn = (int)accessTokenExpirationTime.TotalSeconds, RefreshToken = refreshToken
+            Token = token, ExpiresIn = (int)accessTokenExpirationTime.TotalSeconds, RefreshToken = refreshTokenWithUserId
         };
     }
 
@@ -78,15 +79,12 @@ public class TokenModelService : ITokenModelService
             epoch.ToString(),
             ClaimValueTypes.Integer64);
 
-        if (user is Student student)
-        {
-            var registrationCompleteClaimTypeClaim = new Claim(
-                AuthenticationConstants.RegistrationCompleteClaimType,
-                student.IsRegistrationComplete.ToString(),
-                ClaimValueTypes.Boolean);
-            claims.Add(registrationCompleteClaimTypeClaim);
-        }
 
+        var registrationCompleteClaimTypeClaim = new Claim(
+            AuthenticationConstants.RegistrationCompleteClaimType,
+            user.IsRegistrationComplete.ToString(),
+            ClaimValueTypes.Boolean);
+        claims.Add(registrationCompleteClaimTypeClaim);
         claims.Add(iatClaim);
 
         return claims;
@@ -95,10 +93,11 @@ public class TokenModelService : ITokenModelService
     /// <inheritdoc />
     public Task<bool> ValidateRefreshToken(User user, string token)
     {
+        var tokenWithoutUserId = token.Split("|").Last();
         return userManager.VerifyUserTokenAsync(
             user,
             AuthenticationConstants.AppLoginProvider,
             AuthenticationConstants.RefreshTokensName,
-            token);
+            tokenWithoutUserId);
     }
 }

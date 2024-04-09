@@ -86,6 +86,7 @@ public class Professor : User
         UserName = userName;
         CreatedAt = createdAt;
         UpdatedAt = updatedAt;
+        IsRegistrationComplete = true;
     }
 
     public static Professor Create(

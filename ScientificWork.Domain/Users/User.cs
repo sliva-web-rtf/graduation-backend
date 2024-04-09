@@ -62,6 +62,8 @@ public abstract class User : IdentityUser<Guid>
     /// </summary>
     public DateTime? RemovedAt { get; protected set; }
 
+    public bool IsRegistrationComplete { get; protected set; }
+
     public UserStatus UserStatus { get; protected set; }
 
     public Guid AvatarImageId { get; protected set; }

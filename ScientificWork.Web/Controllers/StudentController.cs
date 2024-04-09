@@ -15,7 +15,7 @@ namespace ScientificWork.Web.Controllers;
 [ApiController]
 [Route("api/student")]
 [ApiExplorerSettings(GroupName = "student")]
-[Authorize]
+[Authorize(Policy = "RegistrationComplete")]
 public class StudentController : ControllerBase
 {
     private readonly IMediator mediator;

@@ -14,6 +14,7 @@ public class SystemAdmin : User
         FirstName = firstName;
         LastName = lastName;
         UserName = Email;
+        IsRegistrationComplete = true;
     }
 
     public static SystemAdmin Create(

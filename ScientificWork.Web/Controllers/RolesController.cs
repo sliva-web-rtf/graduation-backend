@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ScientificWork.Domain.Admins;
 using ScientificWork.Domain.Users;
 
 namespace ScientificWork.Web.Controllers;
@@ -11,7 +12,7 @@ namespace ScientificWork.Web.Controllers;
 [ApiController]
 [Route("api/roles")]
 [ApiExplorerSettings(GroupName = "roles")]
-[Authorize(Roles = "admin")]
+[Authorize(Roles = nameof(SystemAdmin))]
 public class RolesController
 {
     private readonly RoleManager<IdentityRole> roleManager;
