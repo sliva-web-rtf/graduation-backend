@@ -35,7 +35,8 @@ public class GetStudentsQueryHandler : IRequestHandler<GetStudentsQuery, GetStud
 
         var students = studentManager.Users
             .Where(s => !favorites.Contains(s))
-            .Where(x => x.Id != userAccessor.GetCurrentUserId());
+            .Where(x => x.Id != userAccessor.GetCurrentUserId())
+            .Where(x => x.IsRegistrationComplete == true);
 
         if (request.ScientificAreaSubsections != null)
         {

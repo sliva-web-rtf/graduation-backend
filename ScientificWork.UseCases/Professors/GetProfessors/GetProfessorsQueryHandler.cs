@@ -36,6 +36,7 @@ public class GetProfessorsQueryHandler : IRequestHandler<GetProfessorsQuery, Get
 
         var professors = professorManager.Users
             .Where(s => !favorites.Contains(s))
+            .Where(x => x.IsRegistrationComplete == true)
             .Where(x => x.Id != userAccessor.GetCurrentUserId());
 
         if (request.ScientificAreaSubsections != null)

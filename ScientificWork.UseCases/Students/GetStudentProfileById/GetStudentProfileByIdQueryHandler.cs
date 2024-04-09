@@ -49,6 +49,7 @@ public class GetStudentProfileByIdQueryHandler : IRequestHandler<GetStudentProfi
     {
         var student = await userManager.Users
             .Where(x => x.Id == id)
+            .Where(x => x.IsRegistrationComplete == true)
             .Include(x => x.ScientificInterests)
             .Include(x => x.ScientificAreaSubsections)
                 .ThenInclude(x => x.ScientificArea)

@@ -43,6 +43,7 @@ public class GetProfileQueryHandler : IRequestHandler<GetProfileQuery, GetProfil
     private async Task<Professor> GetStudentByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var student = await userManager.Users
+            .Where(x => x.IsRegistrationComplete == true)
             .Where(x => x.Id == id)
             .Include(x => x.ScientificInterests)
             .Include(x => x.ScientificAreasSubsections)
