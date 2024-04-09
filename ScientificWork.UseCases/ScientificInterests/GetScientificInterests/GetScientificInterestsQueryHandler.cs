@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Saritasa.Tools.Common.Pagination;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 
 namespace ScientificWork.UseCases.ScientificInterests.GetScientificInterests;
@@ -19,12 +19,10 @@ public class GetScientificInterestsQueryHandler : IRequestHandler<GetScientificI
     /// <inheritdoc />
     public async Task<IList<string>> Handle(GetScientificInterestsQuery request, CancellationToken cancellationToken)
     {
-        var scientificInterests =
-            await dbContext.ScientificInterests
-                .Where(x => x.Name.StartsWith(request.Search))
-                .Select(x => x.Name)
-                .ToListAsync(cancellationToken);
+        var scientificInterests = dbContext.ScientificInterests
+                .Where(x => x.Name.ToLower().StartsWith(request.Search.ToLower()))
+                .Select(x => x.Name);
 
-        return scientificInterests;
+        return PagedListFactory.FromSource(scientificInterests, page: request.Page, pageSize: request.PageSize).ToList();
     }
 }
