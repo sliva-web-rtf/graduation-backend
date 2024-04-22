@@ -46,7 +46,7 @@ internal class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand,
             throw new DomainException("Refresh token is invalid.");
         }
 
-        var tokenModel = await tokenService.Generate(user, true);
+        var tokenModel = await tokenService.Generate(user, true, TimeSpan.FromSeconds(request.TokenLifetimeInSeconds));
         return tokenModel;
     }
 }

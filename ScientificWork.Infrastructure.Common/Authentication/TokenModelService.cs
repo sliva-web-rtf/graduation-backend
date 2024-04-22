@@ -34,11 +34,11 @@ public class TokenModelService : ITokenModelService
     /// Common code to generate token and fill with claims.
     /// </summary>
     /// <returns>Token model.</returns>
-    public async Task<TokenModel> Generate(User user, bool rememberMe)
+    public async Task<TokenModel> Generate(User user, bool rememberMe, TimeSpan? tokenLifetime = null)
     {
-        var accessTokenExpirationTime = rememberMe
+        var accessTokenExpirationTime = tokenLifetime ?? (rememberMe
             ? AuthenticationConstants.AccessTokenRememberMeExpirationTime
-            : AuthenticationConstants.AccessTokenExpirationTime;
+            : AuthenticationConstants.AccessTokenExpirationTime);
         var token = await GetAuthenticationToken(user, accessTokenExpirationTime);
 
         // add 5 min because of jwt realization
