@@ -34,7 +34,6 @@ public class GetStudentsQueryHandler : IRequestHandler<GetStudentsQuery, GetStud
         var favorites = await GetFavoritesStudentsAsync();
 
         var students = studentManager.Users
-            .Where(s => !favorites.Contains(s))
             .Where(x => x.Id != userAccessor.GetCurrentUserId())
             .Where(x => x.IsRegistrationComplete == true);
 
@@ -52,7 +51,21 @@ public class GetStudentsQueryHandler : IRequestHandler<GetStudentsQuery, GetStud
             .Include(x => x.ScientificInterests)
             .ToListAsync(cancellationToken: cancellationToken);
 
-        var resStudents = PagedListFactory.FromSource(mapper.Map<List<StudentDto>>(studentsResult),
+        var favoriteIds = new HashSet<Guid>(favorites.Select(x => x.Id));
+
+        var studentDto = mapper.Map<List<StudentDto>>(studentsResult)
+            .Select(s =>
+            {
+                s.IsFavorite = favoriteIds.Contains(s.Id);
+                return s;
+            });
+
+        if (request.IsFavoriteFilter)
+        {
+            studentDto = studentDto.OrderBy(x => x.IsFavorite);
+        }
+
+        var resStudents = PagedListFactory.FromSource(studentDto,
             page: request.Page, pageSize: request.PageSize);
 
         return new GetStudentsResult { Students = resStudents, Length = resStudents.Count(), Page = request.Page };

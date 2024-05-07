@@ -8,11 +8,13 @@ public class ScientificWorkDto
 
     public string Name { get; init; }
 
-    public string Titile { get; init; }
+    public string Description { get; init; }
 
     public int? Limit { get; init; }
 
     public int? Fullness { get; init; }
+
+    required public bool IsFavorite { get; set; }
 
     public IList<string> ScientificInterests { get; init; }
 

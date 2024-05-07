@@ -43,6 +43,7 @@ public class GetScientificWorksQueryHandler : IRequestHandler<GetScientificWorks
             result.AddRange(professorManager.Users
                 .Where(x => x.Id == userAccessor.GetCurrentUserId())
                 .Include(x => x.ScientificWorks)
+                .Include(x => x.FavoriteScientificWorks)
                 .SelectMany(x => x.ScientificWorks));
         }
         else
@@ -50,12 +51,12 @@ public class GetScientificWorksQueryHandler : IRequestHandler<GetScientificWorks
             result.AddRange(studentManager.Users
                 .Where(x => x.Id == userAccessor.GetCurrentUserId())
                 .Include(x => x.ScientificWorks)
+                .Include(x => x.FavoriteScientificWorks)
                 .SelectMany(x => x.ScientificWorks));
         }
 
         var scientificWorks = dbContext.ScientificWorks
-            .Include(x => x.ScientificInterests)
-            .Where(x => !result.Contains(x));
+            .Include(x => x.ScientificInterests).AsQueryable();
 
         if (request.ScientificAreaSubsections != null)
         {
@@ -69,8 +70,22 @@ public class GetScientificWorksQueryHandler : IRequestHandler<GetScientificWorks
 
         scientificWorks = scientificWorks.OrderBy(x => x.Fullness);
 
+        var favoriteSWIds = new HashSet<Guid>(result.Select(x => x.Id));
+
+        var scientificWorksDto = mapper.Map<List<ScientificWorkDto>>(scientificWorks)
+            .Select(s =>
+            {
+                s.IsFavorite = favoriteSWIds.Contains(s.Id);
+                return s;
+            });
+
+        if (request.IsFavoriteFilter)
+        {
+            scientificWorksDto = scientificWorksDto.OrderBy(x => x.IsFavorite);
+        }
+
         var resScientificWorks = PagedListFactory.FromSource(
-            mapper.Map<List<ScientificWorkDto>>(await scientificWorks.ToListAsync(cancellationToken)),
+            mapper.Map<List<ScientificWorkDto>>(scientificWorksDto),
             page: request.Page, pageSize: request.PageSize);
 
         return new GetScientificWorksResult

@@ -28,7 +28,7 @@ public class UpdateScientificWorkCommandHandler : IRequestHandler<UpdateScientif
         {
             throw new Exception();
         }
-        scientificWork.Update(request.Name, request.Title, request.Problem, request.Limit);
+        scientificWork.Update(request.Name, request.Description, request.Result, request.Limit);
 
         await UpdateScientificInterestsAsync(scientificWork, request.ScientificInterests, cancellationToken);
         await UpdateScientificAreaSubsectionsAsync(scientificWork, request.ScientificAreaSubsections, cancellationToken);

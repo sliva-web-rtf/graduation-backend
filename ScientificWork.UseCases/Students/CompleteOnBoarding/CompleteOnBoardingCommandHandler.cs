@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Saritasa.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
@@ -20,7 +21,11 @@ public class CompleteOnBoardingCommandHandler : IRequestHandler<CompleteOnBoardi
     public async Task Handle(CompleteOnBoardingCommand request, CancellationToken cancellationToken)
     {
         var userId = userAccessor.GetCurrentUserId();
-        var user = await userManager.FindByIdAsync(userId.ToString());
+        var user = await userManager.Users
+            .Where(x => x.Id == userId)
+            .Include(x => x.ScientificInterests)
+            .Include(x => x.ScientificAreaSubsections)
+            .FirstOrDefaultAsync(cancellationToken);
         if (user is null)
         {
             throw new NotFoundException($"User with id {userId} not found.");

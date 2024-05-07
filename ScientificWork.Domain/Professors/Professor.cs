@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using ScientificWork.Domain.Favorites;
 using ScientificWork.Domain.ScientificAreas;
 using ScientificWork.Domain.ScientificInterests;

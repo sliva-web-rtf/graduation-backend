@@ -35,8 +35,7 @@ public class GetProfessorsQueryHandler : IRequestHandler<GetProfessorsQuery, Get
         var favorites = await GetFavoritesProfessorAsync();
 
         var professors = professorManager.Users
-            .Where(s => !favorites.Contains(s))
-            .Where(x => x.IsRegistrationComplete == true)
+            .Where(x => x.IsRegistrationComplete)
             .Where(x => x.Id != userAccessor.GetCurrentUserId());
 
         if (request.ScientificAreaSubsections != null)
@@ -49,11 +48,25 @@ public class GetProfessorsQueryHandler : IRequestHandler<GetProfessorsQuery, Get
             professors = FilterByScientificInterests(professors, request.ScientificInterests);
         }
 
-        var studentsResult = await professors
+        var professorsResult = await professors
             .Include(x => x.ScientificInterests)
             .ToListAsync(cancellationToken: cancellationToken);
 
-        var resProfessors = PagedListFactory.FromSource(mapper.Map<List<ProfessorDto>>(studentsResult),
+        var favoriteIds = new HashSet<Guid>(favorites.Select(x => x.Id));
+
+        var professorDto = mapper.Map<List<ProfessorDto>>(professorsResult)
+            .Select(s =>
+            {
+                s.IsFavorite = favoriteIds.Contains(s.Id);
+                return s;
+            });
+
+        if (request.IsFavoriteFilter)
+        {
+            professorDto = professorDto.OrderBy(x => x.IsFavorite);
+        }
+
+        var resProfessors = PagedListFactory.FromSource(professorDto,
             page: request.Page, pageSize: request.PageSize);
 
         return new GetProfessorsResult { Professors = resProfessors, Length = resProfessors.Count(), Page = request.Page };

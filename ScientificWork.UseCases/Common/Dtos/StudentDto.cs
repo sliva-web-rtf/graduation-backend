@@ -12,9 +12,13 @@ public class StudentDto
 
     public string? Degree { get; init; }
 
+    public string? About { get; init; }
+
     required public IList<string> ScientificInterests { get; init; }
 
     public string? Status { get; set; }
+
+    required public bool IsFavorite { get; set; }
 
     public bool? CommandSearching { get; set; }
 

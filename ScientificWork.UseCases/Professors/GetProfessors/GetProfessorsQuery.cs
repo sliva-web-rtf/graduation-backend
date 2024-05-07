@@ -26,4 +26,9 @@ public class GetProfessorsQuery : IRequest<GetProfessorsResult>
     /// Scientific interests.
     /// </summary>
     public IList<string>? ScientificInterests { get; init; }
+
+    /// <summary>
+    /// Filter by favorite.
+    /// </summary>
+    public bool IsFavoriteFilter { get; init; }
 }

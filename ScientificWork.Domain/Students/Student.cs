@@ -191,4 +191,22 @@ public class Student : User
     {
         return SearchStatus is not null;
     }
+
+    public void AddFavoriteStudent(Guid studentId)
+    {
+        var professorFavoriteStudent = StudentFavoriteStudent.Create(Id, studentId);
+        studentFavoriteStudents.Add(professorFavoriteStudent);
+    }
+
+    public void AddFavoriteScientificWork(Guid scientificWorkId)
+    {
+        var professorFavoriteStudent = StudentFavoriteScientificWork.Create(Id, scientificWorkId);
+        studentFavoriteScientificWorks.Add(professorFavoriteStudent);
+    }
+
+    public void AddFavoriteProfessor(Guid professorId)
+    {
+        var professorFavoriteStudent = StudentFavoriteProfessor.Create(Id, professorId);
+        studentFavoriteProfessors.Add(professorFavoriteStudent);
+    }
 }
