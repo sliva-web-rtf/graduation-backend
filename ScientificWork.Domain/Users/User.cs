@@ -62,6 +62,10 @@ public abstract class User : IdentityUser<Guid>
     /// </summary>
     public DateTime? RemovedAt { get; protected set; }
 
+    public string? Contacts { get; protected set; }
+
+    public string? About { get; protected set; }
+
     public bool IsRegistrationComplete { get; protected set; }
 
     public UserStatus UserStatus { get; protected set; }
@@ -82,6 +86,20 @@ public abstract class User : IdentityUser<Guid>
     public void UpdateLastLogin()
     {
         LastLogin = DateTime.UtcNow;
+    }
+
+    public void UpdateProfileInformation(
+        string firstName,
+        string lastName,
+        string patronymic,
+        string phoneNumber,
+        string contacts)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        Patronymic = patronymic;
+        PhoneNumber = phoneNumber;
+        Contacts = contacts;
     }
 
     public User()

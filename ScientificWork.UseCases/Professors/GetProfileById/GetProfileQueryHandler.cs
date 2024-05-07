@@ -27,7 +27,7 @@ public class GetProfileQueryHandler : IRequestHandler<GetProfileQuery, GetProfil
         var professor = await GetStudentByIdAsync(request.ProfessorId, cancellationToken);
         var result = mapper.Map<GetProfileByIdResult>(professor);
 
-        var scientificAreasDto = professor.ScientificAreasSubsections
+        var scientificAreasDto = professor.ScientificAreaSubsections
             .GroupBy(x => x.ScientificArea.Name)
             .Select(x => new ScientificAreasDto
             {
@@ -46,7 +46,7 @@ public class GetProfileQueryHandler : IRequestHandler<GetProfileQuery, GetProfil
             .Where(x => x.IsRegistrationComplete == true)
             .Where(x => x.Id == id)
             .Include(x => x.ScientificInterests)
-            .Include(x => x.ScientificAreasSubsections)
+            .Include(x => x.ScientificAreaSubsections)
                 .ThenInclude(x => x.ScientificArea)
             .FirstAsync(cancellationToken);
 

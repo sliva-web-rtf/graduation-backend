@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using ScientificWork.Domain.Students.Enums;
 
-namespace ScientificWork.UseCases.Users.UpdateStatusCommand;
+namespace ScientificWork.UseCases.Users.UpdateStudentStatusCommand;
 
-public class UpdateStatusCommand : IRequest
+public class UpdateStudentStatusCommand : IRequest
 {
     public SearchStatus Status { get; set; }
 

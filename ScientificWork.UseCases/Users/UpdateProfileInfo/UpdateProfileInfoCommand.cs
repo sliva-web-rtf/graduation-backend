@@ -3,7 +3,7 @@ using MediatR;
 
 namespace ScientificWork.UseCases.Users.UpdateProfileInfo;
 
-public record UpdateStudentProfileInfoCommand : IRequest
+public record UpdateProfileInfoCommand : IRequest
 {
     [Required]
     public string FirstName { get; set; }

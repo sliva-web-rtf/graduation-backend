@@ -15,13 +15,11 @@ public class Student : User
 {
     public string? Degree { get; private set; }
 
+    public int Year { get; private set; }
+
     public int PublicationsCount { get; private set; }
 
     public int HIndex { get; private set; }
-
-    public string? About { get; private set; }
-
-    public string? Contacts { get; private set; }
 
     public StudentSearchStatus? SearchStatus { get; private set; }
 
@@ -122,26 +120,14 @@ public class Student : User
         AddScientificInterest(subsection);
     }
 
-    public void UpdateProfileInformation(
-        string firstName,
-        string lastName,
-        string patronymic,
-        string phoneNumber,
-        string contacts)
-    {
-        FirstName = firstName;
-        LastName = lastName;
-        Patronymic = patronymic;
-        PhoneNumber = phoneNumber;
-        Contacts = contacts;
-    }
-
     public void UpdateScientificPortfolio(
         string degree,
-        string? about)
+        string? about,
+        int year)
     {
         Degree = degree;
         About = about;
+        Year = year;
     }
 
     public void UpdateSearchStatus(StudentSearchStatus status)
@@ -177,9 +163,10 @@ public class Student : User
 
     private bool CheckScientificPortfolioFields()
     {
-        if (FieldValidator.ValidateNotNull(Degree)
+        if (!FieldValidator.ValidateNotNull(Degree)
             || scientificInterests.Count == 0
-            || scientificAreaSubsections.Count == 0)
+            || scientificAreaSubsections.Count == 0
+            || Year == 0)
         {
             return false;
         }

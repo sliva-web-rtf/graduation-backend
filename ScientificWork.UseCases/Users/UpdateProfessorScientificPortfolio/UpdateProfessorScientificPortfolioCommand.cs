@@ -1,19 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MediatR;
 
-namespace ScientificWork.UseCases.Users.UpdateStudentScientificPortfolio;
+namespace ScientificWork.UseCases.Users.UpdateProfessorScientificPortfolio;
 
-public class UpdateStudentScientificPortfolioCommand : IRequest
+public class UpdateProfessorScientificPortfolioCommand : IRequest
 {
     [Required]
     public string Degree { get; init; }
-
-    [Required]
-    public int Year { get; init; }
 
     public IList<string>? ScientificAreaSubsections { get; init; }
 
     public IList<string>? ScientificInterests { get; init; }
 
-    public string? About { get; init; }
 }
