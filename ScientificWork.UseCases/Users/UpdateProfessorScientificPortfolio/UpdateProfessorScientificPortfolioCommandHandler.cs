@@ -32,7 +32,16 @@ public class UpdateProfessorScientificPortfolioCommandHandler
             throw new NotFoundException($"User with id {userId} not found.");
         }
 
-        professor.UpdateScientificPortfolio(request.Degree);
+        professor.UpdateScientificPortfolio(
+            request.Degree,
+            request.Post,
+            request.About,
+            request.Address,
+            request.Limit,
+            request.WorkExperienceYears,
+            request.ScopusUri,
+            request.RISCUri,
+            request.URPUri);
 
         if (request.ScientificAreaSubsections != null)
         {

@@ -16,19 +16,13 @@ public class Professor : User
 
     public string? Degree { get; private set; }
 
+    public string? Post { get; private set; }
+
     public int Limit { get; private set; }
 
     public int Fullness { get; private set; }
 
-    public string? Post { get; private set; }
-
-    public int PublicationsCount { get; private set; }
-
     public int WorkExperienceYears { get; private set; }
-
-    public string? Titile { get; private set; }
-
-    public int HIndex { get; private set; }
 
     public string? ScopusUri { get; private set; }
 
@@ -133,8 +127,25 @@ public class Professor : User
         AddScientificInterest(subsection);
     }
 
-    public void UpdateScientificPortfolio(string degree)
+    public void UpdateScientificPortfolio(
+        string degree,
+        string? post,
+        string? about,
+        string? address,
+        int limit,
+        int workExperienceYears,
+        string? scopusUri,
+        string? riscUri,
+        string? urpUri)
     {
         Degree = degree;
+        Post = post;
+        About = about;
+        Address = address;
+        Limit = limit;
+        WorkExperienceYears = workExperienceYears;
+        ScopusUri = scopusUri;
+        RISCUri = riscUri;
+        URPUri = urpUri;
     }
 }
