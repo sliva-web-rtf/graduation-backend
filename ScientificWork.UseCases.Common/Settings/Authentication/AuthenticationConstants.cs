@@ -26,22 +26,12 @@ public static class AuthenticationConstants
     public const string RegistrationCompleteClaimType = "registrationComplete";
 
     /// <summary>
-    /// Refresh token expiration time.
-    /// </summary>
-    public static readonly TimeSpan RefreshTokenRememberMeExpire = TimeSpan.FromMinutes(2);
-
-    /// <summary>
     /// Refresh token when RememberMe clicked expiration time.
     /// </summary>
-    public static readonly TimeSpan RefreshTokenExpire = TimeSpan.FromSeconds(90);
-
-    /// <summary>
-    /// Access token expiration time.
-    /// </summary>
-    public static readonly TimeSpan AccessTokenRememberMeExpirationTime = -TimeSpan.FromMinutes(4);
+    public static readonly TimeSpan RefreshTokenExpire = TimeSpan.FromDays(30);
 
     /// <summary>
     /// Access token when RememberMe clicked expiration time.
     /// </summary>
-    public static readonly TimeSpan AccessTokenExpirationTime = -TimeSpan.FromSeconds(270);
+    public static readonly TimeSpan AccessTokenExpirationTime = TimeSpan.FromDays(1);
 }

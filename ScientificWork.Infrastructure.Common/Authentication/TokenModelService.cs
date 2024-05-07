@@ -16,38 +16,25 @@ public class TokenModelService : ITokenModelService
     private readonly IAuthenticationTokenService authenticationTokenService;
     private readonly SignInManager<User> signInManager;
     private readonly UserManager<User> userManager;
-    private readonly RefreshTokenCreationOptions creationOptions;
 
     public TokenModelService(
         IAuthenticationTokenService authenticationTokenService,
         SignInManager<User> signInManager,
-        UserManager<User> userManager,
-        RefreshTokenCreationOptions creationOptions)
+        UserManager<User> userManager)
     {
         this.authenticationTokenService = authenticationTokenService;
         this.signInManager = signInManager;
         this.userManager = userManager;
-        this.creationOptions = creationOptions;
     }
 
     /// <summary>
     /// Common code to generate token and fill with claims.
     /// </summary>
     /// <returns>Token model.</returns>
-    public async Task<TokenModel> Generate(User user, bool rememberMe, TimeSpan? tokenLifetime = null)
+    public async Task<TokenModel> Generate(User user)
     {
-        var accessTokenExpirationTime = tokenLifetime ?? (rememberMe
-            ? AuthenticationConstants.AccessTokenRememberMeExpirationTime
-            : AuthenticationConstants.AccessTokenExpirationTime);
+        var accessTokenExpirationTime = AuthenticationConstants.AccessTokenExpirationTime;
         var token = await GetAuthenticationToken(user, accessTokenExpirationTime);
-
-        // add 5 min because of jwt realization
-        accessTokenExpirationTime += TimeSpan.FromMinutes(5);
-
-        if (!rememberMe)
-        {
-            creationOptions.TokenLifespan = AuthenticationConstants.RefreshTokenExpire;
-        }
 
         var refreshToken = await userManager.GenerateUserTokenAsync(
             user,
@@ -57,7 +44,9 @@ public class TokenModelService : ITokenModelService
         var refreshTokenWithUserId = $"{user.Id}|{refreshToken}";
         return new TokenModel
         {
-            Token = token, ExpiresIn = (int)accessTokenExpirationTime.TotalSeconds, RefreshToken = refreshTokenWithUserId
+            Token = token,
+            ExpiresIn = (int)accessTokenExpirationTime.TotalSeconds,
+            RefreshToken = refreshTokenWithUserId
         };
     }
 

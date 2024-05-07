@@ -14,6 +14,4 @@ public record RefreshTokenCommand : IRequest<TokenModel>
     /// </summary>
     [Required]
     required public string RefreshToken { get; init; }
-
-    public int TokenLifetimeInSeconds { get; init; }
 }
