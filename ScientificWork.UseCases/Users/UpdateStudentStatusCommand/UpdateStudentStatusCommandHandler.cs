@@ -5,20 +5,20 @@ using ScientificWork.Domain.Students;
 using ScientificWork.Domain.Students.ValueObjects;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 
-namespace ScientificWork.UseCases.Users.UpdateStatusCommand;
+namespace ScientificWork.UseCases.Users.UpdateStudentStatusCommand;
 
-public class UpdateStatusCommandHandler : IRequestHandler<Users.UpdateStatusCommand.UpdateStatusCommand>
+public class UpdateStudentStatusCommandHandler : IRequestHandler<UpdateStudentStatusCommand>
 {
     private readonly UserManager<Student> userManager;
     private readonly ILoggedUserAccessor userAccessor;
 
-    public UpdateStatusCommandHandler(UserManager<Student> userManager, ILoggedUserAccessor userAccessor)
+    public UpdateStudentStatusCommandHandler(UserManager<Student> userManager, ILoggedUserAccessor userAccessor)
     {
         this.userManager = userManager;
         this.userAccessor = userAccessor;
     }
 
-    public async Task Handle(Users.UpdateStatusCommand.UpdateStatusCommand request, CancellationToken cancellationToken)
+    public async Task Handle(UpdateStudentStatusCommand request, CancellationToken cancellationToken)
     {
         var userId = userAccessor.GetCurrentUserId().ToString();
         var student = await userManager.FindByIdAsync(userId);

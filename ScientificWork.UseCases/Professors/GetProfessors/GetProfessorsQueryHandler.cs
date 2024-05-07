@@ -91,8 +91,8 @@ public class GetProfessorsQueryHandler : IRequestHandler<GetProfessorsQuery, Get
     private IQueryable<Professor> FilterByScientificAreaSubsections(IQueryable<Professor> professors, IList<string> scientificAreaSubsections)
     {
         professors = professors
-            .Include(x => x.ScientificAreasSubsections)
-            .Where(student => student.ScientificAreasSubsections
+            .Include(x => x.ScientificAreaSubsections)
+            .Where(student => student.ScientificAreaSubsections
                 .Any(subsection => scientificAreaSubsections.Contains(subsection.Name)));
 
         return professors;

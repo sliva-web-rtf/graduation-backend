@@ -396,32 +396,32 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("ea2f5aa3-90c3-4a2b-bb0c-a8d5234b1354"),
+                            Id = new Guid("0a6ba426-d2c1-40b6-ba0b-0d82b0d63c74"),
                             Name = "Естественные науки"
                         },
                         new
                         {
-                            Id = new Guid("0f2758bb-ee55-4d24-9e28-7ae3b0af052f"),
+                            Id = new Guid("e24c7dae-9183-4de1-9e3c-285f574de795"),
                             Name = "Техника и технологии"
                         },
                         new
                         {
-                            Id = new Guid("ef2e443c-ea76-40f2-bc9e-ad12b26467aa"),
+                            Id = new Guid("9cd85389-3ab2-4148-bd96-5d2095621226"),
                             Name = "Медицина и здравоохранение"
                         },
                         new
                         {
-                            Id = new Guid("ab21f0f4-c0e6-4c45-b0e2-9303fdd76bff"),
+                            Id = new Guid("da07a9fd-b6ae-4f2c-bf7a-ee375e9e3377"),
                             Name = "Сельскохозяйственные науки"
                         },
                         new
                         {
-                            Id = new Guid("700fb95f-8de8-4c68-b323-2b9cfc732dba"),
+                            Id = new Guid("f58501e7-4d73-495c-ae1b-3274ec5b00c8"),
                             Name = "Общественные науки"
                         },
                         new
                         {
-                            Id = new Guid("5eb466be-81f0-4af1-85ff-3626ffaad5cd"),
+                            Id = new Guid("31cdb569-18fe-4b7d-84be-17b085020d61"),
                             Name = "Гуманитарные науки"
                         });
                 });
@@ -449,255 +449,255 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3673ca3d-1e5f-4796-8c89-dce365e7a9c7"),
+                            Id = new Guid("c00db30a-5880-4f91-a050-cb1f3c110f7f"),
                             Name = "Математика",
-                            ScientificAreaId = new Guid("ea2f5aa3-90c3-4a2b-bb0c-a8d5234b1354")
+                            ScientificAreaId = new Guid("0a6ba426-d2c1-40b6-ba0b-0d82b0d63c74")
                         },
                         new
                         {
-                            Id = new Guid("5b444798-93ae-4f0b-af2c-d3f9ffe32682"),
+                            Id = new Guid("bb5df083-b35e-411c-9c8b-3822f0282bfd"),
                             Name = "Компьютерные и информационные науки",
-                            ScientificAreaId = new Guid("ea2f5aa3-90c3-4a2b-bb0c-a8d5234b1354")
+                            ScientificAreaId = new Guid("0a6ba426-d2c1-40b6-ba0b-0d82b0d63c74")
                         },
                         new
                         {
-                            Id = new Guid("b3c220be-d184-461e-a52b-62ad9178d1cc"),
+                            Id = new Guid("98950ede-e5f7-4b83-8c65-c770392ddd4d"),
                             Name = "Физика",
-                            ScientificAreaId = new Guid("ea2f5aa3-90c3-4a2b-bb0c-a8d5234b1354")
+                            ScientificAreaId = new Guid("0a6ba426-d2c1-40b6-ba0b-0d82b0d63c74")
                         },
                         new
                         {
-                            Id = new Guid("acf964d2-2ad5-4a3c-8ce4-cf1d5601439e"),
+                            Id = new Guid("af256762-ee43-42d0-83d0-45b4ebd8e8fb"),
                             Name = "Химия",
-                            ScientificAreaId = new Guid("ea2f5aa3-90c3-4a2b-bb0c-a8d5234b1354")
+                            ScientificAreaId = new Guid("0a6ba426-d2c1-40b6-ba0b-0d82b0d63c74")
                         },
                         new
                         {
-                            Id = new Guid("48d8e39b-522d-4b1a-92f6-6120c422048e"),
+                            Id = new Guid("1d7f1d6f-2762-4415-9a8f-935d890ae590"),
                             Name = "Науки о Земле и окружающей среде",
-                            ScientificAreaId = new Guid("ea2f5aa3-90c3-4a2b-bb0c-a8d5234b1354")
+                            ScientificAreaId = new Guid("0a6ba426-d2c1-40b6-ba0b-0d82b0d63c74")
                         },
                         new
                         {
-                            Id = new Guid("d7d79e07-b3b0-412e-924a-21905305c21c"),
+                            Id = new Guid("9cfef28d-e0fb-4c85-acfe-268809296111"),
                             Name = "Биология",
-                            ScientificAreaId = new Guid("ea2f5aa3-90c3-4a2b-bb0c-a8d5234b1354")
+                            ScientificAreaId = new Guid("0a6ba426-d2c1-40b6-ba0b-0d82b0d63c74")
                         },
                         new
                         {
-                            Id = new Guid("1270d921-6e38-49d1-963c-e2967747c954"),
+                            Id = new Guid("26881303-a1a6-49c7-b932-1b74eea15a79"),
                             Name = "Другие естественные науки",
-                            ScientificAreaId = new Guid("ea2f5aa3-90c3-4a2b-bb0c-a8d5234b1354")
+                            ScientificAreaId = new Guid("0a6ba426-d2c1-40b6-ba0b-0d82b0d63c74")
                         },
                         new
                         {
-                            Id = new Guid("be317e91-e36d-4ca0-be5d-6e1c18c8ebdd"),
+                            Id = new Guid("9fb65f60-42e5-4e27-8eb1-f90dbaf3e068"),
                             Name = "Гражданское строительство",
-                            ScientificAreaId = new Guid("0f2758bb-ee55-4d24-9e28-7ae3b0af052f")
+                            ScientificAreaId = new Guid("e24c7dae-9183-4de1-9e3c-285f574de795")
                         },
                         new
                         {
-                            Id = new Guid("0e1e10c3-5371-4245-803f-39f70ba33326"),
+                            Id = new Guid("01f5d82a-91a1-4d8d-944e-38a6ef765dde"),
                             Name = "Экологическая инженерия",
-                            ScientificAreaId = new Guid("0f2758bb-ee55-4d24-9e28-7ae3b0af052f")
+                            ScientificAreaId = new Guid("e24c7dae-9183-4de1-9e3c-285f574de795")
                         },
                         new
                         {
-                            Id = new Guid("8a5ca348-a24f-4169-a53c-57cc40d12f3a"),
+                            Id = new Guid("1ed975b6-e209-4b96-9ef8-5ec64ad2a909"),
                             Name = "Машиностроение",
-                            ScientificAreaId = new Guid("0f2758bb-ee55-4d24-9e28-7ae3b0af052f")
+                            ScientificAreaId = new Guid("e24c7dae-9183-4de1-9e3c-285f574de795")
                         },
                         new
                         {
-                            Id = new Guid("f4937c21-099e-49f6-9868-2bc61ca2b1cd"),
+                            Id = new Guid("081858c0-25f2-4112-8d82-ec1855c19154"),
                             Name = "Электротехника, электроника, информационная инженерия",
-                            ScientificAreaId = new Guid("0f2758bb-ee55-4d24-9e28-7ae3b0af052f")
+                            ScientificAreaId = new Guid("e24c7dae-9183-4de1-9e3c-285f574de795")
                         },
                         new
                         {
-                            Id = new Guid("eb3150f6-1e94-48e2-88d9-07ad27fcbe96"),
+                            Id = new Guid("19ce95fc-3a70-45ef-9a8d-c27cce1d48bb"),
                             Name = "Химическая инженерия",
-                            ScientificAreaId = new Guid("0f2758bb-ee55-4d24-9e28-7ae3b0af052f")
+                            ScientificAreaId = new Guid("e24c7dae-9183-4de1-9e3c-285f574de795")
                         },
                         new
                         {
-                            Id = new Guid("d2727ff0-7ab7-438e-8dd0-8993ed313460"),
+                            Id = new Guid("65d0dba2-9a75-49c9-875b-59a3ee172ff3"),
                             Name = "Материаловедение",
-                            ScientificAreaId = new Guid("0f2758bb-ee55-4d24-9e28-7ae3b0af052f")
+                            ScientificAreaId = new Guid("e24c7dae-9183-4de1-9e3c-285f574de795")
                         },
                         new
                         {
-                            Id = new Guid("363caaf6-e360-4bde-b29c-705f2b0d92b8"),
+                            Id = new Guid("343f3e41-d128-46d5-8d08-a15ae5236e09"),
                             Name = "Медицинская инженерия",
-                            ScientificAreaId = new Guid("0f2758bb-ee55-4d24-9e28-7ae3b0af052f")
+                            ScientificAreaId = new Guid("e24c7dae-9183-4de1-9e3c-285f574de795")
                         },
                         new
                         {
-                            Id = new Guid("1acdeef2-9ed9-496f-aa0b-e95aaa2ada40"),
+                            Id = new Guid("8925fda8-ffc8-4cc8-9314-14557c8e8821"),
                             Name = "Экологическая биотехнология",
-                            ScientificAreaId = new Guid("0f2758bb-ee55-4d24-9e28-7ae3b0af052f")
+                            ScientificAreaId = new Guid("e24c7dae-9183-4de1-9e3c-285f574de795")
                         },
                         new
                         {
-                            Id = new Guid("d038f03e-1096-45a5-87ee-189db6da9dfb"),
+                            Id = new Guid("1e845278-1923-4d73-9ead-dcd123853d09"),
                             Name = "Промышленная биотехнология",
-                            ScientificAreaId = new Guid("0f2758bb-ee55-4d24-9e28-7ae3b0af052f")
+                            ScientificAreaId = new Guid("e24c7dae-9183-4de1-9e3c-285f574de795")
                         },
                         new
                         {
-                            Id = new Guid("841e6079-d0d5-4a53-bc77-8f9081d82785"),
+                            Id = new Guid("5a4bc36c-7ae7-4310-8db3-583f04fa1467"),
                             Name = "Нанотехнологии",
-                            ScientificAreaId = new Guid("0f2758bb-ee55-4d24-9e28-7ae3b0af052f")
+                            ScientificAreaId = new Guid("e24c7dae-9183-4de1-9e3c-285f574de795")
                         },
                         new
                         {
-                            Id = new Guid("dc849d54-4119-4ad9-a482-1ee1f25f1b70"),
+                            Id = new Guid("a6dbbd1d-251d-473d-aa7c-a2bc43ad1547"),
                             Name = "Другая инженерия и технологии",
-                            ScientificAreaId = new Guid("0f2758bb-ee55-4d24-9e28-7ae3b0af052f")
+                            ScientificAreaId = new Guid("e24c7dae-9183-4de1-9e3c-285f574de795")
                         },
                         new
                         {
-                            Id = new Guid("7ad8af4d-8125-4945-a1b1-1152c982f9e4"),
+                            Id = new Guid("3da3d7ab-7385-4974-bec1-870d4c4296fb"),
                             Name = "Фундаментальная медицина",
-                            ScientificAreaId = new Guid("ef2e443c-ea76-40f2-bc9e-ad12b26467aa")
+                            ScientificAreaId = new Guid("9cd85389-3ab2-4148-bd96-5d2095621226")
                         },
                         new
                         {
-                            Id = new Guid("f11b809b-6a5b-4baa-ad3a-20ee1fdd42f9"),
+                            Id = new Guid("d9b780dc-2b11-4b65-b23c-280ae27572df"),
                             Name = "Клиническая медицина",
-                            ScientificAreaId = new Guid("ef2e443c-ea76-40f2-bc9e-ad12b26467aa")
+                            ScientificAreaId = new Guid("9cd85389-3ab2-4148-bd96-5d2095621226")
                         },
                         new
                         {
-                            Id = new Guid("929693a2-2cb5-4e64-90e0-18cbcd7c0f99"),
+                            Id = new Guid("0840be36-affd-4c21-b3c3-7e72c2e83438"),
                             Name = "Науки о здоровье",
-                            ScientificAreaId = new Guid("ef2e443c-ea76-40f2-bc9e-ad12b26467aa")
+                            ScientificAreaId = new Guid("9cd85389-3ab2-4148-bd96-5d2095621226")
                         },
                         new
                         {
-                            Id = new Guid("4ef94582-ab1b-4861-8381-03c8f4d1d44c"),
+                            Id = new Guid("010969ec-722f-44b4-afa2-eab34654c979"),
                             Name = "Медицинская биотехнология",
-                            ScientificAreaId = new Guid("ef2e443c-ea76-40f2-bc9e-ad12b26467aa")
+                            ScientificAreaId = new Guid("9cd85389-3ab2-4148-bd96-5d2095621226")
                         },
                         new
                         {
-                            Id = new Guid("f76b4ad2-c068-4e6f-a17a-34ae80d171de"),
+                            Id = new Guid("8656aff6-8663-4cf5-b31b-8c3408a6cd26"),
                             Name = "Другие медицинские науки",
-                            ScientificAreaId = new Guid("ef2e443c-ea76-40f2-bc9e-ad12b26467aa")
+                            ScientificAreaId = new Guid("9cd85389-3ab2-4148-bd96-5d2095621226")
                         },
                         new
                         {
-                            Id = new Guid("4c2bd2a9-1bb3-476c-90c0-c6af7f4f89c6"),
+                            Id = new Guid("5de89ea4-3e68-4994-8e18-ee7d7ea4d041"),
                             Name = "Сельское, лесное и рыбное хозяйство",
-                            ScientificAreaId = new Guid("ab21f0f4-c0e6-4c45-b0e2-9303fdd76bff")
+                            ScientificAreaId = new Guid("da07a9fd-b6ae-4f2c-bf7a-ee375e9e3377")
                         },
                         new
                         {
-                            Id = new Guid("48b89ee2-66de-4107-af90-67be4fd86f56"),
+                            Id = new Guid("87258c27-1897-48cd-b0da-03bf02dba63f"),
                             Name = "Животноводство и молочное производство",
-                            ScientificAreaId = new Guid("ab21f0f4-c0e6-4c45-b0e2-9303fdd76bff")
+                            ScientificAreaId = new Guid("da07a9fd-b6ae-4f2c-bf7a-ee375e9e3377")
                         },
                         new
                         {
-                            Id = new Guid("0fb83cd3-65da-4fbc-b4cb-c17ea28b60cc"),
+                            Id = new Guid("5448d0c6-4ed8-4208-8fa3-d6dcb4d3a471"),
                             Name = "Ветеринария",
-                            ScientificAreaId = new Guid("ab21f0f4-c0e6-4c45-b0e2-9303fdd76bff")
+                            ScientificAreaId = new Guid("da07a9fd-b6ae-4f2c-bf7a-ee375e9e3377")
                         },
                         new
                         {
-                            Id = new Guid("fcf32bdc-e039-4df1-8173-9f90fa8e45f7"),
+                            Id = new Guid("709b78e8-f4dd-4e20-ab92-3eb6fc725175"),
                             Name = "Сельскохозяйственная биотехнология",
-                            ScientificAreaId = new Guid("ab21f0f4-c0e6-4c45-b0e2-9303fdd76bff")
+                            ScientificAreaId = new Guid("da07a9fd-b6ae-4f2c-bf7a-ee375e9e3377")
                         },
                         new
                         {
-                            Id = new Guid("fbcb483d-2a9b-4c12-a40f-375f0a5cf43b"),
+                            Id = new Guid("1fb1c458-fd59-44a5-bb0e-11c1e2faa286"),
                             Name = "Другие сельскохозяйственные науки",
-                            ScientificAreaId = new Guid("ab21f0f4-c0e6-4c45-b0e2-9303fdd76bff")
+                            ScientificAreaId = new Guid("da07a9fd-b6ae-4f2c-bf7a-ee375e9e3377")
                         },
                         new
                         {
-                            Id = new Guid("96ff00a6-218f-4784-a453-b5b8095b0d9c"),
+                            Id = new Guid("1209c6d3-19e4-480a-890f-df8fd54d8b23"),
                             Name = "Психология",
-                            ScientificAreaId = new Guid("700fb95f-8de8-4c68-b323-2b9cfc732dba")
+                            ScientificAreaId = new Guid("f58501e7-4d73-495c-ae1b-3274ec5b00c8")
                         },
                         new
                         {
-                            Id = new Guid("77ab53a0-faec-4443-be90-71f047789510"),
+                            Id = new Guid("36551066-ca3b-4344-aa05-f8cd4dc6e5e7"),
                             Name = "Экономика и бизнес",
-                            ScientificAreaId = new Guid("700fb95f-8de8-4c68-b323-2b9cfc732dba")
+                            ScientificAreaId = new Guid("f58501e7-4d73-495c-ae1b-3274ec5b00c8")
                         },
                         new
                         {
-                            Id = new Guid("699c2b1c-7ca5-4909-8f69-73c339ed1edf"),
+                            Id = new Guid("43dad39c-5f9a-4fa1-a92d-8c087ec09d9b"),
                             Name = "Образовательные науки",
-                            ScientificAreaId = new Guid("700fb95f-8de8-4c68-b323-2b9cfc732dba")
+                            ScientificAreaId = new Guid("f58501e7-4d73-495c-ae1b-3274ec5b00c8")
                         },
                         new
                         {
-                            Id = new Guid("84c2a1af-9f5e-401e-a0f5-d33ceff30a78"),
+                            Id = new Guid("f5fdf544-d5bf-4b37-8ee3-1516ea0ad0f6"),
                             Name = "Социология",
-                            ScientificAreaId = new Guid("700fb95f-8de8-4c68-b323-2b9cfc732dba")
+                            ScientificAreaId = new Guid("f58501e7-4d73-495c-ae1b-3274ec5b00c8")
                         },
                         new
                         {
-                            Id = new Guid("dcc75bba-b845-4776-936b-fa088180dc05"),
+                            Id = new Guid("d588e5fb-571d-4cfe-9feb-b8c80463e484"),
                             Name = "Право",
-                            ScientificAreaId = new Guid("700fb95f-8de8-4c68-b323-2b9cfc732dba")
+                            ScientificAreaId = new Guid("f58501e7-4d73-495c-ae1b-3274ec5b00c8")
                         },
                         new
                         {
-                            Id = new Guid("139c3624-9e19-4500-8972-9e41900fac4f"),
+                            Id = new Guid("0d8f03d9-c7f7-49ce-9589-ec9c01805880"),
                             Name = "Политология",
-                            ScientificAreaId = new Guid("700fb95f-8de8-4c68-b323-2b9cfc732dba")
+                            ScientificAreaId = new Guid("f58501e7-4d73-495c-ae1b-3274ec5b00c8")
                         },
                         new
                         {
-                            Id = new Guid("a485ab5a-ec0d-4247-9a2f-fac177818216"),
+                            Id = new Guid("a8da144b-d985-4d64-a705-5fc0d6d5da8b"),
                             Name = "Социально-экономическая география",
-                            ScientificAreaId = new Guid("700fb95f-8de8-4c68-b323-2b9cfc732dba")
+                            ScientificAreaId = new Guid("f58501e7-4d73-495c-ae1b-3274ec5b00c8")
                         },
                         new
                         {
-                            Id = new Guid("3e15ce98-1ec4-484c-b421-327d5bf27a7a"),
+                            Id = new Guid("3d71dba9-e56a-4863-9d56-2116d181de2a"),
                             Name = "Медиа и коммуникации",
-                            ScientificAreaId = new Guid("700fb95f-8de8-4c68-b323-2b9cfc732dba")
+                            ScientificAreaId = new Guid("f58501e7-4d73-495c-ae1b-3274ec5b00c8")
                         },
                         new
                         {
-                            Id = new Guid("703fe571-7309-422e-b660-7cdd7c29911f"),
+                            Id = new Guid("e399056c-d94e-4e41-96ad-54211b6fac92"),
                             Name = "Другие социальные науки",
-                            ScientificAreaId = new Guid("700fb95f-8de8-4c68-b323-2b9cfc732dba")
+                            ScientificAreaId = new Guid("f58501e7-4d73-495c-ae1b-3274ec5b00c8")
                         },
                         new
                         {
-                            Id = new Guid("7e13e96c-4e8d-404c-9def-be23a95fd8b3"),
+                            Id = new Guid("b058e834-e094-471b-8012-32d83d81fa43"),
                             Name = "История и археология",
-                            ScientificAreaId = new Guid("5eb466be-81f0-4af1-85ff-3626ffaad5cd")
+                            ScientificAreaId = new Guid("31cdb569-18fe-4b7d-84be-17b085020d61")
                         },
                         new
                         {
-                            Id = new Guid("04e61890-8754-43eb-9eca-f67c731b3ec6"),
+                            Id = new Guid("4f104781-5f32-4967-b49b-ece44acba781"),
                             Name = "Языки и литература",
-                            ScientificAreaId = new Guid("5eb466be-81f0-4af1-85ff-3626ffaad5cd")
+                            ScientificAreaId = new Guid("31cdb569-18fe-4b7d-84be-17b085020d61")
                         },
                         new
                         {
-                            Id = new Guid("195f7eb4-3277-466a-9d2b-d598a9c80774"),
+                            Id = new Guid("c4a214d5-bde7-4f04-87b3-10a65e5f8b3b"),
                             Name = "Философия, этика и религия",
-                            ScientificAreaId = new Guid("5eb466be-81f0-4af1-85ff-3626ffaad5cd")
+                            ScientificAreaId = new Guid("31cdb569-18fe-4b7d-84be-17b085020d61")
                         },
                         new
                         {
-                            Id = new Guid("956c1dbc-faca-4c6b-87c5-fc5e3eea0b78"),
+                            Id = new Guid("a75d33d5-f419-47ad-b8ab-02050876c878"),
                             Name = "Искусство (искусство, история искусств, исполнительское искусство, музыка)",
-                            ScientificAreaId = new Guid("5eb466be-81f0-4af1-85ff-3626ffaad5cd")
+                            ScientificAreaId = new Guid("31cdb569-18fe-4b7d-84be-17b085020d61")
                         },
                         new
                         {
-                            Id = new Guid("fab1efbb-f333-4867-92ab-154f1f861eb1"),
+                            Id = new Guid("8bae972a-f26a-4e79-829e-37c75fdf138a"),
                             Name = "Другие гуманитарные науки",
-                            ScientificAreaId = new Guid("5eb466be-81f0-4af1-85ff-3626ffaad5cd")
+                            ScientificAreaId = new Guid("31cdb569-18fe-4b7d-84be-17b085020d61")
                         });
                 });
 
@@ -818,6 +818,10 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .IsUnicode(false)
+                        .HasColumnType("text");
+
+                    b.Property<string>("Contacts")
                         .IsUnicode(false)
                         .HasColumnType("text");
 
@@ -1036,10 +1040,6 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         .IsUnicode(false)
                         .HasColumnType("text");
 
-                    b.Property<string>("Contacts")
-                        .IsUnicode(false)
-                        .HasColumnType("text");
-
                     b.Property<string>("Degree")
                         .IsUnicode(false)
                         .HasColumnType("text");
@@ -1052,6 +1052,9 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
 
                     b.Property<Guid?>("ScientificAreaId")
                         .HasColumnType("uuid");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("integer");
 
                     b.HasIndex("ScientificAreaId");
 

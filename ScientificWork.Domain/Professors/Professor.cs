@@ -36,8 +36,6 @@ public class Professor : User
 
     public string? URPUri { get; private set; }
 
-    public string? Сontacts { get; private set; }
-
     private readonly List<ScientificWorks.ScientificWork> scientificWorks = new();
 
     public IReadOnlyList<ScientificWorks.ScientificWork> ScientificWorks => scientificWorks.AsReadOnly();
@@ -46,9 +44,9 @@ public class Professor : User
 
     public IReadOnlyList<ScientificInterest> ScientificInterests => scientificInterests.AsReadOnly();
 
-    private readonly List<ScientificAreaSubsection> scientificAreasSubsections = new();
+    private readonly List<ScientificAreaSubsection> scientificAreaSubsections = new();
 
-    public IReadOnlyList<ScientificAreaSubsection> ScientificAreasSubsections => scientificAreasSubsections.AsReadOnly();
+    public IReadOnlyList<ScientificAreaSubsection> ScientificAreaSubsections => scientificAreaSubsections.AsReadOnly();
 
     #region FavoriteStudents
 
@@ -111,5 +109,32 @@ public class Professor : User
     {
         var professorFavoriteStudent = ProfessorFavoriteScientificWork.Create(Id, scientificWorkId);
         professorFavoriteScientificWorks.Add(professorFavoriteStudent);
+    }
+
+    public void AddScientificAreaSubsections(params ScientificAreaSubsection[] subsection)
+    {
+        scientificAreaSubsections.AddRange(subsection);
+    }
+
+    public void UpdateScientificAreaSubsections(params ScientificAreaSubsection[] subsection)
+    {
+        scientificInterests.Clear();
+        AddScientificAreaSubsections(subsection);
+    }
+
+    public void AddScientificInterest(params ScientificInterest[] subsection)
+    {
+        scientificInterests.AddRange(subsection);
+    }
+
+    public void UpdateScientificInterest(params ScientificInterest[] subsection)
+    {
+        scientificInterests.Clear();
+        AddScientificInterest(subsection);
+    }
+
+    public void UpdateScientificPortfolio(string degree)
+    {
+        Degree = degree;
     }
 }

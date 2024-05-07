@@ -1,23 +1,23 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Saritasa.Tools.Domain.Exceptions;
-using ScientificWork.Domain.Students;
+using ScientificWork.Domain.Users;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 
 namespace ScientificWork.UseCases.Users.UpdateProfileInfo;
 
-public class UpdateProfileInfoCommandHandler : IRequestHandler<UpdateStudentProfileInfoCommand>
+public class UpdateProfileInfoCommandHandler : IRequestHandler<UpdateProfileInfoCommand>
 {
     private readonly ILoggedUserAccessor userAccessor;
-    private readonly UserManager<Student> userManager;
+    private readonly UserManager<User> userManager;
 
-    public UpdateProfileInfoCommandHandler(ILoggedUserAccessor userAccessor, UserManager<Student> userManager)
+    public UpdateProfileInfoCommandHandler(ILoggedUserAccessor userAccessor, UserManager<User> userManager)
     {
         this.userAccessor = userAccessor;
         this.userManager = userManager;
     }
 
-    public async Task Handle(UpdateStudentProfileInfoCommand request,
+    public async Task Handle(UpdateProfileInfoCommand request,
         CancellationToken cancellationToken)
     {
         var userId = userAccessor.GetCurrentUserId().ToString();

@@ -11,21 +11,25 @@ public class CompleteOnBoardingCommandHandler : IRequestHandler<CompleteOnBoardi
 {
     private readonly ILoggedUserAccessor userAccessor;
     private readonly UserManager<Student> userManager;
+    private readonly IAppDbContext dbContext;
 
-    public CompleteOnBoardingCommandHandler(ILoggedUserAccessor userAccessor, UserManager<Student> userManager)
+    public CompleteOnBoardingCommandHandler(ILoggedUserAccessor userAccessor, UserManager<Student> userManager,
+        IAppDbContext dbContext)
     {
         this.userAccessor = userAccessor;
         this.userManager = userManager;
+        this.dbContext = dbContext;
     }
 
     public async Task Handle(CompleteOnBoardingCommand request, CancellationToken cancellationToken)
     {
         var userId = userAccessor.GetCurrentUserId();
-        var user = await userManager.Users
-            .Where(x => x.Id == userId)
-            .Include(x => x.ScientificInterests)
-            .Include(x => x.ScientificAreaSubsections)
-            .FirstOrDefaultAsync(cancellationToken);
+        var user = await dbContext.Students
+            .Include(s => s.ScientificInterests)
+            .Include(s => s.ScientificAreaSubsections)
+            .FirstOrDefaultAsync(
+                student => student.Id == userId,
+                cancellationToken: cancellationToken);
         if (user is null)
         {
             throw new NotFoundException($"User with id {userId} not found.");

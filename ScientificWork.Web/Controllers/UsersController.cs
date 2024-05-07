@@ -1,9 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ScientificWork.Domain.Professors;
+using ScientificWork.Domain.Students;
+using ScientificWork.UseCases.Users.UpdateProfessorScientificPortfolio;
 using ScientificWork.UseCases.Users.UpdateProfileInfo;
-using ScientificWork.UseCases.Users.UpdateStatusCommand;
 using ScientificWork.UseCases.Users.UpdateStudentScientificPortfolio;
+using ScientificWork.UseCases.Users.UpdateStudentStatusCommand;
 using ScientificWork.UseCases.Users.UpdateUserPassword;
 
 namespace ScientificWork.Web.Controllers;
@@ -25,19 +28,28 @@ public class UsersController : ControllerBase
     }
 
     [HttpPut("update-profile-info")]
-    public async Task UpdateProfileInfoAsync(UpdateStudentProfileInfoCommand command)
+    public async Task UpdateProfileInfoAsync(UpdateProfileInfoCommand command)
     {
         await mediator.Send(command);
     }
 
-    [HttpPut("update-scientific-portfolio")]
-    public async Task UpdateScientificPortfolioAsync(UpdateStudentScientificPortfolioCommand command)
+    [HttpPut("update-student-scientific-portfolio")]
+    [Authorize(Policy = "RegistrationComplete", Roles = nameof(Student))]
+    public async Task UpdateStudentScientificPortfolioAsync(UpdateStudentScientificPortfolioCommand command)
     {
         await mediator.Send(command);
     }
 
     [HttpPut("update-status")]
-    public async Task UpdateStatusAsync(UpdateStatusCommand command)
+    [Authorize(Policy = "RegistrationComplete", Roles = nameof(Student))]
+    public async Task UpdateStatusAsync(UpdateStudentStatusCommand command)
+    {
+        await mediator.Send(command);
+    }
+
+    [HttpPut("update-professor-scientific-portfolio")]
+    [Authorize(Policy = "RegistrationComplete", Roles = nameof(Professor))]
+    public async Task UpdateProfessorScientificPortfolioAsync(UpdateProfessorScientificPortfolioCommand command)
     {
         await mediator.Send(command);
     }
