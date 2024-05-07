@@ -27,6 +27,4 @@ public record LoginUserCommand : IRequest<LoginUserCommandResult>
     /// Remember user's cookie for longer period.
     /// </summary>
     public bool RememberMe { get; init; }
-
-    public int TokenLifetimeInSeconds { get; init; }
 }

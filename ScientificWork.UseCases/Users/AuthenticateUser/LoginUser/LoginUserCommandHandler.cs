@@ -51,10 +51,7 @@ internal class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Login
         // Update last login date.
         user.UpdateLastLogin();
         await signInManager.UserManager.UpdateAsync(user);
-        var token = await tokenService.Generate(
-            user,
-            request.RememberMe,
-            TimeSpan.FromSeconds(request.TokenLifetimeInSeconds));
+        var token = await tokenService.Generate(user);
         // Give token.
         return new LoginUserCommandResult
         {

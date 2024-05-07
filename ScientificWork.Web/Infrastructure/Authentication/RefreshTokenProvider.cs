@@ -49,7 +49,7 @@ public class RefreshTokenProvider<TUser> : DataProtectorTokenProvider<TUser> whe
         var userId = await manager.GetUserIdAsync(user);
         await using var writer = ms.CreateWriter();
 
-        writer.Write(DateTimeOffset.UtcNow + creationOptions.TokenLifespan);
+        writer.Write(DateTimeOffset.UtcNow + Options.TokenLifespan);
         writer.Write(userId);
         writer.Write(purpose ?? "");
         var parsedUserId = Guid.Parse(userId);
@@ -139,7 +139,7 @@ public class RefreshTokenProviderOptions : DataProtectionTokenProviderOptions
     public RefreshTokenProviderOptions()
     {
         Name = AuthenticationConstants.AppLoginProvider;
-        TokenLifespan = AuthenticationConstants.RefreshTokenRememberMeExpire;
+        TokenLifespan = AuthenticationConstants.RefreshTokenExpire;
     }
 }
 
