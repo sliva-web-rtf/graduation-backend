@@ -14,7 +14,9 @@ public class ScientificWorkDto
 
     public int? Fullness { get; init; }
 
-    required public bool IsFavorite { get; set; }
+    public bool IsFavorite { get; set; }
+
+    public bool CanJoin { get; set; }
 
     public IList<string> ScientificInterests { get; init; }
 

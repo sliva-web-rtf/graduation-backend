@@ -20,15 +20,14 @@ public class AddProfessorToFavoritesCommandHandler : IRequestHandler<AddProfesso
     public async Task Handle(AddProfessorToFavoritesCommand request, CancellationToken cancellationToken)
     {
         var studentId = userAccessor.GetCurrentUserId();
-        // var student = await studentManager.FindByIdAsync(request.StudentId.ToString());
         var curStudent = await studentManager.Users
             .Where(p => p.Id == studentId)
-            //.Include(x => x.FavoriteStudents)
             .FirstOrDefaultAsync(cancellationToken);
 
         if (curStudent != null)
         {
             curStudent.AddFavoriteStudent(request.ProfessorId);
+            await studentManager.UpdateAsync(curStudent);
         }
         else
         {

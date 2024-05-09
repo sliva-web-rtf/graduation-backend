@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScientificWork.Domain.Admins;
 using ScientificWork.UseCases.Common.Dtos;
+using ScientificWork.UseCases.Professors.GetProfessorDegrees;
 using ScientificWork.UseCases.ScientificAreas.GetScientificAreas;
 using ScientificWork.UseCases.ScientificInterests.CreateScientificInterests;
 using ScientificWork.UseCases.ScientificInterests.GetScientificInterests;
@@ -41,6 +42,15 @@ public class InfrastructureController : ControllerBase
     /// </summary>
     [HttpGet("list-scientific-interests")]
     public async Task<IList<string>> GetScientificInterests([FromQuery] GetScientificInterestsQuery query)
+    {
+        return await mediator.Send(query);
+    }
+
+    /// <summary>
+    /// List professor degrees.
+    /// </summary>
+    [HttpGet("list-professor-degree")]
+    public async Task<IList<string>> GetProfessorDegree([FromQuery] GetProfessorDegreesQuery query)
     {
         return await mediator.Send(query);
     }

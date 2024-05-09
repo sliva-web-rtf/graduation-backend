@@ -18,7 +18,9 @@ public class StudentDto
 
     public string? Status { get; set; }
 
-    required public bool IsFavorite { get; set; }
+    public bool IsFavorite { get; set; }
+
+    public bool CanJoin { get; set; }
 
     public bool? CommandSearching { get; set; }
 

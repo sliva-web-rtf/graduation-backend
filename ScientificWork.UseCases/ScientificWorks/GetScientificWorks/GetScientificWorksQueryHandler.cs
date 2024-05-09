@@ -68,7 +68,7 @@ public class GetScientificWorksQueryHandler : IRequestHandler<GetScientificWorks
             scientificWorks = FilterByScientificInterests(scientificWorks, request.ScientificInterests);
         }
 
-        scientificWorks = scientificWorks.OrderBy(x => x.Fullness);
+        scientificWorks = scientificWorks.OrderBy(x => x.Limit - x.Fullness);
 
         var favoriteSWIds = new HashSet<Guid>(result.Select(x => x.Id));
 
@@ -79,13 +79,17 @@ public class GetScientificWorksQueryHandler : IRequestHandler<GetScientificWorks
                 return s;
             });
 
-        if (request.IsFavoriteFilter)
+        if (request.IsFavoriteFilterOnly)
         {
-            scientificWorksDto = scientificWorksDto.OrderBy(x => x.IsFavorite);
+            scientificWorksDto = scientificWorksDto.Where(x => x.IsFavorite);
         }
 
-        var resScientificWorks = PagedListFactory.FromSource(
-            mapper.Map<List<ScientificWorkDto>>(scientificWorksDto),
+        if (request.IsFavoriteFilter)
+        {
+            scientificWorksDto = scientificWorksDto.OrderByDescending(x => x.IsFavorite);
+        }
+
+        var resScientificWorks = PagedListFactory.FromSource(scientificWorksDto,
             page: request.Page, pageSize: request.PageSize);
 
         return new GetScientificWorksResult

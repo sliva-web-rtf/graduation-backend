@@ -20,7 +20,9 @@ public class ProfessorDto
 
     required public int Fullness { get; init; } = 1;
 
-    required public bool IsFavorite { get; set; }
+    public bool IsFavorite { get; set; }
+
+    public bool CanJoin { get; set; }
 
     required public IList<string> ScientificInterests { get; init; }
 }

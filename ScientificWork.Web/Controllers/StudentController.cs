@@ -60,24 +60,21 @@ public class StudentController : ControllerBase
     }
 
     [HttpPost("add-student-to-favorites")]
-    [Authorize(Roles = nameof(SystemAdmin))]
-    public async Task AddStudentToFavorites([FromForm] AddStudentToFavoritesCommand command)
+    public async Task AddStudentToFavorites([FromQuery] AddStudentToFavoritesCommand command)
     {
         HttpContext.Items.Add("userId", User.GetCurrentUserId());
         await mediator.Send(command);
     }
 
     [HttpPost("add-professor-to-favorites")]
-    [Authorize(Roles = nameof(SystemAdmin))]
-    public async Task AddProfessorToFavorites([FromForm] AddProfessorToFavoritesCommand command)
+    public async Task AddProfessorToFavorites([FromQuery] AddProfessorToFavoritesCommand command)
     {
         HttpContext.Items.Add("userId", User.GetCurrentUserId());
         await mediator.Send(command);
     }
 
     [HttpPost("add-scientific-work-to-favorites")]
-    [Authorize(Roles = nameof(SystemAdmin))]
-    public async Task AddScientificWorksToFavorites([FromForm] AddScientificWorksToFavoritesCommand command)
+    public async Task AddScientificWorksToFavorites([FromQuery] AddScientificWorksToFavoritesCommand command)
     {
         HttpContext.Items.Add("userId", User.GetCurrentUserId());
         await mediator.Send(command);

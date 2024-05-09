@@ -31,4 +31,9 @@ public class GetProfessorsQuery : IRequest<GetProfessorsResult>
     /// Filter by favorite.
     /// </summary>
     public bool IsFavoriteFilter { get; init; }
+
+    /// <summary>
+    /// Get only favorite.
+    /// </summary>
+    public bool IsFavoriteFilterOnly { get; init; }
 }

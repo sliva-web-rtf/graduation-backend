@@ -20,6 +20,10 @@ public record GetStudentProfileByIdResult
 
     public string? Degree { get; init; }
 
+    public string? About { get; init; }
+
+    public int Year { get; init; }
+
     required public IList<ScientificAreasDto> ScientificArea { get; init; } = new List<ScientificAreasDto>();
 
     required public IList<string> ScientificInterests { get; init; }

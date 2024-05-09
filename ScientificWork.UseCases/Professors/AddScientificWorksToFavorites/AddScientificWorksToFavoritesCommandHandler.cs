@@ -20,15 +20,14 @@ public class AddScientificWorksToFavoritesCommandHandler : IRequestHandler<AddSc
     public async Task Handle(AddScientificWorksToFavoritesCommand request, CancellationToken cancellationToken)
     {
         var professorId = userAccessor.GetCurrentUserId();
-        // var scientificWork = await scientificWorkManager.FindByIdAsync(request.ScientificWorksId.ToString());
         var curProfessor = await professorManager.Users
             .Where(p => p.Id == professorId)
-            //.Include(x => x.FavoriteScientificWorks)
             .FirstOrDefaultAsync(cancellationToken);
 
         if (curProfessor != null)
         {
             curProfessor.AddFavoriteScientificWork(request.ScientificWorksId);
+            await professorManager.UpdateAsync(curProfessor);
         }
         else
         {
