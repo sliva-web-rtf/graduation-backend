@@ -32,11 +32,8 @@ public class GetProfessorsQueryHandler : IRequestHandler<GetProfessorsQuery, Get
     /// <inheritdoc />
     public async Task<GetProfessorsResult> Handle(GetProfessorsQuery request, CancellationToken cancellationToken)
     {
-        var favorites = await GetFavoritesProfessorAsync();
-
         var professors = professorManager.Users
-            .Where(s => !favorites.Contains(s))
-            .Where(x => x.IsRegistrationComplete == true)
+            .Where(x => x.IsRegistrationComplete)
             .Where(x => x.Id != userAccessor.GetCurrentUserId());
 
         if (request.ScientificAreaSubsections != null)
@@ -49,27 +46,48 @@ public class GetProfessorsQueryHandler : IRequestHandler<GetProfessorsQuery, Get
             professors = FilterByScientificInterests(professors, request.ScientificInterests);
         }
 
-        var studentsResult = await professors
+        var professorsResult = await professors
             .Include(x => x.ScientificInterests)
             .ToListAsync(cancellationToken: cancellationToken);
 
-        var resProfessors = PagedListFactory.FromSource(mapper.Map<List<ProfessorDto>>(studentsResult),
+        var favorites = await GetFavoritesProfessorAsync();
+
+        var professorDto = mapper.Map<List<ProfessorDto>>(professorsResult)
+            .Select(s =>
+            {
+                s.IsFavorite = favorites.Contains(s.Id);
+                return s;
+            });
+
+        if (request.IsFavoriteFilterOnly)
+        {
+            professorDto = professorDto.Where(x => x.IsFavorite);
+        }
+
+        if (request.IsFavoriteFilter)
+        {
+            professorDto = professorDto.OrderByDescending(x => x.IsFavorite);
+        }
+
+        var resProfessors = PagedListFactory.FromSource(professorDto.OrderBy(x => x.Limit - x.Fullness),
             page: request.Page, pageSize: request.PageSize);
 
         return new GetProfessorsResult { Professors = resProfessors, Length = resProfessors.Count(), Page = request.Page };
     }
 
-    private async Task<List<Professor>> GetFavoritesProfessorAsync()
+    private async Task<HashSet<Guid>> GetFavoritesProfessorAsync()
     {
         var userId = userAccessor.GetCurrentUserId();
         var curUser = await studentManager.FindByIdAsync(userId.ToString());
-        var favorites = new List<Professor>();
+        var favorites = new HashSet<Guid>();
         if (curUser != null)
         {
-            favorites.AddRange(studentManager.Users
+            favorites = professorManager.Users
                 .Where(s => s.Id == userId)
-                .Include(s => s.FavoriteProfessors)
-                .SelectMany(s => s.FavoriteProfessors));
+                .Include(s => s.ProfessorFavoriteStudents)
+                .SelectMany(s => s.ProfessorFavoriteStudents)
+                .Select(s => s.StudentId)
+                .ToHashSet();
         }
 
         return favorites;

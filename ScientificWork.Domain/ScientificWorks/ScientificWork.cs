@@ -15,11 +15,11 @@ public class ScientificWork : Entity<Guid>
 {
     public string Name { get; private set; }
 
-    public string Titile { get; private set; }
+    public string Description { get; private set; }
 
     public int Limit { get; private set; }
 
-    public string Problem { get; private set; }
+    public string Result { get; private set; }
 
     public int Fullness { get; private set; }
 
@@ -51,8 +51,8 @@ public class ScientificWork : Entity<Guid>
         : base(id)
     {
         Name = "a";
-        Titile = Name;
-        Problem = Name;
+        Description = Name;
+        Result = Name;
         ProfessorId = professorId;
     }
 
@@ -64,8 +64,8 @@ public class ScientificWork : Entity<Guid>
     public ScientificWork CreateForStudent(string name, string title, string problem, int limit, Student student)
     {
         Name = name;
-        Titile = title;
-        Problem = problem;
+        Description = title;
+        Result = problem;
         Limit = limit;
         CreateAt = DateTime.UtcNow;
         students.Add(student);
@@ -99,8 +99,8 @@ public class ScientificWork : Entity<Guid>
     public ScientificWork CreateForProfessor(string name, string title, string problem, int limit, Guid professorId, Professor professor)
     {
         Name = name;
-        Titile = title;
-        Problem = problem;
+        Description = title;
+        Result = problem;
         Limit = limit;
         ProfessorId = professorId;
         CreateAt = DateTime.UtcNow;
@@ -113,8 +113,8 @@ public class ScientificWork : Entity<Guid>
     public ScientificWork Update(string name, string title, string problem, int limit)
     {
         Name = name;
-        Titile = title;
-        Problem = problem;
+        Description = title;
+        Result = problem;
         Limit = limit;
         return this;
     }

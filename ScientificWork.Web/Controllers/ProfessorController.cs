@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScientificWork.Domain.Admins;
+using ScientificWork.UseCases.Professors.AddScientificWorksToFavorites;
+using ScientificWork.UseCases.Professors.AddStudentToFavorites;
 using ScientificWork.UseCases.Professors.GetProfessors;
 using ScientificWork.UseCases.Professors.GetProfileById;
 using ScientificWork.UseCases.Professors.UplaodProfessors;
@@ -53,6 +55,20 @@ public class ProfessorController : ControllerBase
     [Authorize(Roles = nameof(SystemAdmin))]
     public async Task UploadProfessors([FromForm] UploadProfessorsCommand command)
     {
+        await mediator.Send(command);
+    }
+
+    [HttpPost("add-student-to-favorites")]
+    public async Task AddStudentToFavorites([FromQuery] AddStudentToFavoritesCommand command)
+    {
+        HttpContext.Items.Add("userId", User.GetCurrentUserId());
+        await mediator.Send(command);
+    }
+
+    [HttpPost("add-scientific-work-to-favorites")]
+    public async Task AddScientificWorksToFavorites([FromQuery] AddScientificWorksToFavoritesCommand command)
+    {
+        HttpContext.Items.Add("userId", User.GetCurrentUserId());
         await mediator.Send(command);
     }
 }

@@ -14,9 +14,15 @@ public class ProfessorDto
 
     public string? Post { get; private set; }
 
+    public string? About { get; init; }
+
     required public int Limit { get; init; }
 
     required public int Fullness { get; init; } = 1;
+
+    public bool IsFavorite { get; set; }
+
+    public bool CanJoin { get; set; }
 
     required public IList<string> ScientificInterests { get; init; }
 }

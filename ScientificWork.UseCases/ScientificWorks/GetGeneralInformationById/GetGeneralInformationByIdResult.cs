@@ -9,11 +9,11 @@ public class GetGeneralInformationByIdResult
 
     required public string Name { get; init; }
 
-    required public string Titile { get; init; }
+    required public string Description { get; init; }
 
     required public int Limit { get; init; }
 
-    public string Problem { get; init; }
+    public string Result { get; init; }
 
     required public int Fullness { get; init; }
 

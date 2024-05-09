@@ -24,6 +24,8 @@ public record GetProfileByIdResult
 
     public string? Post { get; private set; }
 
+    public string? About { get; init; }
+
     required public int Limit { get; init; }
 
     required public int Fullness { get; init; } = 1;

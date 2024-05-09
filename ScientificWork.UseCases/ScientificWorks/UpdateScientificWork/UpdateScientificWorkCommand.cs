@@ -8,11 +8,11 @@ public class UpdateScientificWorkCommand : IRequest
 
     required public string Name { get; init; }
 
-    required public string Title { get; init; }
+    required public string Description { get; init; }
 
     public int Limit { get; init; }
 
-    required public string Problem { get; init; }
+    required public string Result { get; init; }
 
     required public IList<string> ScientificAreaSubsections { get; init; }
 
