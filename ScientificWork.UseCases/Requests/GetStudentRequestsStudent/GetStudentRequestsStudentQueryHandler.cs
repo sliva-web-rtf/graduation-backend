@@ -25,7 +25,11 @@ public class GetStudentRequestsStudentQueryHandler : IRequestHandler<GetStudentR
             .ToList()
             .Where(x => x.StudentToId == studentId)
             .Where(x => x.IsActive)
-            .Select(x => new RequestDto() { Id = x.Id, ScientificWorkId = x.ScientificWorkId, Message = "" });
+            .Select(x =>
+                new RequestDto()
+                {
+                    Id = x.Id, ScientificWorkId = x.ScientificWorkId, UserFrom = x.StudentFromId, Message = ""
+                });
 
         var res = PagedListFactory.FromSource(requests,
             page: request.Page, pageSize: request.PageSize);

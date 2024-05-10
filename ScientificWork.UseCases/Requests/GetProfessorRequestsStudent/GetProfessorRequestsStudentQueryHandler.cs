@@ -27,7 +27,11 @@ public class GetProfessorRequestsStudentQueryHandler : IRequestHandler<GetProfes
             .Where(x => x.StudentId == studentId)
             .Where(x => x.IsActive)
             .Where(x => x.RequestEnum == RequestEnum.FromProfessor)
-            .Select(x => new RequestDto() { Id = x.Id, ScientificWorkId = x.ScientificWorkId, Message = "" });
+            .Select(x =>
+                new RequestDto()
+                {
+                    Id = x.Id, ScientificWorkId = x.ScientificWorkId, UserFrom = x.ProfessorId, Message = ""
+                });
 
         var res = PagedListFactory.FromSource(requests,
             page: request.Page, pageSize: request.PageSize);

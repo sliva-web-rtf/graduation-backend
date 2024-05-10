@@ -8,5 +8,7 @@ public record RequestDto
 
     public Guid ScientificWorkId { get; init; }
 
+    public Guid UserFrom { get; init; }
+
     public string Message { get; init; }
 }
