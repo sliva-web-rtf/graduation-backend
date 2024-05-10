@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using ScientificWork.Domain.Favorites;
+using ScientificWork.Domain.Requests;
 using ScientificWork.Domain.ScientificAreas;
 using ScientificWork.Domain.ScientificInterests;
 using ScientificWork.Domain.Students;
@@ -64,6 +65,14 @@ public class Professor : User
 
     public IReadOnlyList<ProfessorFavoriteScientificWork> ProfessorFavoriteScientificWorks =>
         professorFavoriteScientificWorks.AsReadOnly();
+
+    #endregion
+
+    #region StudentRequestProfessor
+
+    private readonly List<StudentRequestProfessor> studentRequestProfessors = new();
+
+    public IReadOnlyList<StudentRequestProfessor> StudentRequestProfessors => studentRequestProfessors.AsReadOnly();
 
     #endregion
 

@@ -20,8 +20,6 @@ public class StudentDto
 
     public bool IsFavorite { get; set; }
 
-    public bool CanJoin { get; set; }
-
     public bool? CommandSearching { get; set; }
 
     public bool? ProfessorSearching { get; set; }

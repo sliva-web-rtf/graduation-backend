@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScientificWork.Domain.Admins;
 using ScientificWork.UseCases.Professors.AddScientificWorksToFavorites;
+using ScientificWork.UseCases.Requests.GetProfessorRequestsStudent;
+using ScientificWork.UseCases.Requests.GetStudentRequestsStudent;
 using ScientificWork.UseCases.Students.AddProfessorToFavorites;
 using ScientificWork.UseCases.Students.AddStudentToFavorites;
 using ScientificWork.UseCases.Students.GetStudentProfileById;
@@ -78,5 +80,27 @@ public class StudentController : ControllerBase
     {
         HttpContext.Items.Add("userId", User.GetCurrentUserId());
         await mediator.Send(command);
+    }
+
+    /// <summary>
+    /// List request from student to student .
+    /// </summary>
+    [HttpGet("list-request-from-student")]
+    public async Task<ActionResult> GetStudentRequestStudent([FromQuery] GetStudentRequestsStudentQuery query)
+    {
+        HttpContext.Items.Add("userId", User.GetCurrentUserId());
+        var res = await mediator.Send(query);
+        return Ok(res);
+    }
+
+    /// <summary>
+    /// List request from professor to student .
+    /// </summary>
+    [HttpGet("list-request-from-professor")]
+    public async Task<ActionResult> GetProfessorRequestStudent([FromQuery] GetProfessorRequestsStudentQuery query)
+    {
+        HttpContext.Items.Add("userId", User.GetCurrentUserId());
+        var res = await mediator.Send(query);
+        return Ok(res);
     }
 }

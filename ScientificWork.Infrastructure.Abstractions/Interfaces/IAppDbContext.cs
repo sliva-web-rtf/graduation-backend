@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ScientificWork.Domain.Professors;
+using ScientificWork.Domain.Requests;
 using ScientificWork.Domain.ScientificAreas;
 using ScientificWork.Domain.ScientificInterests;
 using ScientificWork.Domain.Students;
@@ -42,5 +43,18 @@ public interface IAppDbContext : IDbContextWithSets, IDisposable
     /// </summary>
     DbSet<ScientificArea> ScientificAreas { get; }
 
+    /// <summary>
+    /// Student request student.
+    /// </summary>
+    DbSet<StudentRequestStudent> StudentRequestStudents { get; }
+
+    /// <summary>
+    /// Student request professor.
+    /// </summary>
+    DbSet<StudentRequestProfessor> StudentRequestProfessors { get; }
+
+    /// <summary>
+    /// Scientific area subsections.
+    /// </summary>
     DbSet<ScientificAreaSubsection> ScientificAreaSubsections { get; }
 }

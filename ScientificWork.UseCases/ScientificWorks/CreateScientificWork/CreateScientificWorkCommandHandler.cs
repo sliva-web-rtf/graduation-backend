@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ScientificWork.Domain.Professors;
+using ScientificWork.Domain.ScientificWorks.Enums;
 using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 
@@ -29,6 +30,11 @@ public class CreateScientificWorkCommandHandler : IRequestHandler<CreateScientif
     /// <inheritdoc />
     public async Task Handle(CreateScientificWorkCommand request, CancellationToken cancellationToken)
     {
+        if (dbContext.ScientificWorks.Any(x => x.Name == request.Name && x.WorkStatus != WorkStatus.NotConfirmed))
+        {
+            throw new Exception("Такое иследование уже существует");
+        }
+
         var student = await studentManager.FindByIdAsync(userAccessor.GetCurrentUserId().ToString());
         var scientificWork = new Domain.ScientificWorks.ScientificWork();
 
@@ -40,7 +46,16 @@ public class CreateScientificWorkCommandHandler : IRequestHandler<CreateScientif
         }
         else
         {
-            scientificWork.CreateForStudent(request.Name, request.Description, request.Result, request.Limit, student);
+            if (request.IsEducator)
+            {
+                var professor = await professorManager.FindByIdAsync(userAccessor.GetCurrentUserId().ToString());
+                scientificWork.CreateForStudentWithProfessor(request.Name, request.Description, request.Result,
+                    request.Limit, student, professor!.Id, professor);
+            }
+            else
+            {
+                scientificWork.CreateForStudent(request.Name, request.Description, request.Result, request.Limit, student);
+            }
         }
 
         await AddScientificAreaSubsectionsAsync(scientificWork, request.ScientificAreaSubsections, cancellationToken);

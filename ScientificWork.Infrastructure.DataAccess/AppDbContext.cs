@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using ScientificWork.Domain.Admins;
 using ScientificWork.Domain.Notifications;
 using ScientificWork.Domain.Professors;
+using ScientificWork.Domain.Requests;
 using ScientificWork.Domain.ScientificAreas;
 using ScientificWork.Domain.ScientificInterests;
 using ScientificWork.Domain.Students;
@@ -40,6 +41,12 @@ public class AppDbContext
 
     /// <inheritdoc/>
     public DbSet<ScientificArea> ScientificAreas { get; private set; }
+
+    /// <inheritdoc/>
+    public DbSet<StudentRequestStudent> StudentRequestStudents { get; private set; }
+
+    /// <inheritdoc/>
+    public DbSet<StudentRequestProfessor> StudentRequestProfessors { get; private set; }
 
     /// <inheritdoc/>
     public DbSet<Notification> Notifications { get; private set; }
