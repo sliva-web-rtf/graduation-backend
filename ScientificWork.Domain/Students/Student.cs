@@ -1,5 +1,6 @@
 ﻿using ScientificWork.Domain.Favorites;
 using ScientificWork.Domain.Professors;
+using ScientificWork.Domain.Requests;
 using ScientificWork.Domain.ScientificAreas;
 using ScientificWork.Domain.ScientificInterests;
 using ScientificWork.Domain.Students.ValueObjects;
@@ -70,6 +71,24 @@ public class Student : User
 
     public IReadOnlyList<StudentFavoriteScientificWork> StudentFavoriteScientificWorks =>
         studentFavoriteScientificWorks.AsReadOnly();
+
+    #endregion
+
+    #region StudentRequestStudent
+
+    private readonly List<StudentRequestStudent> studentRequestStudents = new();
+
+    public IReadOnlyList<StudentRequestStudent> StudentRequestStudents =>
+        studentRequestStudents.AsReadOnly();
+
+    #endregion
+
+    #region StudentRequestProfessor
+
+    private readonly List<StudentRequestProfessor> studentRequestProfessors = new();
+
+    public IReadOnlyList<StudentRequestProfessor> StudentRequestProfessors =>
+        studentRequestProfessors.AsReadOnly();
 
     #endregion
 

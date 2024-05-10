@@ -20,7 +20,8 @@ public class GetStudentsQueryHandler : IRequestHandler<GetStudentsQuery, GetStud
     /// <summary>
     /// Constructor.
     /// </summary>
-    public GetStudentsQueryHandler(IMapper mapper, UserManager<Student> studentManager, ILoggedUserAccessor userAccessor, UserManager<Professor> professorManager)
+    public GetStudentsQueryHandler(IMapper mapper, UserManager<Student> studentManager,
+        ILoggedUserAccessor userAccessor, UserManager<Professor> professorManager)
     {
         this.mapper = mapper;
         this.studentManager = studentManager;
@@ -47,6 +48,7 @@ public class GetStudentsQueryHandler : IRequestHandler<GetStudentsQuery, GetStud
 
         var studentsResult = await students
             .Include(x => x.ScientificInterests)
+            .Include(x => x.ScientificWorks)
             .ToListAsync(cancellationToken: cancellationToken);
 
         var favorites = await GetFavoritesStudentsAsync();

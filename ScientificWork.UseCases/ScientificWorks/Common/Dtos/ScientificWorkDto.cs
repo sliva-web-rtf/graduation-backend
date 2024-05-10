@@ -10,9 +10,9 @@ public class ScientificWorkDto
 
     public string Description { get; init; }
 
-    public int? Limit { get; init; }
+    public int Limit { get; init; }
 
-    public int? Fullness { get; init; }
+    public int Fullness { get; init; }
 
     public bool IsFavorite { get; set; }
 

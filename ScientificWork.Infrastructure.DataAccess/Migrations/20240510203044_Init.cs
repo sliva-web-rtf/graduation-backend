@@ -59,7 +59,8 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", unicode: false, nullable: false)
+                    Name = table.Column<string>(type: "text", unicode: false, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -79,6 +80,9 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     RemovedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Contacts = table.Column<string>(type: "text", unicode: false, nullable: true),
+                    About = table.Column<string>(type: "text", unicode: false, nullable: true),
+                    IsRegistrationComplete = table.Column<bool>(type: "boolean", nullable: false),
                     UserStatus = table.Column<int>(type: "integer", nullable: false),
                     AvatarImageId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", unicode: false, maxLength: 256, nullable: true),
@@ -233,7 +237,8 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Message = table.Column<string>(type: "text", unicode: false, nullable: false),
                     DateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ReceiverId = table.Column<Guid>(type: "uuid", nullable: false)
+                    ReceiverId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -253,28 +258,17 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Address = table.Column<string>(type: "text", unicode: false, nullable: true),
                     Degree = table.Column<string>(type: "text", unicode: false, nullable: true),
+                    Post = table.Column<string>(type: "text", unicode: false, nullable: true),
                     Limit = table.Column<int>(type: "integer", nullable: false),
                     Fullness = table.Column<int>(type: "integer", nullable: false),
-                    Post = table.Column<string>(type: "text", unicode: false, nullable: true),
-                    PublicationsCount = table.Column<int>(type: "integer", nullable: false),
                     WorkExperienceYears = table.Column<int>(type: "integer", nullable: false),
-                    Titile = table.Column<string>(type: "text", unicode: false, nullable: true),
-                    HIndex = table.Column<int>(type: "integer", nullable: false),
                     ScopusUri = table.Column<string>(type: "text", unicode: false, nullable: true),
                     RISCUri = table.Column<string>(type: "text", unicode: false, nullable: true),
-                    URPUri = table.Column<string>(type: "text", unicode: false, nullable: true),
-                    Сontacts = table.Column<string>(type: "text", unicode: false, nullable: true),
-                    ScientificAreaId = table.Column<Guid>(type: "uuid", nullable: true)
+                    URPUri = table.Column<string>(type: "text", unicode: false, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Professors", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Professors_ScientificAreas_ScientificAreaId",
-                        column: x => x.ScientificAreaId,
-                        principalTable: "ScientificAreas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Professors_Users_Id",
                         column: x => x.Id,
@@ -289,27 +283,16 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Degree = table.Column<string>(type: "text", unicode: false, nullable: true),
+                    Year = table.Column<int>(type: "integer", nullable: false),
                     PublicationsCount = table.Column<int>(type: "integer", nullable: false),
                     HIndex = table.Column<int>(type: "integer", nullable: false),
-                    ScopusUri = table.Column<string>(type: "text", unicode: false, nullable: true),
-                    RISCUri = table.Column<string>(type: "text", unicode: false, nullable: true),
-                    URPUri = table.Column<string>(type: "text", unicode: false, nullable: true),
-                    Contacts = table.Column<string>(type: "text", unicode: false, nullable: true),
-                    IsRegistrationComplete = table.Column<bool>(type: "boolean", nullable: false),
                     SearchStatus_Status = table.Column<int>(type: "integer", nullable: true),
                     SearchStatus_CommandSearching = table.Column<bool>(type: "boolean", nullable: true),
-                    SearchStatus_ProfessorSearching = table.Column<bool>(type: "boolean", nullable: true),
-                    ScientificAreaId = table.Column<Guid>(type: "uuid", nullable: true)
+                    SearchStatus_ProfessorSearching = table.Column<bool>(type: "boolean", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Students", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Students_ScientificAreas_ScientificAreaId",
-                        column: x => x.ScientificAreaId,
-                        principalTable: "ScientificAreas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Students_Users_Id",
                         column: x => x.Id,
@@ -336,15 +319,35 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserTokens",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Description = table.Column<string>(type: "text", unicode: false, nullable: false),
+                    Token = table.Column<string>(type: "text", unicode: false, nullable: false),
+                    IssuedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserTokens", x => new { x.UserId, x.Description });
+                    table.ForeignKey(
+                        name: "FK_UserTokens_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProfessorScientificAreaSubsection",
                 columns: table => new
                 {
                     ProfessorsId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ScientificAreasSubsectionsId = table.Column<Guid>(type: "uuid", nullable: false)
+                    ScientificAreaSubsectionsId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProfessorScientificAreaSubsection", x => new { x.ProfessorsId, x.ScientificAreasSubsectionsId });
+                    table.PrimaryKey("PK_ProfessorScientificAreaSubsection", x => new { x.ProfessorsId, x.ScientificAreaSubsectionsId });
                     table.ForeignKey(
                         name: "FK_ProfessorScientificAreaSubsection_Professors_ProfessorsId",
                         column: x => x.ProfessorsId,
@@ -353,7 +356,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ProfessorScientificAreaSubsection_ScientificAreaSubsections~",
-                        column: x => x.ScientificAreasSubsectionsId,
+                        column: x => x.ScientificAreaSubsectionsId,
                         principalTable: "ScientificAreaSubsections",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -389,15 +392,15 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", unicode: false, nullable: false),
-                    Titile = table.Column<string>(type: "text", unicode: false, nullable: false),
+                    Description = table.Column<string>(type: "text", unicode: false, nullable: false),
                     Limit = table.Column<int>(type: "integer", nullable: false),
-                    Problem = table.Column<string>(type: "text", unicode: false, nullable: false),
+                    Result = table.Column<string>(type: "text", unicode: false, nullable: false),
                     Fullness = table.Column<int>(type: "integer", nullable: false),
                     WorkStatus = table.Column<int>(type: "integer", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ProfessorId = table.Column<Guid>(type: "uuid", nullable: true),
                     ImageId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ScientificAreaId = table.Column<Guid>(type: "uuid", nullable: true)
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -407,12 +410,6 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         column: x => x.ProfessorId,
                         principalTable: "Professors",
                         principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_ScientificWorks_ScientificAreas_ScientificAreaId",
-                        column: x => x.ScientificAreaId,
-                        principalTable: "ScientificAreas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -665,17 +662,87 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "StudentRequestProfessors",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProfessorId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StudentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ScientificWorkId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    AddedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentRequestProfessors", x => new { x.StudentId, x.ProfessorId, x.Id });
+                    table.ForeignKey(
+                        name: "FK_StudentRequestProfessors_Professors_ProfessorId",
+                        column: x => x.ProfessorId,
+                        principalTable: "Professors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_StudentRequestProfessors_ScientificWorks_ScientificWorkId",
+                        column: x => x.ScientificWorkId,
+                        principalTable: "ScientificWorks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_StudentRequestProfessors_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StudentRequestStudents",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    StudentToId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StudentFromId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ScientificWorkId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    AddedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentRequestStudents", x => new { x.StudentFromId, x.StudentToId, x.Id });
+                    table.ForeignKey(
+                        name: "FK_StudentRequestStudents_ScientificWorks_ScientificWorkId",
+                        column: x => x.ScientificWorkId,
+                        principalTable: "ScientificWorks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_StudentRequestStudents_Students_StudentFromId",
+                        column: x => x.StudentFromId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudentRequestStudents_Students_StudentToId",
+                        column: x => x.StudentToId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "ScientificAreas",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("107ba2d3-7137-4fc2-8ef4-9915190f8dd5"), "Медицина и здравоохранение" },
-                    { new Guid("a49b37fb-1a6b-4068-a693-4934eba6ea4a"), "Естественные науки" },
-                    { new Guid("c8214058-bb19-4802-847f-5a12a3d55c93"), "Сельскохозяйственные науки" },
-                    { new Guid("cf682539-5460-4999-89ec-f91873ee9f38"), "Гуманитарные науки" },
-                    { new Guid("db09db60-7027-4e2f-97a9-e9675dbd72c6"), "Общественные науки" },
-                    { new Guid("ff6db5d7-727a-478d-bcfd-1d14a20b4428"), "Техника и технологии" }
+                    { new Guid("5fc5311c-84b1-4d69-a9ca-19ccc026e747"), "Техника и технологии" },
+                    { new Guid("7034f484-3284-4f20-ae68-5736319b5237"), "Сельскохозяйственные науки" },
+                    { new Guid("732d228c-3be6-41ba-a372-52a85035a781"), "Медицина и здравоохранение" },
+                    { new Guid("74ddf9aa-b993-43bb-802c-5cdfccda9162"), "Общественные науки" },
+                    { new Guid("e2038d3b-2bff-4adb-8d5e-a70c22f372cd"), "Гуманитарные науки" },
+                    { new Guid("e26310f0-6088-4732-83b2-3a55cfc1ac27"), "Естественные науки" }
                 });
 
             migrationBuilder.InsertData(
@@ -683,48 +750,48 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 columns: new[] { "Id", "Name", "ScientificAreaId" },
                 values: new object[,]
                 {
-                    { new Guid("1356650d-6ff0-4fe7-bf02-f61aaf2d346c"), "Психология", new Guid("db09db60-7027-4e2f-97a9-e9675dbd72c6") },
-                    { new Guid("14be0306-c9d3-4ef6-acbe-59ab76950a81"), "Медицинская биотехнология", new Guid("107ba2d3-7137-4fc2-8ef4-9915190f8dd5") },
-                    { new Guid("162c9d74-ba76-481c-9e5e-2be869b8d9f4"), "Право", new Guid("db09db60-7027-4e2f-97a9-e9675dbd72c6") },
-                    { new Guid("185b7a21-b6f7-49d5-b96b-e5ffc889f294"), "Языки и литература", new Guid("cf682539-5460-4999-89ec-f91873ee9f38") },
-                    { new Guid("1e01f2ca-adb2-4eec-b7c9-baa398a20c69"), "Другие медицинские науки", new Guid("107ba2d3-7137-4fc2-8ef4-9915190f8dd5") },
-                    { new Guid("1f4899b3-404c-472b-907b-9e468147a973"), "Сельское, лесное и рыбное хозяйство", new Guid("c8214058-bb19-4802-847f-5a12a3d55c93") },
-                    { new Guid("24ecd2f3-10ad-4293-bba4-00b2ffcb4b5c"), "Медиа и коммуникации", new Guid("db09db60-7027-4e2f-97a9-e9675dbd72c6") },
-                    { new Guid("2bdcdcce-a4b1-4d13-9f2f-5de29dd6d125"), "Экономика и бизнес", new Guid("db09db60-7027-4e2f-97a9-e9675dbd72c6") },
-                    { new Guid("2d4ba1ac-8ca6-4c7f-8bc6-70442be7a69c"), "История и археология", new Guid("cf682539-5460-4999-89ec-f91873ee9f38") },
-                    { new Guid("2efa62ec-3880-4a10-96f5-845db27c23e5"), "Искусство (искусство, история искусств, исполнительское искусство, музыка)", new Guid("cf682539-5460-4999-89ec-f91873ee9f38") },
-                    { new Guid("32b99f81-85c5-4714-af08-366bade8a788"), "Физика", new Guid("a49b37fb-1a6b-4068-a693-4934eba6ea4a") },
-                    { new Guid("3675d3df-40d3-4b2d-a031-cf7dc2b39cd1"), "Науки о Земле и окружающей среде", new Guid("a49b37fb-1a6b-4068-a693-4934eba6ea4a") },
-                    { new Guid("3be65a48-ffb1-4e9d-a2e6-97fb3dd7beef"), "Другие гуманитарные науки", new Guid("cf682539-5460-4999-89ec-f91873ee9f38") },
-                    { new Guid("4557f8e1-2af2-4aa8-9fbd-73076aa51d97"), "Материаловедение", new Guid("ff6db5d7-727a-478d-bcfd-1d14a20b4428") },
-                    { new Guid("46f85a0b-b54f-40f9-b3aa-96189549f8e0"), "Медицинская инженерия", new Guid("ff6db5d7-727a-478d-bcfd-1d14a20b4428") },
-                    { new Guid("553b0881-8ac3-498c-a44f-c49b24461436"), "Химическая инженерия", new Guid("ff6db5d7-727a-478d-bcfd-1d14a20b4428") },
-                    { new Guid("5ec1c27c-0bd8-4f4b-a076-fd87ca0e2e00"), "Математика", new Guid("a49b37fb-1a6b-4068-a693-4934eba6ea4a") },
-                    { new Guid("653da381-3a37-4b49-bfee-0d0b8cf7a103"), "Гражданское строительство", new Guid("ff6db5d7-727a-478d-bcfd-1d14a20b4428") },
-                    { new Guid("6d503bee-4e5e-4fb5-b08f-2af22c173c41"), "Животноводство и молочное производство", new Guid("c8214058-bb19-4802-847f-5a12a3d55c93") },
-                    { new Guid("74af6977-b6b8-4041-a24d-4c321e793818"), "Химия", new Guid("a49b37fb-1a6b-4068-a693-4934eba6ea4a") },
-                    { new Guid("7af70064-3619-4902-b87d-48c1eacc893e"), "Электротехника, электроника, информационная инженерия", new Guid("ff6db5d7-727a-478d-bcfd-1d14a20b4428") },
-                    { new Guid("84e943eb-bd26-4e1e-af23-810c1f544325"), "Биология", new Guid("a49b37fb-1a6b-4068-a693-4934eba6ea4a") },
-                    { new Guid("858c6322-7fcc-4c08-a992-c19187d3ba72"), "Экологическая биотехнология", new Guid("ff6db5d7-727a-478d-bcfd-1d14a20b4428") },
-                    { new Guid("8756a39a-4c59-46d3-a744-8a13c4718eff"), "Другие социальные науки", new Guid("db09db60-7027-4e2f-97a9-e9675dbd72c6") },
-                    { new Guid("8b2e4692-b084-44cf-97f5-f281976c2099"), "Фундаментальная медицина", new Guid("107ba2d3-7137-4fc2-8ef4-9915190f8dd5") },
-                    { new Guid("90a46e77-743b-4809-8052-e8949dd48ebf"), "Экологическая инженерия", new Guid("ff6db5d7-727a-478d-bcfd-1d14a20b4428") },
-                    { new Guid("913a0031-7342-4d23-936c-d83bb6a68458"), "Другая инженерия и технологии", new Guid("ff6db5d7-727a-478d-bcfd-1d14a20b4428") },
-                    { new Guid("99c33539-4e6a-458d-a7f7-6b6c6fbd7338"), "Политология", new Guid("db09db60-7027-4e2f-97a9-e9675dbd72c6") },
-                    { new Guid("ba0d9cba-78e1-4782-90e6-26b7fcf08c9c"), "Ветеринария", new Guid("c8214058-bb19-4802-847f-5a12a3d55c93") },
-                    { new Guid("bfcee833-2c45-409c-95ea-a0798a469efd"), "Социология", new Guid("db09db60-7027-4e2f-97a9-e9675dbd72c6") },
-                    { new Guid("cd1b52f0-1dd2-4f0c-b804-791a6ac8f672"), "Нанотехнологии", new Guid("ff6db5d7-727a-478d-bcfd-1d14a20b4428") },
-                    { new Guid("d01acfaa-af5c-4675-83ad-f328dccdbe72"), "Другие естественные науки", new Guid("a49b37fb-1a6b-4068-a693-4934eba6ea4a") },
-                    { new Guid("d423c279-2bd6-4501-88e6-a0765bece3f3"), "Другие сельскохозяйственные науки", new Guid("c8214058-bb19-4802-847f-5a12a3d55c93") },
-                    { new Guid("d5a5fff1-a6c6-4e38-9bdd-8d0f2e685a59"), "Компьютерные и информационные науки", new Guid("a49b37fb-1a6b-4068-a693-4934eba6ea4a") },
-                    { new Guid("df5a623d-543c-4c55-a3e3-1156b0fefafb"), "Промышленная биотехнология", new Guid("ff6db5d7-727a-478d-bcfd-1d14a20b4428") },
-                    { new Guid("e198dc5c-3aeb-458c-aa85-fc66fa49a404"), "Образовательные науки", new Guid("db09db60-7027-4e2f-97a9-e9675dbd72c6") },
-                    { new Guid("e5d440c1-f3dc-4365-90a6-42cc26703463"), "Машиностроение", new Guid("ff6db5d7-727a-478d-bcfd-1d14a20b4428") },
-                    { new Guid("ecfd0e49-ed4b-4f3a-a66f-e46ada536f4a"), "Философия, этика и религия", new Guid("cf682539-5460-4999-89ec-f91873ee9f38") },
-                    { new Guid("fc30aa58-08a0-4466-94aa-0cfb8d767315"), "Науки о здоровье", new Guid("107ba2d3-7137-4fc2-8ef4-9915190f8dd5") },
-                    { new Guid("fc341d8d-d3cf-43cc-9964-46cc27df0c6a"), "Социально-экономическая география", new Guid("db09db60-7027-4e2f-97a9-e9675dbd72c6") },
-                    { new Guid("fd4ac14c-79a4-4ce5-985d-6fc68ca4dbc0"), "Сельскохозяйственная биотехнология", new Guid("c8214058-bb19-4802-847f-5a12a3d55c93") },
-                    { new Guid("ffc07109-25a4-4dd2-a210-0d37b2944829"), "Клиническая медицина", new Guid("107ba2d3-7137-4fc2-8ef4-9915190f8dd5") }
+                    { new Guid("001077ce-4453-47a7-b600-3aea2b31ad06"), "Компьютерные и информационные науки", new Guid("e26310f0-6088-4732-83b2-3a55cfc1ac27") },
+                    { new Guid("05259e2a-121c-4a67-845b-0d6b5e0bf4ba"), "Фундаментальная медицина", new Guid("732d228c-3be6-41ba-a372-52a85035a781") },
+                    { new Guid("09059f7b-5f69-42cd-982a-6b54a9d11ffc"), "Математика", new Guid("e26310f0-6088-4732-83b2-3a55cfc1ac27") },
+                    { new Guid("0c709fce-b568-4210-86da-0ccc4ee95518"), "Экономика и бизнес", new Guid("74ddf9aa-b993-43bb-802c-5cdfccda9162") },
+                    { new Guid("0d9a5bda-772d-4741-8f93-376ac2083098"), "Психология", new Guid("74ddf9aa-b993-43bb-802c-5cdfccda9162") },
+                    { new Guid("17d5f102-0946-4866-865b-9bd14b1836bc"), "Другие социальные науки", new Guid("74ddf9aa-b993-43bb-802c-5cdfccda9162") },
+                    { new Guid("1b2d8746-f335-4d6d-9bae-9fda7c50c991"), "Искусство (искусство, история искусств, исполнительское искусство, музыка)", new Guid("e2038d3b-2bff-4adb-8d5e-a70c22f372cd") },
+                    { new Guid("1bce0284-6331-449d-b549-c57ac3b3caf9"), "Социально-экономическая география", new Guid("74ddf9aa-b993-43bb-802c-5cdfccda9162") },
+                    { new Guid("1e8f5872-b92e-4ae8-b7ab-6f9fd9a061a2"), "Другие естественные науки", new Guid("e26310f0-6088-4732-83b2-3a55cfc1ac27") },
+                    { new Guid("21f5d181-77fa-44b6-a67d-f93b5fa6e56c"), "Образовательные науки", new Guid("74ddf9aa-b993-43bb-802c-5cdfccda9162") },
+                    { new Guid("22324b99-fdbc-4fb4-8e69-d718705f6423"), "Материаловедение", new Guid("5fc5311c-84b1-4d69-a9ca-19ccc026e747") },
+                    { new Guid("29a1c266-068d-4b81-8806-ea1987b05780"), "Электротехника, электроника, информационная инженерия", new Guid("5fc5311c-84b1-4d69-a9ca-19ccc026e747") },
+                    { new Guid("3aac0d9a-7840-4815-b643-3332496b1354"), "Клиническая медицина", new Guid("732d228c-3be6-41ba-a372-52a85035a781") },
+                    { new Guid("3bdff21c-d5e1-45b6-be40-7a352ef9f855"), "Машиностроение", new Guid("5fc5311c-84b1-4d69-a9ca-19ccc026e747") },
+                    { new Guid("3d448fb4-d88e-4057-b9d2-fbacd72b1b94"), "Другие медицинские науки", new Guid("732d228c-3be6-41ba-a372-52a85035a781") },
+                    { new Guid("44e280df-2d72-4b7d-8472-7f40f2c07f41"), "Другие сельскохозяйственные науки", new Guid("7034f484-3284-4f20-ae68-5736319b5237") },
+                    { new Guid("464d3b72-bf4e-4399-a18f-31c28469a1e4"), "Экологическая биотехнология", new Guid("5fc5311c-84b1-4d69-a9ca-19ccc026e747") },
+                    { new Guid("4a588664-c853-4904-8619-75eb1688a487"), "Сельскохозяйственная биотехнология", new Guid("7034f484-3284-4f20-ae68-5736319b5237") },
+                    { new Guid("4d27644f-8243-4ccc-a24b-e76929e0f549"), "Языки и литература", new Guid("e2038d3b-2bff-4adb-8d5e-a70c22f372cd") },
+                    { new Guid("66cd5fce-e9f2-4f89-9e35-3206dd388651"), "Социология", new Guid("74ddf9aa-b993-43bb-802c-5cdfccda9162") },
+                    { new Guid("6b8ac5f9-4582-4619-81dc-d585090ff081"), "Сельское, лесное и рыбное хозяйство", new Guid("7034f484-3284-4f20-ae68-5736319b5237") },
+                    { new Guid("777a9d79-9d80-49ea-b738-a4c9f2728558"), "Право", new Guid("74ddf9aa-b993-43bb-802c-5cdfccda9162") },
+                    { new Guid("7884f24a-3200-4f11-82b5-cad200e7f926"), "Нанотехнологии", new Guid("5fc5311c-84b1-4d69-a9ca-19ccc026e747") },
+                    { new Guid("790b78c3-f8d1-4036-b16d-3ca95cf8ac68"), "История и археология", new Guid("e2038d3b-2bff-4adb-8d5e-a70c22f372cd") },
+                    { new Guid("848be8a2-de9c-4376-a89e-e9cbee3051e1"), "Химия", new Guid("e26310f0-6088-4732-83b2-3a55cfc1ac27") },
+                    { new Guid("89147876-b647-4a9f-b1ca-286faeaafafb"), "Биология", new Guid("e26310f0-6088-4732-83b2-3a55cfc1ac27") },
+                    { new Guid("8f87e29f-fa4a-4339-992f-78be3a10bbf6"), "Политология", new Guid("74ddf9aa-b993-43bb-802c-5cdfccda9162") },
+                    { new Guid("8fc51fda-7ca8-4e9f-a768-f439496a7e42"), "Экологическая инженерия", new Guid("5fc5311c-84b1-4d69-a9ca-19ccc026e747") },
+                    { new Guid("9fa5f432-6777-43bd-a191-199b3584eda7"), "Физика", new Guid("e26310f0-6088-4732-83b2-3a55cfc1ac27") },
+                    { new Guid("aac7eeef-a005-4b60-9c54-e97124049940"), "Химическая инженерия", new Guid("5fc5311c-84b1-4d69-a9ca-19ccc026e747") },
+                    { new Guid("c43d356d-d137-4b22-a711-a0e503991ad9"), "Другие гуманитарные науки", new Guid("e2038d3b-2bff-4adb-8d5e-a70c22f372cd") },
+                    { new Guid("cf295f58-59fa-4b91-89d9-d9e409c54acc"), "Медицинская биотехнология", new Guid("732d228c-3be6-41ba-a372-52a85035a781") },
+                    { new Guid("d0386dde-493e-408b-8b6d-d60eaa603014"), "Философия, этика и религия", new Guid("e2038d3b-2bff-4adb-8d5e-a70c22f372cd") },
+                    { new Guid("d61da8e8-e22d-4358-a069-c3e8923b0fa3"), "Науки о здоровье", new Guid("732d228c-3be6-41ba-a372-52a85035a781") },
+                    { new Guid("dc02e8a0-b993-4794-9138-c7734a3b62d5"), "Науки о Земле и окружающей среде", new Guid("e26310f0-6088-4732-83b2-3a55cfc1ac27") },
+                    { new Guid("e16a9f12-742b-4085-96b2-3e57dd43369e"), "Медиа и коммуникации", new Guid("74ddf9aa-b993-43bb-802c-5cdfccda9162") },
+                    { new Guid("e508d968-9df3-495c-8064-ce6f74599606"), "Ветеринария", new Guid("7034f484-3284-4f20-ae68-5736319b5237") },
+                    { new Guid("e8f94232-d654-4e58-b32a-0dcf240e86f9"), "Другая инженерия и технологии", new Guid("5fc5311c-84b1-4d69-a9ca-19ccc026e747") },
+                    { new Guid("efda1d36-8126-4e5b-b3a4-c0c1ab4f3e84"), "Промышленная биотехнология", new Guid("5fc5311c-84b1-4d69-a9ca-19ccc026e747") },
+                    { new Guid("f5d65e28-a3c0-4e6b-8b2c-c5601cb9d2c3"), "Животноводство и молочное производство", new Guid("7034f484-3284-4f20-ae68-5736319b5237") },
+                    { new Guid("f93f03d9-96e9-4e89-9f6c-f7156b58793e"), "Медицинская инженерия", new Guid("5fc5311c-84b1-4d69-a9ca-19ccc026e747") },
+                    { new Guid("fa9f2a32-2b54-4972-9608-d29af225093f"), "Гражданское строительство", new Guid("5fc5311c-84b1-4d69-a9ca-19ccc026e747") }
                 });
 
             migrationBuilder.CreateIndex(
@@ -769,14 +836,9 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Professors_ScientificAreaId",
-                table: "Professors",
-                column: "ScientificAreaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProfessorScientificAreaSubsection_ScientificAreasSubsection~",
+                name: "IX_ProfessorScientificAreaSubsection_ScientificAreaSubsections~",
                 table: "ProfessorScientificAreaSubsection",
-                column: "ScientificAreasSubsectionsId");
+                column: "ScientificAreaSubsectionsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProfessorScientificInterest_ScientificInterestsId",
@@ -814,11 +876,6 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 column: "ProfessorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ScientificWorks_ScientificAreaId",
-                table: "ScientificWorks",
-                column: "ScientificAreaId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ScientificWorkStudent_StudentsId",
                 table: "ScientificWorkStudent",
                 column: "StudentsId");
@@ -839,9 +896,24 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 column: "FavoriteStudentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Students_ScientificAreaId",
-                table: "Students",
-                column: "ScientificAreaId");
+                name: "IX_StudentRequestProfessors_ProfessorId",
+                table: "StudentRequestProfessors",
+                column: "ProfessorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentRequestProfessors_ScientificWorkId",
+                table: "StudentRequestProfessors",
+                column: "ScientificWorkId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentRequestStudents_ScientificWorkId",
+                table: "StudentRequestStudents",
+                column: "ScientificWorkId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentRequestStudents_StudentToId",
+                table: "StudentRequestStudents",
+                column: "StudentToId");
 
             migrationBuilder.CreateIndex(
                 name: "Email",
@@ -932,7 +1004,16 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 name: "StudentFavoriteStudent");
 
             migrationBuilder.DropTable(
+                name: "StudentRequestProfessors");
+
+            migrationBuilder.DropTable(
+                name: "StudentRequestStudents");
+
+            migrationBuilder.DropTable(
                 name: "SystemAdmins");
+
+            migrationBuilder.DropTable(
+                name: "UserTokens");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -950,10 +1031,10 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 name: "Students");
 
             migrationBuilder.DropTable(
-                name: "Professors");
+                name: "ScientificAreas");
 
             migrationBuilder.DropTable(
-                name: "ScientificAreas");
+                name: "Professors");
 
             migrationBuilder.DropTable(
                 name: "Users");

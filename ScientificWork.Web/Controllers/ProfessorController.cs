@@ -7,6 +7,8 @@ using ScientificWork.UseCases.Professors.AddStudentToFavorites;
 using ScientificWork.UseCases.Professors.GetProfessors;
 using ScientificWork.UseCases.Professors.GetProfileById;
 using ScientificWork.UseCases.Professors.UplaodProfessors;
+using ScientificWork.UseCases.Requests.GetProfessorRequestsStudent;
+using ScientificWork.UseCases.Requests.GetStudentRequestsProfessor;
 using ScientificWork.Web.Infrastructure.Web;
 
 namespace ScientificWork.Web.Controllers;
@@ -70,5 +72,15 @@ public class ProfessorController : ControllerBase
     {
         HttpContext.Items.Add("userId", User.GetCurrentUserId());
         await mediator.Send(command);
+    }
+
+    /// <summary>
+    /// List request from student to professor.
+    /// </summary>
+    [HttpGet("list-request-from-student")]
+    public async Task GetProfessorRequestStudent([FromQuery] GetStudentRequestsProfessorQuery query)
+    {
+        HttpContext.Items.Add("userId", User.GetCurrentUserId());
+        await mediator.Send(query);
     }
 }

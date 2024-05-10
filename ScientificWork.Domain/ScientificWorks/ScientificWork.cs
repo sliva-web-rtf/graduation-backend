@@ -74,6 +74,35 @@ public class ScientificWork : Entity<Guid>
         return this;
     }
 
+    public ScientificWork CreateForStudentWithProfessor(string name, string title, string problem, int limit, Student student,
+        Guid professorId, Professor professor)
+    {
+        Name = name;
+        Description = title;
+        Result = problem;
+        Limit = limit;
+        ProfessorId = professorId;
+        CreateAt = DateTime.UtcNow;
+        Professor = professor;
+        students.Add(student);
+        WorkStatus = WorkStatus.NotConfirmed;
+        Fullness = 1;
+        return this;
+    }
+
+    public void StudentExit(Student student)
+    {
+        students.Remove(student);
+        Fullness -= 1;
+    }
+
+    public void ProfessorExit()
+    {
+        Professor = null;
+        ProfessorId = null;
+        WorkStatus = WorkStatus.NotConfirmed;
+    }
+
     public void AddScientificAreaSubsections(params ScientificAreaSubsection[] subsection)
     {
         scientificAreaSubsections.AddRange(subsection);
@@ -117,6 +146,18 @@ public class ScientificWork : Entity<Guid>
         Result = problem;
         Limit = limit;
         return this;
+    }
+
+    public void AddProfessor(Professor professor, Guid professorId)
+    {
+        Professor = professor;
+        ProfessorId = professorId;
+        WorkStatus = WorkStatus.Confirmed;
+    }
+
+    public void AddStudent(Student student)
+    {
+        students.Add(student);
     }
 
     public ScientificWork()

@@ -56,6 +56,7 @@ public class GetProfessorsQueryHandler : IRequestHandler<GetProfessorsQuery, Get
             .Select(s =>
             {
                 s.IsFavorite = favorites.Contains(s.Id);
+                s.CanJoin = s.Limit > s.Fullness;
                 return s;
             });
 

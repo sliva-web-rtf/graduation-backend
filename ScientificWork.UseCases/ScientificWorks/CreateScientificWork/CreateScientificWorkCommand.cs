@@ -15,4 +15,6 @@ public class CreateScientificWorkCommand : IRequest
     required public IList<string> ScientificAreaSubsections { get; init; }
 
     required public IList<string> ScientificInterests { get; init; }
+
+    required public bool IsEducator { get; init; }
 }

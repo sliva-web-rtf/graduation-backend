@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Saritasa.Tools.Common.Pagination;
 using ScientificWork.Domain.Professors;
+using ScientificWork.Domain.ScientificWorks.Enums;
 using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 using ScientificWork.UseCases.ScientificWorks.Common.Dtos;
@@ -36,27 +37,53 @@ public class GetScientificWorksQueryHandler : IRequestHandler<GetScientificWorks
     public async Task<GetScientificWorksResult> Handle(GetScientificWorksQuery request, CancellationToken cancellationToken)
     {
         var student = await studentManager.FindByIdAsync(userAccessor.GetCurrentUserId().ToString());
-        var result = new List<Domain.ScientificWorks.ScientificWork>();
+        HashSet<Guid> favoriteId;
+        HashSet<Guid> swUser;
+        var scientificWorks = dbContext.ScientificWorks
+            .Include(x => x.ScientificInterests)
+            .Where(x => x.WorkStatus != WorkStatus.Сompleted);
 
         if (student == null)
         {
-            result.AddRange(professorManager.Users
+            var p = professorManager.Users
                 .Where(x => x.Id == userAccessor.GetCurrentUserId())
                 .Include(x => x.ScientificWorks)
-                .Include(x => x.FavoriteScientificWorks)
-                .SelectMany(x => x.ScientificWorks));
+                .Include(x => x.ProfessorFavoriteScientificWorks);
+            favoriteId =
+            [
+                ..professorManager.Users
+                    .SelectMany(x => x.ScientificWorks)
+                    .Select(x => x.Id)
+            ];
+            swUser =
+            [
+                ..p
+                    .SelectMany(x => x.ProfessorFavoriteScientificWorks)
+                    .Select(x => x.ScientificWorkId)
+            ];
+            scientificWorks = scientificWorks
+                .Where(x => x.WorkStatus == WorkStatus.NotConfirmed)
+                .Where(x => !swUser.Contains(x.Id));
         }
         else
         {
-            result.AddRange(studentManager.Users
+            var s = studentManager.Users
                 .Where(x => x.Id == userAccessor.GetCurrentUserId())
                 .Include(x => x.ScientificWorks)
-                .Include(x => x.FavoriteScientificWorks)
-                .SelectMany(x => x.ScientificWorks));
+                .Include(x => x.StudentFavoriteScientificWorks);
+            favoriteId =
+            [
+                ..s
+                    .SelectMany(x => x.ScientificWorks)
+                    .Select(x => x.Id)
+            ];
+            swUser =
+            [
+                ..s
+                    .SelectMany(x => x.StudentFavoriteScientificWorks)
+                    .Select(x => x.ScientificWorkId)
+            ];
         }
-
-        var scientificWorks = dbContext.ScientificWorks
-            .Include(x => x.ScientificInterests).AsQueryable();
 
         if (request.ScientificAreaSubsections != null)
         {
@@ -70,12 +97,11 @@ public class GetScientificWorksQueryHandler : IRequestHandler<GetScientificWorks
 
         scientificWorks = scientificWorks.OrderBy(x => x.Limit - x.Fullness);
 
-        var favoriteSWIds = new HashSet<Guid>(result.Select(x => x.Id));
-
         var scientificWorksDto = mapper.Map<List<ScientificWorkDto>>(scientificWorks)
             .Select(s =>
             {
-                s.IsFavorite = favoriteSWIds.Contains(s.Id);
+                s.IsFavorite = favoriteId.Contains(s.Id);
+                s.CanJoin = s.Fullness < s.Limit && !swUser.Contains(s.Id);
                 return s;
             });
 
