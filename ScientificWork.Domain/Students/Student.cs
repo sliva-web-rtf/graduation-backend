@@ -77,6 +77,7 @@ public class Student : User
         Guid id,
         string userName,
         string email,
+        string avatarImagePath,
         DateTime createdAt,
         DateTime updatedAt)
         : base(id)
@@ -85,15 +86,18 @@ public class Student : User
         UserName = userName;
         CreatedAt = createdAt;
         UpdatedAt = updatedAt;
+        AvatarImagePath = avatarImagePath;
     }
 
     public static Student Create(
-        string email)
+        string email,
+        string avatarImagePath)
     {
         return new Student(
             Guid.NewGuid(),
             email,
             email,
+            avatarImagePath,
             DateTime.UtcNow,
             DateTime.UtcNow);
     }

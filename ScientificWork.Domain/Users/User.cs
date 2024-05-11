@@ -70,7 +70,7 @@ public abstract class User : IdentityUser<Guid>
 
     public UserStatus UserStatus { get; protected set; }
 
-    public Guid AvatarImageId { get; protected set; }
+    public string AvatarImagePath { get; protected set; }
 
     private readonly List<Notification> notifications = new();
 
@@ -86,6 +86,11 @@ public abstract class User : IdentityUser<Guid>
     public void UpdateLastLogin()
     {
         LastLogin = DateTime.UtcNow;
+    }
+
+    public void SetAvatarImagePath(string path)
+    {
+        AvatarImagePath = path;
     }
 
     public void UpdateProfileInformation(

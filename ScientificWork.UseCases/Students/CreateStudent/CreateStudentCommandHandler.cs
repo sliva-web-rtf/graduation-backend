@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Saritasa.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Abstractions.Interfaces.Email;
+using ScientificWork.UseCases.Common.Settings.WebRoot;
 
 namespace ScientificWork.UseCases.Students.CreateStudent;
 
@@ -42,7 +43,7 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand>
             logger.LogInformation($"Student already created. Email: {request.Email}.");
             return;
         }
-        var student = Student.Create(request.Email);
+        var student = Student.Create(request.Email, WebRootConstants.DefaultAvatarPath);
 
         var result = await userManager.CreateAsync(student, request.Password);
         if (!result.Succeeded)

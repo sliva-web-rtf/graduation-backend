@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Saritasa.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Professors;
 using ScientificWork.Infrastructure.Abstractions.Interfaces.Email;
+using ScientificWork.UseCases.Common.Settings.WebRoot;
 using ScientificWork.UseCases.Students.CreateStudent;
 
 namespace ScientificWork.UseCases.Professors.CreateProfessor;
@@ -38,7 +39,7 @@ public class CreateProfessorCommandHandler : IRequestHandler<CreateProfessorComm
             logger.LogInformation($"Professor already created. Email: {request.Email}.");
             return;
         }
-        var professor = Professor.Create(request.Email);
+        var professor = Professor.Create(request.Email, WebRootConstants.DefaultAvatarPath);
 
         var result = await userManager.CreateAsync(professor, request.Password);
         if (!result.Succeeded)
