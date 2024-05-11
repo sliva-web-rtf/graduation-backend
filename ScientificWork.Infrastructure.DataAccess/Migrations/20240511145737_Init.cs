@@ -60,6 +60,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", unicode: false, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -235,9 +236,13 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Type = table.Column<int>(type: "integer", nullable: false),
                     Message = table.Column<string>(type: "text", unicode: false, nullable: false),
-                    DateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Attachment_AgreeLink = table.Column<string>(type: "text", unicode: false, nullable: true),
+                    Attachment_DisagreeLink = table.Column<string>(type: "text", unicode: false, nullable: true),
                     ReceiverId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ReadAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -400,6 +405,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     CreateAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ProfessorId = table.Column<Guid>(type: "uuid", nullable: true),
                     ImageId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -670,6 +676,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     ProfessorId = table.Column<Guid>(type: "uuid", nullable: false),
                     StudentId = table.Column<Guid>(type: "uuid", nullable: false),
                     ScientificWorkId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     AddedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false)
@@ -705,6 +712,7 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     StudentToId = table.Column<Guid>(type: "uuid", nullable: false),
                     StudentFromId = table.Column<Guid>(type: "uuid", nullable: false),
                     ScientificWorkId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     AddedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false)
@@ -737,12 +745,12 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("13fa67ac-7d44-4d9d-9fd5-0bab99b78354"), "Естественные науки" },
-                    { new Guid("716ba49a-504a-466d-a005-0d344e92df98"), "Гуманитарные науки" },
-                    { new Guid("800e6c9d-87fb-467a-8f3f-1d81e4b60f8d"), "Техника и технологии" },
-                    { new Guid("95d23fd7-5a90-4043-8eda-b12c637ebe1b"), "Сельскохозяйственные науки" },
-                    { new Guid("a8277c69-2a4f-4f94-ab92-043c839c6f5b"), "Медицина и здравоохранение" },
-                    { new Guid("d8fb160d-402e-4223-b715-fe34843f3f3f"), "Общественные науки" }
+                    { new Guid("1cbde5de-d604-425d-854d-fee5c12097e7"), "Гуманитарные науки" },
+                    { new Guid("56bb9502-b5db-4658-a4e6-67096447db99"), "Общественные науки" },
+                    { new Guid("698ad8bb-6473-4d18-9c79-ab7cb579a8ce"), "Естественные науки" },
+                    { new Guid("7a2b7547-e186-4410-ad4d-974912a8c2a6"), "Техника и технологии" },
+                    { new Guid("8fad7e1a-c6f4-44d5-b7f5-42785d9d850c"), "Медицина и здравоохранение" },
+                    { new Guid("96c1df7e-c749-4e2c-bcad-cf4827f4eda5"), "Сельскохозяйственные науки" }
                 });
 
             migrationBuilder.InsertData(
@@ -750,48 +758,48 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 columns: new[] { "Id", "Name", "ScientificAreaId" },
                 values: new object[,]
                 {
-                    { new Guid("04e5dfaf-031c-4929-9d3a-f67621f1df53"), "Социология", new Guid("d8fb160d-402e-4223-b715-fe34843f3f3f") },
-                    { new Guid("06959a5d-b4a8-4ad9-94e9-52ea54053744"), "Сельскохозяйственная биотехнология", new Guid("95d23fd7-5a90-4043-8eda-b12c637ebe1b") },
-                    { new Guid("07ff0cc3-b7a3-41aa-8693-0b24c0a90ee7"), "Промышленная биотехнология", new Guid("800e6c9d-87fb-467a-8f3f-1d81e4b60f8d") },
-                    { new Guid("09f82fb0-f0ab-4b7d-9009-347f56fe76cb"), "Химическая инженерия", new Guid("800e6c9d-87fb-467a-8f3f-1d81e4b60f8d") },
-                    { new Guid("0e3081a9-7cb0-4221-a36b-2609562252ca"), "Другие сельскохозяйственные науки", new Guid("95d23fd7-5a90-4043-8eda-b12c637ebe1b") },
-                    { new Guid("13988d17-be35-4817-81d7-dd56f46bb670"), "Искусство (искусство, история искусств, исполнительское искусство, музыка)", new Guid("716ba49a-504a-466d-a005-0d344e92df98") },
-                    { new Guid("14703d65-3e98-41fe-b702-4f2966222357"), "Образовательные науки", new Guid("d8fb160d-402e-4223-b715-fe34843f3f3f") },
-                    { new Guid("2095f155-ecb5-4142-8032-efda6a985f6d"), "Науки о Земле и окружающей среде", new Guid("13fa67ac-7d44-4d9d-9fd5-0bab99b78354") },
-                    { new Guid("31c8065d-206d-47c5-b9af-baf48326039a"), "Другие медицинские науки", new Guid("a8277c69-2a4f-4f94-ab92-043c839c6f5b") },
-                    { new Guid("343f7368-c018-4305-ad0b-7043abee59e9"), "Компьютерные и информационные науки", new Guid("13fa67ac-7d44-4d9d-9fd5-0bab99b78354") },
-                    { new Guid("44438ef1-1ce7-4cb3-a3b0-cf9e4e44fa1f"), "Биология", new Guid("13fa67ac-7d44-4d9d-9fd5-0bab99b78354") },
-                    { new Guid("46234b50-4fca-425c-836c-03d9b75822f3"), "Фундаментальная медицина", new Guid("a8277c69-2a4f-4f94-ab92-043c839c6f5b") },
-                    { new Guid("483fea58-b214-4cdf-bc18-370978da907f"), "Право", new Guid("d8fb160d-402e-4223-b715-fe34843f3f3f") },
-                    { new Guid("49e04bef-c6f1-427b-9f9c-588a06b07336"), "Другая инженерия и технологии", new Guid("800e6c9d-87fb-467a-8f3f-1d81e4b60f8d") },
-                    { new Guid("5a0a9cdc-578b-4eca-9c42-996a7b54bf0e"), "Материаловедение", new Guid("800e6c9d-87fb-467a-8f3f-1d81e4b60f8d") },
-                    { new Guid("5acbade9-e537-42dd-8cd8-51042e7462e4"), "Клиническая медицина", new Guid("a8277c69-2a4f-4f94-ab92-043c839c6f5b") },
-                    { new Guid("6d263e54-a386-498f-8085-bb41301983b3"), "Математика", new Guid("13fa67ac-7d44-4d9d-9fd5-0bab99b78354") },
-                    { new Guid("77908fc8-489a-439b-bb9a-8423791477f0"), "Философия, этика и религия", new Guid("716ba49a-504a-466d-a005-0d344e92df98") },
-                    { new Guid("7d9dd3a3-7d64-410a-b0ca-e5dbdbf18533"), "Гражданское строительство", new Guid("800e6c9d-87fb-467a-8f3f-1d81e4b60f8d") },
-                    { new Guid("804f0cd2-222c-47a1-bc52-f971b4e370a2"), "Медицинская инженерия", new Guid("800e6c9d-87fb-467a-8f3f-1d81e4b60f8d") },
-                    { new Guid("8b60b6b8-c7c0-4706-8cf2-857eecdd8ccf"), "Медицинская биотехнология", new Guid("a8277c69-2a4f-4f94-ab92-043c839c6f5b") },
-                    { new Guid("98bbc039-ebf8-4004-97eb-93cdec4b9370"), "Ветеринария", new Guid("95d23fd7-5a90-4043-8eda-b12c637ebe1b") },
-                    { new Guid("9bbf0a77-a72a-4c74-bbb6-0e6d7a00e6a4"), "Социально-экономическая география", new Guid("d8fb160d-402e-4223-b715-fe34843f3f3f") },
-                    { new Guid("a36c2a8d-7432-4c6a-b8ac-5ebb8a3f88a2"), "Политология", new Guid("d8fb160d-402e-4223-b715-fe34843f3f3f") },
-                    { new Guid("a6c91950-8000-4c13-807f-d88e3e4a633e"), "Животноводство и молочное производство", new Guid("95d23fd7-5a90-4043-8eda-b12c637ebe1b") },
-                    { new Guid("a9708542-19fe-447d-a3fb-f2f83d9aeb13"), "Нанотехнологии", new Guid("800e6c9d-87fb-467a-8f3f-1d81e4b60f8d") },
-                    { new Guid("ada6d6e1-5bf1-467b-ab58-44626f35bcb7"), "Науки о здоровье", new Guid("a8277c69-2a4f-4f94-ab92-043c839c6f5b") },
-                    { new Guid("afe6ea5c-a3ff-4253-9ef8-dbff6dedc760"), "Экономика и бизнес", new Guid("d8fb160d-402e-4223-b715-fe34843f3f3f") },
-                    { new Guid("b0f8129d-25c4-41cf-9118-262cdc4a56ae"), "Химия", new Guid("13fa67ac-7d44-4d9d-9fd5-0bab99b78354") },
-                    { new Guid("b4d1d3b0-a712-4ba4-a6cd-045e874c0b90"), "История и археология", new Guid("716ba49a-504a-466d-a005-0d344e92df98") },
-                    { new Guid("b98381c0-b75a-4f27-bbde-ab0eb812995e"), "Физика", new Guid("13fa67ac-7d44-4d9d-9fd5-0bab99b78354") },
-                    { new Guid("c066f676-50a0-4b58-9191-c679e7b89ac3"), "Экологическая инженерия", new Guid("800e6c9d-87fb-467a-8f3f-1d81e4b60f8d") },
-                    { new Guid("c3a0efe7-8bbe-44df-9b17-2cd1f7d4fc40"), "Языки и литература", new Guid("716ba49a-504a-466d-a005-0d344e92df98") },
-                    { new Guid("c74a8aa6-11b1-41c6-8159-001427aa41de"), "Другие гуманитарные науки", new Guid("716ba49a-504a-466d-a005-0d344e92df98") },
-                    { new Guid("cc1a29f5-dec9-477b-94cd-3b1b568db701"), "Другие естественные науки", new Guid("13fa67ac-7d44-4d9d-9fd5-0bab99b78354") },
-                    { new Guid("cc7b16d7-277e-4c6f-b05f-78425d9b1e76"), "Сельское, лесное и рыбное хозяйство", new Guid("95d23fd7-5a90-4043-8eda-b12c637ebe1b") },
-                    { new Guid("d85307c1-11fe-4ee6-93f8-d4f84a1a9f15"), "Психология", new Guid("d8fb160d-402e-4223-b715-fe34843f3f3f") },
-                    { new Guid("d9b46ef1-c462-4047-8495-19e9accb4141"), "Машиностроение", new Guid("800e6c9d-87fb-467a-8f3f-1d81e4b60f8d") },
-                    { new Guid("e1e17db9-ef14-45bd-b8bb-086fdc425a1b"), "Экологическая биотехнология", new Guid("800e6c9d-87fb-467a-8f3f-1d81e4b60f8d") },
-                    { new Guid("e37379db-7f07-46d8-8b5c-67023031b619"), "Медиа и коммуникации", new Guid("d8fb160d-402e-4223-b715-fe34843f3f3f") },
-                    { new Guid("ebc6f736-d10d-485c-879b-185c2a0f838e"), "Электротехника, электроника, информационная инженерия", new Guid("800e6c9d-87fb-467a-8f3f-1d81e4b60f8d") },
-                    { new Guid("ffe53216-9a70-4bda-86b4-ac58fe41b409"), "Другие социальные науки", new Guid("d8fb160d-402e-4223-b715-fe34843f3f3f") }
+                    { new Guid("0d26ebc8-c95e-4d7a-88a4-6dcad9a576a2"), "Математика", new Guid("698ad8bb-6473-4d18-9c79-ab7cb579a8ce") },
+                    { new Guid("11a121a7-3450-4420-a3c8-27766caf5bf3"), "Медицинская инженерия", new Guid("7a2b7547-e186-4410-ad4d-974912a8c2a6") },
+                    { new Guid("20e105ec-5925-4a3a-97a1-119223bf2a6a"), "Медиа и коммуникации", new Guid("56bb9502-b5db-4658-a4e6-67096447db99") },
+                    { new Guid("2b9c1771-cc57-4978-a172-10701a0c8b04"), "Материаловедение", new Guid("7a2b7547-e186-4410-ad4d-974912a8c2a6") },
+                    { new Guid("2c9eba24-be84-4eaa-ba04-ce434e32f7f9"), "Социология", new Guid("56bb9502-b5db-4658-a4e6-67096447db99") },
+                    { new Guid("2e52b438-fc77-46d8-b236-74f02313eab7"), "Экологическая биотехнология", new Guid("7a2b7547-e186-4410-ad4d-974912a8c2a6") },
+                    { new Guid("2f1f5e40-738e-42a1-9702-c4063ffafae0"), "Нанотехнологии", new Guid("7a2b7547-e186-4410-ad4d-974912a8c2a6") },
+                    { new Guid("37163057-dd64-4830-b4f6-369a7a7c54a6"), "Языки и литература", new Guid("1cbde5de-d604-425d-854d-fee5c12097e7") },
+                    { new Guid("3c615158-35c9-4abc-bc0b-8ec6cd3324fa"), "История и археология", new Guid("1cbde5de-d604-425d-854d-fee5c12097e7") },
+                    { new Guid("3dd5eba3-5b40-40f5-9fd8-e1f5bd68c289"), "Сельскохозяйственная биотехнология", new Guid("96c1df7e-c749-4e2c-bcad-cf4827f4eda5") },
+                    { new Guid("47e60d64-0ef4-432f-9ba1-d131ea63667e"), "Другие сельскохозяйственные науки", new Guid("96c1df7e-c749-4e2c-bcad-cf4827f4eda5") },
+                    { new Guid("4c6061cf-2398-4de9-adb4-bd0470c9178b"), "Животноводство и молочное производство", new Guid("96c1df7e-c749-4e2c-bcad-cf4827f4eda5") },
+                    { new Guid("4ed98e16-9fe4-4e2e-8c31-d5ec2c44af79"), "Социально-экономическая география", new Guid("56bb9502-b5db-4658-a4e6-67096447db99") },
+                    { new Guid("5895d59b-a46f-454c-ad8b-26dd96a13538"), "Экологическая инженерия", new Guid("7a2b7547-e186-4410-ad4d-974912a8c2a6") },
+                    { new Guid("58f1be11-f8c4-4973-8bd3-084a58760521"), "Науки о здоровье", new Guid("8fad7e1a-c6f4-44d5-b7f5-42785d9d850c") },
+                    { new Guid("594517b1-6853-40eb-b1a7-e4651fa0beb4"), "Науки о Земле и окружающей среде", new Guid("698ad8bb-6473-4d18-9c79-ab7cb579a8ce") },
+                    { new Guid("69452311-e2fe-4cc6-be62-94fcff9e73e6"), "Медицинская биотехнология", new Guid("8fad7e1a-c6f4-44d5-b7f5-42785d9d850c") },
+                    { new Guid("6bdc3d32-6dfb-4c92-9827-292dde747ca3"), "Право", new Guid("56bb9502-b5db-4658-a4e6-67096447db99") },
+                    { new Guid("7124ed98-086b-4bbb-bfb5-e23ec64ea34c"), "Другие гуманитарные науки", new Guid("1cbde5de-d604-425d-854d-fee5c12097e7") },
+                    { new Guid("77747ba7-d7cc-41f9-9fe5-778279230843"), "Искусство (искусство, история искусств, исполнительское искусство, музыка)", new Guid("1cbde5de-d604-425d-854d-fee5c12097e7") },
+                    { new Guid("7a782822-f2f2-4237-9ee3-945231f51514"), "Политология", new Guid("56bb9502-b5db-4658-a4e6-67096447db99") },
+                    { new Guid("7d031138-69ce-446e-abca-51f827c79ece"), "Промышленная биотехнология", new Guid("7a2b7547-e186-4410-ad4d-974912a8c2a6") },
+                    { new Guid("7e9d62eb-f5fa-4956-b19a-a143205b9462"), "Электротехника, электроника, информационная инженерия", new Guid("7a2b7547-e186-4410-ad4d-974912a8c2a6") },
+                    { new Guid("7f8d6d8d-43c0-4541-a655-a9e2dcda23b6"), "Сельское, лесное и рыбное хозяйство", new Guid("96c1df7e-c749-4e2c-bcad-cf4827f4eda5") },
+                    { new Guid("80e7e16d-55b4-41a4-8e97-0855f99a9c40"), "Химическая инженерия", new Guid("7a2b7547-e186-4410-ad4d-974912a8c2a6") },
+                    { new Guid("867fc1ee-e109-4efd-898a-d5079b29bfd8"), "Философия, этика и религия", new Guid("1cbde5de-d604-425d-854d-fee5c12097e7") },
+                    { new Guid("8829060c-836a-4302-8003-3855451cf7ee"), "Биология", new Guid("698ad8bb-6473-4d18-9c79-ab7cb579a8ce") },
+                    { new Guid("8a3fcae4-2f3a-4445-b234-6f4441c949d5"), "Ветеринария", new Guid("96c1df7e-c749-4e2c-bcad-cf4827f4eda5") },
+                    { new Guid("8b512237-fc8c-4b5c-9b92-909e071cec40"), "Психология", new Guid("56bb9502-b5db-4658-a4e6-67096447db99") },
+                    { new Guid("96447db0-22cc-4320-bca7-03b0e2f3a407"), "Экономика и бизнес", new Guid("56bb9502-b5db-4658-a4e6-67096447db99") },
+                    { new Guid("a40ad852-f20b-440f-9105-b8d700b2883e"), "Физика", new Guid("698ad8bb-6473-4d18-9c79-ab7cb579a8ce") },
+                    { new Guid("a5d5dcb4-f6f9-4a91-bd68-ebdad86e08c0"), "Машиностроение", new Guid("7a2b7547-e186-4410-ad4d-974912a8c2a6") },
+                    { new Guid("a6006e0d-e2c0-444d-a326-04f4d0fa7163"), "Фундаментальная медицина", new Guid("8fad7e1a-c6f4-44d5-b7f5-42785d9d850c") },
+                    { new Guid("abc74cc5-3a19-4990-b2ff-a88ebd58398c"), "Другая инженерия и технологии", new Guid("7a2b7547-e186-4410-ad4d-974912a8c2a6") },
+                    { new Guid("b64f3d03-5b39-4a64-88f5-40dcda056d72"), "Клиническая медицина", new Guid("8fad7e1a-c6f4-44d5-b7f5-42785d9d850c") },
+                    { new Guid("bde5c176-552d-4d9e-8d6b-dc14e92bb3be"), "Гражданское строительство", new Guid("7a2b7547-e186-4410-ad4d-974912a8c2a6") },
+                    { new Guid("cb6db0f2-166c-42a7-b319-99662ebe2911"), "Другие естественные науки", new Guid("698ad8bb-6473-4d18-9c79-ab7cb579a8ce") },
+                    { new Guid("e1cb48e0-cc0a-44d6-9135-c895c5915b96"), "Другие медицинские науки", new Guid("8fad7e1a-c6f4-44d5-b7f5-42785d9d850c") },
+                    { new Guid("e5cbbd8b-db00-4c40-b23b-8d7ca2d59ad1"), "Компьютерные и информационные науки", new Guid("698ad8bb-6473-4d18-9c79-ab7cb579a8ce") },
+                    { new Guid("effba584-188b-4a68-8592-fbc4d9ddde6a"), "Образовательные науки", new Guid("56bb9502-b5db-4658-a4e6-67096447db99") },
+                    { new Guid("f00f6d40-189e-491c-8c14-f38972fbde96"), "Другие социальные науки", new Guid("56bb9502-b5db-4658-a4e6-67096447db99") },
+                    { new Guid("ffaf264d-a7ea-4a87-9e1b-bcfd842b1cba"), "Химия", new Guid("698ad8bb-6473-4d18-9c79-ab7cb579a8ce") }
                 });
 
             migrationBuilder.CreateIndex(

@@ -9,6 +9,7 @@ public class NotificationConfiguration : IEntityTypeConfiguration<Notification>
     public void Configure(EntityTypeBuilder<Notification> builder)
     {
         builder.HasKey(n => n.Id);
+        builder.OwnsOne(s => s.Attachment);
 
         builder.HasOne(n => n.Receiver)
             .WithMany(n => n.Notifications)

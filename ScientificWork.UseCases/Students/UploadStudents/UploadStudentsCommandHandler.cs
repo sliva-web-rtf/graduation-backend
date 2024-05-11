@@ -1,7 +1,9 @@
 ﻿using ClosedXML.Excel;
 using MediatR;
+using ScientificWork.Domain.Notifications.Enums;
 using ScientificWork.Domain.Students.Enums;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
+using ScientificWork.UseCases.Notifications.SendNotification;
 using ScientificWork.UseCases.Students.CompleteOnBoarding;
 using ScientificWork.UseCases.Students.CreateStudent;
 using ScientificWork.UseCases.Users.UpdateProfileInfo;
@@ -100,6 +102,9 @@ public class UploadStudentsCommandHandler : IRequestHandler<UploadStudentsComman
             }
 
             await sender.Send(new UpdateStudentStatusCommand { Status = SearchStatus.DoNotSearch }, cancellationToken);
+            await sender.Send(
+                new SendNotificationCommand(userAccessor.UserId.Value, "Welcome to our platform!",
+                    NotificationType.Info), cancellationToken);
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using ClosedXML.Excel;
 using MediatR;
+using ScientificWork.Domain.Notifications.Enums;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
+using ScientificWork.UseCases.Notifications.SendNotification;
 using ScientificWork.UseCases.Professors.CreateProfessor;
 using ScientificWork.UseCases.Users.UpdateProfessorScientificPortfolio;
 using ScientificWork.UseCases.Users.UpdateProfileInfo;
@@ -103,6 +105,10 @@ public class UploadProfessorsCommandHandler : IRequestHandler<UploadProfessorsCo
                         ScientificAreaSubsections = scientificAreaSubsections.Split(',')
                     }, cancellationToken);
             }
+
+            await sender.Send(
+                new SendNotificationCommand(userAccessor.UserId.Value, "Welcome to our platform!",
+                    NotificationType.Info), cancellationToken);
         }
     }
 }

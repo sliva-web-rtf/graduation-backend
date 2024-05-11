@@ -5,7 +5,7 @@ public abstract class Entity<TId> : Entity, IEquatable<Entity<TId>>
 {
     public TId Id { get; }
 
-    public DateTime CreatedAt { get; }
+    public DateTime CreatedAt { get; private set; }
 
     public DateTime UpdatedAt { get; protected set; }
 

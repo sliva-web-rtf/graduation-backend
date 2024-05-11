@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ScientificWork.Domain.Notifications;
 using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.Requests;
 using ScientificWork.Domain.ScientificAreas;
@@ -13,6 +14,8 @@ namespace ScientificWork.Infrastructure.Abstractions.Interfaces;
 /// </summary>
 public interface IAppDbContext : IDbContextWithSets, IDisposable
 {
+    DbSet<Notification> Notifications { get; }
+
     /// <summary>
     /// Users.
     /// </summary>
