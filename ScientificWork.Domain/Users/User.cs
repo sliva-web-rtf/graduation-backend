@@ -70,7 +70,7 @@ public abstract class User : IdentityUser<Guid>
 
     public UserStatus UserStatus { get; protected set; }
 
-    public string AvatarImagePath { get; protected set; }
+    public string? AvatarImagePath { get; protected set; }
 
     private readonly List<Notification> notifications = new();
 

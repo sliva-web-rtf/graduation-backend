@@ -33,7 +33,7 @@ public class RemoveAvatarImageCommandHandler : IRequestHandler<RemoveAvatarImage
             throw new NotFoundException($"User with id {userId} not found.");
         }
 
-        if (user.AvatarImagePath == WebRootConstants.DefaultAvatarPath)
+        if (user.AvatarImagePath is null || user.AvatarImagePath == WebRootConstants.DefaultAvatarPath)
         {
             return;
         }
