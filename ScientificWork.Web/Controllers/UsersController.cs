@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.Students;
+using ScientificWork.UseCases.Users.AddAvatarImage;
+using ScientificWork.UseCases.Users.GetAvatarImage;
+using ScientificWork.UseCases.Users.RemoveAvatarImage;
 using ScientificWork.UseCases.Users.UpdateProfessorScientificPortfolio;
 using ScientificWork.UseCases.Users.UpdateProfileInfo;
 using ScientificWork.UseCases.Users.UpdateStudentScientificPortfolio;
@@ -61,5 +64,29 @@ public class UsersController : ControllerBase
     public async Task UpdateUserPassword([FromBody] UpdateUserPasswordCommand command)
     {
         await mediator.Send(command);
+    }
+
+    [HttpPost("add-avatar-image")]
+    public async Task AddAvatarImage(IFormFile file)
+    {
+        await using var fileStream = file.OpenReadStream();
+        var command = new AddAvatarImageCommand
+        {
+            Data = fileStream, FileName = file.FileName, ContentType = file.ContentType
+        };
+        await mediator.Send(command);
+    }
+
+    [HttpDelete("remove-avatar-image")]
+    public async Task RemoveAvatarImage(RemoveAvatarImageCommand command)
+    {
+        await mediator.Send(command);
+    }
+
+    [HttpGet("get-avatar-image")]
+    public async Task<ActionResult> GetAvatarImage()
+    {
+        var result = await mediator.Send(new GetAvatarImageCommand());
+        return Ok(result);
     }
 }

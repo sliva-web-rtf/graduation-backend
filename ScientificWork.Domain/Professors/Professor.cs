@@ -80,6 +80,7 @@ public class Professor : User
         Guid id,
         string userName,
         string email,
+        string avatarImagePath,
         DateTime createdAt,
         DateTime updatedAt)
         : base(id)
@@ -89,15 +90,18 @@ public class Professor : User
         CreatedAt = createdAt;
         UpdatedAt = updatedAt;
         IsRegistrationComplete = true;
+        AvatarImagePath = avatarImagePath;
     }
 
     public static Professor Create(
-        string email)
+        string email,
+        string avatarImagePath)
     {
         return new Professor(
             Guid.NewGuid(),
             email,
             email,
+            avatarImagePath,
             DateTime.UtcNow,
             DateTime.UtcNow);
     }

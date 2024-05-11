@@ -144,6 +144,7 @@ public class Startup
     /// <param name="environment">Application environment.</param>
     public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
     {
+        app.UseStaticFiles();
         // Swagger
         app.UseSwagger();
         app.UseSwaggerUI(new SwaggerUIOptionsSetup().Setup);
