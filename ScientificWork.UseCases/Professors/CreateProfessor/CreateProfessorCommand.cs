@@ -11,4 +11,4 @@ public record CreateProfessorCommand(
     [Required]
     [DataType(DataType.Password)]
     string Password)
-    : IRequest;
+    : IRequest<CreateProfessorCommandResult>;

@@ -2,4 +2,4 @@
 
 namespace ScientificWork.UseCases.Students.CreateStudent;
 
-public record CreateStudentCommandResult(Guid UserId, TokenModel Token);
+public record CreateStudentCommandResult(Guid UserId);

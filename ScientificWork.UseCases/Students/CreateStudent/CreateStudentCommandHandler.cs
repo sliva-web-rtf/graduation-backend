@@ -12,7 +12,7 @@ namespace ScientificWork.UseCases.Students.CreateStudent;
 /// <summary>
 /// Create student command handler.
 /// </summary>
-public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand>
+public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand, CreateStudentCommandResult>
 {
     private readonly UserManager<Student> userManager;
     private readonly ILogger<CreateStudentCommandHandler> logger;
@@ -35,13 +35,13 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand>
     }
 
     /// <inheritdoc />
-    public async Task Handle(CreateStudentCommand request,
+    public async Task<CreateStudentCommandResult> Handle(CreateStudentCommand request,
         CancellationToken cancellationToken)
     {
         if (await userManager.FindByEmailAsync(request.Email) is not null)
         {
             logger.LogInformation($"Student already created. Email: {request.Email}.");
-            return;
+            return new CreateStudentCommandResult(Guid.Empty);
         }
         var student = Student.Create(request.Email, WebRootConstants.DefaultAvatarPath);
 
@@ -63,5 +63,7 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand>
         }
 
         logger.LogInformation($"Student created successfully. Id: {student.Id}.");
+
+        return new CreateStudentCommandResult(student.Id);
     }
 }

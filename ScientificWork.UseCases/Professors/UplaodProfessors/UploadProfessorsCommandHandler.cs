@@ -1,16 +1,21 @@
 ﻿using ClosedXML.Excel;
 using MediatR;
+using ScientificWork.Infrastructure.Abstractions.Interfaces;
 using ScientificWork.UseCases.Professors.CreateProfessor;
+using ScientificWork.UseCases.Users.UpdateProfessorScientificPortfolio;
+using ScientificWork.UseCases.Users.UpdateProfileInfo;
 
 namespace ScientificWork.UseCases.Professors.UplaodProfessors;
 
 public class UploadProfessorsCommandHandler : IRequestHandler<UploadProfessorsCommand>
 {
     private readonly ISender sender;
+    private readonly ILoggedUserAccessor userAccessor;
 
-    public UploadProfessorsCommandHandler(ISender sender)
+    public UploadProfessorsCommandHandler(ISender sender, ILoggedUserAccessor userAccessor)
     {
         this.sender = sender;
+        this.userAccessor = userAccessor;
     }
 
     public async Task Handle(UploadProfessorsCommand request, CancellationToken cancellationToken)
@@ -27,7 +32,76 @@ public class UploadProfessorsCommandHandler : IRequestHandler<UploadProfessorsCo
             var password = ws.Cell($"B{i}").GetValue<string>();
             if (!string.IsNullOrWhiteSpace(name) && !string.IsNullOrWhiteSpace(password))
             {
-                await sender.Send(new CreateProfessorCommand(name, password), cancellationToken);
+                var result = await sender.Send(new CreateProfessorCommand(name, password), cancellationToken);
+                if (result.UserId == default)
+                {
+                    continue;
+                }
+                userAccessor.UserId = result.UserId;
+            }
+            else
+            {
+                continue;
+            }
+
+            var firstName = ws.Cell($"C{i}").GetValue<string>();
+            var lastName = ws.Cell($"D{i}").GetValue<string>();
+            var patronymic = ws.Cell($"E{i}").GetValue<string>();
+            var contacts = ws.Cell($"F{i}").GetValue<string>();
+            var phone = ws.Cell($"G{i}").GetValue<string>();
+            if (!string.IsNullOrWhiteSpace(firstName)
+                && !string.IsNullOrWhiteSpace(lastName)
+                && !string.IsNullOrWhiteSpace(name)
+                && !string.IsNullOrWhiteSpace(patronymic))
+            {
+                await sender.Send(
+                    new UpdateProfileInfoCommand
+                    {
+                        FirstName = firstName,
+                        LastName = lastName,
+                        Contacts = contacts,
+                        Email = name,
+                        Patronymic = patronymic,
+                        Phone = phone
+                    }, cancellationToken);
+            }
+            else
+            {
+                continue;
+            }
+
+            var about = ws.Cell($"H{i}").GetValue<string>();
+            var address = ws.Cell($"I{i}").GetValue<string>();
+            var degree = ws.Cell($"J{i}").GetValue<string>();
+            var limit = ws.Cell($"K{i}").GetValue<string>();
+            var post = ws.Cell($"L{i}").GetValue<string>();
+            var workExperienceYears = ws.Cell($"M{i}").GetValue<string>();
+            var scopusURI = ws.Cell($"N{i}").GetValue<string>();
+            var URPURI = ws.Cell($"O{i}").GetValue<string>();
+            var RISCURI = ws.Cell($"P{i}").GetValue<string>();
+            var scientificInterests = ws.Cell($"Q{i}").GetValue<string>();
+            var scientificAreaSubsections = ws.Cell($"R{i}").GetValue<string>();
+            if (!string.IsNullOrWhiteSpace(degree)
+                && !string.IsNullOrWhiteSpace(limit)
+                && !string.IsNullOrWhiteSpace(workExperienceYears)
+                && !string.IsNullOrWhiteSpace(scientificInterests)
+                && !string.IsNullOrWhiteSpace(scientificAreaSubsections))
+            {
+                await sender.Send(
+                    new UpdateProfessorScientificPortfolioCommand
+                    {
+                        About = about,
+                        Address = address,
+                        Degree = degree,
+                        Limit = int.Parse(limit),
+                        Post = post,
+                        WorkExperienceYears = int.Parse(workExperienceYears),
+                        ScopusUri = scopusURI,
+                        URPUri = URPURI,
+                        RISCUri = RISCURI,
+                        ScientificInterests = scientificInterests.Split(','),
+                        ScientificAreaSubsections = scientificAreaSubsections.Split(',')
+                    }, cancellationToken);
             }
         }
     }

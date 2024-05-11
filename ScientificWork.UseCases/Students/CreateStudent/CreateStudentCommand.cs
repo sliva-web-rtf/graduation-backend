@@ -11,4 +11,4 @@ public record CreateStudentCommand(
     [Required]
     [DataType(DataType.Password)]
     string Password
-) : IRequest;
+) : IRequest<CreateStudentCommandResult>;

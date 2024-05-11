@@ -5,6 +5,8 @@ namespace ScientificWork.Infrastructure.Abstractions.Interfaces;
 /// </summary>
 public interface ILoggedUserAccessor
 {
+    Guid? UserId { get; set; }
+
     /// <summary>
     /// Get current logged user identifier.
     /// </summary>

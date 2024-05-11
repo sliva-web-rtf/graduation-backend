@@ -97,8 +97,8 @@ public abstract class User : IdentityUser<Guid>
         string firstName,
         string lastName,
         string patronymic,
-        string phoneNumber,
-        string contacts)
+        string? phoneNumber,
+        string? contacts)
     {
         FirstName = firstName;
         LastName = lastName;

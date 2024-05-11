@@ -10,7 +10,7 @@ using ScientificWork.UseCases.Students.CreateStudent;
 
 namespace ScientificWork.UseCases.Professors.CreateProfessor;
 
-public class CreateProfessorCommandHandler : IRequestHandler<CreateProfessorCommand>
+public class CreateProfessorCommandHandler : IRequestHandler<CreateProfessorCommand, CreateProfessorCommandResult>
 {
     private readonly UserManager<Professor> userManager;
     private readonly ILogger<CreateStudentCommandHandler> logger;
@@ -32,12 +32,12 @@ public class CreateProfessorCommandHandler : IRequestHandler<CreateProfessorComm
         this.sender = sender;
     }
 
-    public async Task Handle(CreateProfessorCommand request, CancellationToken cancellationToken)
+    public async Task<CreateProfessorCommandResult> Handle(CreateProfessorCommand request, CancellationToken cancellationToken)
     {
         if (await userManager.FindByEmailAsync(request.Email) is not null)
         {
             logger.LogInformation($"Professor already created. Email: {request.Email}.");
-            return;
+            return new CreateProfessorCommandResult(Guid.Empty);
         }
         var professor = Professor.Create(request.Email, WebRootConstants.DefaultAvatarPath);
 
@@ -59,5 +59,6 @@ public class CreateProfessorCommandHandler : IRequestHandler<CreateProfessorComm
         }
 
         logger.LogInformation($"Professor created successfully. Id: {professor.Id}.");
+        return new CreateProfessorCommandResult(professor.Id);
     }
 }
