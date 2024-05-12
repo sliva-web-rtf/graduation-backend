@@ -83,11 +83,12 @@ public class GetProfessorsQueryHandler : IRequestHandler<GetProfessorsQuery, Get
         var favorites = new HashSet<Guid>();
         if (curUser != null)
         {
-            favorites = professorManager.Users
+            favorites = studentManager.Users
                 .Where(s => s.Id == userId)
-                .Include(s => s.ProfessorFavoriteStudents)
-                .SelectMany(s => s.ProfessorFavoriteStudents)
-                .Select(s => s.StudentId)
+                .Include(s => s.StudentFavoriteProfessors)
+                .SelectMany(s => s.StudentFavoriteProfessors)
+                .Where(x => x.IsActive)
+                .Select(s => s.ProfessorId)
                 .ToHashSet();
         }
 

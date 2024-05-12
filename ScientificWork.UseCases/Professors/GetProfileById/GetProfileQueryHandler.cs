@@ -3,6 +3,8 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ScientificWork.Domain.Professors;
+using ScientificWork.Domain.Students;
+using ScientificWork.Infrastructure.Abstractions.Interfaces;
 using ScientificWork.UseCases.Common.Dtos;
 
 namespace ScientificWork.UseCases.Professors.GetProfileById;
@@ -10,15 +12,19 @@ namespace ScientificWork.UseCases.Professors.GetProfileById;
 public class GetProfileQueryHandler : IRequestHandler<GetProfileQuery, GetProfileByIdResult>
 {
     private readonly IMapper mapper;
-    private readonly UserManager<Professor> userManager;
+    private readonly UserManager<Professor> professorManager;
+    private readonly UserManager<Student> studentManager;
+    private readonly ILoggedUserAccessor userAccessor;
 
     /// <summary>
     /// Constructor.
     /// </summary>
-    public GetProfileQueryHandler(IMapper mapper, UserManager<Professor> userManager)
+    public GetProfileQueryHandler(IMapper mapper, UserManager<Professor> professorManager, ILoggedUserAccessor userAccessor, UserManager<Student> studentManager)
     {
         this.mapper = mapper;
-        this.userManager = userManager;
+        this.professorManager = professorManager;
+        this.userAccessor = userAccessor;
+        this.studentManager = studentManager;
     }
 
     /// <inheritdoc />
@@ -37,12 +43,14 @@ public class GetProfileQueryHandler : IRequestHandler<GetProfileQuery, GetProfil
 
         result.ScientificArea.ToList().AddRange(scientificAreasDto);
 
+
+        result.IsFavorite = CheckFavorites(request.ProfessorId);
         return result;
     }
 
     private async Task<Professor> GetStudentByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var student = await userManager.Users
+        var student = await professorManager.Users
             .Where(x => x.IsRegistrationComplete == true)
             .Where(x => x.Id == id)
             .Include(x => x.ScientificInterests)
@@ -50,11 +58,24 @@ public class GetProfileQueryHandler : IRequestHandler<GetProfileQuery, GetProfil
                 .ThenInclude(x => x.ScientificArea)
             .FirstAsync(cancellationToken);
 
-        if (!await userManager.IsInRoleAsync(student, nameof(Professor).ToLower()))
+        if (!await professorManager.IsInRoleAsync(student, nameof(Professor).ToLower()))
         {
             throw new Exception();
         }
 
         return student;
+    }
+
+    private bool CheckFavorites(Guid professorId)
+    {
+        var userId = userAccessor.GetCurrentUserId();
+        var check = studentManager.Users
+                .Where(s => s.Id == userId)
+                .Include(s => s.StudentFavoriteProfessors)
+                .SelectMany(s => s.StudentFavoriteProfessors)
+                .Where(x => x.IsActive)
+                .Any(s => s.ProfessorId == professorId);
+
+        return check;
     }
 }

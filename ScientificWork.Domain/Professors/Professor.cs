@@ -123,6 +123,24 @@ public class Professor : User
         scientificAreaSubsections.AddRange(subsection);
     }
 
+    public void RemoveFavoriteStudent(Guid studentId)
+    {
+        var pfs = professorFavoriteStudents.FirstOrDefault(x => x.StudentId == studentId);
+        if (pfs != null)
+        {
+            pfs.Deactivate();
+        }
+    }
+
+    public void RemoveFavoriteScientificWork(Guid scientificWorkId)
+    {
+        var pfs = professorFavoriteScientificWorks.FirstOrDefault(x => x.ScientificWorkId == scientificWorkId);
+        if (pfs != null)
+        {
+            pfs.Deactivate();
+        }
+    }
+
     public void UpdateScientificAreaSubsections(params ScientificAreaSubsection[] subsection)
     {
         scientificInterests.Clear();

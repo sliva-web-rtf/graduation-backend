@@ -46,16 +46,17 @@ public class CreateScientificWorkCommandHandler : IRequestHandler<CreateScientif
         }
         else
         {
-            if (request.IsEducator)
-            {
-                var professor = await professorManager.FindByIdAsync(userAccessor.GetCurrentUserId().ToString());
-                scientificWork.CreateForStudentWithProfessor(request.Name, request.Description, request.Result,
-                    request.Limit, student, professor!.Id, professor);
-            }
-            else
-            {
-                scientificWork.CreateForStudent(request.Name, request.Description, request.Result, request.Limit, student);
-            }
+            scientificWork.CreateForStudent(request.Name, request.Description, request.Result, request.Limit, student);
+            // if (request.IsEducator)
+            // {
+            //     var professor = await professorManager.FindByIdAsync(userAccessor.GetCurrentUserId().ToString());
+            //     scientificWork.CreateForStudentWithProfessor(request.Name, request.Description, request.Result,
+            //         request.Limit, student, professor!.Id, professor);
+            // }
+            // else
+            // {
+            //     scientificWork.CreateForStudent(request.Name, request.Description, request.Result, request.Limit, student);
+            // }
         }
 
         await AddScientificAreaSubsectionsAsync(scientificWork, request.ScientificAreaSubsections, cancellationToken);

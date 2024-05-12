@@ -219,4 +219,31 @@ public class Student : User
         var professorFavoriteStudent = StudentFavoriteProfessor.Create(Id, professorId);
         studentFavoriteProfessors.Add(professorFavoriteStudent);
     }
+
+    public void RemoveFavoriteStudent(Guid studentId)
+    {
+        var sfs = studentFavoriteStudents.FirstOrDefault(x => x.StudentId == studentId);
+        if (sfs != null)
+        {
+            sfs.Deactivate();
+        }
+    }
+
+    public void RemoveFavoriteScientificWork(Guid scientificWorkId)
+    {
+        var sfs = studentFavoriteScientificWorks.FirstOrDefault(x => x.ScientificWorkId == scientificWorkId);
+        if (sfs != null)
+        {
+            sfs.Deactivate();
+        }
+    }
+
+    public void RemoveFavoriteProfessor(Guid professorId)
+    {
+        var pfs = studentFavoriteProfessors.FirstOrDefault(x => x.ProfessorId == professorId);
+        if (pfs != null)
+        {
+            pfs.Deactivate();
+        }
+    }
 }

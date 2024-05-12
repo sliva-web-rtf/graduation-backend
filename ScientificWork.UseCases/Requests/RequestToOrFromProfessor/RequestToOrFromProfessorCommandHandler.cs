@@ -70,11 +70,11 @@ public class RequestToOrFromProfessorCommandHandler : IRequestHandler<RequestToO
                 ),
             new(
                 requestEnum == RequestEnum.FromStudent && scientificWork.Professor == null,
-                "Хочет стать Вашим падаваном"
+                "Вам предложили тему"
                 ),
             new(
                 requestEnum == RequestEnum.FromStudent && scientificWork.Professor != null,
-                $"Хочет попасть вот сюда -> {scientificWork.Name}"
+                $"Студент хочет попасть в научную работу : {scientificWork.Name}"
             )
         };
         return messages.FirstOrDefault(x => x.Key).Value;

@@ -40,6 +40,8 @@ public record GetProfileByIdResult
 
     public string? RISCUri { get; init; }
 
+    public bool IsFavorite { get; set; }
+
     public int PublicationsCount { get; init; }
 
     public int? HIndex { get; init; }

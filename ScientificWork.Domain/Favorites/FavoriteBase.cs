@@ -18,5 +18,10 @@ public abstract class FavoriteBase : Entity
         }
     }
 
+    public void Deactivate()
+    {
+        IsActive = false;
+    }
+
     protected abstract IEnumerable<object?> GetFavoriteEntitiesIds();
 }

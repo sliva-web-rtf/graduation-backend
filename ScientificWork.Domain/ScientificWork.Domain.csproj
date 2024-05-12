@@ -12,8 +12,4 @@
     <PackageReference Remove="StyleCop.Analyzers.Unstable" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Favorites\Enums\" />
-  </ItemGroup>
-
 </Project>

@@ -1,23 +1,24 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ScientificWork.Domain.Favorites.Enums;
 using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 
-namespace ScientificWork.UseCases.Students.AddScientificWorksToFavorites;
+namespace ScientificWork.UseCases.Students.ToggleProfessorToFavorites;
 
-public class AddScientificWorksToFavoritesCommandHandler : IRequestHandler<AddScientificWorksToFavoritesCommand>
+public class ToggleProfessorToFavoritesCommandHandler : IRequestHandler<ToggleProfessorToFavoritesCommand>
 {
     private readonly ILoggedUserAccessor userAccessor;
     private readonly UserManager<Student> studentManager;
 
-    public AddScientificWorksToFavoritesCommandHandler(ILoggedUserAccessor userAccessor, UserManager<Student> studentManager)
+    public ToggleProfessorToFavoritesCommandHandler(ILoggedUserAccessor userAccessor, UserManager<Student> studentManager)
     {
         this.userAccessor = userAccessor;
         this.studentManager = studentManager;
     }
 
-    public async Task Handle(AddScientificWorksToFavoritesCommand request, CancellationToken cancellationToken)
+    public async Task Handle(ToggleProfessorToFavoritesCommand request, CancellationToken cancellationToken)
     {
         var studentId = userAccessor.GetCurrentUserId();
         var curStudent = await studentManager.Users
@@ -26,7 +27,14 @@ public class AddScientificWorksToFavoritesCommandHandler : IRequestHandler<AddSc
 
         if (curStudent != null)
         {
-            curStudent.AddFavoriteStudent(request.ScientificWorksId);
+            if (request.ToggleEnum == ToggleEnum.Activate)
+            {
+                curStudent.AddFavoriteProfessor(request.ProfessorId);
+            }
+            else
+            {
+                curStudent.RemoveFavoriteProfessor(request.ProfessorId);
+            }
             await studentManager.UpdateAsync(curStudent);
         }
         else

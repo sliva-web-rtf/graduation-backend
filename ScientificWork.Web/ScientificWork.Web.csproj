@@ -40,6 +40,11 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Auth\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="publish\web.config" />
+    <_ContentIncludedByDefault Remove="publish\appsettings.Development.json" />
+    <_ContentIncludedByDefault Remove="publish\appsettings.json" />
+    <_ContentIncludedByDefault Remove="publish\ScientificWork.Web.deps.json" />
+    <_ContentIncludedByDefault Remove="publish\ScientificWork.Web.runtimeconfig.json" />
   </ItemGroup>
 
   <ItemGroup>

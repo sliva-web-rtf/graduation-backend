@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScientificWork.Domain.Admins;
-using ScientificWork.UseCases.Professors.AddScientificWorksToFavorites;
+using ScientificWork.UseCases.Professors.ToggleScientificWorksToFavorites;
 using ScientificWork.UseCases.Requests.GetProfessorRequestsStudent;
 using ScientificWork.UseCases.Requests.GetStudentRequestsStudent;
-using ScientificWork.UseCases.Students.AddProfessorToFavorites;
-using ScientificWork.UseCases.Students.AddStudentToFavorites;
 using ScientificWork.UseCases.Students.GetStudentProfileById;
 using ScientificWork.UseCases.Students.GetStudents;
+using ScientificWork.UseCases.Students.ToggleProfessorToFavorites;
+using ScientificWork.UseCases.Students.ToggleStudentToFavorites;
 using ScientificWork.UseCases.Students.UploadStudents;
 using ScientificWork.Web.Infrastructure.Web;
 
@@ -39,6 +39,7 @@ public class StudentController : ControllerBase
     [HttpGet("student-profile-by-id")]
     public async Task<ActionResult> GetStudentProfile([FromQuery] GetStudentProfileByIdQuery query)
     {
+        HttpContext.Items.Add("userId", User.GetCurrentUserId());
         var res = await mediator.Send(query);
         return Ok(res);
     }
@@ -62,21 +63,21 @@ public class StudentController : ControllerBase
     }
 
     [HttpPost("add-student-to-favorites")]
-    public async Task AddStudentToFavorites([FromQuery] AddStudentToFavoritesCommand command)
+    public async Task AddStudentToFavorites([FromQuery] ToggleStudentToFavoritesCommand command)
     {
         HttpContext.Items.Add("userId", User.GetCurrentUserId());
         await mediator.Send(command);
     }
 
     [HttpPost("add-professor-to-favorites")]
-    public async Task AddProfessorToFavorites([FromQuery] AddProfessorToFavoritesCommand command)
+    public async Task AddProfessorToFavorites([FromQuery] ToggleProfessorToFavoritesCommand command)
     {
         HttpContext.Items.Add("userId", User.GetCurrentUserId());
         await mediator.Send(command);
     }
 
     [HttpPost("add-scientific-work-to-favorites")]
-    public async Task AddScientificWorksToFavorites([FromQuery] AddScientificWorksToFavoritesCommand command)
+    public async Task AddScientificWorksToFavorites([FromQuery] ToggleScientificWorksToFavoritesCommand command)
     {
         HttpContext.Items.Add("userId", User.GetCurrentUserId());
         await mediator.Send(command);

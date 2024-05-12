@@ -59,6 +59,7 @@ public class GetScientificWorksQueryHandler : IRequestHandler<GetScientificWorks
             [
                 ..p
                     .SelectMany(x => x.ProfessorFavoriteScientificWorks)
+                    .Where(x => x.IsActive)
                     .Select(x => x.ScientificWorkId)
             ];
             scientificWorks = scientificWorks
@@ -81,6 +82,7 @@ public class GetScientificWorksQueryHandler : IRequestHandler<GetScientificWorks
             [
                 ..s
                     .SelectMany(x => x.StudentFavoriteScientificWorks)
+                    .Where(x => x.IsActive)
                     .Select(x => x.ScientificWorkId)
             ];
         }

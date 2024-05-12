@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScientificWork.UseCases.ScientificWorks.Common.Dtos;
 using ScientificWork.UseCases.ScientificWorks.CreateScientificWork;
+using ScientificWork.UseCases.ScientificWorks.DeleteScientificWork;
 using ScientificWork.UseCases.ScientificWorks.GetGeneralInformationById;
 using ScientificWork.UseCases.ScientificWorks.GetRecordingSlotById;
 using ScientificWork.UseCases.ScientificWorks.GetScientificWorksByUserId;
@@ -42,6 +43,15 @@ public class ScientificWorkController : ControllerBase
     }
 
     /// <summary>
+    /// Delete scientific work.
+    /// </summary>
+    [HttpDelete("delete-scientific-work")]
+    public async Task DeleteScientificWork([FromQuery] DeleteScientificWorkCommand command)
+    {
+        await mediator.Send(command);
+    }
+
+    /// <summary>
     /// Update scientific work.
     /// </summary>
     [HttpPut("update-scientific-work")]
@@ -56,6 +66,7 @@ public class ScientificWorkController : ControllerBase
     [HttpGet("general-info-by-id")]
     public async Task<GetGeneralInformationByIdResult> GetGeneralInformationById([FromQuery] GetGeneralInformationByIdQuery query)
     {
+        HttpContext.Items.Add("userId", User.GetCurrentUserId());
         return await mediator.Send(query);
     }
 

@@ -23,5 +23,7 @@ public class GetGeneralInformationByIdResult
 
     public Guid? ImageId { get; init; }
 
+    public bool IsFavorite { get; set; }
+
     required public IList<string> ScientificInterests { get; init; }
 }
