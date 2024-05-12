@@ -10,6 +10,8 @@ public class ScientificWorkDto
 
     public string Description { get; init; }
 
+    public Guid? ProfessorId { get; init; }
+
     public int Limit { get; init; }
 
     public int Fullness { get; init; }

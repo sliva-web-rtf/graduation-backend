@@ -8,6 +8,8 @@ public class Request : Entity<Guid>
 
     public bool IsActive { get; protected set; } = true;
 
+    public string Message { get; protected set; }
+
     public void Respond()
     {
         IsActive = false;

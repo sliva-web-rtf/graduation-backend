@@ -28,7 +28,7 @@ public class GetStudentRequestsStudentQueryHandler : IRequestHandler<GetStudentR
             .Select(x =>
                 new RequestDto()
                 {
-                    Id = x.Id, ScientificWorkId = x.ScientificWorkId, UserFrom = x.StudentFromId, Message = ""
+                    Id = x.Id, ScientificWorkId = x.ScientificWorkId, UserFrom = x.StudentFromId, Message = x.Message
                 });
 
         var res = PagedListFactory.FromSource(requests,

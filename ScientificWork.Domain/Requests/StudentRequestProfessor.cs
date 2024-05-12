@@ -25,7 +25,7 @@ public class StudentRequestProfessor : Request
     }
 
     public StudentRequestProfessor(Professor professor, Guid professorId, Student student, Guid studentId,
-        ScientificWorks.ScientificWork scientificWork, Guid scientificWorkId, RequestEnum requestEnum)
+        ScientificWorks.ScientificWork scientificWork, Guid scientificWorkId, RequestEnum requestEnum, string message)
     {
         AddedAt = DateTime.UtcNow;
         Professor = professor;
@@ -35,5 +35,6 @@ public class StudentRequestProfessor : Request
         ScientificWork = scientificWork;
         ScientificWorkId = scientificWorkId;
         RequestEnum = requestEnum;
+        Message = message;
     }
 }

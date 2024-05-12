@@ -30,7 +30,7 @@ public class GetProfessorRequestsStudentQueryHandler : IRequestHandler<GetProfes
             .Select(x =>
                 new RequestDto()
                 {
-                    Id = x.Id, ScientificWorkId = x.ScientificWorkId, UserFrom = x.ProfessorId, Message = ""
+                    Id = x.Id, ScientificWorkId = x.ScientificWorkId, UserFrom = x.ProfessorId, Message = x.Message
                 });
 
         var res = PagedListFactory.FromSource(requests,
