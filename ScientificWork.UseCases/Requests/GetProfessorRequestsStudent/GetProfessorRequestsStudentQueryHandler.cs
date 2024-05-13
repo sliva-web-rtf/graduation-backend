@@ -36,6 +36,6 @@ public class GetProfessorRequestsStudentQueryHandler : IRequestHandler<GetProfes
         var res = PagedListFactory.FromSource(requests,
             page: request.Page, pageSize: request.PageSize);
 
-        return new GetProfessorRequestsStudentResult() { Requests = res, Page = request.Page, Length = res.Count() };
+        return new GetProfessorRequestsStudentResult() { Requests = res, Page = request.Page, Length = requests.Count() };
     }
 }

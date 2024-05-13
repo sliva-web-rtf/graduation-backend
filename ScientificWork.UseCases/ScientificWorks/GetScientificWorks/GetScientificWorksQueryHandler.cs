@@ -122,7 +122,7 @@ public class GetScientificWorksQueryHandler : IRequestHandler<GetScientificWorks
 
         return new GetScientificWorksResult
         {
-            ScientificWorks = resScientificWorks, Page = request.Page, Length = resScientificWorks.Count()
+            ScientificWorks = resScientificWorks, Page = request.Page, Length = scientificWorksDto.Count()
         };
     }
 

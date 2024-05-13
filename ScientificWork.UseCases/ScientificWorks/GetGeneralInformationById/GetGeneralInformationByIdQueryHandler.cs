@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
+using ScientificWork.UseCases.Professors.Common.Dtos;
+using ScientificWork.UseCases.Students.Common.Dtos;
 
 namespace ScientificWork.UseCases.ScientificWorks.GetGeneralInformationById;
 
@@ -36,9 +38,20 @@ public class GetGeneralInformationByIdQueryHandler : IRequestHandler<GetGeneralI
         var scientificWorks = await dbContext.ScientificWorks
                 .Where(x => x.Id == request.Id)
                 .Include(x => x.ScientificInterests)
+                .Include(x => x.Students)
+                .Include(x => x.Professor)
                 .FirstOrDefaultAsync(cancellationToken);
         var result = mapper.Map<GetGeneralInformationByIdResult>(scientificWorks);
         result.IsFavorite = await CheckFavoritesAsync(request.Id);
+        result.CanJoin = result.Limit > result.Fullness;
+        result.StudentDtos = scientificWorks.Students
+            .Select(x => mapper.Map<StudentDto>(x))
+            .ToList();
+        if (scientificWorks.ProfessorId != null)
+        {
+            result.Professor = mapper.Map<ProfessorDto>(scientificWorks.Professor);
+        }
+
         return result;
     }
 

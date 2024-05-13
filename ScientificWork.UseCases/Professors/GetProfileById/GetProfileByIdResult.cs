@@ -42,7 +42,11 @@ public record GetProfileByIdResult
 
     public bool IsFavorite { get; set; }
 
+    public bool CanJoin { get; set; }
+
     public int PublicationsCount { get; init; }
 
     public int? HIndex { get; init; }
+
+    public string? AvatarImagePath { get; init; }
 }

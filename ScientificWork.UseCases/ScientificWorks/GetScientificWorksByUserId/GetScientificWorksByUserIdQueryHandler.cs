@@ -47,6 +47,7 @@ public class GetScientificWorksByUserIdQueryHandler : IRequestHandler<GetScienti
                 .Where(x => x.Id == request.UserId)
                 .Include(x => x.ScientificWorks)
                 .SelectMany(x => x.ScientificWorks)
+                .Where(x => x.Professor == null)
                 .Include(x => x.ScientificInterests));
         }
 
@@ -55,6 +56,7 @@ public class GetScientificWorksByUserIdQueryHandler : IRequestHandler<GetScienti
         foreach (var sw in res)
         {
             sw.IsFavorite = favorites.Contains(sw.Id);
+            sw.CanJoin = sw.Limit > sw.Fullness;
         }
 
         return res;

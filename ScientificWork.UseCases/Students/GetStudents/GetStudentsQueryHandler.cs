@@ -73,7 +73,7 @@ public class GetStudentsQueryHandler : IRequestHandler<GetStudentsQuery, GetStud
         var resStudents = PagedListFactory.FromSource(studentDto,
             page: request.Page, pageSize: request.PageSize);
 
-        return new GetStudentsResult { Students = resStudents, Length = resStudents.Count(), Page = request.Page };
+        return new GetStudentsResult { Students = resStudents, Length = studentDto.Count(), Page = request.Page };
     }
 
     private async Task<HashSet<Guid>> GetFavoritesStudentsAsync()

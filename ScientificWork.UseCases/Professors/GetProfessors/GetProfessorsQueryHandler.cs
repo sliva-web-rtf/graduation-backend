@@ -73,7 +73,7 @@ public class GetProfessorsQueryHandler : IRequestHandler<GetProfessorsQuery, Get
         var resProfessors = PagedListFactory.FromSource(professorDto.OrderBy(x => x.Limit - x.Fullness),
             page: request.Page, pageSize: request.PageSize);
 
-        return new GetProfessorsResult { Professors = resProfessors, Length = resProfessors.Count(), Page = request.Page };
+        return new GetProfessorsResult { Professors = resProfessors, Length = professorDto.Count(), Page = request.Page };
     }
 
     private async Task<HashSet<Guid>> GetFavoritesProfessorAsync()

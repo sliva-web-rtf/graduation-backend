@@ -25,4 +25,6 @@ public class ProfessorDto
     public bool CanJoin { get; set; }
 
     required public IList<string> ScientificInterests { get; init; }
+
+    public string? AvatarImagePath { get; init; }
 }

@@ -1,5 +1,7 @@
 ﻿using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.ScientificWorks.Enums;
+using ScientificWork.UseCases.Professors.Common.Dtos;
+using ScientificWork.UseCases.Students.Common.Dtos;
 
 namespace ScientificWork.UseCases.ScientificWorks.GetGeneralInformationById;
 
@@ -19,11 +21,13 @@ public class GetGeneralInformationByIdResult
 
     required public WorkStatus WorkStatus { get; init; }
 
-    public Professor? Professor { get; init; }
-
-    public Guid? ImageId { get; init; }
+    public ProfessorDto? Professor { get; set; }
 
     public bool IsFavorite { get; set; }
 
+    public bool CanJoin { get; set; }
+
     required public IList<string> ScientificInterests { get; init; }
+
+    public List<StudentDto> StudentDtos { get; set; }
 }

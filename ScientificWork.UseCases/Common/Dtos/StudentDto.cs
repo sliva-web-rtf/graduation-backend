@@ -23,4 +23,6 @@ public class StudentDto
     public bool? CommandSearching { get; set; }
 
     public bool? ProfessorSearching { get; set; }
+
+    public string? AvatarImagePath { get; init; }
 }

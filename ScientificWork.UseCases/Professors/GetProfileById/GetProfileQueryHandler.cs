@@ -45,6 +45,7 @@ public class GetProfileQueryHandler : IRequestHandler<GetProfileQuery, GetProfil
 
 
         result.IsFavorite = CheckFavorites(request.ProfessorId);
+        result.CanJoin = result.Limit > result.Fullness;
         return result;
     }
 
