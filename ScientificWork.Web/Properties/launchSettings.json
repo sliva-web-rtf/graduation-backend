@@ -4,7 +4,7 @@
     "anonymousAuthentication": true,
     "iis": {
       "applicationUrl": "http://localhost/",
-      "sslPort": 0
+      "sslPort": 44349
     }
   },
   "$schema": "http://json.schemastore.org/launchsettings.json",
@@ -12,7 +12,8 @@
     "Import": {
       "commandName": "Project",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "applicationUrl": "http://0.0.0.0:5000"
       }
     },
     "Run Web": {
