@@ -30,6 +30,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.9" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="Unchase.Swashbuckle.AspNetCore.Extensions" Version="2.7.1" />
+    <PackageReference Remove="StyleCop.Analyzers.Unstable" />
   </ItemGroup>
 
   <ItemGroup>
