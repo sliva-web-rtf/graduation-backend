@@ -1,12 +1,12 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
-using ScientificWork.Domain.Students;
 using ScientificWork.Domain.Users;
 using ScientificWork.Infrastructure.Abstractions.DTOs;
 using ScientificWork.Infrastructure.Abstractions.Interfaces.Authentication;
 using ScientificWork.UseCases.Common.Settings.Authentication;
+using ScientificWork.UseCases.Users.AuthenticateUser;
 
-namespace ScientificWork.UseCases.Users.AuthenticateUser;
+namespace ScientificWork.Infrastructure.Common.Authentication;
 
 /// <summary>
 /// Helper to generate <see cref="TokenModel" />.

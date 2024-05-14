@@ -4,11 +4,10 @@ using ScientificWork.Domain.Notifications.Enums;
 using ScientificWork.Domain.Students.Enums;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 using ScientificWork.UseCases.Notifications.SendNotification;
-using ScientificWork.UseCases.Students.CompleteOnBoarding;
 using ScientificWork.UseCases.Students.CreateStudent;
 using ScientificWork.UseCases.Users.UpdateProfileInfo;
 using ScientificWork.UseCases.Users.UpdateStudentScientificPortfolio;
-using ScientificWork.UseCases.Users.UpdateStudentStatusCommand;
+using ScientificWork.UseCases.Users.UpdateStudentStatus;
 
 namespace ScientificWork.UseCases.Students.UploadStudents;
 

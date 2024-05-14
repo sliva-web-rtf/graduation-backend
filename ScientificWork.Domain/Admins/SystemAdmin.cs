@@ -24,4 +24,6 @@ public class SystemAdmin : User
     {
         return new SystemAdmin(Guid.NewGuid(), email, firstName, lastName);
     }
+
+    public override bool CompleteRegistration(out List<string> errors) => throw new NotImplementedException();
 }

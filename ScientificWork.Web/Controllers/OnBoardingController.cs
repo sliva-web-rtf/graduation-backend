@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScientificWork.Domain.Users;
-using ScientificWork.UseCases.Students.CompleteOnBoarding;
+using ScientificWork.UseCases.Users.CompleteOnBoarding;
+using ScientificWork.UseCases.Users.UpdateProfessorScientificPortfolio;
+using ScientificWork.UseCases.Users.UpdateProfessorStatus;
 using ScientificWork.UseCases.Users.UpdateProfileInfo;
 using ScientificWork.UseCases.Users.UpdateStudentScientificPortfolio;
-using ScientificWork.UseCases.Users.UpdateStudentStatusCommand;
+using ScientificWork.UseCases.Users.UpdateStudentStatus;
 using ScientificWork.Web.Infrastructure.Web;
 
 namespace ScientificWork.Web.Controllers;
@@ -40,6 +42,18 @@ public class OnBoardingController : ControllerBase
 
     [HttpPut("update-status")]
     public async Task UpdateOnBoardingStatusAsync(UpdateStudentStatusCommand command)
+    {
+        await mediator.Send(command);
+    }
+
+    [HttpPut("update-professor-scientific-portfolio")]
+    public async Task UpdateProfessorOnBoardingScientificPortfolioAsync(UpdateProfessorScientificPortfolioCommand command)
+    {
+        await mediator.Send(command);
+    }
+
+    [HttpPut("update-professor-status")]
+    public async Task UpdateProfessorOnBoardingStatusAsync(UpdateProfessorStatusCommand command)
     {
         await mediator.Send(command);
     }

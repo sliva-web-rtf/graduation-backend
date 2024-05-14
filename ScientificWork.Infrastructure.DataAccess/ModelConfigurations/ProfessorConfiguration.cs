@@ -10,6 +10,7 @@ public class ProfessorConfiguration : IEntityTypeConfiguration<Professor>
     public void Configure(EntityTypeBuilder<Professor> builder)
     {
         builder.ToTable("Professors");
+        builder.OwnsOne(s => s.SearchStatus);
         builder.HasMany(p => p.ScientificWorks)
             .WithOne(p => p.Professor)
             .HasForeignKey(p => p.ProfessorId);

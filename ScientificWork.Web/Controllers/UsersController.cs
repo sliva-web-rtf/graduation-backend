@@ -9,7 +9,7 @@ using ScientificWork.UseCases.Users.RemoveAvatarImage;
 using ScientificWork.UseCases.Users.UpdateProfessorScientificPortfolio;
 using ScientificWork.UseCases.Users.UpdateProfileInfo;
 using ScientificWork.UseCases.Users.UpdateStudentScientificPortfolio;
-using ScientificWork.UseCases.Users.UpdateStudentStatusCommand;
+using ScientificWork.UseCases.Users.UpdateStudentStatus;
 using ScientificWork.UseCases.Users.UpdateUserPassword;
 
 namespace ScientificWork.Web.Controllers;

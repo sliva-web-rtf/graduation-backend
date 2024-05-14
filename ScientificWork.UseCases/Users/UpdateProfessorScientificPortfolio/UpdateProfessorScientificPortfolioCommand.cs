@@ -14,8 +14,6 @@ public class UpdateProfessorScientificPortfolioCommand : IRequest
 
     public string? Post { get; init; }
 
-    public int Limit { get; init; }
-
     public int WorkExperienceYears { get; init; }
 
     public string? ScopusUri { get; init; }

@@ -1,24 +1,24 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Saritasa.Tools.Domain.Exceptions;
-using ScientificWork.Domain.Students;
-using ScientificWork.Domain.Students.ValueObjects;
+using ScientificWork.Domain.Professors;
+using ScientificWork.Domain.Professors.ValueObjects;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 
-namespace ScientificWork.UseCases.Users.UpdateStudentStatusCommand;
+namespace ScientificWork.UseCases.Users.UpdateProfessorStatus;
 
-public class UpdateStudentStatusCommandHandler : IRequestHandler<UpdateStudentStatusCommand>
+public class UpdateProfessorStatusCommandHandler : IRequestHandler<UpdateProfessorStatusCommand>
 {
-    private readonly UserManager<Student> userManager;
+    private readonly UserManager<Professor> userManager;
     private readonly ILoggedUserAccessor userAccessor;
 
-    public UpdateStudentStatusCommandHandler(UserManager<Student> userManager, ILoggedUserAccessor userAccessor)
+    public UpdateProfessorStatusCommandHandler(UserManager<Professor> userManager, ILoggedUserAccessor userAccessor)
     {
         this.userManager = userManager;
         this.userAccessor = userAccessor;
     }
 
-    public async Task Handle(UpdateStudentStatusCommand request, CancellationToken cancellationToken)
+    public async Task Handle(UpdateProfessorStatusCommand request, CancellationToken cancellationToken)
     {
         var userId = userAccessor.GetCurrentUserId().ToString();
         var student = await userManager.FindByIdAsync(userId);
@@ -27,7 +27,7 @@ public class UpdateStudentStatusCommandHandler : IRequestHandler<UpdateStudentSt
             throw new NotFoundException($"User with id {userId} not found.");
         }
 
-        var status = StudentSearchStatus.Create(request.Status, request.CommandSearching, request.ProfessorSearching);
+        var status = ProfessorSearchStatus.Create(request.Status, request.Limit);
         student.UpdateSearchStatus(status);
         await userManager.UpdateAsync(student);
     }

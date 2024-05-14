@@ -1,10 +1,12 @@
 using System.Runtime.CompilerServices;
 using ScientificWork.Domain.Favorites;
+using ScientificWork.Domain.Professors.ValueObjects;
 using ScientificWork.Domain.Requests;
 using ScientificWork.Domain.ScientificAreas;
 using ScientificWork.Domain.ScientificInterests;
 using ScientificWork.Domain.Students;
 using ScientificWork.Domain.Users;
+using ScientificWork.Infrastructure.DataAccess.Helpers;
 
 namespace ScientificWork.Domain.Professors;
 
@@ -19,7 +21,7 @@ public class Professor : User
 
     public string? Post { get; private set; }
 
-    public int Limit { get; private set; }
+    public ProfessorSearchStatus? SearchStatus { get; private set; }
 
     public int Fullness { get; private set; }
 
@@ -34,14 +36,6 @@ public class Professor : User
     private readonly List<ScientificWorks.ScientificWork> scientificWorks = new();
 
     public IReadOnlyList<ScientificWorks.ScientificWork> ScientificWorks => scientificWorks.AsReadOnly();
-
-    private readonly List<ScientificInterest> scientificInterests = new();
-
-    public IReadOnlyList<ScientificInterest> ScientificInterests => scientificInterests.AsReadOnly();
-
-    private readonly List<ScientificAreaSubsection> scientificAreaSubsections = new();
-
-    public IReadOnlyList<ScientificAreaSubsection> ScientificAreaSubsections => scientificAreaSubsections.AsReadOnly();
 
     #region FavoriteStudents
 
@@ -90,7 +84,6 @@ public class Professor : User
         UserName = userName;
         CreatedAt = createdAt;
         UpdatedAt = updatedAt;
-        IsRegistrationComplete = true;
         AvatarImagePath = avatarImagePath;
     }
 
@@ -105,6 +98,55 @@ public class Professor : User
             avatarImagePath,
             DateTime.UtcNow,
             DateTime.UtcNow);
+    }
+
+    public void UpdateSearchStatus(ProfessorSearchStatus status)
+    {
+        SearchStatus = status;
+    }
+
+    public override bool CompleteRegistration(out List<string> errors)
+    {
+        var nullErrors = new List<string?>
+        {
+            CheckUserPortfolioFields() ? null : "user portfolio",
+            CheckScientificPortfolioFields() ? null : "scientific portfolio",
+            CheckStatusFields() ? null : "search status"
+        };
+
+        var notNullErrors = nullErrors.Where(v => v is not null).Select(v => v!).ToList();
+        if (notNullErrors.Any())
+        {
+            errors = notNullErrors;
+            return false;
+        }
+
+        IsRegistrationComplete = true;
+        errors = new List<string>();
+        return true;
+    }
+    
+    private bool CheckUserPortfolioFields()
+    {
+        return FieldValidator.ValidateNotNull(FirstName, LastName, Email);
+    }
+
+    private bool CheckScientificPortfolioFields()
+    {
+        if (!FieldValidator.ValidateNotNull(Degree)
+            || scientificInterests.Count == 0
+            || scientificAreaSubsections.Count == 0
+            || WorkExperienceYears == 0)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private bool CheckStatusFields()
+    {
+        return SearchStatus is not null;
     }
 
     public void AddFavoriteStudent(Guid studentId)
@@ -170,7 +212,6 @@ public class Professor : User
         string? post,
         string? about,
         string? address,
-        int limit,
         int workExperienceYears,
         string? scopusUri,
         string? riscUri,
@@ -180,7 +221,6 @@ public class Professor : User
         Post = post;
         About = about;
         Address = address;
-        Limit = limit;
         WorkExperienceYears = workExperienceYears;
         ScopusUri = scopusUri;
         RISCUri = riscUri;

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace ScientificWork.UseCases.Students.CompleteOnBoarding;
+namespace ScientificWork.UseCases.Users.CompleteOnBoarding;
 
 public record CompleteOnBoardingCommand()
     : IRequest;

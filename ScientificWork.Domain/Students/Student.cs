@@ -28,14 +28,6 @@ public class Student : User
 
     public IReadOnlyList<ScientificWorks.ScientificWork> ScientificWorks => scientificWorks.AsReadOnly();
 
-    private readonly List<ScientificInterest> scientificInterests = new();
-
-    public IReadOnlyList<ScientificInterest> ScientificInterests => scientificInterests.AsReadOnly();
-
-    private readonly List<ScientificAreaSubsection> scientificAreaSubsections = new();
-
-    public IReadOnlyList<ScientificAreaSubsection> ScientificAreaSubsections => scientificAreaSubsections.AsReadOnly();
-
     #region FavoriteStudents
 
     private readonly List<Student> favoriteStudents = new();
@@ -158,7 +150,7 @@ public class Student : User
         SearchStatus = status;
     }
 
-    public bool CompleteRegistration(out List<string> errors)
+    public override bool CompleteRegistration(out List<string> errors)
     {
         var nullErrors = new List<string?>
         {

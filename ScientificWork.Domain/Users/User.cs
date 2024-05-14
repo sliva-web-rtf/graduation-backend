@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Saritasa.Tools.Common.Utils;
 using ScientificWork.Domain.Notifications;
+using ScientificWork.Domain.ScientificAreas;
+using ScientificWork.Domain.ScientificInterests;
 using ScientificWork.Domain.Users.Enums;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
@@ -76,6 +78,14 @@ public abstract class User : IdentityUser<Guid>
 
     public ICollection<Notification> Notifications => notifications;
 
+    protected readonly List<ScientificInterest> scientificInterests = new();
+
+    public IReadOnlyList<ScientificInterest> ScientificInterests => scientificInterests.AsReadOnly();
+
+    protected readonly List<ScientificAreaSubsection> scientificAreaSubsections = new();
+
+    public IReadOnlyList<ScientificAreaSubsection> ScientificAreaSubsections => scientificAreaSubsections.AsReadOnly();
+
     protected User(Guid id)
     {
         Id = id;
@@ -92,6 +102,9 @@ public abstract class User : IdentityUser<Guid>
     {
         AvatarImagePath = path;
     }
+
+    public abstract bool CompleteRegistration(out List<string> errors);
+
 
     public void UpdateProfileInformation(
         string firstName,

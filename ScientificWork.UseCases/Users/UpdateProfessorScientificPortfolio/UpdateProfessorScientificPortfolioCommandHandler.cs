@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Saritasa.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Professors;
-using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 
 namespace ScientificWork.UseCases.Users.UpdateProfessorScientificPortfolio;
@@ -37,7 +36,6 @@ public class UpdateProfessorScientificPortfolioCommandHandler
             request.Post,
             request.About,
             request.Address,
-            request.Limit,
             request.WorkExperienceYears,
             request.ScopusUri,
             request.RISCUri,

@@ -1,10 +1,12 @@
 ﻿using ClosedXML.Excel;
 using MediatR;
 using ScientificWork.Domain.Notifications.Enums;
+using ScientificWork.Domain.Students.Enums;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 using ScientificWork.UseCases.Notifications.SendNotification;
 using ScientificWork.UseCases.Professors.CreateProfessor;
 using ScientificWork.UseCases.Users.UpdateProfessorScientificPortfolio;
+using ScientificWork.UseCases.Users.UpdateProfessorStatus;
 using ScientificWork.UseCases.Users.UpdateProfileInfo;
 
 namespace ScientificWork.UseCases.Professors.UplaodProfessors;
@@ -95,7 +97,6 @@ public class UploadProfessorsCommandHandler : IRequestHandler<UploadProfessorsCo
                         About = about,
                         Address = address,
                         Degree = degree,
-                        Limit = int.Parse(limit),
                         Post = post,
                         WorkExperienceYears = int.Parse(workExperienceYears),
                         ScopusUri = scopusURI,
@@ -105,7 +106,12 @@ public class UploadProfessorsCommandHandler : IRequestHandler<UploadProfessorsCo
                         ScientificAreaSubsections = scientificAreaSubsections.Split(',')
                     }, cancellationToken);
             }
-
+            else
+            {
+                continue;
+            }
+            
+            await sender.Send(new UpdateProfessorStatusCommand { Status = SearchStatus.DoNotSearch }, cancellationToken);
             await sender.Send(
                 new SendNotificationCommand(userAccessor.UserId.Value, "Welcome to our platform!",
                     NotificationType.Info), cancellationToken);

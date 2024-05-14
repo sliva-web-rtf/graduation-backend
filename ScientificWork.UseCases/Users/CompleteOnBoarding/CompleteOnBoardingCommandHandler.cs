@@ -3,17 +3,18 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Saritasa.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Students;
+using ScientificWork.Domain.Users;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 
-namespace ScientificWork.UseCases.Students.CompleteOnBoarding;
+namespace ScientificWork.UseCases.Users.CompleteOnBoarding;
 
 public class CompleteOnBoardingCommandHandler : IRequestHandler<CompleteOnBoardingCommand>
 {
     private readonly ILoggedUserAccessor userAccessor;
-    private readonly UserManager<Student> userManager;
+    private readonly UserManager<User> userManager;
     private readonly IAppDbContext dbContext;
 
-    public CompleteOnBoardingCommandHandler(ILoggedUserAccessor userAccessor, UserManager<Student> userManager,
+    public CompleteOnBoardingCommandHandler(ILoggedUserAccessor userAccessor, UserManager<User> userManager,
         IAppDbContext dbContext)
     {
         this.userAccessor = userAccessor;
@@ -24,7 +25,7 @@ public class CompleteOnBoardingCommandHandler : IRequestHandler<CompleteOnBoardi
     public async Task Handle(CompleteOnBoardingCommand request, CancellationToken cancellationToken)
     {
         var userId = userAccessor.GetCurrentUserId();
-        var user = await dbContext.Students
+        var user = await dbContext.Users
             .Include(s => s.ScientificInterests)
             .Include(s => s.ScientificAreaSubsections)
             .FirstOrDefaultAsync(

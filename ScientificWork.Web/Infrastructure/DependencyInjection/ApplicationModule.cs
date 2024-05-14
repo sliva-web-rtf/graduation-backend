@@ -1,4 +1,5 @@
 using ScientificWork.Infrastructure.Abstractions.Interfaces.Authentication;
+using ScientificWork.Infrastructure.Common.Authentication;
 using ScientificWork.UseCases.Users.AuthenticateUser;
 
 namespace ScientificWork.Web.Infrastructure.DependencyInjection;
