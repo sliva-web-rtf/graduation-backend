@@ -7,7 +7,6 @@ using ScientificWork.UseCases.Professors.GetProfileById;
 using ScientificWork.UseCases.Professors.ToggleScientificWorksToFavorites;
 using ScientificWork.UseCases.Professors.ToggleStudentToFavorites;
 using ScientificWork.UseCases.Professors.UplaodProfessors;
-using ScientificWork.UseCases.Requests.GetProfessorRequestsStudent;
 using ScientificWork.UseCases.Requests.GetStudentRequestsProfessor;
 using ScientificWork.Web.Infrastructure.Web;
 

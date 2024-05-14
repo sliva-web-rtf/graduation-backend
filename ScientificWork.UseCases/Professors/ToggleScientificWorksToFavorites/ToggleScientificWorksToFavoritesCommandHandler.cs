@@ -23,6 +23,7 @@ public class ToggleScientificWorksToFavoritesCommandHandler : IRequestHandler<To
         var professorId = userAccessor.GetCurrentUserId();
         var curProfessor = await professorManager.Users
             .Where(p => p.Id == professorId)
+            .Include(p => p.ProfessorFavoriteScientificWorks)
             .FirstOrDefaultAsync(cancellationToken);
 
         if (curProfessor != null)

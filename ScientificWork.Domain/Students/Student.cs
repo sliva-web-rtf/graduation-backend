@@ -204,37 +204,46 @@ public class Student : User
 
     public void AddFavoriteStudent(Guid studentId)
     {
-        var professorFavoriteStudent = StudentFavoriteStudent.Create(Id, studentId);
-        studentFavoriteStudents.Add(professorFavoriteStudent);
+        if (studentFavoriteStudents.All(x => x.FavoriteStudentId != studentId))
+        {
+            var professorFavoriteStudent = StudentFavoriteStudent.Create(Id, studentId);
+            studentFavoriteStudents.Add(professorFavoriteStudent);
+        }
     }
 
     public void AddFavoriteScientificWork(Guid scientificWorkId)
     {
-        var professorFavoriteStudent = StudentFavoriteScientificWork.Create(Id, scientificWorkId);
-        studentFavoriteScientificWorks.Add(professorFavoriteStudent);
+        if (studentFavoriteScientificWorks.All(x => x.ScientificWorkId != scientificWorkId))
+        {
+            var professorFavoriteStudent = StudentFavoriteScientificWork.Create(Id, scientificWorkId);
+            studentFavoriteScientificWorks.Add(professorFavoriteStudent);
+        }
     }
 
     public void AddFavoriteProfessor(Guid professorId)
     {
-        var professorFavoriteStudent = StudentFavoriteProfessor.Create(Id, professorId);
-        studentFavoriteProfessors.Add(professorFavoriteStudent);
+        if (studentFavoriteProfessors.All(x => x.ProfessorId != professorId))
+        {
+            var professorFavoriteStudent = StudentFavoriteProfessor.Create(Id, professorId);
+            studentFavoriteProfessors.Add(professorFavoriteStudent);
+        }
     }
 
     public void RemoveFavoriteStudent(Guid studentId)
     {
-        var sfs = studentFavoriteStudents.FirstOrDefault(x => x.StudentId == studentId);
+        var sfs = studentFavoriteStudents.FirstOrDefault(x => x.FavoriteStudentId == studentId);
         if (sfs != null)
         {
-            sfs.Deactivate();
+            studentFavoriteStudents.Remove(sfs);
         }
     }
 
     public void RemoveFavoriteScientificWork(Guid scientificWorkId)
     {
-        var sfs = studentFavoriteScientificWorks.FirstOrDefault(x => x.ScientificWorkId == scientificWorkId);
-        if (sfs != null)
+        var sfsw = studentFavoriteScientificWorks.FirstOrDefault(x => x.ScientificWorkId == scientificWorkId);
+        if (sfsw != null)
         {
-            sfs.Deactivate();
+            studentFavoriteScientificWorks.Remove(sfsw);
         }
     }
 
@@ -243,7 +252,7 @@ public class Student : User
         var pfs = studentFavoriteProfessors.FirstOrDefault(x => x.ProfessorId == professorId);
         if (pfs != null)
         {
-            pfs.Deactivate();
+            studentFavoriteProfessors.Remove(pfs);
         }
     }
 }

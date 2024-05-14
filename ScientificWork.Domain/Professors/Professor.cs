@@ -59,7 +59,8 @@ public class Professor : User
 
     private readonly List<ScientificWorks.ScientificWork> favoriteScientificWorks = new();
 
-    public IReadOnlyList<ScientificWorks.ScientificWork> FavoriteScientificWorks => favoriteScientificWorks.AsReadOnly();
+    public IReadOnlyList<ScientificWorks.ScientificWork> FavoriteScientificWorks =>
+        favoriteScientificWorks.AsReadOnly();
 
     private readonly List<ProfessorFavoriteScientificWork> professorFavoriteScientificWorks = new();
 
@@ -108,14 +109,20 @@ public class Professor : User
 
     public void AddFavoriteStudent(Guid studentId)
     {
-        var professorFavoriteStudent = ProfessorFavoriteStudent.Create(Id, studentId);
-        professorFavoriteStudents.Add(professorFavoriteStudent);
+        if (professorFavoriteStudents.All(p => p.StudentId != studentId))
+        {
+            var professorFavoriteStudent = ProfessorFavoriteStudent.Create(Id, studentId);
+            professorFavoriteStudents.Add(professorFavoriteStudent);
+        }
     }
 
     public void AddFavoriteScientificWork(Guid scientificWorkId)
     {
-        var professorFavoriteStudent = ProfessorFavoriteScientificWork.Create(Id, scientificWorkId);
-        professorFavoriteScientificWorks.Add(professorFavoriteStudent);
+        if (professorFavoriteScientificWorks.All(p => p.ScientificWorkId != scientificWorkId))
+        {
+            var professorFavoriteStudent = ProfessorFavoriteScientificWork.Create(Id, scientificWorkId);
+            professorFavoriteScientificWorks.Add(professorFavoriteStudent);
+        }
     }
 
     public void AddScientificAreaSubsections(params ScientificAreaSubsection[] subsection)
@@ -128,7 +135,7 @@ public class Professor : User
         var pfs = professorFavoriteStudents.FirstOrDefault(x => x.StudentId == studentId);
         if (pfs != null)
         {
-            pfs.Deactivate();
+            professorFavoriteStudents.Remove(pfs);
         }
     }
 
@@ -137,7 +144,7 @@ public class Professor : User
         var pfs = professorFavoriteScientificWorks.FirstOrDefault(x => x.ScientificWorkId == scientificWorkId);
         if (pfs != null)
         {
-            pfs.Deactivate();
+            professorFavoriteScientificWorks.Remove(pfs);
         }
     }
 

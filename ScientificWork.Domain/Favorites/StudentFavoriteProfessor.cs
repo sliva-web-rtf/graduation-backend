@@ -28,7 +28,7 @@ public class StudentFavoriteProfessor : FavoriteBase
         Guid studentId,
         Guid professorId)
     {
-        return new StudentFavoriteProfessor(professorId, studentId, DateTime.UtcNow);
+        return new StudentFavoriteProfessor(studentId, professorId, DateTime.UtcNow);
     }
 
     protected override IEnumerable<object?> GetFavoriteEntitiesIds()

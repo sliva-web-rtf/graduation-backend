@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScientificWork.Domain.Admins;
-using ScientificWork.UseCases.Professors.ToggleScientificWorksToFavorites;
 using ScientificWork.UseCases.Requests.GetProfessorRequestsStudent;
 using ScientificWork.UseCases.Requests.GetStudentRequestsStudent;
 using ScientificWork.UseCases.Students.GetStudentProfileById;
 using ScientificWork.UseCases.Students.GetStudents;
 using ScientificWork.UseCases.Students.ToggleProfessorToFavorites;
+using ScientificWork.UseCases.Students.ToggleScientificWorksToFavorites;
 using ScientificWork.UseCases.Students.ToggleStudentToFavorites;
 using ScientificWork.UseCases.Students.UploadStudents;
 using ScientificWork.Web.Infrastructure.Web;
