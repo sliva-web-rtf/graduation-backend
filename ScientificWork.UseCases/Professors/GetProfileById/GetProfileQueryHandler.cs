@@ -41,7 +41,7 @@ public class GetProfileQueryHandler : IRequestHandler<GetProfileQuery, GetProfil
                 Subsections = x.Select(s => s.Name).ToList()
             });
 
-        result.ScientificArea.ToList().AddRange(scientificAreasDto);
+        result.ScientificArea.AddRange(scientificAreasDto);
 
 
         result.IsFavorite = CheckFavorites(request.ProfessorId);
@@ -51,7 +51,7 @@ public class GetProfileQueryHandler : IRequestHandler<GetProfileQuery, GetProfil
 
     private async Task<Professor> GetStudentByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var student = await professorManager.Users
+        var professor = await professorManager.Users
             .Where(x => x.IsRegistrationComplete == true)
             .Where(x => x.Id == id)
             .Include(x => x.ScientificInterests)
@@ -59,12 +59,12 @@ public class GetProfileQueryHandler : IRequestHandler<GetProfileQuery, GetProfil
                 .ThenInclude(x => x.ScientificArea)
             .FirstAsync(cancellationToken);
 
-        if (!await professorManager.IsInRoleAsync(student, nameof(Professor).ToLower()))
+        if (!await professorManager.IsInRoleAsync(professor, nameof(Professor).ToLower()))
         {
             throw new Exception();
         }
 
-        return student;
+        return professor;
     }
 
     private bool CheckFavorites(Guid professorId)

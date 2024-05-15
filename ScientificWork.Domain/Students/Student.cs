@@ -116,7 +116,7 @@ public class Student : User
 
     public void UpdateScientificAreaSubsections(params ScientificAreaSubsection[] subsection)
     {
-        scientificInterests.Clear();
+        scientificAreaSubsections.Clear();
         AddScientificAreaSubsections(subsection);
     }
 

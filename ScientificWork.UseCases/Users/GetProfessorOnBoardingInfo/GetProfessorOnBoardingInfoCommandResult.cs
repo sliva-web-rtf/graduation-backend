@@ -14,7 +14,7 @@ public class GetProfessorOnBoardingInfoCommandResult
 
     public string? PhoneNumber { get; init; }
 
-    required public string Email { get; init; }
+    public string Email { get; init; } = null!;
 
     public string? Contacts { get; init; }
 
@@ -23,26 +23,22 @@ public class GetProfessorOnBoardingInfoCommandResult
     public string? Address { get; private set; }
 
     public string? Post { get; private set; }
+    
+    public int? WorkExperienceYears { get; private set; }
 
     public string? About { get; init; }
 
-    required public int Limit { get; init; }
+    public string? SearchStatus { get; set; }
+    
+    public int Limit { get; init; }
+    
+    public List<ScientificAreasDto> ScientificArea { get; init; } = new List<ScientificAreasDto>();
 
-    required public int Fullness { get; init; } = 1;
-
-    required public IList<ScientificAreasDto> ScientificArea { get; init; } = new List<ScientificAreasDto>();
-
-    required public IList<string> ScientificInterests { get; init; }
+    public IList<string> ScientificInterests { get; init; }
 
     public string? URPUri { get; init; }
 
     public string? ScopusUri { get; init; }
 
     public string? RISCUri { get; init; }
-
-    public int PublicationsCount { get; init; }
-
-    public int? HIndex { get; init; }
-
-    public string? AvatarImagePath { get; init; }
 }

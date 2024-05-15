@@ -23,8 +23,11 @@ public class UpdateStudentScientificPortfolioCommandHandler : IRequestHandler<Up
 
     public async Task Handle(UpdateStudentScientificPortfolioCommand request, CancellationToken cancellationToken)
     {
-        var userId = userAccessor.GetCurrentUserId().ToString();
-        var student = await userManager.FindByIdAsync(userId);
+        var userId = userAccessor.GetCurrentUserId();
+        var student = await userManager.Users.Where(u => u.Id == userId)
+            .Include(u => u.ScientificAreaSubsections)
+            .Include(u => u.ScientificInterests)
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
         if (student is null)
         {
             throw new NotFoundException($"User with id {userId} not found.");

@@ -31,6 +31,8 @@ public class UserMappingProfile : Profile
         
         CreateMap<Professor, GetProfessorOnBoardingInfoCommandResult>()
             .ForMember(x => x.ScientificArea, opt => opt.Ignore())
+            .ForMember(x => x.SearchStatus, opt => opt.MapFrom(student => student.SearchStatus!.Status))
+            .ForMember(x => x.Limit, opt => opt.MapFrom(student => student.SearchStatus!.Limit))
             .ForMember(x => x.ScientificInterests, opt => opt.MapFrom(x => x.ScientificInterests.Select(s => s.Name)));
     }
 }

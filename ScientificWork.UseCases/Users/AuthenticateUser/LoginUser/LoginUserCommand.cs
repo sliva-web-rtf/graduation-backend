@@ -22,9 +22,4 @@ public record LoginUserCommand : IRequest<LoginUserCommandResult>
     [Required]
     [DataType(DataType.Password)]
     required public string Password { get; init; }
-
-    /// <summary>
-    /// Remember user's cookie for longer period.
-    /// </summary>
-    public bool RememberMe { get; init; }
 }

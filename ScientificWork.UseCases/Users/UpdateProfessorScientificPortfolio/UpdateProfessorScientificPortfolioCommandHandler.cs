@@ -24,8 +24,11 @@ public class UpdateProfessorScientificPortfolioCommandHandler
 
     public async Task Handle(UpdateProfessorScientificPortfolioCommand request, CancellationToken cancellationToken)
     {
-        var userId = userAccessor.GetCurrentUserId().ToString();
-        var professor = await userManager.FindByIdAsync(userId);
+        var userId = userAccessor.GetCurrentUserId();
+        var professor = await userManager.Users.Where(u => u.Id == userId)
+            .Include(u => u.ScientificAreaSubsections)
+            .Include(u => u.ScientificInterests)
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
         if (professor is null)
         {
             throw new NotFoundException($"User with id {userId} not found.");

@@ -17,7 +17,7 @@ namespace ScientificWork.Web.Controllers;
 [ApiController]
 [Route("api/on-boarding")]
 [ApiExplorerSettings(GroupName = "on-boarding")]
-[Authorize]
+[Authorize(Policy = "RegistrationNotComplete")]
 public class OnBoardingController : ControllerBase
 {
     private readonly IMediator mediator;
@@ -37,24 +37,28 @@ public class OnBoardingController : ControllerBase
     }
 
     [HttpPut("update-scientific-portfolio")]
+    [Authorize(Roles = nameof(Student))]
     public async Task UpdateOnBoardingScientificPortfolioAsync(UpdateStudentScientificPortfolioCommand command)
     {
         await mediator.Send(command);
     }
 
     [HttpPut("update-status")]
+    [Authorize(Roles = nameof(Student))]
     public async Task UpdateOnBoardingStatusAsync(UpdateStudentStatusCommand command)
     {
         await mediator.Send(command);
     }
 
     [HttpPut("update-professor-scientific-portfolio")]
+    [Authorize(Roles = nameof(Professor))]
     public async Task UpdateProfessorOnBoardingScientificPortfolioAsync(UpdateProfessorScientificPortfolioCommand command)
     {
         await mediator.Send(command);
     }
 
     [HttpPut("update-professor-status")]
+    [Authorize(Roles = nameof(Professor))]
     public async Task UpdateProfessorOnBoardingStatusAsync(UpdateProfessorStatusCommand command)
     {
         await mediator.Send(command);

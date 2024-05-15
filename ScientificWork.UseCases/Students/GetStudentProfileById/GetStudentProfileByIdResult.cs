@@ -28,12 +28,6 @@ public record GetStudentProfileByIdResult
 
     required public IList<string> ScientificInterests { get; init; }
 
-    public string? URPUri { get; init; }
-
-    public string? ScopusUri { get; init; }
-
-    public string? RISCUri { get; init; }
-
     public string? Status { get; set; }
 
     public bool IsFavorite { get; set; }
@@ -41,10 +35,6 @@ public record GetStudentProfileByIdResult
     public bool? CommandSearching { get; set; }
 
     public bool? ProfessorSearching { get; set; }
-
-    public int? PublicationsCount { get; init; }
-
-    public int? HIndex { get; init; }
 
     public string? AvatarImagePath { get; init; }
 }

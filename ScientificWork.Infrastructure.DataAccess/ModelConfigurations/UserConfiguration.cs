@@ -19,6 +19,12 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
 
         // builder.HasQueryFilter(user => user.RemovedAt == null);
 
+        builder.HasMany(u => u.ScientificInterests)
+            .WithMany(s => s.Users);
+
+        builder.HasMany(u => u.ScientificAreaSubsections)
+            .WithMany(s => s.Users);
+        
         ConfigureProperties(builder);
     }
 

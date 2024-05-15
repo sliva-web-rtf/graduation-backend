@@ -25,12 +25,16 @@ public record GetProfileByIdResult
     public string? Post { get; private set; }
 
     public string? About { get; init; }
+    
+    public int? WorkExperienceYears { get; private set; }
 
+    public string? SearchStatus { get; set; }
+    
     required public int Limit { get; init; }
 
     required public int Fullness { get; init; } = 1;
 
-    required public IList<ScientificAreasDto> ScientificArea { get; init; } = new List<ScientificAreasDto>();
+    required public List<ScientificAreasDto> ScientificArea { get; init; } = new List<ScientificAreasDto>();
 
     required public IList<string> ScientificInterests { get; init; }
 
@@ -43,10 +47,6 @@ public record GetProfileByIdResult
     public bool IsFavorite { get; set; }
 
     public bool CanJoin { get; set; }
-
-    public int PublicationsCount { get; init; }
-
-    public int? HIndex { get; init; }
 
     public string? AvatarImagePath { get; init; }
 }

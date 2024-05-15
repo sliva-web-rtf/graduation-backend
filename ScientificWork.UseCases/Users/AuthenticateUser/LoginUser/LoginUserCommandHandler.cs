@@ -36,8 +36,8 @@ internal class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Login
     public async Task<LoginUserCommandResult> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
         // Password sign in.
-        var result = await signInManager.PasswordSignInAsync(request.Email, request.Password,
-            lockoutOnFailure: false, isPersistent: request.RememberMe);
+        var result = await signInManager.PasswordSignInAsync(request.Email, request.Password, 
+            false, false);
         ValidateSignInResult(result, request.Email);
 
         // Get user and log.

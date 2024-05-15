@@ -41,7 +41,7 @@ public class GetProfessorOnBoardingInfoCommandHandler
                 Subsections = x.Select(s => s.Name).ToList()
             });
 
-        result.ScientificArea.ToList().AddRange(scientificAreasDto);
+        result.ScientificArea.AddRange(scientificAreasDto);
         
         return result;
     }

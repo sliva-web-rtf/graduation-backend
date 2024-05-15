@@ -23,9 +23,9 @@ public class Professor : User
 
     public ProfessorSearchStatus? SearchStatus { get; private set; }
 
-    public int Fullness { get; private set; }
+    public int? Fullness { get; private set; }
 
-    public int WorkExperienceYears { get; private set; }
+    public int? WorkExperienceYears { get; private set; }
 
     public string? ScopusUri { get; private set; }
 
@@ -136,7 +136,7 @@ public class Professor : User
         if (!FieldValidator.ValidateNotNull(Degree)
             || scientificInterests.Count == 0
             || scientificAreaSubsections.Count == 0
-            || WorkExperienceYears == 0)
+            || !WorkExperienceYears.HasValue)
         {
             return false;
         }
@@ -192,7 +192,7 @@ public class Professor : User
 
     public void UpdateScientificAreaSubsections(params ScientificAreaSubsection[] subsection)
     {
-        scientificInterests.Clear();
+        scientificAreaSubsections.Clear();
         AddScientificAreaSubsections(subsection);
     }
 
@@ -212,7 +212,7 @@ public class Professor : User
         string? post,
         string? about,
         string? address,
-        int workExperienceYears,
+        int? workExperienceYears,
         string? scopusUri,
         string? riscUri,
         string? urpUri)

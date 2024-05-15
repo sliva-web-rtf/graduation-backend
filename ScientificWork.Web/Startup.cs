@@ -114,6 +114,10 @@ public class Startup
             {
                 builder.RequireClaim("registrationComplete", "true");
             });
+            options.AddPolicy("RegistrationNotComplete", builder =>
+            {
+                builder.RequireClaim("registrationComplete", "false");
+            });
         });
         // Database.
         services.AddDbContext<AppDbContext>(

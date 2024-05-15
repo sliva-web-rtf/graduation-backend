@@ -20,6 +20,8 @@ public class ProfessorMappingProfile : Profile
             .ForMember(x => x.ScientificInterests, opt => opt.MapFrom(x => x.ScientificInterests.Select(s => s.Name)));
         CreateMap<Professor, GetProfileByIdResult>()
             .ForMember(x => x.ScientificArea, opt => opt.Ignore())
-            .ForMember(x => x.ScientificInterests, opt => opt.MapFrom(x => x.ScientificInterests.Select(s => s.Name)));
+            .ForMember(x => x.ScientificInterests, opt => opt.MapFrom(x => x.ScientificInterests.Select(s => s.Name)))
+            .ForMember(x => x.SearchStatus, opt => opt.MapFrom(student => student.SearchStatus!.Status))
+            .ForMember(x => x.Limit, opt => opt.MapFrom(student => student.SearchStatus!.Limit));
     }
 }
