@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
@@ -12,10 +11,8 @@ using ScientificWork.Domain.Users;
 using ScientificWork.Infrastructure.Abstractions.Interfaces.Email;
 using ScientificWork.Infrastructure.Common.Services.Email;
 using ScientificWork.Infrastructure.DataAccess;
-using ScientificWork.UseCases.Common.Settings;
 using ScientificWork.UseCases.Common.Settings.Authentication;
 using ScientificWork.UseCases.Common.Settings.Email;
-using ScientificWork.UseCases.Users.AuthenticateUser;
 using ScientificWork.Web.Infrastructure.Authentication;
 using ScientificWork.Web.Infrastructure.Middlewares;
 using ScientificWork.Web.Infrastructure.Settings;
@@ -62,8 +59,7 @@ public class Startup
 
         // Health check.
         var databaseConnectionString = configuration.GetConnectionString("AppDatabase")
-                                       ?? throw new ArgumentNullException("ConnectionStrings:AppDatabase",
-                                           "Database connection string is not initialized");
+                                       ?? throw new ArgumentException("Database connection string is not initialized");
         services.AddHealthChecks()
             .AddNpgSql(databaseConnectionString);
 
@@ -96,8 +92,8 @@ public class Startup
         services.AddIdentityCore<SystemAdmin>().AddRoles<AppIdentityRole>().AddEntityFrameworkStores<AppDbContext>();
 
         // JWT.
-        var jwtSecretKey = configuration["Jwt:SecretKey"] ?? throw new ArgumentNullException("Jwt:SecretKey");
-        var jwtIssuer = configuration["Jwt:Issuer"] ?? throw new ArgumentNullException("Jwt:Issuer");
+        var jwtSecretKey = configuration["Jwt:SecretKey"] ?? throw new ArgumentException("Jwt:SecretKey");
+        var jwtIssuer = configuration["Jwt:Issuer"] ?? throw new ArgumentException("Jwt:Issuer");
         services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

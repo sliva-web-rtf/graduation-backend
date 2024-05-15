@@ -2,6 +2,8 @@ using System.ComponentModel.DataAnnotations;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.AspNetCore.Identity;
 using ScientificWork.Domain.Users;
+// ReSharper disable NotAccessedField.Local
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
 
 namespace ScientificWork.Web.Commands;
 

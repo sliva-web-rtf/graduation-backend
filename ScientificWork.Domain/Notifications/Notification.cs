@@ -2,6 +2,7 @@
 using ScientificWork.Domain.Notifications.Enums;
 using ScientificWork.Domain.Notifications.ValueObjects;
 using ScientificWork.Domain.Users;
+// ReSharper disable UnusedAutoPropertyAccessor.Local
 
 namespace ScientificWork.Domain.Notifications;
 
@@ -52,6 +53,7 @@ public sealed class Notification : Entity<Guid>
 
     // for EF
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    // ReSharper disable once UnusedMember.Local
     private Notification()
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {

@@ -1,8 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using ScientificWork.Domain.Common;
-using ScientificWork.Domain.Professors;
-using ScientificWork.Domain.Students;
-using ScientificWork.Domain.Users;
+﻿using ScientificWork.Domain.Users;
 
 namespace ScientificWork.Domain.ScientificAreas;
 
@@ -12,9 +8,9 @@ public class ScientificAreaSubsection
 
     public Guid ScientificAreaId { get;  set; }
 
-    public ScientificArea ScientificArea { get;  set; }
+    public ScientificArea ScientificArea { get; set; } = null!;
 
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     private readonly List<User> users = new();
     public ICollection<User> Users => users;

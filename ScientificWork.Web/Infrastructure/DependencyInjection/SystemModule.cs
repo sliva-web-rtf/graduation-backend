@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 using ScientificWork.Infrastructure.DataAccess;
 using ScientificWork.UseCases.Users.AuthenticateUser;

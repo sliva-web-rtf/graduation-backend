@@ -1,6 +1,7 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
 using ScientificWork.Web.Commands;
-using ScientificWork.Web.Infrastructure.Startup;
+// ReSharper disable UnassignedGetOnlyAutoProperty
+// ReSharper disable UnusedMember.Global
 
 namespace ScientificWork.Web;
 

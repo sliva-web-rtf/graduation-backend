@@ -1,6 +1,5 @@
 ﻿using ScientificWork.Domain.Common;
 using ScientificWork.Domain.Students.Enums;
-using ScientificWork.Domain.Students.ValueObjects;
 
 namespace ScientificWork.Domain.Professors.ValueObjects;
 

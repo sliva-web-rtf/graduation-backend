@@ -1,19 +1,19 @@
-using System.Runtime.CompilerServices;
 using ScientificWork.Domain.Favorites;
+using ScientificWork.Domain.Helpers;
 using ScientificWork.Domain.Professors.ValueObjects;
 using ScientificWork.Domain.Requests;
 using ScientificWork.Domain.ScientificAreas;
 using ScientificWork.Domain.ScientificInterests;
 using ScientificWork.Domain.Students;
 using ScientificWork.Domain.Users;
-using ScientificWork.Infrastructure.DataAccess.Helpers;
+// ReSharper disable CollectionNeverUpdated.Local
 
 namespace ScientificWork.Domain.Professors;
 
 /// <summary>
 /// Professors.
 /// </summary>
-public class Professor : User
+public sealed class Professor : User
 {
     public string? Address { get; private set; }
 
@@ -23,6 +23,7 @@ public class Professor : User
 
     public ProfessorSearchStatus? SearchStatus { get; private set; }
 
+    // ReSharper disable once UnusedAutoPropertyAccessor.Local
     public int? Fullness { get; private set; }
 
     public int? WorkExperienceYears { get; private set; }

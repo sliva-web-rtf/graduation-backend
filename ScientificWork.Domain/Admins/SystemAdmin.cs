@@ -2,7 +2,7 @@
 
 namespace ScientificWork.Domain.Admins;
 
-public class SystemAdmin : User
+public sealed class SystemAdmin : User
 {
     private SystemAdmin(Guid id,
         string email,

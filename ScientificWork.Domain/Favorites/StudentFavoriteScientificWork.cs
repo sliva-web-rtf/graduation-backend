@@ -1,4 +1,5 @@
 ﻿using ScientificWork.Domain.Students;
+// ReSharper disable UnassignedGetOnlyAutoProperty
 
 namespace ScientificWork.Domain.Favorites;
 
@@ -6,11 +7,11 @@ public class StudentFavoriteScientificWork : FavoriteBase
 {
     public Guid StudentId { get; }
 
-    public Student Student { get; }
+    public Student? Student { get; }
 
     public Guid ScientificWorkId { get; }
 
-    public ScientificWorks.ScientificWork ScientificWork { get; }
+    public ScientificWorks.ScientificWork? ScientificWork { get; }
 
     private StudentFavoriteScientificWork(
         Guid studentId,

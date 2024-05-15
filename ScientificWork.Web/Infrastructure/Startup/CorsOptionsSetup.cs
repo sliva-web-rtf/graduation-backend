@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Cors.Infrastructure;
+// ReSharper disable NotAccessedField.Local
 
 namespace ScientificWork.Web.Infrastructure.Startup;
 

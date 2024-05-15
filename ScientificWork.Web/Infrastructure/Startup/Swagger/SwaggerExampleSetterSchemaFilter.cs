@@ -13,7 +13,7 @@ internal sealed class SwaggerExampleSetterSchemaFilter : ISchemaFilter
     /// <summary>
     /// Maps property name to example value.
     /// </summary>
-    private static readonly IDictionary<string, IOpenApiPrimitive> propertyNameExampleMap =
+    private static readonly IDictionary<string, IOpenApiPrimitive> PropertyNameExampleMap =
         new Dictionary<string, IOpenApiPrimitive>
         {
             // General.
@@ -55,7 +55,7 @@ internal sealed class SwaggerExampleSetterSchemaFilter : ISchemaFilter
         foreach (var property in schema.Properties)
         {
             var key = property.Key.ToLower();
-            if (propertyNameExampleMap.TryGetValue(key, out var example))
+            if (PropertyNameExampleMap.TryGetValue(key, out var example))
             {
                 property.Value.Example = example;
             }

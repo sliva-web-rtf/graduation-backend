@@ -1,4 +1,4 @@
-﻿namespace ScientificWork.Infrastructure.DataAccess.Helpers;
+﻿namespace ScientificWork.Domain.Helpers;
 
 public static class FieldValidator
 {

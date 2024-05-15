@@ -12,6 +12,7 @@ public abstract class Entity<TId> : Entity, IEquatable<Entity<TId>>
     protected Entity(TId id)
     {
         Id = id;
+        CreatedAt = DateTime.UtcNow;
     }
 
     public override bool Equals(object? obj)

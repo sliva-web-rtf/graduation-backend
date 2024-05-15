@@ -1,11 +1,11 @@
 ﻿using ScientificWork.Domain.Favorites;
+using ScientificWork.Domain.Helpers;
 using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.Requests;
 using ScientificWork.Domain.ScientificAreas;
 using ScientificWork.Domain.ScientificInterests;
 using ScientificWork.Domain.Students.ValueObjects;
 using ScientificWork.Domain.Users;
-using ScientificWork.Infrastructure.DataAccess.Helpers;
 
 namespace ScientificWork.Domain.Students;
 

@@ -1,11 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ScientificWork.UseCases.Requests.GetProfessorRequestsStudent;
 using ScientificWork.UseCases.Requests.RequestToOrFromProfessor;
 using ScientificWork.UseCases.Requests.RequestToStudent;
 using ScientificWork.UseCases.Requests.RespondRequest;
-using ScientificWork.Web.Infrastructure.Web;
 
 namespace ScientificWork.Web.Controllers;
 

@@ -15,18 +15,6 @@ namespace ScientificWork.Web.Controllers;
 [Authorize(Roles = nameof(SystemAdmin))]
 public class TestController : ControllerBase
 {
-    private readonly AppDbContext context;
-    private readonly UserManager<Professor> professorManager;
-    private readonly UserManager<Student> studentManager;
-
-    public TestController(AppDbContext context, UserManager<Professor> professorManager,
-        UserManager<Student> studentManager)
-    {
-        this.context = context;
-        this.professorManager = professorManager;
-        this.studentManager = studentManager;
-    }
-
     [HttpGet]
     public async Task<ActionResult> Test(IEmailSender emailSender)
     {

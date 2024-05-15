@@ -2,9 +2,9 @@
 
 public abstract class Entity: IEquatable<Entity>, IHasDomainEvents
 {
-    private readonly List<IDomainEvent> _domainEvents = new();
+    private readonly List<IDomainEvent> domainEvents = new();
 
-    public IReadOnlyList<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
+    public IReadOnlyList<IDomainEvent> DomainEvents => domainEvents.AsReadOnly();
 
     public abstract IEnumerable<object?> GetEqualityComponents();
 
@@ -43,11 +43,11 @@ public abstract class Entity: IEquatable<Entity>, IHasDomainEvents
 
     public void AddDomainEvent(IDomainEvent domainEvent)
     {
-        _domainEvents.Add(domainEvent);
+        domainEvents.Add(domainEvent);
     }
 
     public void ClearDomainEvents()
     {
-        _domainEvents.Clear();
+        domainEvents.Clear();
     }
 }

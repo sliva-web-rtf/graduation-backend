@@ -14,7 +14,7 @@ public sealed class Attachment : ValueObject
         DisagreeLink = disagreeLink;
     }
 
-    public static Attachment? Create(string agreeLink, string disagreeLink)
+    public static Attachment Create(string agreeLink, string disagreeLink)
     {
         if (agreeLink is null)
         {

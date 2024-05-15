@@ -1,8 +1,4 @@
-﻿using ScientificWork.Domain.Common;
-using ScientificWork.Domain.Professors;
-using ScientificWork.Domain.Students;
-
-namespace ScientificWork.Domain.ScientificAreas;
+﻿namespace ScientificWork.Domain.ScientificAreas;
 
 /// <summary>
 /// Scientific area.
@@ -13,7 +9,7 @@ public class ScientificArea
 
     public string Name { get; private set; }
 
-    private IList<ScientificAreaSubsection> scientificAreaSubsections;
+    private List<ScientificAreaSubsection> scientificAreaSubsections = new();
 
     public IReadOnlyList<ScientificAreaSubsection> ScientificAreaSubsections => scientificAreaSubsections.AsReadOnly();
 
@@ -23,12 +19,14 @@ public class ScientificArea
         Name = name;
     }
 
-    public void UpdateScientificAreaSubsections(List<ScientificAreaSubsection> scientificAreaSubsections)
+    public void UpdateScientificAreaSubsections(List<ScientificAreaSubsection> newScientificAreaSubsections)
     {
-        this.scientificAreaSubsections = scientificAreaSubsections;
+        this.scientificAreaSubsections = newScientificAreaSubsections;
     }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public ScientificArea()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
 
     }

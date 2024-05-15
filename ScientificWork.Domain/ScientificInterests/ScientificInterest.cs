@@ -1,7 +1,6 @@
 ﻿using ScientificWork.Domain.Common;
-using ScientificWork.Domain.Professors;
-using ScientificWork.Domain.Students;
 using ScientificWork.Domain.Users;
+// ReSharper disable CollectionNeverUpdated.Local
 
 namespace ScientificWork.Domain.ScientificInterests;
 
@@ -12,12 +11,11 @@ public class ScientificInterest : Entity<Guid>
 {
     public string Name { get; private set; }
     
+    private readonly List<User> users = new();
+    public IReadOnlyList<User> Users => users.AsReadOnly();
 
-    private readonly List<User> _users = new();
-    public IReadOnlyList<User> Users => _users.AsReadOnly();
-
-    private readonly List<ScientificWorks.ScientificWork> _scientificWorks = new();
-    public IReadOnlyList<ScientificWorks.ScientificWork> ScientificWorks => _scientificWorks.AsReadOnly();
+    private readonly List<ScientificWorks.ScientificWork> scientificWorks = new();
+    public IReadOnlyList<ScientificWorks.ScientificWork> ScientificWorks => scientificWorks.AsReadOnly();
 
     public ScientificInterest()
     {

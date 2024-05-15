@@ -13,17 +13,4 @@ namespace ScientificWork.Web.Controllers;
 [Route("api/roles")]
 [ApiExplorerSettings(GroupName = "roles")]
 [Authorize(Roles = nameof(SystemAdmin))]
-public class RolesController
-{
-    private readonly RoleManager<IdentityRole> roleManager;
-    private readonly UserManager<User> userManager;
-
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    public RolesController(RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
-    {
-        this.roleManager = roleManager;
-        this.userManager = userManager;
-    }
-}
+public class RolesController;
