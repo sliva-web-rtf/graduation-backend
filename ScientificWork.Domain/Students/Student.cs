@@ -18,10 +18,6 @@ public class Student : User
 
     public int Year { get; private set; }
 
-    public int PublicationsCount { get; private set; }
-
-    public int HIndex { get; private set; }
-
     public StudentSearchStatus? SearchStatus { get; private set; }
 
     private readonly List<ScientificWorks.ScientificWork> scientificWorks = new();

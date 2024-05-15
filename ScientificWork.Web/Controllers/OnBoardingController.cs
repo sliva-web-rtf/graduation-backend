@@ -1,14 +1,16 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ScientificWork.Domain.Users;
+using ScientificWork.Domain.Professors;
+using ScientificWork.Domain.Students;
 using ScientificWork.UseCases.Users.CompleteOnBoarding;
+using ScientificWork.UseCases.Users.GetProfessorOnBoardingInfo;
+using ScientificWork.UseCases.Users.GetStudentOnBoardingInfo;
 using ScientificWork.UseCases.Users.UpdateProfessorScientificPortfolio;
 using ScientificWork.UseCases.Users.UpdateProfessorStatus;
 using ScientificWork.UseCases.Users.UpdateProfileInfo;
 using ScientificWork.UseCases.Users.UpdateStudentScientificPortfolio;
 using ScientificWork.UseCases.Users.UpdateStudentStatus;
-using ScientificWork.Web.Infrastructure.Web;
 
 namespace ScientificWork.Web.Controllers;
 
@@ -56,6 +58,24 @@ public class OnBoardingController : ControllerBase
     public async Task UpdateProfessorOnBoardingStatusAsync(UpdateProfessorStatusCommand command)
     {
         await mediator.Send(command);
+    }
+    
+    [HttpGet("student-profile")]
+    [Authorize(Roles = nameof(Student))]
+    public async Task<ActionResult> GetStudentProfile()
+    {
+        var command = new GetStudentOnBoardingInfoCommand();
+        var res = await mediator.Send(command);
+        return Ok(res);
+    }
+    
+    [HttpGet("professor-profile")]
+    [Authorize(Roles = nameof(Professor))]
+    public async Task<ActionResult> GetProfessorProfile()
+    {
+        var command = new GetProfessorOnBoardingInfoCommand();
+        var res = await mediator.Send(command);
+        return Ok(res);
     }
 
     [HttpPost("complete")]
