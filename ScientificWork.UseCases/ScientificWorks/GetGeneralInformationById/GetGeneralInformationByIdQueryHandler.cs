@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
+using ScientificWork.UseCases.Common.Dtos;
 using ScientificWork.UseCases.Professors.Common.Dtos;
 using ScientificWork.UseCases.Students.Common.Dtos;
 
@@ -38,6 +39,8 @@ public class GetGeneralInformationByIdQueryHandler : IRequestHandler<GetGeneralI
         var scientificWorks = await dbContext.ScientificWorks
                 .Where(x => x.Id == request.Id)
                 .Include(x => x.ScientificInterests)
+                .Include(x => x.ScientificAreaSubsections)
+                    .ThenInclude(x => x.ScientificArea)
                 .Include(x => x.Students)
                 .Include(x => x.Professor)
                 .FirstOrDefaultAsync(cancellationToken);
@@ -51,6 +54,15 @@ public class GetGeneralInformationByIdQueryHandler : IRequestHandler<GetGeneralI
         {
             result.Professor = mapper.Map<ProfessorDto>(scientificWorks.Professor);
         }
+        var scientificAreasDto = scientificWorks.ScientificAreaSubsections
+            .GroupBy(x => x.ScientificArea.Name)
+            .Select(x => new ScientificAreasDto
+            {
+                Section = x.Key,
+                Subsections = x.Select(s => s.Name).ToList()
+            });
+
+        result.ScientificArea.AddRange(scientificAreasDto);
 
         return result;
     }
