@@ -129,7 +129,7 @@ public class GetScientificWorksQueryHandler : IRequestHandler<GetScientificWorks
     private IQueryable<Domain.ScientificWorks.ScientificWork> FilterByScientificAreaSubsections(
         IQueryable<Domain.ScientificWorks.ScientificWork> scientificWorks, IList<string> scientificAreaSubsections)
     {
-        scientificWorks = dbContext.ScientificWorks
+        scientificWorks = scientificWorks
             .Where(x => x.ScientificAreaSubsections
                 .Any(subsection => scientificAreaSubsections.Contains(subsection.Name)));
 
@@ -139,7 +139,7 @@ public class GetScientificWorksQueryHandler : IRequestHandler<GetScientificWorks
     private IQueryable<Domain.ScientificWorks.ScientificWork> FilterByScientificInterests(
         IQueryable<Domain.ScientificWorks.ScientificWork> scientificWorks, IList<string> scientificInterests)
     {
-        scientificWorks = dbContext.ScientificWorks
+        scientificWorks = scientificWorks
             .Where(x => x.ScientificInterests
                 .Any(interest => scientificInterests.Contains(interest.Name)));
 
