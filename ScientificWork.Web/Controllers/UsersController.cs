@@ -17,7 +17,6 @@ namespace ScientificWork.Web.Controllers;
 [ApiController]
 [Route("api/users")]
 [ApiExplorerSettings(GroupName = "users")]
-[Authorize(Policy = "RegistrationComplete")]
 public class UsersController : ControllerBase
 {
     private readonly IMediator mediator;
@@ -31,6 +30,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPut("update-profile-info")]
+    [Authorize(Policy = "RegistrationComplete")]
     public async Task UpdateProfileInfoAsync(UpdateProfileInfoCommand command)
     {
         await mediator.Send(command);
@@ -60,13 +60,15 @@ public class UsersController : ControllerBase
     /// <summary>
     /// Update password.
     /// </summary>
+    [Authorize(Policy = "RegistrationComplete")]
     [HttpPut("update-user-password")]
     public async Task UpdateUserPassword([FromBody] UpdateUserPasswordCommand command)
     {
         await mediator.Send(command);
     }
-
+    
     [HttpPost("add-avatar-image")]
+    [Authorize]
     public async Task AddAvatarImage(IFormFile file)
     {
         await using var fileStream = file.OpenReadStream();
@@ -78,12 +80,14 @@ public class UsersController : ControllerBase
     }
 
     [HttpDelete("remove-avatar-image")]
-    public async Task RemoveAvatarImage(RemoveAvatarImageCommand command)
+    [Authorize]
+    public async Task RemoveAvatarImage()
     {
-        await mediator.Send(command);
+        await mediator.Send(new RemoveAvatarImageCommand());
     }
 
     [HttpGet("get-avatar-image")]
+    [Authorize]
     public async Task<ActionResult> GetAvatarImage()
     {
         var result = await mediator.Send(new GetAvatarImageCommand());

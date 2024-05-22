@@ -31,7 +31,7 @@ public class AddAvatarImageCommandHandler : IRequestHandler<AddAvatarImageComman
 
         var extension = request.FileName.Split(".").Last();
         var allowedFormats =
-            new List<(string ContentType, string Extension)> { ("image/jpeg", "jpg"), ("image/png", "png") };
+            new List<(string ContentType, string Extension)> { ("image/jpeg", "jpg"), ("image/png", "png"), ("image/jpeg", "jpeg") };
         if (!allowedFormats.Any(f => f.Extension == extension && f.ContentType == request.ContentType))
         {
             throw new DomainException("Неправильный формат картинки.");
@@ -51,7 +51,7 @@ public class AddAvatarImageCommandHandler : IRequestHandler<AddAvatarImageComman
         }
 
         var webRootDirectory = _hostingEnvironment.WebRootPath.TrimEnd('/');
-        var path = $"{WebRootConstants.AvatarsDirectory}/{userId}.{extension}";
+        var path = $"{WebRootConstants.AvatarsDirectory}/{Guid.NewGuid()}.{extension}";
         var filePath = webRootDirectory + path;
 
         await using var fileStream = File.Create(filePath);
