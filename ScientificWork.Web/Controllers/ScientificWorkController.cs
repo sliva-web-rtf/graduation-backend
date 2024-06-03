@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using ScientificWork.UseCases.ScientificWorks.Common.Dtos;
 using ScientificWork.UseCases.ScientificWorks.CreateScientificWork;
 using ScientificWork.UseCases.ScientificWorks.DeleteScientificWork;
+using ScientificWork.UseCases.ScientificWorks.EnterScientificWork;
 using ScientificWork.UseCases.ScientificWorks.GetGeneralInformationById;
 using ScientificWork.UseCases.ScientificWorks.GetRecordingSlotById;
 using ScientificWork.UseCases.ScientificWorks.GetScientificWorksByUserId;
 using ScientificWork.UseCases.ScientificWorks.GetScientificWorksForProfessor;
+using ScientificWork.UseCases.ScientificWorks.LeaveScientificWork;
 using ScientificWork.UseCases.ScientificWorks.UpdateScientificWork;
 using ScientificWork.Web.Infrastructure.Web;
 
@@ -64,7 +66,8 @@ public class ScientificWorkController : ControllerBase
     /// Scientific work general info by id.
     /// </summary>
     [HttpGet("general-info-by-id")]
-    public async Task<GetGeneralInformationByIdResult> GetGeneralInformationById([FromQuery] GetGeneralInformationByIdQuery query)
+    public async Task<GetGeneralInformationByIdResult> GetGeneralInformationById(
+        [FromQuery] GetGeneralInformationByIdQuery query)
     {
         HttpContext.Items.Add("userId", User.GetCurrentUserId());
         return await mediator.Send(query);
@@ -83,7 +86,8 @@ public class ScientificWorkController : ControllerBase
     /// Scientific work by user id.
     /// </summary>
     [HttpGet("scientific-work-by-user-id")]
-    public async Task<List<ScientificWorkDto>> GetScientificWorkByUserId([FromQuery] GetScientificWorksByUserIdQuery query)
+    public async Task<List<ScientificWorkDto>> GetScientificWorkByUserId(
+        [FromQuery] GetScientificWorksByUserIdQuery query)
     {
         return await mediator.Send(query);
     }
@@ -96,5 +100,23 @@ public class ScientificWorkController : ControllerBase
     {
         var res = await mediator.Send(query);
         return Ok(res);
+    }
+    
+    /// <summary>
+    /// Пустышка
+    /// </summary>
+    /// <param name="command"></param>
+    [HttpPost("enter-scientific-work")]
+    public async Task EnterScientificWork(EnterScientificWorkCommand command)
+    {
+    }
+    
+    /// <summary>
+    /// Пустышка
+    /// </summary>
+    /// <param name="command"></param>
+    [HttpDelete("leave-scientific-work")]
+    public async Task LeaveScientificWork(LeaveScientificWorkCommand command)
+    {
     }
 }
