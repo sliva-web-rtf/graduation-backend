@@ -49,13 +49,13 @@ public class GetScientificWorksQueryHandler : IRequestHandler<GetScientificWorks
                 .Where(x => x.Id == userAccessor.GetCurrentUserId())
                 .Include(x => x.ScientificWorks)
                 .Include(x => x.ProfessorFavoriteScientificWorks);
-            favoriteId =
+            swUser =
             [
-                ..professorManager.Users
+                ..p
                     .SelectMany(x => x.ScientificWorks)
                     .Select(x => x.Id)
             ];
-            swUser =
+            favoriteId =
             [
                 ..p
                     .SelectMany(x => x.ProfessorFavoriteScientificWorks)
@@ -72,19 +72,21 @@ public class GetScientificWorksQueryHandler : IRequestHandler<GetScientificWorks
                 .Where(x => x.Id == userAccessor.GetCurrentUserId())
                 .Include(x => x.ScientificWorks)
                 .Include(x => x.StudentFavoriteScientificWorks);
-            favoriteId =
+            swUser =
             [
                 ..s
                     .SelectMany(x => x.ScientificWorks)
                     .Select(x => x.Id)
             ];
-            swUser =
+            favoriteId =
             [
                 ..s
                     .SelectMany(x => x.StudentFavoriteScientificWorks)
                     .Where(x => x.IsActive)
                     .Select(x => x.ScientificWorkId)
             ];
+            scientificWorks = scientificWorks
+                .Where(x => !swUser.Contains(x.Id));
         }
 
         if (request.ScientificAreaSubsections != null)
@@ -103,7 +105,7 @@ public class GetScientificWorksQueryHandler : IRequestHandler<GetScientificWorks
             .Select(s =>
             {
                 s.IsFavorite = favoriteId.Contains(s.Id);
-                s.CanJoin = s.Fullness < s.Limit && !swUser.Contains(s.Id);
+                s.CanJoin = s.Fullness < s.Limit;
                 return s;
             });
 
