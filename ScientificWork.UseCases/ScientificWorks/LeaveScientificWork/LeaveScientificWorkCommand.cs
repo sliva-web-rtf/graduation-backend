@@ -1,6 +1,8 @@
-﻿namespace ScientificWork.UseCases.ScientificWorks.LeaveScientificWork;
+﻿using MediatR;
 
-public class LeaveScientificWorkCommand
+namespace ScientificWork.UseCases.ScientificWorks.LeaveScientificWork;
+
+public class LeaveScientificWorkCommand : IRequest
 {
     public Guid ScientificWorkId { get; init; }
 }

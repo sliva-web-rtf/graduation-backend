@@ -18,7 +18,8 @@ public class RequestToOrFromProfessorCommandHandler : IRequestHandler<RequestToO
     /// <summary>
     /// Constructor.
     /// </summary>
-    public RequestToOrFromProfessorCommandHandler(UserManager<Student> studentManager, UserManager<Professor> professorManager, IAppDbContext dbContext)
+    public RequestToOrFromProfessorCommandHandler(UserManager<Student> studentManager,
+        UserManager<Professor> professorManager, IAppDbContext dbContext)
     {
         this.studentManager = studentManager;
         this.professorManager = professorManager;
@@ -29,21 +30,41 @@ public class RequestToOrFromProfessorCommandHandler : IRequestHandler<RequestToO
     {
         var professor = await professorManager.FindByIdAsync(request.ProfessorId.ToString());
         var student = await studentManager.FindByIdAsync(request.StudentId.ToString());
-        var scientificWork = await dbContext.ScientificWorks.FirstOrDefaultAsync(x => x.Id == request.ScientificWorkId,
-            cancellationToken);
+        var scientificWork = await dbContext.ScientificWorks
+            .Include(sw => sw.Students)
+            .FirstOrDefaultAsync(x => x.Id == request.ScientificWorkId, cancellationToken);
 
         if (professor == null)
         {
             throw new Exception($"Не существует профессора с id: {request.ProfessorId}");
         }
+
         if (student == null)
         {
             throw new Exception($"Не существует студента с id: {request.StudentId}");
         }
+
         if (scientificWork == null)
         {
             throw new Exception($"Не существует иследования с id: {request.ScientificWorkId}");
         }
+
+        // Разве заявку не должен создавать только участник (ну или создатель)?
+        //
+        // if (request.RequestEnum is RequestEnum.FromProfessor)
+        // {
+        //     if (scientificWork.ProfessorId != request.ProfessorId)
+        //         throw new DomainException("Вы не являетесь профессором в этой научной работе");
+        // }
+        // else if (request.RequestEnum is RequestEnum.FromStudent)
+        // {
+        //     if (scientificWork.Students.All(s => s.Id != request.StudentId))
+        //         throw new DomainException("Вы не являетесь участником этой научной работы");
+        // }
+        // else
+        // {
+        //     throw new NotImplementedException();
+        // }
 
         var r = new StudentRequestProfessor(professor, professor.Id, student, student.Id, scientificWork,
             scientificWork.Id, request.RequestEnum, GetMessage(request.RequestEnum, scientificWork));
@@ -57,21 +78,23 @@ public class RequestToOrFromProfessorCommandHandler : IRequestHandler<RequestToO
         var messages = new List<KeyValuePair<bool, string>>
         {
             new(
-                requestEnum == RequestEnum.FromProfessor && scientificWork.Professor != null && scientificWork.Limit > 1,
+                requestEnum == RequestEnum.FromProfessor && scientificWork.Professor != null &&
+                scientificWork.Limit > 1,
                 "Вас приглашают в команду"
-                ),
+            ),
             new(
-                requestEnum == RequestEnum.FromProfessor && scientificWork.Professor != null && scientificWork.Limit == 1,
+                requestEnum == RequestEnum.FromProfessor && scientificWork.Professor != null &&
+                scientificWork.Limit == 1,
                 "Вам предложили тему"
-                ),
+            ),
             new(
                 requestEnum == RequestEnum.FromProfessor && scientificWork.Professor == null,
                 "Над Вашим исследованием хотят поработать"
-                ),
+            ),
             new(
                 requestEnum == RequestEnum.FromStudent && scientificWork.Professor == null,
                 "Вам предложили тему"
-                ),
+            ),
             new(
                 requestEnum == RequestEnum.FromStudent && scientificWork.Professor != null,
                 $"Студент хочет попасть в научную работу : {scientificWork.Name}"

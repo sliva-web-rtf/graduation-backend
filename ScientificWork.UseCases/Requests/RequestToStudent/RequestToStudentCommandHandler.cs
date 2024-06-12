@@ -31,14 +31,21 @@ public class RequestToStudentCommandHandler : IRequestHandler<RequestToStudentCo
         {
             throw new Exception($"Не существует студента который отпаравил запрос с id: {request.StudentFromId}");
         }
+
         if (studentTo == null)
         {
             throw new Exception($"Не существует студента которому отправляют запрос с id: {request.StudentToId}");
         }
+
         if (scientificWork == null)
         {
             throw new Exception($"Не существует иследования с id: {request.ScientificWorkId}");
         }
+
+        // Разве заявку не должен создавать только участник (ну или создатель)?
+        //
+        // if (scientificWork.Students.All(s => s.Id != request.StudentFromId))
+        //     throw new DomainException("Вы не являетесь участником этой научной работы");
 
         var r = new StudentRequestStudent(studentTo, studentTo.Id, studentFrom, studentFrom.Id, scientificWork,
             scientificWork.Id, request.RequestEnum, GetMessage(scientificWork, studentTo));

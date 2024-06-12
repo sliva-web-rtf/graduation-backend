@@ -103,20 +103,24 @@ public class ScientificWorkController : ControllerBase
     }
     
     /// <summary>
-    /// Пустышка
+    /// Записаться в научную работу
     /// </summary>
     /// <param name="command"></param>
-    [HttpPost("enter-scientific-work")]
-    public async Task EnterScientificWork(EnterScientificWorkCommand command)
+    [HttpPost("enter")]
+    public async Task<IActionResult> Enter(EnterScientificWorkCommand command)
     {
+        await mediator.Send(command);
+        return Ok();
     }
     
     /// <summary>
-    /// Пустышка
+    /// Выйти из научной работы
     /// </summary>
     /// <param name="command"></param>
-    [HttpDelete("leave-scientific-work")]
-    public async Task LeaveScientificWork(LeaveScientificWorkCommand command)
+    [HttpDelete("leave")]
+    public async Task<IActionResult> Leave(LeaveScientificWorkCommand command)
     {
+        await mediator.Send(command);
+        return Ok();
     }
 }

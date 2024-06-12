@@ -154,10 +154,23 @@ public class ScientificWork : Entity<Guid>
         ProfessorId = professorId;
         WorkStatus = WorkStatus.Confirmed;
     }
+    
+    public void RemoveProfessor()
+    {
+        ProfessorId = null;
+        WorkStatus = WorkStatus.NotConfirmed;
+    }
 
     public void AddStudent(Student student)
     {
         students.Add(student);
+        Fullness++;
+    }
+    
+    public void RemoveStudent(Guid studentId)
+    {
+        students.RemoveAll(s => s.Id == studentId);
+        Fullness--;
     }
 
     public ScientificWork()

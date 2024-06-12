@@ -1,6 +1,8 @@
-﻿namespace ScientificWork.UseCases.ScientificWorks.EnterScientificWork;
+﻿using MediatR;
 
-public class EnterScientificWorkCommand
+namespace ScientificWork.UseCases.ScientificWorks.EnterScientificWork;
+
+public class EnterScientificWorkCommand : IRequest
 {
     public Guid ScientificWorkId { get; init; }
 }
