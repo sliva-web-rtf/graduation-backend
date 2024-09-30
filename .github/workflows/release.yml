@@ -45,7 +45,7 @@ jobs:
         run: echo "${{ secrets.OAUTH_TOKEN }}" | docker login --username oauth --password-stdin cr.yandex
 
       - name: Build Docker image
-        run: docker build --platform=linux/amd64 -t cr.yandex/${{ vars.CR_ID }}/app:${{ env.RELEASE_VERSION }} .
+        run: docker build --platform=linux/amd64 -t cr.yandex/${{ vars.CR_ID }}/app:${{ env.RELEASE_VERSION }} -f ./ScientificWork.Web/Dockerfile ScientificWork.Web
 
       - name: Tag Docker image with latest
         run: docker tag cr.yandex/${{ vars.CR_ID }}/app:${{ env.RELEASE_VERSION }} cr.yandex/${{ vars.CR_ID }}/app:${{ env.RELEASE_VERSION }}_latest
