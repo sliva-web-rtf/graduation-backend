@@ -54,8 +54,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            sudo docker stop app
-            sudo docker rm app
+            sudo docker stop app || true
+            sudo docker rm app || true
             sudo docker run -d --restart unless-stopped --name app -p 3000:3000 \
               -e AdminOptionsEmail=${{ secrets.ADMIN_EMAIL }} \
               -e AdminOptionsPassword=${{ secrets.ADMIN_PASSWORD }} \
@@ -63,12 +63,17 @@ jobs:
               cr.yandex/${{ vars.CR_ID }}/app:${{ github.event.inputs.version }}_latest
 
       - name: Remove old Docker image
-        run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ vars.SERVER_IP }} "sudo docker image prune -af"
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ vars.SERVER_IP }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: "sudo docker image prune -af"
 
       - name: Add comment to issue
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        #   GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           ISSUE_NUMBER=$(gh issue list --search ${{ github.event.inputs.version }} --limit 1 --json number --jq ".[0].number")
           gh issue comment $ISSUE_NUMBER --body "Release v${{ github.event.inputs.version }} has been deployed to production.<br><br>**Date:** ${{ env.CURRENT_DATE }}<br>**Author:** ${{ github.actor }}"

@@ -79,6 +79,5 @@ jobs:
       - name: Create release issue
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        #   GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           gh issue create --title "Release v${{ env.RELEASE_VERSION }}" --body "**Date:** ${{ env.CURRENT_DATE }}<br>**Author:** ${{ github.actor }}<br>**Version:** ${{ env.RELEASE_VERSION }}<br>**Commits:**<br>${{ env.COMMITS }}<br>**Docker Image:** cr.yandex/${{ vars.CR_ID }}/app:${{ env.RELEASE_VERSION }}"
