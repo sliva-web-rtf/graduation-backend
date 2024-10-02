@@ -30,6 +30,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1AAC31B4-1F84-4F0E-ADB9-23844077097E}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
+		.github\workflows\deploy.yml = .github\workflows\deploy.yml
+		.github\workflows\release.yml = .github\workflows\release.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScientificWork.Infrastructure.Common", "ScientificWork.Infrastructure.Common\ScientificWork.Infrastructure.Common.csproj", "{22F82411-AF5A-4FD2-8283-B77A0EDAFFAD}"
