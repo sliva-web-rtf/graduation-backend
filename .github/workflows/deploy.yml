@@ -44,7 +44,7 @@ jobs:
         id: login-cr
         uses: yc-actions/yc-cr-login@v2
         with:
-          yc-sa-json-credentials: ${{ secrets.YC_SA_PULLER}}
+          yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_PULLER}}
 
       - name: Check Docker image
         run: docker pull cr.yandex/${{ vars.CR_ID }}/app:${{ github.event.inputs.version }}_latest
