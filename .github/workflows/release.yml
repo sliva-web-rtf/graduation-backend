@@ -45,9 +45,7 @@ jobs:
         id: issue-iam-token
         uses: yc-actions/yc-iam-token@v1
         with:
-          yc-key-id: ${{ secrets.YC_KEY_ID_PUSHER }}
-          yc-service-account-id: ${{ secrets.YC_SERVICE_ACCOUNT_ID_PUSHER }}
-          yc-private-key: ${{ secrets.YC_PRIVATE_KEY_PUSHER }}
+          yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
 
       - name: Login to Yandex Cloud Container Registry
         id: login-cr
