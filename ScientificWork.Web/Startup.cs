@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System.Net;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
@@ -14,9 +15,11 @@ using ScientificWork.Infrastructure.DataAccess;
 using ScientificWork.UseCases.Common.Settings.Authentication;
 using ScientificWork.UseCases.Common.Settings.Email;
 using ScientificWork.Web.Infrastructure.Authentication;
+using ScientificWork.Web.Infrastructure.DependencyInjection;
 using ScientificWork.Web.Infrastructure.Middlewares;
 using ScientificWork.Web.Infrastructure.Settings;
 using ScientificWork.Web.Infrastructure.Startup;
+using ScientificWork.Web.Infrastructure.Startup.HealthCheck;
 using ScientificWork.Web.Infrastructure.Startup.Swagger;
 
 namespace ScientificWork.Web;
@@ -48,14 +51,23 @@ public class Startup
         services.AddSwaggerGen(new SwaggerGenOptionsSetup().Setup);
 
         // CORS.
-        string[]? frontendOrigin = null;
-        // TODO: uncomment if you need to specify additional FrontendOrigins for CORS (if you have an Angular/React/etc project).
-        // frontendOrigin = Saritasa.Tools.Common.Utils.StringUtils.NullSafe(configuration["AppSettings:FrontendOrigin"])
-        //        .Split(';', StringSplitOptions.RemoveEmptyEntries);
+        var frontendOrigin = (configuration["AppSettings:FrontendOrigin"] ?? string.Empty)
+            .Split(';', StringSplitOptions.RemoveEmptyEntries);
         services.AddCors(new CorsOptionsSetup(
             environment.IsDevelopment(),
             frontendOrigin
         ).Setup);
+
+        // x-forward
+        var knownProxies = (configuration["AppSettings:KnownProxies"] ?? string.Empty)
+            .Split(';', StringSplitOptions.RemoveEmptyEntries);
+        services.Configure<ForwardedHeadersOptions>(options =>
+        {
+            foreach (var proxy in knownProxies)
+            {
+                options.KnownProxies.Add(IPAddress.Parse(proxy));
+            }
+        });
 
         // Health check.
         var databaseConnectionString = configuration.GetConnectionString("AppDatabase")
@@ -106,14 +118,10 @@ public class Startup
 
         services.AddAuthorization(options =>
         {
-            options.AddPolicy("RegistrationComplete", builder =>
-            {
-                builder.RequireClaim("registrationComplete", "true");
-            });
-            options.AddPolicy("RegistrationNotComplete", builder =>
-            {
-                builder.RequireClaim("registrationComplete", "false");
-            });
+            options.AddPolicy("RegistrationComplete",
+                builder => { builder.RequireClaim("registrationComplete", "true"); });
+            options.AddPolicy("RegistrationNotComplete",
+                builder => { builder.RequireClaim("registrationComplete", "false"); });
         });
         // Database.
         services.AddDbContext<AppDbContext>(
@@ -131,10 +139,10 @@ public class Startup
         services.AddHttpClient();
 
         // Other dependencies.
-        Infrastructure.DependencyInjection.AutoMapperModule.Register(services);
-        Infrastructure.DependencyInjection.ApplicationModule.Register(services, configuration);
-        Infrastructure.DependencyInjection.MediatRModule.Register(services);
-        Infrastructure.DependencyInjection.SystemModule.Register(services);
+        AutoMapperModule.Register(services);
+        ApplicationModule.Register(services, configuration);
+        MediatRModule.Register(services);
+        SystemModule.Register(services);
     }
 
     /// <summary>
@@ -155,6 +163,12 @@ public class Startup
         // MVC.
         app.UseRouting();
 
+        // https
+        if (!environment.IsDevelopment())
+        {
+            app.UseHttpsRedirection();
+        }
+
         // CORS.
         app.UseCors(CorsOptionsSetup.CorsPolicyName);
         app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.All });
@@ -162,7 +176,7 @@ public class Startup
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>
         {
-            Infrastructure.Startup.HealthCheck.HealthCheckModule.Register(endpoints);
+            HealthCheckModule.Register(endpoints);
             endpoints.Map("/", context =>
             {
                 context.Response.Redirect("/swagger");
