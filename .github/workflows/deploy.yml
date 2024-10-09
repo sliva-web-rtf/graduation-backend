@@ -26,6 +26,7 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: prod
     steps:
       - uses: actions/checkout@v3
 
@@ -35,10 +36,10 @@ jobs:
       - name: Set up SSH key
         uses: webfactory/ssh-agent@v0.5.4
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_PROD }}
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Add host to known_hosts
-        run: ssh-keyscan -H ${{ vars.SERVER_IP_PROD }} >> ~/.ssh/known_hosts
+        run: ssh-keyscan -H ${{ vars.SERVER_IP }} >> ~/.ssh/known_hosts
 
       - name: Login to Yandex Cloud Container Registry
         id: login-cr
@@ -52,26 +53,26 @@ jobs:
       - name: Deploy to production server
         uses: appleboy/ssh-action@v0.1.6
         with:
-          host: ${{ vars.SERVER_IP_PROD }}
-          username: ${{ secrets.USER_PROD }}
-          key: ${{ secrets.SSH_PRIVATE_KEY_PROD }}
+          host: ${{ vars.SERVER_IP }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
             sudo docker stop sci-join-back || true
             sudo docker rm sci-join-back || true
             sudo docker run -d --restart unless-stopped --name sci-join-back --network sci-join -p 80:5000 \
-              -e AdminOptions__Email='${{ secrets.ADMIN_EMAIL_PROD }}' \
-              -e AdminOptions__Password='${{ secrets.ADMIN_PASSWORD_PROD }}' \
-              -e ConnectionStrings__AppDatabase='${{ secrets.DATABASE_PROD }}' \
+              -e AdminOptions__Email='${{ secrets.ADMIN_EMAIL }}' \
+              -e AdminOptions__Password='${{ secrets.ADMIN_PASSWORD }}' \
+              -e ConnectionStrings__AppDatabase='${{ secrets.DATABASE }}' \
               -e ASPNETCORE_HTTP_PORTS=5000 \
               cr.yandex/${{ vars.CR_ID }}/app:${{ github.event.inputs.version }}_latest
 
       - name: Remove old Docker image
         uses: appleboy/ssh-action@v0.1.6
         with:
-          host: ${{ vars.SERVER_IP_PROD }}
-          username: ${{ secrets.USER_PROD }}
-          key: ${{ secrets.SSH_PRIVATE_KEY_PROD }}
+          host: ${{ vars.SERVER_IP }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: "sudo docker image prune -af"
 
