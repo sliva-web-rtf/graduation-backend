@@ -51,7 +51,7 @@ public class Startup
         services.AddSwaggerGen(new SwaggerGenOptionsSetup().Setup);
 
         // CORS.
-        var frontendOrigin = (configuration["AppSettings:FrontendOrigin"] ?? string.Empty)
+        var frontendOrigin = (configuration["FrontendOrigin"] ?? string.Empty)
             .Split(';', StringSplitOptions.RemoveEmptyEntries);
         services.AddCors(new CorsOptionsSetup(
             environment.IsDevelopment(),
@@ -59,7 +59,7 @@ public class Startup
         ).Setup);
 
         // x-forward
-        var knownProxies = (configuration["AppSettings:KnownProxies"] ?? string.Empty)
+        var knownProxies = (configuration["KnownProxies"] ?? string.Empty)
             .Split(';', StringSplitOptions.RemoveEmptyEntries);
         services.Configure<ForwardedHeadersOptions>(options =>
         {
@@ -155,7 +155,7 @@ public class Startup
         app.UseStaticFiles();
         // Swagger
         app.UseSwagger();
-        var appPrefix = configuration["AppSettings:AppPrefix"];
+        var appPrefix = configuration["AppPrefix"];
         app.UseSwaggerUI(new SwaggerUIOptionsSetup(appPrefix).Setup);
 
         // Custom middlewares.
