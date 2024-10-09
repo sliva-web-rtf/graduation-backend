@@ -57,9 +57,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY_PROD }}
           port: 22
           script: |
-            sudo docker stop app || true
-            sudo docker rm app || true
-            sudo docker run -d --restart unless-stopped --name app --network sci-join -p 80:5000 \
+            sudo docker stop sci-join-back || true
+            sudo docker rm sci-join-back || true
+            sudo docker run -d --restart unless-stopped --name sci-join-back --network sci-join -p 80:5000 \
               -e AdminOptions__Email='${{ secrets.ADMIN_EMAIL_PROD }}' \
               -e AdminOptions__Password='${{ secrets.ADMIN_PASSWORD_PROD }}' \
               -e ConnectionStrings__AppDatabase='${{ secrets.DATABASE_PROD }}' \
