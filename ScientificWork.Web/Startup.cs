@@ -163,12 +163,6 @@ public class Startup
         // MVC.
         app.UseRouting();
 
-        // https
-        if (!environment.IsDevelopment())
-        {
-            app.UseHttpsRedirection();
-        }
-
         // CORS.
         app.UseCors(CorsOptionsSetup.CorsPolicyName);
         app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.All });
