@@ -155,8 +155,7 @@ public class Startup
         app.UseStaticFiles();
         // Swagger
         app.UseSwagger();
-        var appPrefix = configuration["AppPrefix"];
-        app.UseSwaggerUI(new SwaggerUIOptionsSetup(appPrefix).Setup);
+        app.UseSwaggerUI(new SwaggerUIOptionsSetup().Setup);
 
         // Custom middlewares.
         app.UseMiddleware<ApiExceptionMiddleware>();

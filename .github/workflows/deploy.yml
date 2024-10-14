@@ -65,7 +65,6 @@ jobs:
               -e AdminOptions__Password='${{ secrets.ADMIN_PASSWORD }}' \
               -e ConnectionStrings__AppDatabase='${{ secrets.DATABASE }}' \
               -e ASPNETCORE_HTTP_PORTS=5000 \
-              -e AppPrefix='/api' \
               cr.yandex/${{ vars.CR_ID }}/app:${{ github.event.inputs.version }}_latest
 
       - name: Remove old Docker image

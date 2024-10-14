@@ -7,13 +7,6 @@ namespace ScientificWork.Web.Infrastructure.Startup.Swagger;
 /// </summary>
 internal class SwaggerUIOptionsSetup
 {
-    private readonly string appPrefix;
-
-    public SwaggerUIOptionsSetup(string? appPrefix = null)
-    {
-        this.appPrefix = appPrefix ?? string.Empty;
-    }
-    
     /// <summary>
     /// Setup.
     /// </summary>
@@ -21,7 +14,7 @@ internal class SwaggerUIOptionsSetup
     public void Setup(SwaggerUIOptions options)
     {
         options.ShowExtensions();
-        options.SwaggerEndpoint($"{appPrefix}/swagger/v1/swagger.json?v=1", "API Documentation");
+        options.SwaggerEndpoint("/swagger/v1/swagger.json?v=1", "API Documentation");
         options.EnableValidator();
         options.EnableDeepLinking();
         options.DisplayOperationId();
