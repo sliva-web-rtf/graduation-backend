@@ -22,9 +22,6 @@ internal sealed class Program
         app = builder.Build();
         startup.Configure(app, app.Environment);
 
-        // Command line processing.
-        using var scope = app.Services.CreateScope();
-        
         if (app == null)
         {
             throw new InvalidOperationException("app is not initialized");
@@ -32,7 +29,7 @@ internal sealed class Program
 
         await app.InitAsync();
         await app.RunAsync();
-        
+
         return 0;
     }
 }
