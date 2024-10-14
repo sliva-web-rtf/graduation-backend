@@ -1,6 +1,4 @@
-﻿using McMaster.Extensions.CommandLineUtils;
-using ScientificWork.Web.Commands;
-// ReSharper disable UnassignedGetOnlyAutoProperty
+﻿// ReSharper disable UnassignedGetOnlyAutoProperty
 // ReSharper disable UnusedMember.Global
 
 namespace ScientificWork.Web;
@@ -8,8 +6,6 @@ namespace ScientificWork.Web;
 /// <summary>
 /// Entry point class.
 /// </summary>
-[Command(Name = "scientificwork")]
-[Subcommand(typeof(CreateUser))]
 internal sealed class Program
 {
     private static WebApplication? app;
@@ -27,31 +23,8 @@ internal sealed class Program
         startup.Configure(app, app.Environment);
 
         // Command line processing.
-        var commandLineApplication = new CommandLineApplication<Program>();
         using var scope = app.Services.CreateScope();
-
-        var services = scope.ServiceProvider;
-
-        commandLineApplication
-            .Conventions
-            .UseConstructorInjection(services)
-            .UseDefaultConventions();
-        return await commandLineApplication.ExecuteAsync(args);
-    }
-
-    /// <summary>
-    /// This options is there to allow running the application with `--urls` parameter.
-    /// https://paketo.io/docs/reference/dotnet-core-reference/#self-contained-deployment-and-framework-dependent-executables.
-    /// </summary>
-    [Option]
-    public string? Urls { get; }
-
-    /// <summary>
-    /// Command line application execution callback.
-    /// </summary>
-    /// <returns>Exit code.</returns>
-    public async Task<int> OnExecuteAsync()
-    {
+        
         if (app == null)
         {
             throw new InvalidOperationException("app is not initialized");
@@ -59,6 +32,7 @@ internal sealed class Program
 
         await app.InitAsync();
         await app.RunAsync();
+        
         return 0;
     }
 }
