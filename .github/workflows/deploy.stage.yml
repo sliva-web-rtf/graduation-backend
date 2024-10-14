@@ -57,9 +57,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY_STAGE }}
           port: 22
           script: |
-            sudo docker stop sci-join-back || true
-            sudo docker rm sci-join-back || true
-            sudo docker run -d --restart unless-stopped --name sci-join-back --network sci-join \
+            sudo docker stop sci-join-back-stage || true
+            sudo docker rm sci-join-back-stage || true
+            sudo docker run -d --restart unless-stopped --name sci-join-back-stage --network sci-join \
               -e AdminOptions__Email='${{ secrets.ADMIN_EMAIL_STAGE }}' \
               -e AdminOptions__Password='${{ secrets.ADMIN_PASSWORD_STAGE }}' \
               -e ConnectionStrings__AppDatabase='${{ secrets.DATABASE_STAGE }}' \
