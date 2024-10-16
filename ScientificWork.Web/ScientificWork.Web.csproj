@@ -74,7 +74,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\" />
     <Folder Include="wwwroot\Avatars\" />
   </ItemGroup>
 
