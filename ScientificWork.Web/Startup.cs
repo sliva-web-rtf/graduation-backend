@@ -4,113 +4,133 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
 using ScientificWork.Domain.Admins;
 using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.Students;
 using ScientificWork.Domain.Users;
+using ScientificWork.Infrastructure.Abstractions.Interfaces;
+using ScientificWork.Infrastructure.Abstractions.Interfaces.Authentication;
 using ScientificWork.Infrastructure.Abstractions.Interfaces.Email;
+using ScientificWork.Infrastructure.Common.Authentication;
 using ScientificWork.Infrastructure.Common.Services.Email;
 using ScientificWork.Infrastructure.DataAccess;
 using ScientificWork.UseCases.Common.Settings.Authentication;
 using ScientificWork.UseCases.Common.Settings.Email;
+using ScientificWork.UseCases.Users;
+using ScientificWork.UseCases.Users.AuthenticateUser;
+using ScientificWork.UseCases.Users.AuthenticateUser.LoginUser;
 using ScientificWork.Web.Infrastructure.Authentication;
-using ScientificWork.Web.Infrastructure.DependencyInjection;
+using ScientificWork.Web.Infrastructure.Jwt;
 using ScientificWork.Web.Infrastructure.Middlewares;
 using ScientificWork.Web.Infrastructure.Settings;
 using ScientificWork.Web.Infrastructure.Startup;
 using ScientificWork.Web.Infrastructure.Startup.HealthCheck;
 using ScientificWork.Web.Infrastructure.Startup.Swagger;
+using ScientificWork.Web.Infrastructure.Web;
 
 namespace ScientificWork.Web;
 
 /// <summary>
 /// Entry point for ASP.NET Core app.
 /// </summary>
-public class Startup
+public static class DependencyInjection
 {
-    private readonly IConfiguration configuration;
-
-    /// <summary>
-    /// Entry point for web application.
-    /// </summary>
-    /// <param name="configuration">Global configuration.</param>
-    public Startup(IConfiguration configuration)
-    {
-        this.configuration = configuration;
-    }
 
     /// <summary>
     /// Configure application services on startup.
     /// </summary>
     /// <param name="services">Services to configure.</param>
     /// <param name="environment">Application environment.</param>
-    public void ConfigureServices(IServiceCollection services, IWebHostEnvironment environment)
+    /// <param name="configuration">Aplication configuration</param>
+    public static IServiceCollection AddApplication(this IServiceCollection services, IWebHostEnvironment environment, IConfiguration configuration)
     {
-        // Swagger.
-        services.AddSwaggerGen(new SwaggerGenOptionsSetup().Setup);
+        services.AddSwaggerGen(new SwaggerGenOptionsSetup().Setup) // Swagger
+                .AddCORS(environment, configuration) // CORS
+                .AddXForward(configuration) // x-forward
+                .AddAplicationMVC() // MVC
+                .AddAplicationDataProtection(configuration) // We need to set the application name to data protection, since the default token
+                                                            // provider uses this data to create the token. If it is not specified explicitly,
+                                                            // tokens from different instances will be incompatible.
+                .AddAplicationIdentity() // Identity.
+                .AddJwt(configuration) // JWT
+                .AddHealthCheckAndDB(configuration) // Health check
+                                                    // Database
+                .AddLogging(new LoggingOptionsSetup(configuration, environment).Setup) // Logging.
+                .Configure<AppSettings>(configuration.GetSection("Application")) // Application settings.
+                .AddHttpClient() // HTTP client.
+                .AddScoped<ITokenModelService, TokenModelService>() // Application 
+                .AddAutoMapper(typeof(UserMappingProfile).Assembly) // AutoMapper
+                .AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(LoginUserCommand).Assembly)) // MediatR
+                .AddSystem();
+        return services;
+    }
 
-        // CORS.
-        var frontendOrigin = (configuration["FrontendOrigin"] ?? string.Empty)
-            .Split(';', StringSplitOptions.RemoveEmptyEntries);
-        services.AddCors(new CorsOptionsSetup(
-            environment.IsDevelopment(),
-            frontendOrigin
-        ).Setup);
-
-        // x-forward
-        var knownProxies = (configuration["KnownProxies"] ?? string.Empty)
-            .Split(';', StringSplitOptions.RemoveEmptyEntries);
-        services.Configure<ForwardedHeadersOptions>(options =>
-        {
-            foreach (var proxy in knownProxies)
+    /// <summary>
+    /// Configure web application.
+    /// </summary>
+    /// <param name="app">Application builder.</param>
+    public static IApplicationBuilder UseApplication(this IApplicationBuilder app)
+    {
+        app.UseStaticFiles()
+            .UseSwagger() // Swagger
+            .UseSwaggerUI(new SwaggerUIOptionsSetup().Setup)
+            .UseMiddleware<ApiExceptionMiddleware>() // Custom middlewares.
+            .UseRouting() // MVC
+            .UseCors(CorsOptionsSetup.CorsPolicyName) // CORS.
+            .UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.All })
+            .UseAuthentication()
+            .UseAuthorization()
+            .UseEndpoints(endpoints =>
             {
-                options.KnownProxies.Add(IPAddress.Parse(proxy));
-            }
-        });
+                HealthCheckModule.Register(endpoints);
+                endpoints.Map("/", context =>
+                {
+                    context.Response.Redirect("/swagger");
+                    return Task.CompletedTask;
+                });
+                endpoints.MapControllers();
+            });
 
-        // Health check.
+        return app;
+    }
+
+    private static IServiceCollection AddSystem(this IServiceCollection services)
+    {
+        services.AddSingleton<IJsonHelper, SystemTextJsonHelper>()
+                .AddScoped<IAuthenticationTokenService, SystemJwtTokenService>()
+                .AddScoped<IAppDbContext>(s => s.GetRequiredService<AppDbContext>())
+                .AddScoped<ILoggedUserAccessor, LoggedUserAccessor>();
+
+        return services;
+    }
+
+    private static IServiceCollection AddHealthCheckAndDB(this IServiceCollection services, IConfiguration configuration)
+    {
+        //Health Check
         var databaseConnectionString = configuration.GetConnectionString("AppDatabase")
                                        ?? throw new ArgumentException("Database connection string is not initialized");
         services.AddHealthChecks()
             .AddNpgSql(databaseConnectionString);
+        // Database.
+        services.AddDbContext<AppDbContext>(
+            new DbContextOptionsSetup(databaseConnectionString).Setup);
+        services.AddAsyncInitializer<DatabaseInitializer>()
+            .AddAsyncInitializer<RoleInitializer>();
 
-        // MVC.
-        services
-            .AddControllers()
-            .AddJsonOptions(new JsonOptionsSetup().Setup);
-        services.Configure<ApiBehaviorOptions>(new ApiBehaviorOptionsSetup().Setup);
+        return services;
+    }
 
-        // We need to set the application name to data protection, since the default token
-        // provider uses this data to create the token. If it is not specified explicitly,
-        // tokens from different instances will be incompatible.
-        services.AddDataProtection().SetApplicationName("Application")
-            .PersistKeysToDbContext<AppDbContext>();
-
-        var emailSettings = new EmailSettings();
-        configuration.Bind(EmailSettings.SectionName, emailSettings);
-        services.AddSingleton(Options.Create(emailSettings));
-        services.AddScoped<IEmailSender, EmailSender>();
-
-        services.AddScoped<RefreshTokenCreationOptions>();
-        // Identity.
-        services.AddIdentity<User, AppIdentityRole>()
-            .AddEntityFrameworkStores<AppDbContext>()
-            .AddDefaultTokenProviders()
-            .AddTokenProvider<RefreshTokenProvider<User>>(AuthenticationConstants.AppLoginProvider);
-        services.Configure<IdentityOptions>(new IdentityOptionsSetup().Setup);
-        services.AddIdentityCore<Professor>().AddRoles<AppIdentityRole>().AddEntityFrameworkStores<AppDbContext>();
-        services.AddIdentityCore<Student>().AddRoles<AppIdentityRole>().AddEntityFrameworkStores<AppDbContext>();
-        services.AddIdentityCore<SystemAdmin>().AddRoles<AppIdentityRole>().AddEntityFrameworkStores<AppDbContext>();
-
-        // JWT.
+    private static IServiceCollection AddJwt(this IServiceCollection services, IConfiguration configuration)
+    {
         var jwtSecretKey = configuration["Jwt:SecretKey"] ?? throw new ArgumentException("Jwt:SecretKey");
         var jwtIssuer = configuration["Jwt:Issuer"] ?? throw new ArgumentException("Jwt:Issuer");
         services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
             .AddJwtBearer(new JwtBearerOptionsSetup(
                 jwtSecretKey,
                 jwtIssuer).Setup
@@ -123,60 +143,68 @@ public class Startup
             options.AddPolicy("RegistrationNotComplete",
                 builder => { builder.RequireClaim("registrationComplete", "false"); });
         });
-        // Database.
-        services.AddDbContext<AppDbContext>(
-            new DbContextOptionsSetup(databaseConnectionString).Setup);
-        services.AddAsyncInitializer<DatabaseInitializer>()
-            .AddAsyncInitializer<RoleInitializer>();
 
-        // Logging.
-        services.AddLogging(new LoggingOptionsSetup(configuration, environment).Setup);
-
-        // Application settings.
-        services.Configure<AppSettings>(configuration.GetSection("Application"));
-
-        // HTTP client.
-        services.AddHttpClient();
-
-        // Other dependencies.
-        AutoMapperModule.Register(services);
-        ApplicationModule.Register(services, configuration);
-        MediatRModule.Register(services);
-        SystemModule.Register(services);
+        return services;
     }
 
-    /// <summary>
-    /// Configure web application.
-    /// </summary>
-    /// <param name="app">Application builder.</param>
-    /// <param name="environment">Application environment.</param>
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
+    private static IServiceCollection AddAplicationIdentity(this IServiceCollection services)
     {
-        app.UseStaticFiles();
-        // Swagger
-        app.UseSwagger();
-        app.UseSwaggerUI(new SwaggerUIOptionsSetup().Setup);
+        services.AddIdentity<User, AppIdentityRole>()
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders()
+            .AddTokenProvider<RefreshTokenProvider<User>>(AuthenticationConstants.AppLoginProvider);
+        services.Configure<IdentityOptions>(new IdentityOptionsSetup().Setup);
+        services.AddIdentityCore<Professor>().AddRoles<AppIdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+        services.AddIdentityCore<Student>().AddRoles<AppIdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+        services.AddIdentityCore<SystemAdmin>().AddRoles<AppIdentityRole>().AddEntityFrameworkStores<AppDbContext>();
 
-        // Custom middlewares.
-        app.UseMiddleware<ApiExceptionMiddleware>();
+        return services;
+    }
 
-        // MVC.
-        app.UseRouting();
+    private static IServiceCollection AddAplicationDataProtection(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddDataProtection().SetApplicationName("Application")
+            .PersistKeysToDbContext<AppDbContext>();
 
-        // CORS.
-        app.UseCors(CorsOptionsSetup.CorsPolicyName);
-        app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.All });
-        app.UseAuthentication();
-        app.UseAuthorization();
-        app.UseEndpoints(endpoints =>
+        var emailSettings = new EmailSettings();
+        configuration.Bind(EmailSettings.SectionName, emailSettings);
+        services.AddSingleton(Options.Create(emailSettings));
+        services.AddScoped<IEmailSender, EmailSender>();
+
+        services.AddScoped<RefreshTokenCreationOptions>();
+        return services;
+    }
+
+    private static IServiceCollection AddAplicationMVC(this IServiceCollection services)
+    {
+        services.AddControllers()
+            .AddJsonOptions(new JsonOptionsSetup().Setup);
+        services.Configure<ApiBehaviorOptions>(new ApiBehaviorOptionsSetup().Setup);
+        return services;
+    }
+
+    private static IServiceCollection AddXForward(this IServiceCollection services, IConfiguration configuration)
+    {
+        var knownProxies = (configuration["KnownProxies"] ?? string.Empty)
+            .Split(';', StringSplitOptions.RemoveEmptyEntries);
+        services.Configure<ForwardedHeadersOptions>(options =>
         {
-            HealthCheckModule.Register(endpoints);
-            endpoints.Map("/", context =>
+            foreach (var proxy in knownProxies)
             {
-                context.Response.Redirect("/swagger");
-                return Task.CompletedTask;
-            });
-            endpoints.MapControllers();
+                options.KnownProxies.Add(IPAddress.Parse(proxy));
+            }
         });
+        return services;
+    }
+
+    private static IServiceCollection AddCORS(this IServiceCollection services, IWebHostEnvironment environment, IConfiguration configuration)
+    {
+        var frontendOrigin = (configuration["FrontendOrigin"] ?? string.Empty)
+            .Split(';', StringSplitOptions.RemoveEmptyEntries);
+        services.AddCors(new CorsOptionsSetup(
+            environment.IsDevelopment(),
+            frontendOrigin
+        ).Setup);
+        return services;
     }
 }
