@@ -1,6 +1,6 @@
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
-using ScientificWork.Web.Infrastructure.DependencyInjection;
+using ScientificWork.UseCases.Users;
 using Xunit;
 
 namespace ScientificWork.Web.Tests;
@@ -18,7 +18,8 @@ public class AutoMapperTests
     {
         // Arrange
         var sc = new ServiceCollection();
-        AutoMapperModule.Register(sc);
+        sc.AddAutoMapper(
+            typeof(UserMappingProfile).Assembly);
 
         // Act
         var serviceProvider = sc.BuildServiceProvider();
