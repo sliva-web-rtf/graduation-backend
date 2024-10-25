@@ -32,44 +32,41 @@ using ScientificWork.Web.Infrastructure.Web;
 
 namespace ScientificWork.Web;
 
-/// <summary>
-/// Entry point for ASP.NET Core app.
-/// </summary>
 public static class DependencyInjection
 {
 
     /// <summary>
     /// Configure application services on startup.
     /// </summary>
+    /// <returns>The IServiceCollection so that additional calls can be chained.</returns>
     /// <param name="services">Services to configure.</param>
     /// <param name="environment">Application environment.</param>
-    /// <param name="configuration">Aplication configuration</param>
-    public static IServiceCollection AddApplication(this IServiceCollection services, IWebHostEnvironment environment, IConfiguration configuration)
+    /// <param name="configuration">Application configuration</param>
+    public static IServiceCollection AddApplication(this IServiceCollection services,
+        IWebHostEnvironment environment, IConfiguration configuration)
     {
         services.AddSwaggerGen(new SwaggerGenOptionsSetup().Setup) // Swagger
-                .AddCORS(environment, configuration) // CORS
+                .AddApplicationCors(environment, configuration) // CORS
                 .AddXForward(configuration) // x-forward
-                .AddAplicationMVC() // MVC
-                .AddAplicationDataProtection(configuration) // We need to set the application name to data protection, since the default token
-                                                            // provider uses this data to create the token. If it is not specified explicitly,
-                                                            // tokens from different instances will be incompatible.
-                .AddAplicationIdentity() // Identity.
+                .AddApplicationMvc() // MVC
+                .AddApplicationDataProtection(configuration) 
+                .AddApplicationIdentity() // Identity.
                 .AddJwt(configuration) // JWT
-                .AddHealthCheckAndDB(configuration) // Health check
-                                                    // Database
+                .AddHealthCheckAndDb(configuration) // Health check and Database
                 .AddLogging(new LoggingOptionsSetup(configuration, environment).Setup) // Logging.
                 .Configure<AppSettings>(configuration.GetSection("Application")) // Application settings.
                 .AddHttpClient() // HTTP client.
                 .AddScoped<ITokenModelService, TokenModelService>() // Application 
                 .AddAutoMapper(typeof(UserMappingProfile).Assembly) // AutoMapper
                 .AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(LoginUserCommand).Assembly)) // MediatR
-                .AddSystem();
+                .AddOther();
         return services;
     }
 
     /// <summary>
     /// Configure web application.
     /// </summary>
+    /// <returns>A reference to app after the operation has completed.</returns>
     /// <param name="app">Application builder.</param>
     public static IApplicationBuilder UseApplication(this IApplicationBuilder app)
     {
@@ -96,7 +93,14 @@ public static class DependencyInjection
         return app;
     }
 
-    private static IServiceCollection AddSystem(this IServiceCollection services)
+    /// <summary>
+    /// add singleton: IJsonHelper;
+    /// add scoped: IAuthenticationTokenService,
+    /// IAppDbContext, ILoggedUserAccessor
+    /// </summary>
+    /// <param name="services"></param>
+    /// <returns></returns>
+    private static IServiceCollection AddOther(this IServiceCollection services)
     {
         services.AddSingleton<IJsonHelper, SystemTextJsonHelper>()
                 .AddScoped<IAuthenticationTokenService, SystemJwtTokenService>()
@@ -106,7 +110,7 @@ public static class DependencyInjection
         return services;
     }
 
-    private static IServiceCollection AddHealthCheckAndDB(this IServiceCollection services, IConfiguration configuration)
+    private static IServiceCollection AddHealthCheckAndDb(this IServiceCollection services, IConfiguration configuration)
     {
         //Health Check
         var databaseConnectionString = configuration.GetConnectionString("AppDatabase")
@@ -147,7 +151,7 @@ public static class DependencyInjection
         return services;
     }
 
-    private static IServiceCollection AddAplicationIdentity(this IServiceCollection services)
+    private static IServiceCollection AddApplicationIdentity(this IServiceCollection services)
     {
         services.AddIdentity<User, AppIdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>()
@@ -161,7 +165,15 @@ public static class DependencyInjection
         return services;
     }
 
-    private static IServiceCollection AddAplicationDataProtection(this IServiceCollection services, IConfiguration configuration)
+    /// <summary>
+    /// We need to set the application name to data protection, since the default token
+    /// provider uses this data to create the token. If it is not specified explicitly,
+    /// tokens from different instances will be incompatible.
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="configuration"></param>
+    /// <returns></returns>
+    private static IServiceCollection AddApplicationDataProtection(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDataProtection().SetApplicationName("Application")
             .PersistKeysToDbContext<AppDbContext>();
@@ -175,7 +187,7 @@ public static class DependencyInjection
         return services;
     }
 
-    private static IServiceCollection AddAplicationMVC(this IServiceCollection services)
+    private static IServiceCollection AddApplicationMvc(this IServiceCollection services)
     {
         services.AddControllers()
             .AddJsonOptions(new JsonOptionsSetup().Setup);
@@ -197,7 +209,8 @@ public static class DependencyInjection
         return services;
     }
 
-    private static IServiceCollection AddCORS(this IServiceCollection services, IWebHostEnvironment environment, IConfiguration configuration)
+    private static IServiceCollection AddApplicationCors(this IServiceCollection services,
+        IWebHostEnvironment environment, IConfiguration configuration)
     {
         var frontendOrigin = (configuration["FrontendOrigin"] ?? string.Empty)
             .Split(';', StringSplitOptions.RemoveEmptyEntries);
