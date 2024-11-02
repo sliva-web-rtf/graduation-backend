@@ -1,6 +1,6 @@
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
-using ScientificWork.Web.Infrastructure.DependencyInjection;
+using ScientificWork.Infrastructure.Presentation.DependencyInjection;
 using Xunit;
 
 namespace ScientificWork.Web.Tests;
