@@ -3,6 +3,9 @@ using ScientificWork.Infrastructure.DataAccess;
 
 namespace ScientificWork.Web.Infrastructure.Startup;
 
+// TODO:
+// Удалить
+
 /// <summary>
 /// Database context setup.
 /// </summary>

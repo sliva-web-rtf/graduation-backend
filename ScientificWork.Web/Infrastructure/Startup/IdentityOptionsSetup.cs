@@ -13,6 +13,7 @@ public class IdentityOptionsSetup
     /// <param name="options">The options.</param>
     public void Setup(IdentityOptions options)
     {
+        // todo: delete
         options.User.RequireUniqueEmail = true;
         options.Password.RequireNonAlphanumeric = false;
     }
