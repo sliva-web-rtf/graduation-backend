@@ -1,6 +1,7 @@
-﻿using ScientificWork.UseCases.Users;
+﻿using Microsoft.Extensions.DependencyInjection;
+using ScientificWork.UseCases.Users;
 
-namespace ScientificWork.Web.Infrastructure.DependencyInjection;
+namespace ScientificWork.Infrastructure.Presentation.DependencyInjection;
 
 /// <summary>
 /// Register AutoMapper dependencies.

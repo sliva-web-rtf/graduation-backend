@@ -6,7 +6,7 @@ namespace ScientificWork.Web.Infrastructure.Startup;
 /// <summary>
 /// JSON options setup.
 /// </summary>
-internal class JsonOptionsSetup
+public class JsonOptionsSetup
 {
     /// <summary>
     /// Setup method.

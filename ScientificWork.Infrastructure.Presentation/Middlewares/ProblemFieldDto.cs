@@ -1,9 +1,9 @@
-namespace ScientificWork.Web.Infrastructure.Middlewares;
+namespace ScientificWork.Infrastructure.Presentation.Middlewares;
 
 /// <summary>
 /// Problem field DTO.
 /// </summary>
-internal class ProblemFieldDto
+public class ProblemFieldDto
 {
     /// <summary>
     /// Field name.

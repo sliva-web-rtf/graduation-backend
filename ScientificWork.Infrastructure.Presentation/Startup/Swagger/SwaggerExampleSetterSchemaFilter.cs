@@ -8,7 +8,7 @@ namespace ScientificWork.Web.Infrastructure.Startup.Swagger;
 /// Generates standard example for Swagger document properties. For example it puts
 /// correct values for "address1", "state", "email" fields.
 /// </summary>
-internal sealed class SwaggerExampleSetterSchemaFilter : ISchemaFilter
+public sealed class SwaggerExampleSetterSchemaFilter : ISchemaFilter
 {
     /// <summary>
     /// Maps property name to example value.

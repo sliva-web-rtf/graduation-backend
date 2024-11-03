@@ -14,7 +14,7 @@ namespace ScientificWork.Web.Infrastructure.Web;
 /// Source:
 /// https://github.com/dotnet/aspnetcore/blob/master/src/Mvc/Mvc.ViewFeatures/src/Rendering/SystemTextJsonHelper.cs .
 /// </remarks>
-internal class SystemTextJsonHelper : IJsonHelper
+public class SystemTextJsonHelper : IJsonHelper
 {
     private readonly JsonSerializerOptions htmlSafeJsonSerializerOptions;
 

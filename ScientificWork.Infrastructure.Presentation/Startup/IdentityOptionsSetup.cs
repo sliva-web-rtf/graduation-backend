@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace ScientificWork.Web.Infrastructure.Startup;
+namespace ScientificWork.Infrastructure.Presentation.Startup;
 
 /// <summary>
 /// Identity options setup.

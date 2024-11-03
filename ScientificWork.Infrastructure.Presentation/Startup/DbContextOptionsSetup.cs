@@ -6,7 +6,7 @@ namespace ScientificWork.Web.Infrastructure.Startup;
 /// <summary>
 /// Database context setup.
 /// </summary>
-internal class DbContextOptionsSetup
+public class DbContextOptionsSetup
 {
     private readonly string connectionString;
 

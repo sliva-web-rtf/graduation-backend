@@ -1,16 +1,18 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Saritasa.Tools.Domain.Exceptions;
-using ScientificWork.Web.Infrastructure.Middlewares;
+using ScientificWork.Infrastructure.Presentation.Middlewares;
 
-namespace ScientificWork.Web.Infrastructure.Startup;
+namespace ScientificWork.Infrastructure.Presentation.Startup;
 
 /// <summary>
 /// API behavior setup. In this behavior we override default 400 errors handler to
 /// use another "errors" field of <see cref="ValidationProblemDetails" />.
 /// </summary>
-internal class ApiBehaviorOptionsSetup
+public class ApiBehaviorOptionsSetup
 {
     private readonly string? code;
 

@@ -1,15 +1,16 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace ScientificWork.Web.Infrastructure.Startup.HealthCheck;
+namespace ScientificWork.Infrastructure.Presentation.Startup.HealthCheck;
 
 /// <summary>
 /// The class returns configured health check.
 /// More health checks can be found here https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks .
 /// </summary>
-internal class HealthCheckOptionsSetup
+public class HealthCheckOptionsSetup
 {
     private static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions
     {

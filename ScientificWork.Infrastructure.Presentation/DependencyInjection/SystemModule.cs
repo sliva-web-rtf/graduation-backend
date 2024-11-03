@@ -1,16 +1,17 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.DependencyInjection;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 using ScientificWork.Infrastructure.DataAccess;
 using ScientificWork.UseCases.Users.AuthenticateUser;
 using ScientificWork.Web.Infrastructure.Jwt;
 using ScientificWork.Web.Infrastructure.Web;
 
-namespace ScientificWork.Web.Infrastructure.DependencyInjection;
+namespace ScientificWork.Infrastructure.Presentation.DependencyInjection;
 
 /// <summary>
 /// System specific dependencies.
 /// </summary>
-internal static class SystemModule
+public static class SystemModule
 {
     /// <summary>
     /// Register dependencies.

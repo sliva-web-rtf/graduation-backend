@@ -1,11 +1,13 @@
+using Microsoft.AspNetCore.Http;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
+using ScientificWork.Infrastructure.Presentation.Web;
 
 namespace ScientificWork.Web.Infrastructure.Web;
 
 /// <summary>
 /// Logged user accessor implementation.
 /// </summary>
-internal class LoggedUserAccessor : ILoggedUserAccessor
+public class LoggedUserAccessor : ILoggedUserAccessor
 {
     private readonly IHttpContextAccessor httpContextAccessor;
 

@@ -6,7 +6,7 @@ namespace ScientificWork.Web.Infrastructure.Startup;
 /// <summary>
 /// CORS options setup.
 /// </summary>
-internal class CorsOptionsSetup
+public class CorsOptionsSetup
 {
     public const string CorsPolicyName = "AllowFrontend";
 

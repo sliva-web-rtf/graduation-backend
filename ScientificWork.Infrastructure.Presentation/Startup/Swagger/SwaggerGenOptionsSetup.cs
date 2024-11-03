@@ -1,24 +1,27 @@
 using System.Diagnostics;
 using System.Reflection;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using ScientificWork.UseCases.Common.Pagination;
 using ScientificWork.UseCases.Users;
+using ScientificWork.Web.Infrastructure.Startup.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 
-namespace ScientificWork.Web.Infrastructure.Startup.Swagger;
+namespace ScientificWork.Infrastructure.Presentation.Startup.Swagger;
 
 /// <summary>
 /// Swagger generation options.
 /// </summary>
-internal class SwaggerGenOptionsSetup
+public class SwaggerGenOptionsSetup
 {
     /// <summary>
     /// Setup.
     /// </summary>
     /// <param name="options">Swagger generation options.</param>
-    public void Setup(SwaggerGenOptions options)
+    /// <param name="assembly"></param>
+    public void Setup(SwaggerGenOptions options, Assembly assembly)
     {
         var fileVersionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
 
@@ -38,9 +41,13 @@ internal class SwaggerGenOptionsSetup
             Type = SecuritySchemeType.Http
         });
         // TODO: Add your assemblies here.
-        options.IncludeXmlCommentsWithRemarks(GetAssemblyLocationByType(GetType()));
-        options.IncludeXmlCommentsWithRemarks(GetAssemblyLocationByType(typeof(PageQueryFilter)));
-        options.IncludeXmlCommentsWithRemarks(GetAssemblyLocationByType(typeof(UserMappingProfile)));
+        options.IncludeXmlCommentsWithRemarks(GetAssemblyLocationByType(assembly));
+        options.IncludeXmlCommentsWithRemarks(GetAssemblyLocationByType(typeof(PageQueryFilter).Assembly));
+        options.IncludeXmlCommentsWithRemarks(GetAssemblyLocationByType(typeof(UserMappingProfile).Assembly));
+        options.SchemaFilterDescriptors = options
+            .SchemaFilterDescriptors
+            .Where(filterDescriptor => filterDescriptor.Arguments is not null)
+            .ToList();
         options.IncludeXmlCommentsFromInheritDocs(includeRemarks: true);
 
         // Our custom filters.
@@ -64,6 +71,6 @@ internal class SwaggerGenOptionsSetup
         options.UseDateOnlyTimeOnlyStringConverters();
     }
 
-    private static string GetAssemblyLocationByType(Type type) =>
-        Path.Combine(AppContext.BaseDirectory, $"{type.Assembly.GetName().Name}.xml");
+    private static string GetAssemblyLocationByType(Assembly assembly) =>
+        Path.Combine(AppContext.BaseDirectory, $"{assembly.GetName().Name}.xml");
 }

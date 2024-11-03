@@ -9,7 +9,7 @@ namespace ScientificWork.Web.Infrastructure.Startup.Swagger;
 /// It also adds additional descriptions if the enum elements have the attribute
 /// <see cref="DescriptionAttribute" />.
 /// </summary>
-internal class SwaggerEnumDescriptionSchemaOperationFilter : ISchemaFilter, IOperationFilter
+public class SwaggerEnumDescriptionSchemaOperationFilter : ISchemaFilter, IOperationFilter
 {
     private const string LineBreakSeparator = "<br />";
 

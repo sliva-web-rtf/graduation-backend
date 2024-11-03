@@ -7,6 +7,7 @@ using ScientificWork.UseCases.Users.AuthenticateUser.LoginUser;
 using ScientificWork.UseCases.Users.AuthenticateUser.RefreshToken;
 using ScientificWork.UseCases.Users.GetUserById;
 using ScientificWork.Infrastructure.Presentation.Web;
+using ScientificWork.Web.Infrastructure.Web;
 
 namespace ScientificWork.Web.Controllers;
 

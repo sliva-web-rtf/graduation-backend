@@ -1,11 +1,12 @@
+using Microsoft.Extensions.DependencyInjection;
 using ScientificWork.UseCases.Users.AuthenticateUser.LoginUser;
 
-namespace ScientificWork.Web.Infrastructure.DependencyInjection;
+namespace ScientificWork.Infrastructure.Presentation.DependencyInjection;
 
 /// <summary>
 /// Register Mediator as dependency.
 /// </summary>
-internal static class MediatRModule
+public static class MediatRModule
 {
     /// <summary>
     /// Register dependencies.

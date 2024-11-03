@@ -1,9 +1,14 @@
-namespace ScientificWork.Web.Infrastructure.Startup;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+
+namespace ScientificWork.Infrastructure.Presentation.Startup;
 
 /// <summary>
 /// Logging setup for application.
 /// </summary>
-internal class LoggingOptionsSetup
+public class LoggingOptionsSetup
 {
     private readonly IConfiguration configuration;
     private readonly IWebHostEnvironment environment;

@@ -7,7 +7,7 @@ namespace ScientificWork.Web.Infrastructure.Startup;
 /// <summary>
 /// JWT bearer options setup.
 /// </summary>
-internal class JwtBearerOptionsSetup
+public class JwtBearerOptionsSetup
 {
     private readonly string secretKey;
     private readonly string issuer;

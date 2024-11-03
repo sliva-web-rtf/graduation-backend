@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace ScientificWork.Web.Infrastructure.Web;
+namespace ScientificWork.Infrastructure.Presentation.Web;
 
 /// <summary>
 /// Extensions for the <see cref="ClaimsPrincipal" />.

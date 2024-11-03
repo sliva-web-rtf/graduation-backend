@@ -1,15 +1,16 @@
 using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace ScientificWork.Web.Infrastructure.Startup.Swagger;
+namespace ScientificWork.Infrastructure.Presentation.Startup.Swagger;
 
 /// <summary>
 /// Automatically adds information about authorization requirements for API endpoints.
 /// </summary>
-internal sealed class SwaggerSecurityRequirementsOperationFilter : IOperationFilter
+public sealed class SwaggerSecurityRequirementsOperationFilter : IOperationFilter
 {
     private static readonly string UnauthorizedCode = StatusCodes.Status401Unauthorized.ToString();
     private static readonly string ForbiddenCode = StatusCodes.Status403Forbidden.ToString();

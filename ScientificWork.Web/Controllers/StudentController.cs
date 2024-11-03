@@ -11,6 +11,7 @@ using ScientificWork.UseCases.Students.ToggleScientificWorksToFavorites;
 using ScientificWork.UseCases.Students.ToggleStudentToFavorites;
 using ScientificWork.UseCases.Students.UploadStudents;
 using ScientificWork.Infrastructure.Presentation.Web;
+using ScientificWork.Web.Infrastructure.Web;
 
 namespace ScientificWork.Web.Controllers;
 

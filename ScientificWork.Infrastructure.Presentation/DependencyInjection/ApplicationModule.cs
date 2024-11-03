@@ -1,12 +1,14 @@
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using ScientificWork.Infrastructure.Abstractions.Interfaces.Authentication;
 using ScientificWork.Infrastructure.Common.Authentication;
 
-namespace ScientificWork.Web.Infrastructure.DependencyInjection;
+namespace ScientificWork.Infrastructure.Presentation.DependencyInjection;
 
 /// <summary>
 /// Application specific dependencies.
 /// </summary>
-internal static class ApplicationModule
+public static class ApplicationModule
 {
     /// <summary>
     /// Register dependencies.

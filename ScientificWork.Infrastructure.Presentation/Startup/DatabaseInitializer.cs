@@ -7,7 +7,7 @@ namespace ScientificWork.Web.Infrastructure.Startup;
 /// <summary>
 /// Contains database migration helper methods.
 /// </summary>
-internal sealed class DatabaseInitializer : IAsyncInitializer
+public sealed class DatabaseInitializer : IAsyncInitializer
 {
     private readonly AppDbContext appDbContext;
 

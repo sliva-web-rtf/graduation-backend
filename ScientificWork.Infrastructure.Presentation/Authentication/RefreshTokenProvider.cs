@@ -3,13 +3,14 @@ using System.Text;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ScientificWork.Domain.Users;
 using ScientificWork.Infrastructure.Common.Encoding;
 using ScientificWork.Infrastructure.DataAccess;
 using ScientificWork.UseCases.Common.Settings.Authentication;
 
-namespace ScientificWork.Web.Infrastructure.Authentication;
+namespace ScientificWork.Infrastructure.Presentation.Authentication;
 
 /// <inheritdoc />
 public class RefreshTokenProvider<TUser> : DataProtectorTokenProvider<TUser> where TUser : class

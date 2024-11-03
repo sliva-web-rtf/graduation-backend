@@ -1,14 +1,19 @@
 using System.Text;
 using System.Text.Json;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.WebEncoders.Testing;
 using Saritasa.Tools.Common.Utils;
 using Saritasa.Tools.Domain.Exceptions;
 using ValidationException = Saritasa.Tools.Domain.Exceptions.ValidationException;
 
-namespace ScientificWork.Web.Infrastructure.Middlewares;
+namespace ScientificWork.Infrastructure.Presentation.Middlewares;
 
 /// <summary>
 /// Exception handling middleware. In general:
@@ -16,7 +21,7 @@ namespace ScientificWork.Web.Infrastructure.Middlewares;
 /// DomainException => 400.
 /// _ => 500 with stack trace.
 /// </summary>
-internal sealed class ApiExceptionMiddleware
+public sealed class ApiExceptionMiddleware
 {
     public const string ErrorsKey = "errors";
     public const string CodeKey = "code";

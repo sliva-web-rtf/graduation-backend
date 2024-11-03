@@ -1,11 +1,12 @@
+using Microsoft.AspNetCore.Builder;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
-namespace ScientificWork.Web.Infrastructure.Startup.Swagger;
+namespace ScientificWork.Infrastructure.Presentation.Startup.Swagger;
 
 /// <summary>
 /// Swagger UI options.
 /// </summary>
-internal class SwaggerUIOptionsSetup
+public class SwaggerUIOptionsSetup
 {
     /// <summary>
     /// Setup.

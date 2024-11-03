@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Net.Http.Headers;
 
-namespace ScientificWork.Web.Infrastructure.Startup.HealthCheck;
+namespace ScientificWork.Infrastructure.Presentation.Startup.HealthCheck;
 
 /// <summary>
 /// Module responsible for configuring application health checks.
 /// </summary>
-internal static class HealthCheckModule
+public static class HealthCheckModule
 {
     /// <summary>
     /// Register health check endpoints.
