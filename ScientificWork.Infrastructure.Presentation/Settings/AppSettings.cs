@@ -1,4 +1,4 @@
-﻿namespace ScientificWork.Web.Infrastructure.Settings;
+﻿namespace ScientificWork.Infrastructure.Presentation.Settings;
 
 /// <summary>
 /// Global application settings.

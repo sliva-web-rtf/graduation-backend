@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
 
-namespace ScientificWork.Web.Infrastructure.Web;
+namespace ScientificWork.Infrastructure.Presentation.Web;
 
 /// <summary>
 /// System JSON helper that implements <see cref="IJsonHelper" /> interface.

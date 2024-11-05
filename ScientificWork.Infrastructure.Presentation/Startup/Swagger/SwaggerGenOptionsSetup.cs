@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using ScientificWork.UseCases.Common.Pagination;
 using ScientificWork.UseCases.Users;
-using ScientificWork.Web.Infrastructure.Startup.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 

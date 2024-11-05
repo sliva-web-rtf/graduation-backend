@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ScientificWork.UseCases.Users.AuthenticateUser;
 
-namespace ScientificWork.Web.Infrastructure.Jwt;
+namespace ScientificWork.Infrastructure.Presentation.Jwt;
 
 /// <summary>
 /// The authenticate tokens implementation uses ASP.NET Core Identity.

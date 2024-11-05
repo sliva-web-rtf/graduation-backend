@@ -16,14 +16,12 @@ using ScientificWork.Infrastructure.DataAccess;
 using ScientificWork.Infrastructure.Presentation.Authentication;
 using ScientificWork.Infrastructure.Presentation.DependencyInjection;
 using ScientificWork.Infrastructure.Presentation.Middlewares;
+using ScientificWork.Infrastructure.Presentation.Settings;
 using ScientificWork.Infrastructure.Presentation.Startup;
 using ScientificWork.Infrastructure.Presentation.Startup.HealthCheck;
 using ScientificWork.Infrastructure.Presentation.Startup.Swagger;
 using ScientificWork.UseCases.Common.Settings.Authentication;
 using ScientificWork.UseCases.Common.Settings.Email;
-using ScientificWork.Web.Infrastructure.Settings;
-using ScientificWork.Web.Infrastructure.Startup;
-using ScientificWork.Web.Infrastructure.Startup.Swagger;
 
 namespace ScientificWork.Web;
 

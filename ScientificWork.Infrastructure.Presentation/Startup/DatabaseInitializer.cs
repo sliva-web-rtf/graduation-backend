@@ -2,7 +2,7 @@ using Extensions.Hosting.AsyncInitialization;
 using Microsoft.EntityFrameworkCore;
 using ScientificWork.Infrastructure.DataAccess;
 
-namespace ScientificWork.Web.Infrastructure.Startup;
+namespace ScientificWork.Infrastructure.Presentation.Startup;
 
 /// <summary>
 /// Contains database migration helper methods.

@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ScientificWork.Web.Infrastructure.Startup;
+namespace ScientificWork.Infrastructure.Presentation.Startup;
 
 /// <summary>
 /// JSON options setup.

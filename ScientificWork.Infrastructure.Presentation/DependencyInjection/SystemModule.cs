@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.DependencyInjection;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 using ScientificWork.Infrastructure.DataAccess;
+using ScientificWork.Infrastructure.Presentation.Jwt;
+using ScientificWork.Infrastructure.Presentation.Web;
 using ScientificWork.UseCases.Users.AuthenticateUser;
-using ScientificWork.Web.Infrastructure.Jwt;
-using ScientificWork.Web.Infrastructure.Web;
 
 namespace ScientificWork.Infrastructure.Presentation.DependencyInjection;
 

@@ -1,4 +1,4 @@
-﻿namespace ScientificWork.Web.Infrastructure.Dtos;
+﻿namespace ScientificWork.Infrastructure.Presentation.Dtos;
 
 /// <summary>
 /// DTO for application version.

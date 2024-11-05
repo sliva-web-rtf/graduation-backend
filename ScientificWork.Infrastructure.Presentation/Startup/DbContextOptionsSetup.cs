@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ScientificWork.Infrastructure.DataAccess;
 
-namespace ScientificWork.Web.Infrastructure.Startup;
+namespace ScientificWork.Infrastructure.Presentation.Startup;
 
 /// <summary>
 /// Database context setup.

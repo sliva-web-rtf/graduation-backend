@@ -2,7 +2,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
-namespace ScientificWork.Web.Infrastructure.Startup;
+namespace ScientificWork.Infrastructure.Presentation.Startup;
 
 /// <summary>
 /// JWT bearer options setup.

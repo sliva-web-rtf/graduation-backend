@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
-using ScientificWork.Infrastructure.Presentation.Web;
 
-namespace ScientificWork.Web.Infrastructure.Web;
+namespace ScientificWork.Infrastructure.Presentation.Web;
 
 /// <summary>
 /// Logged user accessor implementation.
