@@ -40,9 +40,9 @@ public class SwaggerGenOptionsSetup
             Type = SecuritySchemeType.Http
         });
         // TODO: Add your assemblies here.
-        options.IncludeXmlCommentsWithRemarks(GetAssemblyLocationByType(assembly));
-        options.IncludeXmlCommentsWithRemarks(GetAssemblyLocationByType(typeof(PageQueryFilter).Assembly));
-        options.IncludeXmlCommentsWithRemarks(GetAssemblyLocationByType(typeof(UserMappingProfile).Assembly));
+        options.IncludeXmlCommentsWithRemarks(GetAssemblyLocation(assembly));
+        options.IncludeXmlCommentsWithRemarks(GetAssemblyLocation(typeof(PageQueryFilter).Assembly));
+        options.IncludeXmlCommentsWithRemarks(GetAssemblyLocation(typeof(UserMappingProfile).Assembly));
         options.SchemaFilterDescriptors = options
             .SchemaFilterDescriptors
             .Where(filterDescriptor => filterDescriptor.Arguments is not null)
@@ -70,6 +70,6 @@ public class SwaggerGenOptionsSetup
         options.UseDateOnlyTimeOnlyStringConverters();
     }
 
-    private static string GetAssemblyLocationByType(Assembly assembly) =>
+    private static string GetAssemblyLocation(Assembly assembly) =>
         Path.Combine(AppContext.BaseDirectory, $"{assembly.GetName().Name}.xml");
 }
