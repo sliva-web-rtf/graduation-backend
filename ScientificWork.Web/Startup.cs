@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -12,15 +13,15 @@ using ScientificWork.Domain.Users;
 using ScientificWork.Infrastructure.Abstractions.Interfaces.Email;
 using ScientificWork.Infrastructure.Common.Services.Email;
 using ScientificWork.Infrastructure.DataAccess;
+using ScientificWork.Infrastructure.Presentation.Authentication;
+using ScientificWork.Infrastructure.Presentation.DependencyInjection;
+using ScientificWork.Infrastructure.Presentation.Middlewares;
+using ScientificWork.Infrastructure.Presentation.Settings;
+using ScientificWork.Infrastructure.Presentation.Startup;
+using ScientificWork.Infrastructure.Presentation.Startup.HealthCheck;
+using ScientificWork.Infrastructure.Presentation.Startup.Swagger;
 using ScientificWork.UseCases.Common.Settings.Authentication;
 using ScientificWork.UseCases.Common.Settings.Email;
-using ScientificWork.Web.Infrastructure.Authentication;
-using ScientificWork.Web.Infrastructure.DependencyInjection;
-using ScientificWork.Web.Infrastructure.Middlewares;
-using ScientificWork.Web.Infrastructure.Settings;
-using ScientificWork.Web.Infrastructure.Startup;
-using ScientificWork.Web.Infrastructure.Startup.HealthCheck;
-using ScientificWork.Web.Infrastructure.Startup.Swagger;
 
 namespace ScientificWork.Web;
 
@@ -48,7 +49,7 @@ public class Startup
     public void ConfigureServices(IServiceCollection services, IWebHostEnvironment environment)
     {
         // Swagger.
-        services.AddSwaggerGen(new SwaggerGenOptionsSetup().Setup);
+        services.AddSwaggerGen(x => new SwaggerGenOptionsSetup().Setup(x, GetType().Assembly));
 
         // CORS.
         var frontendOrigin = (configuration["FrontendOrigin"] ?? string.Empty)

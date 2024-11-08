@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
-using ScientificWork.Web.Infrastructure.Dtos;
+using ScientificWork.Infrastructure.Presentation.Dtos;
 
 namespace ScientificWork.Web.Controllers;
 

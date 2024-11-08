@@ -6,7 +6,7 @@ using ScientificWork.Infrastructure.Abstractions.DTOs;
 using ScientificWork.UseCases.Users.AuthenticateUser.LoginUser;
 using ScientificWork.UseCases.Users.AuthenticateUser.RefreshToken;
 using ScientificWork.UseCases.Users.GetUserById;
-using ScientificWork.Web.Infrastructure.Web;
+using ScientificWork.Infrastructure.Presentation.Web;
 
 namespace ScientificWork.Web.Controllers;
 

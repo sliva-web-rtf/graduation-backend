@@ -20,10 +20,8 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="7.0.0" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Bogus" Version="34.0.2" />
     <PackageReference Include="DateOnlyTimeOnly.AspNet.Swashbuckle" Version="2.1.1" />
-    <PackageReference Include="Extensions.Hosting.AsyncInitialization" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="7.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.Extensions" Version="7.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.9">
@@ -35,14 +33,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Saritasa.Tools.Common" Version="5.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.9" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-    <PackageReference Include="Unchase.Swashbuckle.AspNetCore.Extensions" Version="2.7.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ScientificWork.Infrastructure.Common\ScientificWork.Infrastructure.Common.csproj" />
     <ProjectReference Include="..\ScientificWork.Infrastructure.DataAccess\ScientificWork.Infrastructure.DataAccess.csproj" />
+    <ProjectReference Include="..\ScientificWork.Infrastructure.Presentation\ScientificWork.Infrastructure.Presentation.csproj" />
     <ProjectReference Include="..\ScientificWork.UseCases\ScientificWork.UseCases.csproj" />
   </ItemGroup>
 
