@@ -37,7 +37,7 @@ public class CreateProfessorCommandHandler : IRequestHandler<CreateProfessorComm
         if (await userManager.FindByEmailAsync(request.Email) is not null)
         {
             logger.LogInformation($"Professor already created. Email: {request.Email}.");
-            return new CreateProfessorCommandResult(Guid.Empty);
+            throw new DomainException("Professor already created.");
         }
         var professor = Professor.Create(request.Email, WebRootConstants.DefaultAvatarPath);
 

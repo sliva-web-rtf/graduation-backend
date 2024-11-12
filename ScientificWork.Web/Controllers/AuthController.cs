@@ -2,11 +2,14 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ScientificWork.Domain.Admins;
 using ScientificWork.Infrastructure.Abstractions.DTOs;
 using ScientificWork.UseCases.Users.AuthenticateUser.LoginUser;
 using ScientificWork.UseCases.Users.AuthenticateUser.RefreshToken;
 using ScientificWork.UseCases.Users.GetUserById;
 using ScientificWork.Infrastructure.Presentation.Web;
+using ScientificWork.UseCases.Professors.CreateProfessor;
+using ScientificWork.UseCases.Students.CreateStudent;
 
 namespace ScientificWork.Web.Controllers;
 
@@ -26,6 +29,28 @@ public class AuthController : ControllerBase
     public AuthController(IMediator mediator)
     {
         this.mediator = mediator;
+    }
+    
+    /// <summary>
+    /// Register new student by email and password.
+    /// </summary>
+    /// <param name="command">Create command</param>
+    [HttpPost("upload-student")]
+    [Authorize(Roles = nameof(SystemAdmin))]
+    public async Task UploadStudent([FromForm] CreateStudentCommand command)
+    {
+        await mediator.Send(command);
+    }
+    
+    /// <summary>
+    /// Register new professor by email and password.
+    /// </summary>
+    /// <param name="command">Create command</param>
+    [HttpPost("upload-professor")]
+    [Authorize(Roles = nameof(SystemAdmin))]
+    public async Task UploadProfessor([FromForm] CreateProfessorCommand command)
+    {
+        await mediator.Send(command);
     }
 
     /// <summary>

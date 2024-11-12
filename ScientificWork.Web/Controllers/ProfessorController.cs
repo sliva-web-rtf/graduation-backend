@@ -6,9 +6,9 @@ using ScientificWork.UseCases.Professors.GetProfessors;
 using ScientificWork.UseCases.Professors.GetProfileById;
 using ScientificWork.UseCases.Professors.ToggleScientificWorksToFavorites;
 using ScientificWork.UseCases.Professors.ToggleStudentToFavorites;
-using ScientificWork.UseCases.Professors.UplaodProfessors;
 using ScientificWork.UseCases.Requests.GetStudentRequestsProfessor;
 using ScientificWork.Infrastructure.Presentation.Web;
+using ScientificWork.UseCases.Professors.UploadProfessors;
 
 namespace ScientificWork.Web.Controllers;
 

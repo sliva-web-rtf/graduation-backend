@@ -41,7 +41,7 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
         if (await userManager.FindByEmailAsync(request.Email) is not null)
         {
             logger.LogInformation($"Student already created. Email: {request.Email}.");
-            return new CreateStudentCommandResult(Guid.Empty);
+            throw new DomainException("Student already created.");
         }
         var student = Student.Create(request.Email, WebRootConstants.DefaultAvatarPath);
 

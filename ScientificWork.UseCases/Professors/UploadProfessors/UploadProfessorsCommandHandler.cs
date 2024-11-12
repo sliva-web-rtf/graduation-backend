@@ -9,7 +9,7 @@ using ScientificWork.UseCases.Users.UpdateProfessorScientificPortfolio;
 using ScientificWork.UseCases.Users.UpdateProfessorStatus;
 using ScientificWork.UseCases.Users.UpdateProfileInfo;
 
-namespace ScientificWork.UseCases.Professors.UplaodProfessors;
+namespace ScientificWork.UseCases.Professors.UploadProfessors;
 
 public class UploadProfessorsCommandHandler : IRequestHandler<UploadProfessorsCommand>
 {
