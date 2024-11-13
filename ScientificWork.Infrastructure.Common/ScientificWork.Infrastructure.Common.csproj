@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
@@ -9,11 +9,15 @@
     <ItemGroup>
       <ProjectReference Include="..\ScientificWork.Domain\ScientificWork.Domain.csproj" />
       <ProjectReference Include="..\ScientificWork.Infrastructure.Abstractions\ScientificWork.Infrastructure.Abstractions.csproj" />
+      <ProjectReference Include="..\ScientificWork.Infrastructure.DataAccess\ScientificWork.Infrastructure.DataAccess.csproj" />
       <ProjectReference Include="..\ScientificWork.UseCases\ScientificWork.UseCases.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="MailKit" Version="4.4.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.9" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.0" />
+      <FrameworkReference Include="Microsoft.AspNetCore.App" />
     </ItemGroup>
 
 </Project>
