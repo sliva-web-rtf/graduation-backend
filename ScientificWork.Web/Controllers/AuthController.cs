@@ -35,9 +35,9 @@ public class AuthController : ControllerBase
     /// Register new student by email and password.
     /// </summary>
     /// <param name="command">Create command</param>
-    [HttpPost("upload-student")]
+    [HttpPost("create-student")]
     [Authorize(Roles = nameof(SystemAdmin))]
-    public async Task UploadStudent([FromForm] CreateStudentCommand command)
+    public async Task CreateStudent([FromForm] CreateStudentCommand command)
     {
         await mediator.Send(command);
     }
@@ -46,9 +46,9 @@ public class AuthController : ControllerBase
     /// Register new professor by email and password.
     /// </summary>
     /// <param name="command">Create command</param>
-    [HttpPost("upload-professor")]
+    [HttpPost("create-professor")]
     [Authorize(Roles = nameof(SystemAdmin))]
-    public async Task UploadProfessor([FromForm] CreateProfessorCommand command)
+    public async Task CreateProfessor([FromForm] CreateProfessorCommand command)
     {
         await mediator.Send(command);
     }
