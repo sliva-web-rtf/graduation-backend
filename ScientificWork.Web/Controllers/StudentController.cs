@@ -10,7 +10,7 @@ using ScientificWork.UseCases.Students.ToggleProfessorToFavorites;
 using ScientificWork.UseCases.Students.ToggleScientificWorksToFavorites;
 using ScientificWork.UseCases.Students.ToggleStudentToFavorites;
 using ScientificWork.UseCases.Students.UploadStudents;
-using ScientificWork.Web.Infrastructure.Web;
+using ScientificWork.Infrastructure.Presentation.Web;
 
 namespace ScientificWork.Web.Controllers;
 

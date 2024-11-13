@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\ScientificWork.Infrastructure.Common\ScientificWork.Infrastructure.Common.csproj"/>
+        <ProjectReference Include="..\ScientificWork.Infrastructure.DataAccess\ScientificWork.Infrastructure.DataAccess.csproj"/>
+        <ProjectReference Include="..\ScientificWork.UseCases.Common\ScientificWork.UseCases.Common.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="DateOnlyTimeOnly.AspNet.Swashbuckle" Version="2.1.1"/>
+        <PackageReference Include="Extensions.Hosting.AsyncInitialization" Version="3.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.9.0"/>
+        <PackageReference Include="Unchase.Swashbuckle.AspNetCore.Extensions" Version="2.7.1"/>
+    </ItemGroup>
+
+</Project>

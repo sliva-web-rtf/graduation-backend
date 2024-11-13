@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using ScientificWork.Web.Infrastructure.Settings;
 using ScientificWork.Web.Infrastructure.Startup;

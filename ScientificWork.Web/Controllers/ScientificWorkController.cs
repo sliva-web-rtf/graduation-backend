@@ -11,7 +11,7 @@ using ScientificWork.UseCases.ScientificWorks.GetScientificWorksByUserId;
 using ScientificWork.UseCases.ScientificWorks.GetScientificWorksForProfessor;
 using ScientificWork.UseCases.ScientificWorks.LeaveScientificWork;
 using ScientificWork.UseCases.ScientificWorks.UpdateScientificWork;
-using ScientificWork.Web.Infrastructure.Web;
+using ScientificWork.Infrastructure.Presentation.Web;
 
 namespace ScientificWork.Web.Controllers;
 
