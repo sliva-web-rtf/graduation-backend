@@ -36,7 +36,6 @@ public class AuthController : ControllerBase
     /// </summary>
     /// <param name="command">Create command</param>
     [HttpPost("create-student")]
-    [Authorize(Roles = nameof(SystemAdmin))]
     public async Task CreateStudent([FromForm] CreateStudentCommand command)
     {
         await mediator.Send(command);
@@ -47,7 +46,6 @@ public class AuthController : ControllerBase
     /// </summary>
     /// <param name="command">Create command</param>
     [HttpPost("create-professor")]
-    [Authorize(Roles = nameof(SystemAdmin))]
     public async Task CreateProfessor([FromForm] CreateProfessorCommand command)
     {
         await mediator.Send(command);

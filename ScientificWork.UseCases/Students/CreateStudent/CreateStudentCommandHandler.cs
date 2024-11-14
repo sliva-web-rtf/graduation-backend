@@ -96,20 +96,13 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
         if (!password.Any(char.IsUpper) || !password.Any(char.IsLower))
         {
             logger.LogInformation("The password does not contain at least one uppercase and one lowercase letter.");
-            throw new ValidationException("Password must contain at least one uppercase and one lowercase letter.", 405);
+            throw new ValidationException("Password must contain at least one uppercase and one lowercase letter.");
         }
 
         if (!password.Any(char.IsDigit))
         {
             logger.LogInformation("The password does not contain at least one number.");
             throw new ValidationException("Password must contain at least one number.");
-        }
-        
-        var regex = new Regex(@"[!@#$%^&*(),.?""{}|<>_\[\]\\'`~\-+=/:;]");
-        if (!regex.IsMatch(password))
-        {
-            logger.LogInformation("The password does not contain at least one special character.");
-            throw new ValidationException("Password must contain at least one special character.");
         }
     }
 }
