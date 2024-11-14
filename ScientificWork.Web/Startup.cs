@@ -1,8 +1,8 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
-using ScientificWork.Web.Infrastructure.Settings;
-using ScientificWork.Web.Infrastructure.Startup;
-using ScientificWork.Web.Infrastructure.Startup.Swagger;
+using ScientificWork.Infrastructure.Presentation.Settings;
+using ScientificWork.Infrastructure.Presentation.Startup;
+using ScientificWork.Infrastructure.Presentation.Startup.Swagger;
 
 namespace ScientificWork.Web;
 

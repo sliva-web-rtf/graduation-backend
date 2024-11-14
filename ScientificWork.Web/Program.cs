@@ -3,10 +3,10 @@ using ScientificWork.Infrastructure.Common.Startup;
 using ScientificWork.Infrastructure.DataAccess.Startup;
 using ScientificWork.UseCases;
 using ScientificWork.Web;
-using ScientificWork.Web.Infrastructure.Middlewares;
-using ScientificWork.Web.Infrastructure.Startup;
-using ScientificWork.Web.Infrastructure.Startup.HealthCheck;
-using ScientificWork.Web.Infrastructure.Startup.Swagger;
+using ScientificWork.Infrastructure.Presentation.Middlewares;
+using ScientificWork.Infrastructure.Presentation.Startup;
+using ScientificWork.Infrastructure.Presentation.Startup.HealthCheck;
+using ScientificWork.Infrastructure.Presentation.Startup.Swagger;
 
 
 var builder = WebApplication.CreateBuilder(args);
