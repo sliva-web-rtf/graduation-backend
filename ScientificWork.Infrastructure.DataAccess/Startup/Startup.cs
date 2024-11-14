@@ -10,8 +10,11 @@ public static class Startup
 {
     public static IServiceCollection AddDataAccess(this IServiceCollection services, IConfiguration configuration)
     {
-        var databaseConnectionString = configuration.GetConnectionString("AppDatabase")
-                                       ?? throw new ArgumentException("Database connection string is not initialized");
+        var databaseConnectionString = configuration.GetConnectionString("AppDatabase");
+        if (string.IsNullOrWhiteSpace(databaseConnectionString))    
+        {
+            throw new ArgumentException("Database connection string is not initialized");
+        }
         services.AddHealthChecks()
             .AddNpgSql(databaseConnectionString);
         
