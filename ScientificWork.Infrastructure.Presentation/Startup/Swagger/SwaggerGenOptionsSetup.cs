@@ -20,7 +20,7 @@ public class SwaggerGenOptionsSetup
     /// </summary>
     /// <param name="options">Swagger generation options.</param>
     /// <param name="assembly"></param>
-    public void Setup(SwaggerGenOptions options)
+    public static void Setup(SwaggerGenOptions options, Assembly assembly)
     {
         var fileVersionInfo = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location);
 
@@ -40,7 +40,7 @@ public class SwaggerGenOptionsSetup
             Type = SecuritySchemeType.Http
         });
         // TODO: Add your assemblies here.
-        options.IncludeXmlCommentsWithRemarks(GetAssemblyLocation(GetType().Assembly));
+        options.IncludeXmlCommentsWithRemarks(GetAssemblyLocation(assembly));
         options.IncludeXmlCommentsWithRemarks(GetAssemblyLocation(typeof(PageQueryFilter).Assembly));
         options.IncludeXmlCommentsWithRemarks(GetAssemblyLocation(typeof(UserMappingProfile).Assembly));
         options.SchemaFilterDescriptors = options

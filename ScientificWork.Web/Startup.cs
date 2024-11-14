@@ -12,7 +12,7 @@ public static class Startup
         IWebHostEnvironment environment,
         IConfiguration configuration)
     {
-        services.AddSwaggerGen(new SwaggerGenOptionsSetup().Setup)
+        services.AddSwaggerGen(options => SwaggerGenOptionsSetup.Setup(options, typeof(Startup).Assembly))
             .AddApplicationCors(environment, configuration) // CORS
             .AddXForward(configuration) // x-forward
             .AddApplicationMvc() // MVC
