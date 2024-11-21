@@ -10,9 +10,5 @@
     <PackageReference Include="Saritasa.Tools.Common" Version="5.0.0" />
     <PackageReference Include="Saritasa.Tools.Domain" Version="0.8.2" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="..\ScientificWork.Infrastructure.Common\ScientificWork.Infrastructure.Common.csproj" />
-  </ItemGroup>
 
 </Project>
