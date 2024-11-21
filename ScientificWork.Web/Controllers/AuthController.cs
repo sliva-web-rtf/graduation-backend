@@ -1,15 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ScientificWork.Domain.Admins;
+using Microsoft.AspNetCore.Authorization;
+using System.ComponentModel.DataAnnotations;
+using ScientificWork.Infrastructure.Presentation.Web;
 using ScientificWork.Infrastructure.Abstractions.DTOs;
+using ScientificWork.UseCases.Users.GetUserById;
+using ScientificWork.UseCases.Students.CreateStudent;
+using ScientificWork.UseCases.Professors.CreateProfessor;
 using ScientificWork.UseCases.Users.AuthenticateUser.LoginUser;
 using ScientificWork.UseCases.Users.AuthenticateUser.RefreshToken;
-using ScientificWork.UseCases.Users.GetUserById;
-using ScientificWork.Infrastructure.Presentation.Web;
-using ScientificWork.UseCases.Professors.CreateProfessor;
-using ScientificWork.UseCases.Students.CreateStudent;
 
 namespace ScientificWork.Web.Controllers;
 
@@ -36,7 +35,7 @@ public class AuthController : ControllerBase
     /// </summary>
     /// <param name="command">Create command</param>
     [HttpPost("create-student")]
-    public async Task CreateStudent([FromForm] CreateStudentCommand command)
+    public async Task CreateStudent(CreateStudentCommand command)
     {
         await mediator.Send(command);
     }
@@ -46,7 +45,7 @@ public class AuthController : ControllerBase
     /// </summary>
     /// <param name="command">Create command</param>
     [HttpPost("create-professor")]
-    public async Task CreateProfessor([FromForm] CreateProfessorCommand command)
+    public async Task CreateProfessor(CreateProfessorCommand command)
     {
         await mediator.Send(command);
     }
