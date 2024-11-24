@@ -1,4 +1,4 @@
-﻿using Saritasa.Tools.Common.Pagination;
+﻿using ScientificWork.UseCases.Common.Pagination;
 using ScientificWork.UseCases.Professors.Common.Dtos;
 
 namespace ScientificWork.UseCases.Professors.GetProfessors;

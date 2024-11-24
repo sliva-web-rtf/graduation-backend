@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Saritasa.Tools.Common.Pagination;
+using ScientificWork.UseCases.Common.Pagination;
 using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.ScientificWorks.Enums;
 using ScientificWork.Domain.Students;

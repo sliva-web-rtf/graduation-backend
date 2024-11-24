@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Saritasa.Tools.Common.Pagination;
+using ScientificWork.UseCases.Common.Pagination;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 using ScientificWork.UseCases.Requests.Common.Dtos;
 
