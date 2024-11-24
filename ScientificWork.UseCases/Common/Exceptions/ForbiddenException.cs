@@ -1,4 +1,4 @@
-namespace ScientificWork.Infrastructure.Common.Exceptions;
+namespace ScientificWork.UseCases.Common.Exceptions;
 
 [Serializable]
 public class ForbiddenException : DomainException
