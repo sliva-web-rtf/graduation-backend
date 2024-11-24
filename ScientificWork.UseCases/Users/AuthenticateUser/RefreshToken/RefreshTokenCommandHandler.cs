@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Saritasa.Tools.Domain.Exceptions;
+using ScientificWork.UseCases.Common.Exceptions;
 using ScientificWork.Domain.Users;
 using ScientificWork.Infrastructure.Abstractions.DTOs;
 using ScientificWork.Infrastructure.Abstractions.Interfaces.Authentication;

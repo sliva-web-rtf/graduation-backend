@@ -1,4 +1,4 @@
-﻿using Saritasa.Tools.Domain.Exceptions;
+﻿using ScientificWork.UseCases.Common.Exceptions;
 
 namespace ScientificWork.Infrastructure.DataAccess.Extensions;
 

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Saritasa.Tools.Domain.Exceptions;
+using ScientificWork.UseCases.Common.Exceptions;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 
 namespace ScientificWork.UseCases.Notifications.ReadNotification;

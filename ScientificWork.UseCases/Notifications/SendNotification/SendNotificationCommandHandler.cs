@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Saritasa.Tools.Domain.Exceptions;
+using ScientificWork.UseCases.Common.Exceptions;
 using ScientificWork.Domain.Notifications;
 using ScientificWork.Domain.Notifications.Enums;
 using ScientificWork.Domain.Notifications.ValueObjects;
