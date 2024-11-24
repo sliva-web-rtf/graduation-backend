@@ -64,7 +64,7 @@ public class UploadStudentsCommandHandler : IRequestHandler<UploadStudentsComman
                     {
                         FirstName = firstName,
                         LastName = lastName,
-                        Contacts = contacts,
+                        ContactsTg = contacts,
                         Email = name,
                         Patronymic = patronymic,
                         Phone = phone

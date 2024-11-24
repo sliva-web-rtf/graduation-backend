@@ -19,7 +19,7 @@ public record UpdateProfileInfoCommand : IRequest
     [DataType(DataType.EmailAddress)]
     public string Email { get; set; }
 
-    public string? Contacts { get; set; }
-
     public string? Phone { get; set; }
+
+    public string? ContactsTg { get; set; }
 }
