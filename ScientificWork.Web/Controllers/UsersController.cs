@@ -5,6 +5,7 @@ using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.Students;
 using ScientificWork.UseCases.Users.AddAvatarImage;
 using ScientificWork.UseCases.Users.GetAvatarImage;
+using ScientificWork.UseCases.Users.GetProfileInfo;
 using ScientificWork.UseCases.Users.RemoveAvatarImage;
 using ScientificWork.UseCases.Users.UpdateProfessorScientificPortfolio;
 using ScientificWork.UseCases.Users.UpdateProfileInfo;
@@ -27,6 +28,15 @@ public class UsersController : ControllerBase
     public UsersController(IMediator mediator)
     {
         this.mediator = mediator;
+    }
+
+    [HttpGet("get-profile-info")]
+    [Authorize(Policy = "RegistrationComplete")]
+    [ProducesResponseType<GetProfileInfoCommandResult>(200)]
+    public async Task<IActionResult> GetProfileInfo()
+    {
+        var result = await mediator.Send(new GetProfileInfoCommand());
+        return Ok(result);
     }
 
     [HttpPut("update-profile-info")]
