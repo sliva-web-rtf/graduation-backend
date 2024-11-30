@@ -3,10 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.Students;
-using ScientificWork.UseCases.Professors.GetProfessorProfileInfo;
-using ScientificWork.UseCases.Professors.GetProfessorScientificPortfolio;
-using ScientificWork.UseCases.Students.GetStudentProfileInfo;
-using ScientificWork.UseCases.Students.GetStudentScientificPortfolio;
 using ScientificWork.UseCases.Users.CompleteOnBoarding;
 using ScientificWork.UseCases.Users.GetProfessorOnBoardingInfo;
 using ScientificWork.UseCases.Users.GetStudentOnBoardingInfo;
@@ -69,47 +65,11 @@ public class OnBoardingController : ControllerBase
         await mediator.Send(command);
     }
 
-    [HttpGet("student-profile-info")]
-    [Authorize(Roles = nameof(Student))]
-    public async Task<ActionResult> GetStudentProfileInfo()
-    {
-        var command = new GetStudentProfileInfoCommand();
-        var res = await mediator.Send(command);
-        return Ok(res);
-    }
-
-    [HttpGet("student-scientific-portfolio")]
-    [Authorize(Roles = nameof(Student))]
-    public async Task<ActionResult> GetStudentScientificPortfolio()
-    {
-        var command = new GetStudentScientificPortfolioCommand();
-        var res = await mediator.Send(command);
-        return Ok(res);
-    }
-
     [HttpGet("student-profile")]
     [Authorize(Roles = nameof(Student))]
     public async Task<ActionResult> GetStudentProfile()
     {
         var command = new GetStudentOnBoardingInfoCommand();
-        var res = await mediator.Send(command);
-        return Ok(res);
-    }
-
-    [HttpGet("professor-profile-info")]
-    [Authorize(Roles = nameof(Professor))]
-    public async Task<ActionResult> GetProfessorProfileInfo()
-    {
-        var command = new GetProfessorProfileInfoCommand();
-        var res = await mediator.Send(command);
-        return Ok(res);
-    }
-
-    [HttpGet("professor-scientific-portfolio")]
-    [Authorize(Roles = nameof(Professor))]
-    public async Task<ActionResult> GetProfessorScientificPortfolio()
-    {
-        var command = new GetProfessorScientificPortfolioCommand();
         var res = await mediator.Send(command);
         return Ok(res);
     }

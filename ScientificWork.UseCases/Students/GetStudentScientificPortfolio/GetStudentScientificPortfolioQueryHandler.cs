@@ -2,39 +2,33 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.Students;
-using ScientificWork.Infrastructure.Abstractions.Interfaces;
 using ScientificWork.UseCases.Common.Dtos;
-using ScientificWork.UseCases.Users.GetStudentOnBoardingInfo;
 
 namespace ScientificWork.UseCases.Students.GetStudentScientificPortfolio;
 
-public class GetStudentScientificPortfolioCommandHandler
-    : IRequestHandler<GetStudentScientificPortfolioCommand, GetStudentScientificPortfolioCommandResult>
+public class GetStudentScientificPortfolioQueryHandler
+    : IRequestHandler<GetStudentScientificPortfolioQuery, GetStudentScientificPortfolioQueryResult>
 {
     private readonly IMapper mapper;
     private readonly UserManager<Student> studentManager;
-    private readonly ILoggedUserAccessor userAccessor;
 
-    public GetStudentScientificPortfolioCommandHandler(
+    public GetStudentScientificPortfolioQueryHandler(
         IMapper mapper,
-        UserManager<Student> studentManager,
-        ILoggedUserAccessor userAccessor)
+        UserManager<Student> studentManager)
     {
         this.mapper = mapper;
         this.studentManager = studentManager;
-        this.userAccessor = userAccessor;
     }
 
-    public async Task<GetStudentScientificPortfolioCommandResult> Handle(
-        GetStudentScientificPortfolioCommand request,
+    public async Task<GetStudentScientificPortfolioQueryResult> Handle(
+        GetStudentScientificPortfolioQuery request,
         CancellationToken cancellationToken)
     {
-        var userId = userAccessor.GetCurrentUserId();
+        var userId = request.Id;
         var student = await GetStudentByIdAsync(userId, cancellationToken);
 
-        var result = mapper.Map<GetStudentScientificPortfolioCommandResult>(student);
+        var result = mapper.Map<GetStudentScientificPortfolioQueryResult>(student);
 
         var scientificAreasDto = student.ScientificAreaSubsections
             .GroupBy(x => x.ScientificArea.Name)

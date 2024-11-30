@@ -3,11 +3,12 @@ using ScientificWork.UseCases.Common.Dtos;
 
 namespace ScientificWork.UseCases.Professors.GetProfessorScientificPortfolio;
 
-public class GetProfessorScientificPortfolioCommandResult
+public class GetProfessorScientificPortfolioQueryResult
 {
     public Guid Id { get; init; }
     
-    [Required] public string Degree { get; init; }
+    [Required]
+    public string Degree { get; init; }
 
     public List<ScientificAreasDto> ScientificArea { get; } = new();
 

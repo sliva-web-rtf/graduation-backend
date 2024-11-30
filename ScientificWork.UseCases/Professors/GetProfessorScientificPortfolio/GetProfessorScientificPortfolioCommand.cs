@@ -1,5 +1,0 @@
-using MediatR;
-
-namespace ScientificWork.UseCases.Professors.GetProfessorScientificPortfolio;
-
-public class GetProfessorScientificPortfolioCommand : IRequest<GetProfessorScientificPortfolioCommandResult>;

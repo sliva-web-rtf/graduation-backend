@@ -5,7 +5,7 @@ namespace ScientificWork.UseCases.Users.UpdateStudentScientificPortfolio;
 
 public class UpdateStudentScientificPortfolioCommand : IRequest
 {
-    [Required] 
+    [Required]
     public string Degree { get; init; }
 
     [Required]

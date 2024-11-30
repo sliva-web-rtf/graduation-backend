@@ -1,6 +1,6 @@
-namespace ScientificWork.UseCases.Professors.GetProfessorProfileInfo;
+namespace ScientificWork.UseCases.Students.GetStudentProfileInfo;
 
-public class GetProfessorProfileInfoCommandResult
+public record GetStudentProfileInfoQueryResult
 {
     public Guid Id { get; init; }
 

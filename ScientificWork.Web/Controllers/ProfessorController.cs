@@ -1,14 +1,15 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using ScientificWork.Domain.Admins;
 using ScientificWork.UseCases.Professors.GetProfessors;
 using ScientificWork.UseCases.Professors.GetProfileById;
-using ScientificWork.UseCases.Professors.ToggleScientificWorksToFavorites;
+using ScientificWork.UseCases.Professors.UploadProfessors;
 using ScientificWork.UseCases.Professors.ToggleStudentToFavorites;
+using ScientificWork.UseCases.Professors.GetProfessorScientificPortfolio;
+using ScientificWork.UseCases.Professors.ToggleScientificWorksToFavorites;
 using ScientificWork.UseCases.Requests.GetStudentRequestsProfessor;
 using ScientificWork.Infrastructure.Presentation.Web;
-using ScientificWork.UseCases.Professors.UploadProfessors;
 
 namespace ScientificWork.Web.Controllers;
 
@@ -39,6 +40,15 @@ public class ProfessorController : ControllerBase
     {
         HttpContext.Items.Add("userId", User.GetCurrentUserId());
         var res = await mediator.Send(query);
+        return Ok(res);
+    }
+
+    [HttpGet("{id:guid}/professor-scientific-portfolio")]
+    [Authorize(Policy = "RegistrationComplete")]
+    public async Task<ActionResult> GetProfessorScientificPortfolio(Guid id)
+    {
+        var command = new GetProfessorScientificPortfolioQuery(id);
+        var res = await mediator.Send(command);
         return Ok(res);
     }
 
