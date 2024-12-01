@@ -46,7 +46,6 @@ public class StudentController : ControllerBase
     }
 
     [HttpGet("student-scientific-portfolio")]
-    //[Authorize(Policy = "RegistrationComplete")]
     public async Task<ActionResult> GetStudentScientificPortfolio(Guid id)
     {
         var command = new GetStudentScientificPortfolioQuery(id);
