@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ScientificWork.Domain.Professors;
+using ScientificWork.Infrastructure.Abstractions.Interfaces;
 using ScientificWork.UseCases.Common.Dtos;
 
 namespace ScientificWork.UseCases.Professors.GetProfessorScientificPortfolio;
@@ -13,17 +14,19 @@ public class GetProfessorScientificPortfolioQueryHandler
 {
     private readonly IMapper mapper;
     private readonly UserManager<Professor> professorManager;
+    private readonly ILoggedUserAccessor userAccessor;
 
-    public GetProfessorScientificPortfolioQueryHandler(IMapper mapper, UserManager<Professor> professorManager)
+    public GetProfessorScientificPortfolioQueryHandler(IMapper mapper, UserManager<Professor> professorManager, ILoggedUserAccessor userAccessor)
     {
         this.mapper = mapper;
         this.professorManager = professorManager;
+        this.userAccessor = userAccessor;
     }
 
     public async Task<GetProfessorScientificPortfolioQueryResult> Handle(
         GetProfessorScientificPortfolioQuery request, CancellationToken cancellationToken)
     {
-        var userId = request.Id;
+        var userId = userAccessor.GetCurrentUserId();
         var professor = await GetProfessorByIdAsync(userId, cancellationToken);
         var result = mapper.Map<GetProfessorScientificPortfolioQueryResult>(professor);
 

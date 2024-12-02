@@ -43,11 +43,11 @@ public class ProfessorController : ControllerBase
         return Ok(res);
     }
 
-    [HttpGet("{id:guid}/professor-scientific-portfolio")]
+    [HttpGet("professor-scientific-portfolio")]
     [Authorize(Policy = "RegistrationComplete")]
-    public async Task<ActionResult> GetProfessorScientificPortfolio(Guid id)
+    public async Task<ActionResult> GetProfessorScientificPortfolio()
     {
-        var command = new GetProfessorScientificPortfolioQuery(id);
+        var command = new GetProfessorScientificPortfolioQuery();
         var res = await mediator.Send(command);
         return Ok(res);
     }

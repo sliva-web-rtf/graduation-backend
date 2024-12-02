@@ -8,11 +8,11 @@ public class GetProfessorScientificPortfolioQueryResult
     public Guid Id { get; init; }
     
     [Required]
-    public string Degree { get; init; }
+    public string? Degree { get; init; }
 
     public List<ScientificAreasDto> ScientificArea { get; } = new();
 
-    public IList<string> ScientificInterests { get; init; }
+    public IList<string>? ScientificInterests { get; init; }
 
     public string? URPUri { get; init; }
 

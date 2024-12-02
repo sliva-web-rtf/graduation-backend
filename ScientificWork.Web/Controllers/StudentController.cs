@@ -46,9 +46,9 @@ public class StudentController : ControllerBase
     }
 
     [HttpGet("student-scientific-portfolio")]
-    public async Task<ActionResult> GetStudentScientificPortfolio(Guid id)
+    public async Task<ActionResult> GetStudentScientificPortfolio()
     {
-        var command = new GetStudentScientificPortfolioQuery(id);
+        var command = new GetStudentScientificPortfolioQuery();
         var res = await mediator.Send(command);
         return Ok(res);
     }
