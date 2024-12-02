@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ScientificWork.UseCases.Users.GetProfileInfo;
 
-public record GetProfileInfoCommandResult
+public record GetProfileInfoQueryResult
 {
     [Required]
     public required string FirstName { get; set; }

@@ -2,7 +2,7 @@ using MediatR;
 
 namespace ScientificWork.UseCases.Users.GetProfileInfo;
 
-public record GetProfileInfoCommand : IRequest<GetProfileInfoCommandResult>
+public record GetProfileInfoQuery : IRequest<GetProfileInfoQueryResult>
 {
     
 }

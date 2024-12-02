@@ -8,21 +8,21 @@ using ScientificWork.Infrastructure.Abstractions.Interfaces;
 
 namespace ScientificWork.UseCases.Users.GetProfileInfo;
 
-public class GetProfileInfoCommandHandler
-    : IRequestHandler<GetProfileInfoCommand, GetProfileInfoCommandResult>
+public class GetProfileInfoQueryHandler
+    : IRequestHandler<GetProfileInfoQuery, GetProfileInfoQueryResult>
 {
 
     private readonly ILoggedUserAccessor userAccessor;
     private readonly UserManager<User> userManager;
 
-    public GetProfileInfoCommandHandler(ILoggedUserAccessor userAccessor,
+    public GetProfileInfoQueryHandler(ILoggedUserAccessor userAccessor,
         UserManager<User> userManager)
     {
         this.userAccessor = userAccessor;
         this.userManager = userManager;
     }
     
-    public async Task<GetProfileInfoCommandResult> Handle(GetProfileInfoCommand request, CancellationToken cancellationToken)
+    public async Task<GetProfileInfoQueryResult> Handle(GetProfileInfoQuery request, CancellationToken cancellationToken)
     {
         var userId = userAccessor.GetCurrentUserId().ToString();
         var user = await userManager.FindByIdAsync(userId);
@@ -31,7 +31,7 @@ public class GetProfileInfoCommandHandler
             throw new NotFoundException($"User with id {userId} not found.");
         }
         
-        return new GetProfileInfoCommandResult()
+        return new GetProfileInfoQueryResult()
         {
             FirstName = user.FirstName,
             LastName = user.LastName,

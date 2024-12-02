@@ -32,10 +32,10 @@ public class UsersController : ControllerBase
 
     [HttpGet("get-profile-info")]
     [Authorize(Policy = "RegistrationComplete")]
-    [ProducesResponseType<GetProfileInfoCommandResult>(200)]
+    [ProducesResponseType<GetProfileInfoQueryResult>(200)]
     public async Task<IActionResult> GetProfileInfo()
     {
-        var result = await mediator.Send(new GetProfileInfoCommand());
+        var result = await mediator.Send(new GetProfileInfoQuery());
         return Ok(result);
     }
 
