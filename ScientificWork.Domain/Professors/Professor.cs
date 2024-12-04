@@ -210,19 +210,13 @@ public sealed class Professor : User
 
     public void UpdateScientificPortfolio(
         string degree,
-        string? post,
         string? about,
-        string? address,
-        int? workExperienceYears,
         string? scopusUri,
         string? riscUri,
         string? urpUri)
     {
         Degree = degree;
-        Post = post;
         About = about;
-        Address = address;
-        WorkExperienceYears = workExperienceYears;
         ScopusUri = scopusUri;
         RISCUri = riscUri;
         URPUri = urpUri;

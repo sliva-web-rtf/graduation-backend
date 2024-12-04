@@ -36,10 +36,7 @@ public class UpdateProfessorScientificPortfolioCommandHandler
 
         professor.UpdateScientificPortfolio(
             request.Degree,
-            request.Post,
             request.About,
-            request.Address,
-            request.WorkExperienceYears,
             request.ScopusUri,
             request.RISCUri,
             request.URPUri);

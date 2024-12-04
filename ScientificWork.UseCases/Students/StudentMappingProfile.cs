@@ -3,6 +3,7 @@ using ScientificWork.Domain.Students;
 using ScientificWork.UseCases.Students.Common.Dtos;
 using ScientificWork.UseCases.Students.CreateStudent;
 using ScientificWork.UseCases.Students.GetStudentProfileById;
+using ScientificWork.UseCases.Students.GetStudentScientificPortfolio;
 using ScientificWork.UseCases.Users.UpdateUserPassword;
 
 namespace ScientificWork.UseCases.Students;
@@ -44,5 +45,9 @@ public class StudentMappingProfile : Profile
             .ForMember(x => x.Status, opt => opt.MapFrom(student => student.SearchStatus!.Status))
             .ForMember(x => x.CommandSearching, opt => opt.MapFrom(student => student.SearchStatus!.CommandSearching))
             .ForMember(x => x.ProfessorSearching, opt => opt.MapFrom(student => student.SearchStatus!.ProfessorSearching));
+
+        CreateMap<Student, GetStudentScientificPortfolioQueryResult>()
+            .ForMember(x => x.ScientificArea, opt => opt.Ignore())
+            .ForMember(x => x.ScientificInterests, opt => opt.MapFrom(x => x.ScientificInterests.Select(s => s.Name)));
     }
 }
