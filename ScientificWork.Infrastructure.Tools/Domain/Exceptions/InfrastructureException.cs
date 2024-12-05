@@ -1,4 +1,4 @@
-namespace ScientificWork.UseCases.Common.Exceptions;
+namespace ScientificWork.Infrastructure.Tools.Domain.Exceptions;
 
 [Serializable]
 public class InfrastructureException : Exception

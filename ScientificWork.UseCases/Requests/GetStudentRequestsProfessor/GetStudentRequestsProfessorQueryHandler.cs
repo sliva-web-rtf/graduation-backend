@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using ScientificWork.UseCases.Common.Pagination;
+using ScientificWork.Infrastructure.Tools.Common.Pagination;
 using ScientificWork.Domain.Requests.Enums;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 using ScientificWork.UseCases.Requests.Common.Dtos;

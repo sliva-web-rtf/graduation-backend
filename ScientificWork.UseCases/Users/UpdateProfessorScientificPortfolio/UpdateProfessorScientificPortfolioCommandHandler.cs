@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ScientificWork.UseCases.Common.Exceptions;
+using ScientificWork.Infrastructure.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Professors;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 

@@ -1,4 +1,4 @@
-namespace ScientificWork.Domain.Common.Utils;
+namespace ScientificWork.Infrastructure.Tools.Common.Utils;
 
 public static class StringUtils
 {

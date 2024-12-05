@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using ScientificWork.UseCases.Common.Pagination;
+using ScientificWork.Infrastructure.Tools.Common.Pagination;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 
 namespace ScientificWork.UseCases.ScientificInterests.GetScientificInterests;

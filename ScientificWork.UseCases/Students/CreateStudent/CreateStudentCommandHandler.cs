@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using ScientificWork.UseCases.Common.Exceptions;
+using ScientificWork.Infrastructure.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Abstractions.Interfaces.Email;
 using ScientificWork.UseCases.Common.Settings.WebRoot;

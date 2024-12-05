@@ -1,4 +1,4 @@
-namespace ScientificWork.UseCases.Common.Exceptions;
+namespace ScientificWork.Infrastructure.Tools.Domain.Exceptions;
 
 [Serializable]
 public class ValidationException : DomainException
@@ -113,5 +113,4 @@ public class ValidationException : DomainException
 
         this.Errors = errors.ToDictionary(kv => kv.Key, kv => (ICollection<string>)kv.Value);
     }
-    
 }

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using ScientificWork.UseCases.Common.Exceptions;
+using ScientificWork.Infrastructure.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;

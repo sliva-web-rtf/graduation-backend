@@ -1,4 +1,4 @@
-namespace ScientificWork.UseCases.Common.Exceptions;
+namespace ScientificWork.Infrastructure.Tools.Domain.Exceptions;
 
 [Serializable]
 public class InvalidOrderFieldException: Exception
@@ -20,7 +20,4 @@ public class InvalidOrderFieldException: Exception
     {
         AvailableFields = availableFields;
     }
-    
-    
-    
 }

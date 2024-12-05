@@ -1,4 +1,4 @@
-﻿using ScientificWork.UseCases.Common.Pagination;
+﻿using ScientificWork.Infrastructure.Tools.Common.Pagination;
 using ScientificWork.UseCases.Students.Common.Dtos;
 
 namespace ScientificWork.UseCases.Students.GetStudents;

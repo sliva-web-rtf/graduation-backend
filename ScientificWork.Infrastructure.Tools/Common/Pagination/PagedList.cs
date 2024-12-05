@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace ScientificWork.UseCases.Common.Pagination;
+namespace ScientificWork.Infrastructure.Tools.Common.Pagination;
 
 [Serializable]
 public class PagedList<T> : IEnumerable<T>
@@ -121,8 +121,6 @@ public class PagedList<T> : IEnumerable<T>
             Offset = Offset,
             TotalCount = TotalCount
         };
-    
-    
     
     public IEnumerator<T> GetEnumerator()
     {

@@ -1,4 +1,4 @@
-namespace ScientificWork.UseCases.Common.Pagination;
+namespace ScientificWork.Infrastructure.Tools.Common.Pagination;
 
 /// <summary>
 /// The class contains static methods for <see cref="PagedList{T}" /> and is intended to

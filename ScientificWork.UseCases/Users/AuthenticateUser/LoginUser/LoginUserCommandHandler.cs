@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using ScientificWork.UseCases.Common.Exceptions;
+using ScientificWork.Infrastructure.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Users;
 using ScientificWork.Infrastructure.Abstractions.Interfaces.Authentication;
 
