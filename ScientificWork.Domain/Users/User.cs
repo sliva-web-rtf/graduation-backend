@@ -42,6 +42,11 @@ public abstract class User : IdentityUser<Guid>
     /// The date when user last logged in.
     /// </summary>
     public DateTime? LastLogin { get; protected set; }
+    
+    /// <summary>
+    /// The date when the user last changed their password
+    /// </summary>
+    public DateTime? LastPasswordChange { get; protected set; } 
 
     /// <summary>
     /// Last token reset date. Before the date all generate login tokens are considered
@@ -96,6 +101,11 @@ public abstract class User : IdentityUser<Guid>
     public void UpdateLastLogin()
     {
         LastLogin = DateTime.UtcNow;
+    }
+
+    public void UpdateLastPasswordChange()
+    {
+        LastPasswordChange = DateTime.UtcNow;
     }
 
     public void SetAvatarImagePath(string path)

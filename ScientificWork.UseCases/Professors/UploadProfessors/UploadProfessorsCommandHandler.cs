@@ -63,7 +63,7 @@ public class UploadProfessorsCommandHandler : IRequestHandler<UploadProfessorsCo
                     {
                         FirstName = firstName,
                         LastName = lastName,
-                        Contacts = contacts,
+                        ContactsTg = contacts,
                         Email = name,
                         Patronymic = patronymic,
                         Phone = phone
@@ -95,10 +95,7 @@ public class UploadProfessorsCommandHandler : IRequestHandler<UploadProfessorsCo
                     new UpdateProfessorScientificPortfolioCommand
                     {
                         About = about,
-                        Address = address,
                         Degree = degree,
-                        Post = post,
-                        WorkExperienceYears = int.Parse(workExperienceYears),
                         ScopusUri = scopusURI,
                         URPUri = URPURI,
                         RISCUri = RISCURI,

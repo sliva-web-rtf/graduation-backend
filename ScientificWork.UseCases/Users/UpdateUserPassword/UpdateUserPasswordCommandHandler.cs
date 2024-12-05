@@ -37,7 +37,11 @@ public class UpdateUserPasswordCommandHandler : IRequestHandler<UpdateUserPasswo
 
         if (!string.IsNullOrEmpty(request.CurrentPassword) && !string.IsNullOrEmpty(request.NewPassword))
         {
-            await userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+            var task = await userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+            if (task.Succeeded)
+            {
+                user.UpdateLastPasswordChange();
+            }
         }
     }
 }

@@ -52,7 +52,8 @@ public class OnBoardingController : ControllerBase
 
     [HttpPut("update-professor-scientific-portfolio")]
     [Authorize(Roles = nameof(Professor))]
-    public async Task UpdateProfessorOnBoardingScientificPortfolioAsync(UpdateProfessorScientificPortfolioCommand command)
+    public async Task UpdateProfessorOnBoardingScientificPortfolioAsync(
+        UpdateProfessorScientificPortfolioCommand command)
     {
         await mediator.Send(command);
     }
@@ -63,7 +64,7 @@ public class OnBoardingController : ControllerBase
     {
         await mediator.Send(command);
     }
-    
+
     [HttpGet("student-profile")]
     [Authorize(Roles = nameof(Student))]
     public async Task<ActionResult> GetStudentProfile()
@@ -72,7 +73,7 @@ public class OnBoardingController : ControllerBase
         var res = await mediator.Send(command);
         return Ok(res);
     }
-    
+
     [HttpGet("professor-profile")]
     [Authorize(Roles = nameof(Professor))]
     public async Task<ActionResult> GetProfessorProfile()

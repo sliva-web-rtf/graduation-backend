@@ -1,15 +1,16 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using ScientificWork.Domain.Admins;
-using ScientificWork.UseCases.Requests.GetProfessorRequestsStudent;
-using ScientificWork.UseCases.Requests.GetStudentRequestsStudent;
-using ScientificWork.UseCases.Students.GetStudentProfileById;
 using ScientificWork.UseCases.Students.GetStudents;
-using ScientificWork.UseCases.Students.ToggleProfessorToFavorites;
-using ScientificWork.UseCases.Students.ToggleScientificWorksToFavorites;
-using ScientificWork.UseCases.Students.ToggleStudentToFavorites;
 using ScientificWork.UseCases.Students.UploadStudents;
+using ScientificWork.UseCases.Students.GetStudentProfileById;
+using ScientificWork.UseCases.Students.ToggleStudentToFavorites;
+using ScientificWork.UseCases.Requests.GetStudentRequestsStudent;
+using ScientificWork.UseCases.Students.ToggleProfessorToFavorites;
+using ScientificWork.UseCases.Requests.GetProfessorRequestsStudent;
+using ScientificWork.UseCases.Students.GetStudentScientificPortfolio;
+using ScientificWork.UseCases.Students.ToggleScientificWorksToFavorites;
 using ScientificWork.Infrastructure.Presentation.Web;
 
 namespace ScientificWork.Web.Controllers;
@@ -41,6 +42,14 @@ public class StudentController : ControllerBase
     {
         HttpContext.Items.Add("userId", User.GetCurrentUserId());
         var res = await mediator.Send(query);
+        return Ok(res);
+    }
+
+    [HttpGet("student-scientific-portfolio")]
+    public async Task<ActionResult> GetStudentScientificPortfolio()
+    {
+        var command = new GetStudentScientificPortfolioQuery();
+        var res = await mediator.Send(command);
         return Ok(res);
     }
 

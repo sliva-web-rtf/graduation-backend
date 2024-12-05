@@ -36,7 +36,7 @@ public class UpdateProfileInfoCommandHandler : IRequestHandler<UpdateProfileInfo
             lastName: request.LastName,
             patronymic: request.Patronymic,
             phoneNumber: request.Phone,
-            contacts: request.Contacts);
+            contacts: request.ContactsTg);
 
         await userManager.UpdateAsync(user);
     }
