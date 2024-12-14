@@ -69,8 +69,9 @@ public class StudentController : ControllerBase
     /// List available for recording professors.
     /// </summary>
     [HttpGet("get-available-for-recording-professors")]
-    public async Task<ActionResult> GetFavoritesAvailableForRecordingProfessors(GetAvailableForRecordingProfessorsQuery query)
+    public async Task<ActionResult> GetFavoritesAvailableForRecordingProfessors([FromQuery] GetAvailableForRecordingProfessorsQuery query)
     {
+        HttpContext.Items.Add("userId", User.GetCurrentUserId());
         var res = await mediator.Send(query);
         return Ok(res);
     }
@@ -86,7 +87,7 @@ public class StudentController : ControllerBase
     /// Add a student to your favorites
     /// </summary>
     [HttpPost("add-student-to-favorites")]
-    public async Task AddStudentToFavorites(ToggleStudentToFavoritesCommand command)
+    public async Task AddStudentToFavorites([FromQuery] ToggleStudentToFavoritesCommand command)
     {
         HttpContext.Items.Add("userId", User.GetCurrentUserId());
         await mediator.Send(command);
@@ -96,7 +97,7 @@ public class StudentController : ControllerBase
     /// Add a professor to your favorites
     /// </summary>
     [HttpPost("add-professor-to-favorites")]
-    public async Task AddProfessorToFavorites(ToggleProfessorToFavoritesCommand command)
+    public async Task AddProfessorToFavorites([FromQuery] ToggleProfessorToFavoritesCommand command)
     {
         HttpContext.Items.Add("userId", User.GetCurrentUserId());
         await mediator.Send(command);
@@ -106,7 +107,7 @@ public class StudentController : ControllerBase
     /// Add a scientific works to your favorites
     /// </summary>
     [HttpPost("add-scientific-work-to-favorites")]
-    public async Task AddScientificWorksToFavorites(ToggleScientificWorksToFavoritesCommand command)
+    public async Task AddScientificWorksToFavorites([FromQuery] ToggleScientificWorksToFavoritesCommand command)
     {
         HttpContext.Items.Add("userId", User.GetCurrentUserId());
         await mediator.Send(command);

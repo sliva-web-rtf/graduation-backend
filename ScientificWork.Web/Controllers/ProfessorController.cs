@@ -70,14 +70,14 @@ public class ProfessorController : ControllerBase
     }
 
     [HttpPost("add-student-to-favorites")]
-    public async Task AddStudentToFavorites(ToggleStudentToFavoritesCommand command)
+    public async Task AddStudentToFavorites([FromQuery] ToggleStudentToFavoritesCommand command)
     {
         HttpContext.Items.Add("userId", User.GetCurrentUserId());
         await mediator.Send(command);
     }
 
     [HttpPost("add-scientific-work-to-favorites")]
-    public async Task AddScientificWorksToFavorites(ToggleScientificWorksToFavoritesCommand command)
+    public async Task AddScientificWorksToFavorites([FromQuery] ToggleScientificWorksToFavoritesCommand command)
     {
         HttpContext.Items.Add("userId", User.GetCurrentUserId());
         await mediator.Send(command);

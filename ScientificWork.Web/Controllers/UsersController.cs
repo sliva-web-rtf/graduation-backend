@@ -47,8 +47,9 @@ public class UsersController : ControllerBase
     /// List researchers students.
     /// </summary>
     [HttpGet("get-researchers-students")]
-    public async Task<ActionResult> GetResearchersStudents(GetStudentsQuery query)
+    public async Task<ActionResult> GetResearchersStudents([FromQuery] GetStudentsQuery query)
     {
+        HttpContext.Items.Add("userId", User.GetCurrentUserId());
         var res = await mediator.Send(query);
         return Ok(res);
     }
@@ -57,8 +58,9 @@ public class UsersController : ControllerBase
     /// List research topics.
     /// </summary>
     [HttpGet("get-research-topics")]
-    public async Task<ActionResult> GetFavoritesResearchTopics(GetScientificWorksQuery query)
+    public async Task<ActionResult> GetFavoritesResearchTopics([FromQuery] GetScientificWorksQuery query)
     {
+        HttpContext.Items.Add("userId", User.GetCurrentUserId());
         var res = await mediator.Send(query);
         return Ok(res);
     }
