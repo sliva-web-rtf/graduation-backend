@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MediatR;
 
-namespace ScientificWork.UseCases.ScientificWorks.GetScientificWorksForProfessor;
+namespace ScientificWork.UseCases.ScientificWorks.GetScientificWorks;
 
 public class GetScientificWorksQuery : IRequest<GetScientificWorksResult>
 {

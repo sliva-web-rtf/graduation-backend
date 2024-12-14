@@ -7,7 +7,6 @@ using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 using ScientificWork.UseCases.Common.Dtos;
 using ScientificWork.UseCases.Professors.Common.Dtos;
-using ScientificWork.UseCases.Students.Common.Dtos;
 
 namespace ScientificWork.UseCases.ScientificWorks.GetGeneralInformationById;
 

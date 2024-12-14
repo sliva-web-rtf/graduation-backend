@@ -1,9 +1,9 @@
 ﻿using Saritasa.Tools.Common.Pagination;
-using ScientificWork.UseCases.Students.Common.Dtos;
+using ScientificWork.UseCases.Common.Dtos;
 
-namespace ScientificWork.UseCases.Students.GetStudents;
+namespace ScientificWork.UseCases.Users.GetStudents;
 
-public record GetStudentsResult
+public record GetStudentsQueryResult
 {
     public PagedList<StudentDto> Students { get; init; }
 

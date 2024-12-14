@@ -2,8 +2,8 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
+using ScientificWork.UseCases.Common.Dtos;
 using ScientificWork.UseCases.Common.Exceptions;
-using ScientificWork.UseCases.Students.Common.Dtos;
 
 namespace ScientificWork.UseCases.ScientificWorks.GetRecordingSlotById;
 

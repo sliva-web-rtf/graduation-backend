@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using ScientificWork.Domain.Professors;
 using ScientificWork.UseCases.Professors.Common.Dtos;
-using ScientificWork.UseCases.Professors.GetProfessors;
 using ScientificWork.UseCases.Professors.GetProfessorScientificPortfolio;
 using ScientificWork.UseCases.Professors.GetProfileById;
 

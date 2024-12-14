@@ -3,9 +3,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.Students;
+using ScientificWork.Infrastructure.Presentation.Web;
+using ScientificWork.UseCases.ScientificWorks.GetScientificWorks;
+using ScientificWork.UseCases.Students.ToggleProfessorToFavorites;
 using ScientificWork.UseCases.Users.AddAvatarImage;
 using ScientificWork.UseCases.Users.GetAvatarImage;
 using ScientificWork.UseCases.Users.GetProfileInfo;
+using ScientificWork.UseCases.Users.GetStudents;
 using ScientificWork.UseCases.Users.RemoveAvatarImage;
 using ScientificWork.UseCases.Users.UpdateProfessorScientificPortfolio;
 using ScientificWork.UseCases.Users.UpdateProfileInfo;
@@ -36,6 +40,34 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> GetProfileInfo()
     {
         var result = await mediator.Send(new GetProfileInfoQuery());
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// List researchers students.
+    /// </summary>
+    [HttpGet("get-researchers-students")]
+    public async Task<ActionResult> GetResearchersStudents(GetStudentsQuery query)
+    {
+        var res = await mediator.Send(query);
+        return Ok(res);
+    }
+
+    /// <summary>
+    /// List research topics.
+    /// </summary>
+    [HttpGet("get-research-topics")]
+    public async Task<ActionResult> GetFavoritesResearchTopics(GetScientificWorksQuery query)
+    {
+        var res = await mediator.Send(query);
+        return Ok(res);
+    }
+
+    [HttpGet("get-avatar-image")]
+    [Authorize]
+    public async Task<ActionResult> GetAvatarImage()
+    {
+        var result = await mediator.Send(new GetAvatarImageCommand());
         return Ok(result);
     }
 
@@ -76,7 +108,7 @@ public class UsersController : ControllerBase
     {
         await mediator.Send(command);
     }
-    
+
     [HttpPost("add-avatar-image")]
     [Authorize]
     public async Task AddAvatarImage(IFormFile file)
@@ -94,13 +126,5 @@ public class UsersController : ControllerBase
     public async Task RemoveAvatarImage()
     {
         await mediator.Send(new RemoveAvatarImageCommand());
-    }
-
-    [HttpGet("get-avatar-image")]
-    [Authorize]
-    public async Task<ActionResult> GetAvatarImage()
-    {
-        var result = await mediator.Send(new GetAvatarImageCommand());
-        return Ok(result);
     }
 }

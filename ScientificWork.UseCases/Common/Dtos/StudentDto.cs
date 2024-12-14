@@ -1,4 +1,4 @@
-﻿namespace ScientificWork.UseCases.Students.Common.Dtos;
+﻿namespace ScientificWork.UseCases.Common.Dtos;
 
 public class StudentDto
 {

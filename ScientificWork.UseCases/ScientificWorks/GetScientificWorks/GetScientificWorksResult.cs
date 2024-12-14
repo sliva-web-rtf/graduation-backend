@@ -1,7 +1,7 @@
 ﻿using Saritasa.Tools.Common.Pagination;
 using ScientificWork.UseCases.ScientificWorks.Common.Dtos;
 
-namespace ScientificWork.UseCases.ScientificWorks.GetScientificWorksForProfessor;
+namespace ScientificWork.UseCases.ScientificWorks.GetScientificWorks;
 
 public class GetScientificWorksResult
 {

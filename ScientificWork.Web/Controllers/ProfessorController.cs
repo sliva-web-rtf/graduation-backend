@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using ScientificWork.Domain.Admins;
-using ScientificWork.UseCases.Professors.GetProfessors;
 using ScientificWork.UseCases.Professors.GetProfileById;
 using ScientificWork.UseCases.Professors.UploadProfessors;
 using ScientificWork.UseCases.Professors.ToggleStudentToFavorites;
@@ -10,6 +9,7 @@ using ScientificWork.UseCases.Professors.GetProfessorScientificPortfolio;
 using ScientificWork.UseCases.Professors.ToggleScientificWorksToFavorites;
 using ScientificWork.UseCases.Requests.GetStudentRequestsProfessor;
 using ScientificWork.Infrastructure.Presentation.Web;
+using ScientificWork.UseCases.Users.GetAvailableForRecordingProfessors;
 
 namespace ScientificWork.Web.Controllers;
 
@@ -55,7 +55,7 @@ public class ProfessorController : ControllerBase
     /// List professor.
     /// </summary>
     [HttpGet("list-professor")]
-    public async Task<ActionResult> GetProfessors([FromQuery] GetProfessorsQuery query)
+    public async Task<ActionResult> GetProfessors([FromQuery] GetAvailableForRecordingProfessorsQuery query)
     {
         HttpContext.Items.Add("userId", User.GetCurrentUserId());
         var res = await mediator.Send(query);
@@ -70,14 +70,14 @@ public class ProfessorController : ControllerBase
     }
 
     [HttpPost("add-student-to-favorites")]
-    public async Task AddStudentToFavorites([FromQuery] ToggleStudentToFavoritesCommand command)
+    public async Task AddStudentToFavorites(ToggleStudentToFavoritesCommand command)
     {
         HttpContext.Items.Add("userId", User.GetCurrentUserId());
         await mediator.Send(command);
     }
 
     [HttpPost("add-scientific-work-to-favorites")]
-    public async Task AddScientificWorksToFavorites([FromQuery] ToggleScientificWorksToFavoritesCommand command)
+    public async Task AddScientificWorksToFavorites(ToggleScientificWorksToFavoritesCommand command)
     {
         HttpContext.Items.Add("userId", User.GetCurrentUserId());
         await mediator.Send(command);

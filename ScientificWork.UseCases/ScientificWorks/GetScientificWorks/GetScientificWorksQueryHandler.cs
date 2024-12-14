@@ -8,7 +8,6 @@ using ScientificWork.Domain.ScientificWorks.Enums;
 using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 using ScientificWork.UseCases.ScientificWorks.Common.Dtos;
-using ScientificWork.UseCases.ScientificWorks.GetScientificWorksForProfessor;
 
 namespace ScientificWork.UseCases.ScientificWorks.GetScientificWorks;
 

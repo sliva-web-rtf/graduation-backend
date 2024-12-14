@@ -40,7 +40,7 @@ public class ToggleScientificWorksToFavoritesCommandHandler : IRequestHandler<To
         }
         else
         {
-            throw new Exception($"Нет профессора с таким id: {studentId}");
+            throw new Exception($"Нет студента с таким id: {studentId}");
         }
     }
 }
