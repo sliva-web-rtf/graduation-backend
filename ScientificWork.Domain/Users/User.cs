@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
-using Saritasa.Tools.Common.Utils;
+using ScientificWork.Infrastructure.Tools.Common.Utils;
 using ScientificWork.Domain.Notifications;
 using ScientificWork.Domain.ScientificAreas;
 using ScientificWork.Domain.ScientificInterests;

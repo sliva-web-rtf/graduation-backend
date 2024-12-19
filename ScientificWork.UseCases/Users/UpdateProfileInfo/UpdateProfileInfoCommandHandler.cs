@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Saritasa.Tools.Domain.Exceptions;
+using ScientificWork.Infrastructure.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Users;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 
