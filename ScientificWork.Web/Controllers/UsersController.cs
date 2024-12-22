@@ -5,9 +5,12 @@ using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.Students;
 using ScientificWork.UseCases.Users.AddAvatarImage;
 using ScientificWork.UseCases.Users.GetAvatarImage;
+using ScientificWork.UseCases.Users.GetProfessorStatus;
 using ScientificWork.UseCases.Users.GetProfileInfo;
+using ScientificWork.UseCases.Users.GetStudentStatus;
 using ScientificWork.UseCases.Users.RemoveAvatarImage;
 using ScientificWork.UseCases.Users.UpdateProfessorScientificPortfolio;
+using ScientificWork.UseCases.Users.UpdateProfessorStatus;
 using ScientificWork.UseCases.Users.UpdateProfileInfo;
 using ScientificWork.UseCases.Users.UpdateStudentScientificPortfolio;
 using ScientificWork.UseCases.Users.UpdateStudentStatus;
@@ -37,6 +40,38 @@ public class UsersController : ControllerBase
     {
         var result = await mediator.Send(new GetProfileInfoQuery());
         return Ok(result);
+    }
+    
+    [HttpGet("student-status")]
+    [Authorize(Policy = "RegistrationComplete", Roles = nameof(Student))]
+    [ProducesResponseType<GetStudentStatusQueryResult>(200)]
+    public async Task<IActionResult> GetStudentStatus()
+    {
+        var result = await mediator.Send(new GetStudentStatusQuery());
+        return Ok(result);
+    }
+    
+    [HttpGet("professor-status")]
+    [Authorize(Policy = "RegistrationComplete", Roles = nameof(Professor))]
+    [ProducesResponseType<GetProfessorStatusQueryResult>(200)]
+    public async Task<IActionResult> GetProfessorStatus()
+    {
+        var result = await mediator.Send(new GetProfessorStatusQuery());
+        return Ok(result);
+    }
+    
+    [HttpPut("student-status")]
+    [Authorize(Policy = "RegistrationComplete", Roles = nameof(Student))]
+    public async Task UpdateStudentStatus(UpdateStudentStatusCommand command)
+    {
+         await mediator.Send(command);
+    }
+    
+    [HttpPut("professor-status")]
+    [Authorize(Policy = "RegistrationComplete", Roles = nameof(Professor))]
+    public async Task UpdateProfessorStatus(UpdateProfessorStatusCommand command)
+    {
+        await mediator.Send(command);
     }
 
     [HttpPut("update-profile-info")]
