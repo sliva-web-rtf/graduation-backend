@@ -37,7 +37,16 @@ public class UpdateProfileInfoCommandHandler : IRequestHandler<UpdateProfileInfo
             patronymic: request.Patronymic,
             phoneNumber: request.Phone,
             contacts: request.ContactsTg);
-
+        
+        if (!string.IsNullOrWhiteSpace(request.CurrentPassword) && !string.IsNullOrWhiteSpace(request.NewPassword))
+        {
+            var task = await userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+            if (task.Succeeded)
+            {
+                user.UpdateLastPasswordChange();
+            }
+        }
+        
         await userManager.UpdateAsync(user);
     }
 }
