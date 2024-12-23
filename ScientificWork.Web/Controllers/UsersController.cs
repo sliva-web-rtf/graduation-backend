@@ -49,6 +49,7 @@ public class UsersController : ControllerBase
     /// List researchers students.
     /// </summary>
     [HttpGet("get-researchers-students")]
+    [Authorize(Policy = "RegistrationComplete")]
     public async Task<ActionResult> GetResearchersStudents([FromQuery] GetStudentsQuery query)
     {
         HttpContext.Items.Add("userId", User.GetCurrentUserId());
@@ -60,6 +61,7 @@ public class UsersController : ControllerBase
     /// List research topics.
     /// </summary>
     [HttpGet("get-research-topics")]
+    [Authorize(Policy = "RegistrationComplete")]
     public async Task<ActionResult> GetFavoritesResearchTopics([FromQuery] GetScientificWorksQuery query)
     {
         HttpContext.Items.Add("userId", User.GetCurrentUserId());
