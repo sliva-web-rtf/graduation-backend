@@ -3,10 +3,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.Students;
+using ScientificWork.Infrastructure.Presentation.Web;
+using ScientificWork.UseCases.ScientificWorks.GetScientificWorks;
 using ScientificWork.UseCases.Users.AddAvatarImage;
 using ScientificWork.UseCases.Users.GetAvatarImage;
 using ScientificWork.UseCases.Users.GetProfessorStatus;
 using ScientificWork.UseCases.Users.GetProfileInfo;
+using ScientificWork.UseCases.Users.GetStudents;
 using ScientificWork.UseCases.Users.GetStudentStatus;
 using ScientificWork.UseCases.Users.RemoveAvatarImage;
 using ScientificWork.UseCases.Users.UpdateProfessorScientificPortfolio;
@@ -159,13 +162,5 @@ public class UsersController : ControllerBase
     public async Task RemoveAvatarImage()
     {
         await mediator.Send(new RemoveAvatarImageCommand());
-    }
-
-    [HttpGet("get-avatar-image")]
-    [Authorize]
-    public async Task<ActionResult> GetAvatarImage()
-    {
-        var result = await mediator.Send(new GetAvatarImageCommand());
-        return Ok(result);
     }
 }
