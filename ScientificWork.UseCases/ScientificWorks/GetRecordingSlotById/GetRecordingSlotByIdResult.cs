@@ -1,6 +1,6 @@
 ﻿using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.ScientificWorks.Enums;
-using ScientificWork.UseCases.Students.Common.Dtos;
+using ScientificWork.UseCases.Common.Dtos;
 
 namespace ScientificWork.UseCases.ScientificWorks.GetRecordingSlotById;
 

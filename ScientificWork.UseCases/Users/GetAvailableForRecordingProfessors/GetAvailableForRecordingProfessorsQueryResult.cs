@@ -1,9 +1,9 @@
 ﻿using ScientificWork.Infrastructure.Tools.Common.Pagination;
 using ScientificWork.UseCases.Professors.Common.Dtos;
 
-namespace ScientificWork.UseCases.Professors.GetProfessors;
+namespace ScientificWork.UseCases.Users.GetAvailableForRecordingProfessors;
 
-public record GetProfessorsResult
+public record GetAvailableForRecordingProfessorsQueryResult
 {
     public PagedList<ProfessorDto> Professors { get; init; }
 

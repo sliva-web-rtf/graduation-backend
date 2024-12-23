@@ -11,12 +11,10 @@ namespace ScientificWork.UseCases.Professors.ToggleStudentToFavorites;
 public class ToggleStudentToFavoritesCommandHandler : IRequestHandler<ToggleStudentToFavoritesCommand>
 {
     private readonly ILoggedUserAccessor userAccessor;
-    private readonly UserManager<Student> studentManager;
     private readonly UserManager<Professor> professorManager;
 
-    public ToggleStudentToFavoritesCommandHandler(UserManager<Student> studentManager, UserManager<Professor> professorManager, ILoggedUserAccessor userAccessor)
+    public ToggleStudentToFavoritesCommandHandler(UserManager<Professor> professorManager, ILoggedUserAccessor userAccessor)
     {
-        this.studentManager = studentManager;
         this.professorManager = professorManager;
         this.userAccessor = userAccessor;
     }

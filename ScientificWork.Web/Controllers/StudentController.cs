@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using ScientificWork.Domain.Admins;
-using ScientificWork.UseCases.Students.GetStudents;
 using ScientificWork.UseCases.Students.UploadStudents;
 using ScientificWork.UseCases.Students.GetStudentProfileById;
 using ScientificWork.UseCases.Students.ToggleStudentToFavorites;
@@ -12,6 +11,8 @@ using ScientificWork.UseCases.Requests.GetProfessorRequestsStudent;
 using ScientificWork.UseCases.Students.GetStudentScientificPortfolio;
 using ScientificWork.UseCases.Students.ToggleScientificWorksToFavorites;
 using ScientificWork.Infrastructure.Presentation.Web;
+using ScientificWork.UseCases.Users.GetAvailableForRecordingProfessors;
+using ScientificWork.UseCases.Users.GetStudents;
 
 namespace ScientificWork.Web.Controllers;
 
@@ -64,6 +65,17 @@ public class StudentController : ControllerBase
         return Ok(res);
     }
 
+    /// <summary>
+    /// List available for recording professors.
+    /// </summary>
+    [HttpGet("get-available-for-recording-professors")]
+    public async Task<ActionResult> GetFavoritesAvailableForRecordingProfessors([FromQuery] GetAvailableForRecordingProfessorsQuery query)
+    {
+        HttpContext.Items.Add("userId", User.GetCurrentUserId());
+        var res = await mediator.Send(query);
+        return Ok(res);
+    }
+    
     [HttpPost("upload-students")]
     [Authorize(Roles = nameof(SystemAdmin))]
     public async Task UploadStudents([FromForm] UploadStudentsCommand command)
@@ -71,6 +83,9 @@ public class StudentController : ControllerBase
         await mediator.Send(command);
     }
 
+    /// <summary>
+    /// Add a student to your favorites
+    /// </summary>
     [HttpPost("add-student-to-favorites")]
     public async Task AddStudentToFavorites([FromQuery] ToggleStudentToFavoritesCommand command)
     {
@@ -78,6 +93,9 @@ public class StudentController : ControllerBase
         await mediator.Send(command);
     }
 
+    /// <summary>
+    /// Add a professor to your favorites
+    /// </summary>
     [HttpPost("add-professor-to-favorites")]
     public async Task AddProfessorToFavorites([FromQuery] ToggleProfessorToFavoritesCommand command)
     {
@@ -85,6 +103,9 @@ public class StudentController : ControllerBase
         await mediator.Send(command);
     }
 
+    /// <summary>
+    /// Add a scientific works to your favorites
+    /// </summary>
     [HttpPost("add-scientific-work-to-favorites")]
     public async Task AddScientificWorksToFavorites([FromQuery] ToggleScientificWorksToFavoritesCommand command)
     {

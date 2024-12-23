@@ -2,7 +2,6 @@
 using ScientificWork.Domain.ScientificWorks.Enums;
 using ScientificWork.UseCases.Common.Dtos;
 using ScientificWork.UseCases.Professors.Common.Dtos;
-using ScientificWork.UseCases.Students.Common.Dtos;
 
 namespace ScientificWork.UseCases.ScientificWorks.GetGeneralInformationById;
 

@@ -6,11 +6,11 @@ using ScientificWork.Infrastructure.Tools.Common.Pagination;
 using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
-using ScientificWork.UseCases.Students.Common.Dtos;
+using ScientificWork.UseCases.Common.Dtos;
 
-namespace ScientificWork.UseCases.Students.GetStudents;
+namespace ScientificWork.UseCases.Users.GetStudents;
 
-public class GetStudentsQueryHandler : IRequestHandler<GetStudentsQuery, GetStudentsResult>
+public class GetStudentsQueryHandler : IRequestHandler<GetStudentsQuery, GetStudentsQueryResult>
 {
     private readonly IMapper mapper;
     private readonly ILoggedUserAccessor userAccessor;
@@ -30,7 +30,7 @@ public class GetStudentsQueryHandler : IRequestHandler<GetStudentsQuery, GetStud
     }
 
     /// <inheritdoc />
-    public async Task<GetStudentsResult> Handle(GetStudentsQuery request, CancellationToken cancellationToken)
+    public async Task<GetStudentsQueryResult> Handle(GetStudentsQuery request, CancellationToken cancellationToken)
     {
         var students = studentManager.Users
             .Where(x => x.Id != userAccessor.GetCurrentUserId())
@@ -73,7 +73,7 @@ public class GetStudentsQueryHandler : IRequestHandler<GetStudentsQuery, GetStud
         var resStudents = PagedListFactory.FromSource(studentDto,
             page: request.Page, pageSize: request.PageSize);
 
-        return new GetStudentsResult { Students = resStudents, Length = studentDto.Count(), Page = request.Page };
+        return new GetStudentsQueryResult { Students = resStudents, Length = studentDto.Count(), Page = request.Page };
     }
 
     private async Task<HashSet<Guid>> GetFavoritesStudentsAsync()

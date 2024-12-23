@@ -8,9 +8,9 @@ using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 using ScientificWork.UseCases.Professors.Common.Dtos;
 
-namespace ScientificWork.UseCases.Professors.GetProfessors;
+namespace ScientificWork.UseCases.Users.GetAvailableForRecordingProfessors;
 
-public class GetProfessorsQueryHandler : IRequestHandler<GetProfessorsQuery, GetProfessorsResult>
+public class GetAvailableForRecordingProfessorsQueryHandler : IRequestHandler<GetAvailableForRecordingProfessorsQuery, GetAvailableForRecordingProfessorsQueryResult>
 {
     private readonly IMapper mapper;
     private readonly ILoggedUserAccessor userAccessor;
@@ -20,7 +20,7 @@ public class GetProfessorsQueryHandler : IRequestHandler<GetProfessorsQuery, Get
     /// <summary>
     /// Constructor.
     /// </summary>
-    public GetProfessorsQueryHandler(IMapper mapper, UserManager<Professor> professorManager,
+    public GetAvailableForRecordingProfessorsQueryHandler(IMapper mapper, UserManager<Professor> professorManager,
         ILoggedUserAccessor userAccessor, UserManager<Student> studentManager)
     {
         this.mapper = mapper;
@@ -30,7 +30,7 @@ public class GetProfessorsQueryHandler : IRequestHandler<GetProfessorsQuery, Get
     }
 
     /// <inheritdoc />
-    public async Task<GetProfessorsResult> Handle(GetProfessorsQuery request, CancellationToken cancellationToken)
+    public async Task<GetAvailableForRecordingProfessorsQueryResult> Handle(GetAvailableForRecordingProfessorsQuery request, CancellationToken cancellationToken)
     {
         var professors = professorManager.Users
             .Where(x => x.IsRegistrationComplete)
@@ -73,7 +73,7 @@ public class GetProfessorsQueryHandler : IRequestHandler<GetProfessorsQuery, Get
         var resProfessors = PagedListFactory.FromSource(professorDto.OrderBy(x => x.Limit - x.Fullness),
             page: request.Page, pageSize: request.PageSize);
 
-        return new GetProfessorsResult { Professors = resProfessors, Length = professorDto.Count(), Page = request.Page };
+        return new GetAvailableForRecordingProfessorsQueryResult { Professors = resProfessors, Length = professorDto.Count(), Page = request.Page };
     }
 
     private async Task<HashSet<Guid>> GetFavoritesProfessorAsync()

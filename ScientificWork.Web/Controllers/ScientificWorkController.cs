@@ -8,10 +8,10 @@ using ScientificWork.UseCases.ScientificWorks.EnterScientificWork;
 using ScientificWork.UseCases.ScientificWorks.GetGeneralInformationById;
 using ScientificWork.UseCases.ScientificWorks.GetRecordingSlotById;
 using ScientificWork.UseCases.ScientificWorks.GetScientificWorksByUserId;
-using ScientificWork.UseCases.ScientificWorks.GetScientificWorksForProfessor;
 using ScientificWork.UseCases.ScientificWorks.LeaveScientificWork;
 using ScientificWork.UseCases.ScientificWorks.UpdateScientificWork;
 using ScientificWork.Infrastructure.Presentation.Web;
+using ScientificWork.UseCases.ScientificWorks.GetScientificWorks;
 
 namespace ScientificWork.Web.Controllers;
 
