@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 using ScientificWork.Domain.Users;
-using ScientificWork.UseCases.Common.Exceptions;
+using ScientificWork.Infrastructure.Tools.Domain.Exceptions;
 
 namespace ScientificWork.UseCases.Users.GetUserById;
 
@@ -41,7 +41,7 @@ internal class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserD
         var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken: cancellationToken);
         if (user == null)
         {
-            throw new UserNotFoundException($"User not found by id - {request.UserId}");
+            throw new NotFoundException($"User not found by id - {request.UserId}");
         }
         var res = mapper.Map<UserDetailsDto>(user);
         res.Roles = await userManager.GetRolesAsync(user);

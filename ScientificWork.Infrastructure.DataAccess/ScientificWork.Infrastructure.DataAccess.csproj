@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ScientificWork.Infrastructure.Abstractions\ScientificWork.Infrastructure.Abstractions.csproj" />
+    <ProjectReference Include="..\ScientificWork.UseCases\ScientificWork.UseCases.csproj" />
   </ItemGroup>
 
 </Project>

@@ -9,9 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.WebEncoders.Testing;
-using Saritasa.Tools.Common.Utils;
-using Saritasa.Tools.Domain.Exceptions;
-using ValidationException = Saritasa.Tools.Domain.Exceptions.ValidationException;
+using ScientificWork.Infrastructure.Tools.Domain.Exceptions;
 
 namespace ScientificWork.Infrastructure.Presentation.Middlewares;
 

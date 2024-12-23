@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Saritasa.Tools.Domain.Exceptions;
+using ScientificWork.Infrastructure.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Professors;
 using ScientificWork.Infrastructure.Abstractions.Interfaces.Email;
 using ScientificWork.UseCases.Common.Settings.WebRoot;

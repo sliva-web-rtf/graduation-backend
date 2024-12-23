@@ -1,5 +1,5 @@
-﻿using Saritasa.Tools.Common.Pagination;
-using ScientificWork.UseCases.Common.Dtos;
+﻿using ScientificWork.Infrastructure.Tools.Common.Pagination;
+using ScientificWork.UseCases.Students.Common.Dtos;
 
 namespace ScientificWork.UseCases.Users.GetStudents;
 

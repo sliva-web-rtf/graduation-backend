@@ -1,4 +1,4 @@
-﻿using Saritasa.Tools.Common.Pagination;
+﻿using ScientificWork.Infrastructure.Tools.Common.Pagination;
 using ScientificWork.UseCases.ScientificWorks.Common.Dtos;
 
 namespace ScientificWork.UseCases.ScientificWorks.GetScientificWorks;

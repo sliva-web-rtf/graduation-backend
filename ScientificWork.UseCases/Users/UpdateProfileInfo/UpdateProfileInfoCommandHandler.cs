@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Saritasa.Tools.Domain.Exceptions;
+using ScientificWork.Infrastructure.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Users;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 
@@ -37,7 +37,16 @@ public class UpdateProfileInfoCommandHandler : IRequestHandler<UpdateProfileInfo
             patronymic: request.Patronymic,
             phoneNumber: request.Phone,
             contacts: request.ContactsTg);
-
+        
+        if (!string.IsNullOrWhiteSpace(request.CurrentPassword) && !string.IsNullOrWhiteSpace(request.NewPassword))
+        {
+            var task = await userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+            if (task.Succeeded)
+            {
+                user.UpdateLastPasswordChange();
+            }
+        }
+        
         await userManager.UpdateAsync(user);
     }
 }

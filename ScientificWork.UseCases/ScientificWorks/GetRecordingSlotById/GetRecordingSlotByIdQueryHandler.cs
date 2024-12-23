@@ -2,8 +2,8 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
-using ScientificWork.UseCases.Common.Dtos;
-using ScientificWork.UseCases.Common.Exceptions;
+using ScientificWork.Infrastructure.Tools.Domain.Exceptions;
+using ScientificWork.UseCases.Students.Common.Dtos;
 
 namespace ScientificWork.UseCases.ScientificWorks.GetRecordingSlotById;
 
@@ -31,7 +31,7 @@ public class GetRecordingSlotByIdQueryHandler : IRequestHandler<GetRecordingSlot
 
         if (scientificWork == null)
         {
-            throw new ScientificWorkNotFoundException($"Not found scientific work with id = {request.Id}");
+            throw new NotFoundException($"Not found scientific work with id = {request.Id}");
         }
 
         var res = mapper.Map<GetRecordingSlotByIdResult>(scientificWork);

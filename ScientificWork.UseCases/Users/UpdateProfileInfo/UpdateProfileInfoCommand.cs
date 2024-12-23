@@ -22,4 +22,8 @@ public record UpdateProfileInfoCommand : IRequest
     public string? Phone { get; set; }
 
     public string? ContactsTg { get; set; }
+    
+    public string? CurrentPassword { get; set; }
+
+    public string? NewPassword { get; set; }
 }

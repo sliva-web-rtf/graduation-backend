@@ -3,11 +3,10 @@ using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using Saritasa.Tools.Domain.Exceptions;
+using ScientificWork.Infrastructure.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Abstractions.Interfaces.Email;
 using ScientificWork.UseCases.Common.Settings.WebRoot;
-using ValidationException = Saritasa.Tools.Domain.Exceptions.ValidationException;
 
 namespace ScientificWork.UseCases.Students.CreateStudent;
 

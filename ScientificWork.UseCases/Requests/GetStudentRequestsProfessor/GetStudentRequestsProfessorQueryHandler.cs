@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Saritasa.Tools.Common.Pagination;
+﻿using MediatR;
+using ScientificWork.Infrastructure.Tools.Common.Pagination;
 using ScientificWork.Domain.Requests.Enums;
 using ScientificWork.Infrastructure.Abstractions.Interfaces;
 using ScientificWork.UseCases.Requests.Common.Dtos;
