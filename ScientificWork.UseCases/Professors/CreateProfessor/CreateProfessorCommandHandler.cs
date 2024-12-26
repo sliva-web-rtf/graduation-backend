@@ -6,14 +6,13 @@ using ScientificWork.Infrastructure.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Professors;
 using ScientificWork.Infrastructure.Abstractions.Interfaces.Email;
 using ScientificWork.UseCases.Common.Settings.WebRoot;
-using ScientificWork.UseCases.Students.CreateStudent;
 
 namespace ScientificWork.UseCases.Professors.CreateProfessor;
 
 public class CreateProfessorCommandHandler : IRequestHandler<CreateProfessorCommand, CreateProfessorCommandResult>
 {
     private readonly UserManager<Professor> userManager;
-    private readonly ILogger<CreateStudentCommandHandler> logger;
+    private readonly ILogger<CreateProfessorCommandHandler> logger;
     private readonly IHostingEnvironment environment;
     private readonly IEmailSender sender;
 
@@ -22,7 +21,7 @@ public class CreateProfessorCommandHandler : IRequestHandler<CreateProfessorComm
     /// </summary>
     public CreateProfessorCommandHandler(
         UserManager<Professor> userManager,
-        ILogger<CreateStudentCommandHandler> logger,
+        ILogger<CreateProfessorCommandHandler> logger,
         IHostingEnvironment environment,
         IEmailSender sender)
     {

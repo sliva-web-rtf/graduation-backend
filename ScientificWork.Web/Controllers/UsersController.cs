@@ -1,11 +1,15 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Presentation.Web;
+using ScientificWork.UseCases.Professors.ConfirmProfessorEmail;
+using ScientificWork.UseCases.Professors.SendEmailWithConfirmCodeProfessor;
 using ScientificWork.UseCases.ScientificWorks.GetScientificWorks;
 using ScientificWork.UseCases.Students.ConfirmStudentEmail;
+using ScientificWork.UseCases.Students.SendEmailWithConfirmCodeStudent;
 using ScientificWork.UseCases.Users.AddAvatarImage;
 using ScientificWork.UseCases.Users.GetAvatarImage;
 using ScientificWork.UseCases.Users.GetProfessorStatus;
@@ -165,5 +169,45 @@ public class UsersController : ControllerBase
     public async Task RemoveAvatarImage()
     {
         await mediator.Send(new RemoveAvatarImageCommand());
+    }
+    
+    /// <summary>
+    /// Confirm student email.
+    /// </summary>
+    [HttpPatch("student-confirm-email")]
+    public async Task<ActionResult> UpdateStudentPassword(ConfirmStudentEmailCommand command)
+    {
+        var result = await mediator.Send(command);
+        return Ok(result);
+    }
+    
+    /// <summary>
+    /// Repeat send email with confirm code for student.
+    /// </summary>
+    [HttpPut("repeat-send-email-with-confirm-code-student")]
+    public async Task<ActionResult> RepeatSendEmailWithConfirmCodeStudent(SendEmailWithConfirmCodeStudentCommand command)
+    {
+        var result = await mediator.Send(command);
+        return Ok(result);
+    }
+    
+    /// <summary>
+    /// Confirm professor email.
+    /// </summary>
+    [HttpPatch("professor-confirm-email")]
+    public async Task<ActionResult> UpdateProfessorPassword(ConfirmProfessorEmailCommand command)
+    {
+        var result = await mediator.Send(command);
+        return Ok(result);
+    }
+    
+    /// <summary>
+    /// Repeat send email with confirm code for student.
+    /// </summary>
+    [HttpPut("repeat-send-email-with-confirm-code-professor")]
+    public async Task<ActionResult> RepeatSendEmailWithConfirmCodeStudent(SendEmailWithConfirmCodeProfessorCommand command)
+    {
+        var result = await mediator.Send(command);
+        return Ok(result);
     }
 }
