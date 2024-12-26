@@ -5,6 +5,7 @@ using ScientificWork.Domain.Professors;
 using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Presentation.Web;
 using ScientificWork.UseCases.ScientificWorks.GetScientificWorks;
+using ScientificWork.UseCases.Students.ConfirmStudentEmail;
 using ScientificWork.UseCases.Users.AddAvatarImage;
 using ScientificWork.UseCases.Users.GetAvatarImage;
 using ScientificWork.UseCases.Users.GetProfessorStatus;
@@ -76,7 +77,7 @@ public class UsersController : ControllerBase
         var result = await mediator.Send(new GetAvatarImageCommand());
         return Ok(result);
     }
-    
+
     [HttpGet("student-status")]
     [Authorize(Policy = "RegistrationComplete", Roles = nameof(Student))]
     [ProducesResponseType<GetStudentStatusQueryResult>(200)]
@@ -85,7 +86,7 @@ public class UsersController : ControllerBase
         var result = await mediator.Send(new GetStudentStatusQuery());
         return Ok(result);
     }
-    
+
     [HttpGet("professor-status")]
     [Authorize(Policy = "RegistrationComplete", Roles = nameof(Professor))]
     [ProducesResponseType<GetProfessorStatusQueryResult>(200)]
@@ -94,14 +95,14 @@ public class UsersController : ControllerBase
         var result = await mediator.Send(new GetProfessorStatusQuery());
         return Ok(result);
     }
-    
+
     [HttpPut("student-status")]
     [Authorize(Policy = "RegistrationComplete", Roles = nameof(Student))]
     public async Task UpdateStudentStatus(UpdateStudentStatusCommand command)
     {
-         await mediator.Send(command);
+        await mediator.Send(command);
     }
-    
+
     [HttpPut("professor-status")]
     [Authorize(Policy = "RegistrationComplete", Roles = nameof(Professor))]
     public async Task UpdateProfessorStatus(UpdateProfessorStatusCommand command)

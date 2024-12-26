@@ -9,6 +9,7 @@ using ScientificWork.UseCases.Professors.GetProfessorScientificPortfolio;
 using ScientificWork.UseCases.Professors.ToggleScientificWorksToFavorites;
 using ScientificWork.UseCases.Requests.GetStudentRequestsProfessor;
 using ScientificWork.Infrastructure.Presentation.Web;
+using ScientificWork.UseCases.Professors.ConfirmProfessorEmail;
 using ScientificWork.UseCases.Users.GetAvailableForRecordingProfessors;
 
 namespace ScientificWork.Web.Controllers;
@@ -91,5 +92,15 @@ public class ProfessorController : ControllerBase
     {
         HttpContext.Items.Add("userId", User.GetCurrentUserId());
         await mediator.Send(query);
+    }
+    
+    /// <summary>
+    /// Confirm professor email.
+    /// </summary>
+    [HttpPatch("update-professor-confirm-email")]
+    public async Task<ActionResult> UpdateProfessorPassword(ConfirmProfessorEmailCommand command)
+    {
+        var result = await mediator.Send(command);
+        return Ok(result);
     }
 }

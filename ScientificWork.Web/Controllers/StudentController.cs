@@ -11,6 +11,7 @@ using ScientificWork.UseCases.Requests.GetProfessorRequestsStudent;
 using ScientificWork.UseCases.Students.GetStudentScientificPortfolio;
 using ScientificWork.UseCases.Students.ToggleScientificWorksToFavorites;
 using ScientificWork.Infrastructure.Presentation.Web;
+using ScientificWork.UseCases.Students.ConfirmStudentEmail;
 using ScientificWork.UseCases.Users.GetAvailableForRecordingProfessors;
 using ScientificWork.UseCases.Users.GetStudents;
 
@@ -133,5 +134,24 @@ public class StudentController : ControllerBase
         HttpContext.Items.Add("userId", User.GetCurrentUserId());
         var res = await mediator.Send(query);
         return Ok(res);
+    }
+    
+    /// <summary>
+    /// Confirm student email.
+    /// </summary>
+    [HttpPatch("update-student-confirm-email")]
+    public async Task<ActionResult> UpdateStudentPassword(ConfirmStudentEmailCommand command)
+    {
+        var result = await mediator.Send(command);
+        return Ok(result);
+    }
+    
+    /// <summary>
+    /// Repeat send email with confirm code for student.
+    /// </summary>
+    [HttpPut("repeat-send-email-with-confirm-code-student")]
+    public async Task RepeatSendEmailWithConfirmCodeStudent( command)
+    {
+        await mediator.Send(command);
     }
 }
