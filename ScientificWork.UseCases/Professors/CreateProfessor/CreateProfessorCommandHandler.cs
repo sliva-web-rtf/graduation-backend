@@ -59,6 +59,11 @@ public class CreateProfessorCommandHandler : IRequestHandler<CreateProfessorComm
         }
 
         logger.LogInformation($"Professor created successfully. Id: {professor.Id}.");
+        
+        var confirmEmailCode = await userManager.GenerateEmailConfirmationTokenAsync(professor);
+        await sender.SendEmailAsync(request.Email, $"Ваш код для подтверждения регистрации: {confirmEmailCode}", "Ваш код");
+        logger.LogInformation($"Professor confirm email code sent. Id: {professor.Id}.");
+        
         return new CreateProfessorCommandResult(professor.Id);
     }
 }

@@ -36,21 +36,22 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
     }
 
     /// <inheritdoc />
-    public async Task<CreateStudentCommandResult> Handle(CreateStudentCommand request,
+    public async Task<CreateStudentCommandResult> Handle(
+        CreateStudentCommand request,
         CancellationToken cancellationToken)
     {
         ValidateEmail(request.Email);
         ValidatePassword(request.Password);
-        
+
         if (await userManager.FindByEmailAsync(request.Email) is not null)
         {
             logger.LogInformation($"Student already created. Email: {request.Email}.");
             throw new DomainException("Student already created.", 409);
         }
-        
+
         var student = Student.Create(request.Email, WebRootConstants.DefaultAvatarPath);
         var result = await userManager.CreateAsync(student, request.Password);
-        
+
         if (!result.Succeeded)
         {
             var errors = result.Errors
@@ -61,6 +62,7 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
         await userManager.AddToRoleAsync(student, nameof(Student).ToLower());
 
         student.UpdateLastLogin();
+
         await userManager.UpdateAsync(student);
         if (environment.IsProduction())
         {
@@ -69,27 +71,31 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
 
         logger.LogInformation($"Student created successfully. Id: {student.Id}.");
 
+        var confirmEmailCode = await userManager.GenerateEmailConfirmationTokenAsync(student);
+        await sender.SendEmailAsync(request.Email, $"Ваш код для подтверждения регистрации: {confirmEmailCode}", "Ваш код");
+        logger.LogInformation($"Student confirm email code sent. Id: {student.Id}.");
+        
         return new CreateStudentCommandResult(student.Id);
     }
-    
+
     private void ValidateEmail(string email)
     {
-        var emailRegex = new Regex( @"[.\-_a-z0-9]+@([a-z0-9][\-a-z0-9]+\.)+[a-z]{2,6}", RegexOptions.IgnoreCase);
+        var emailRegex = new Regex(@"[.\-_a-z0-9]+@([a-z0-9][\-a-z0-9]+\.)+[a-z]{2,6}", RegexOptions.IgnoreCase);
         var isMatch = emailRegex.Match(email);
-        
+
         if (!isMatch.Success)
         {
             logger.LogInformation($"Invalid email format. Email: {email}.");
             throw new ValidationException("Invalid email format.");
         }
-        
+
         if (email.Length is < 6 or > 255)
         {
             logger.LogInformation($"Email length is not valid. Email: {email}.");
             throw new ValidationException("Email length is not valid.");
         }
     }
-    
+
     private void ValidatePassword(string password)
     {
         if (!password.Any(char.IsUpper) || !password.Any(char.IsLower))
