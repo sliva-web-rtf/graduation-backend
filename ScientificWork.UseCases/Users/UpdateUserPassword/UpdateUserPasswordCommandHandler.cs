@@ -35,16 +35,19 @@ public class UpdateUserPasswordCommandHandler : IRequestHandler<UpdateUserPasswo
             throw new NotFoundException($"User with id {userId} not found.");
         }
 
-        if (!string.IsNullOrEmpty(request.CurrentPassword) && !string.IsNullOrEmpty(request.NewPassword))
+        if (string.IsNullOrWhiteSpace(request.CurrentPassword) || string.IsNullOrWhiteSpace(request.NewPassword))
         {
-            var task = await userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
-            if (!task.Succeeded)
-            {
-                var message = task.Errors.FirstOrDefault()?.Description ?? "Current password or new password not valid.";
-                throw new DomainException(message);
-            }
-            user.UpdateLastPasswordChange();
-            await userManager.UpdateAsync(user);
+            throw new DomainException("Password and new password are required.");
         }
+
+        var task = await userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+        if (!task.Succeeded)
+        {
+            var message = task.Errors.FirstOrDefault()?.Description ?? "Current password or new password not valid.";
+            throw new DomainException(message);
+        }
+
+        user.UpdateLastPasswordChange();
+        await userManager.UpdateAsync(user);
     }
 }
