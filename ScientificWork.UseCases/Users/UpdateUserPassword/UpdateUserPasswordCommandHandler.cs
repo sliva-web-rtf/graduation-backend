@@ -38,10 +38,12 @@ public class UpdateUserPasswordCommandHandler : IRequestHandler<UpdateUserPasswo
         if (!string.IsNullOrEmpty(request.CurrentPassword) && !string.IsNullOrEmpty(request.NewPassword))
         {
             var task = await userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
-            if (task.Succeeded)
+            if (!task.Succeeded)
             {
-                user.UpdateLastPasswordChange();
+                var message = task.Errors.FirstOrDefault()?.Description ?? "Current password or new password not valid.";
+                throw new DomainException(message);
             }
+            user.UpdateLastPasswordChange();
         }
     }
 }

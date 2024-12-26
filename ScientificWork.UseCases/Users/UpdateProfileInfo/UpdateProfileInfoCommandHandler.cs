@@ -41,10 +41,12 @@ public class UpdateProfileInfoCommandHandler : IRequestHandler<UpdateProfileInfo
         if (!string.IsNullOrWhiteSpace(request.CurrentPassword) && !string.IsNullOrWhiteSpace(request.NewPassword))
         {
             var task = await userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
-            if (task.Succeeded)
+            if (!task.Succeeded)
             {
-                user.UpdateLastPasswordChange();
+                var message = task.Errors.FirstOrDefault()?.Description ?? "Current password or new password not valid.";
+                throw new DomainException(message);
             }
+            user.UpdateLastPasswordChange();
         }
         
         await userManager.UpdateAsync(user);
