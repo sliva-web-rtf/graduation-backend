@@ -44,6 +44,7 @@ public class UpdateUserPasswordCommandHandler : IRequestHandler<UpdateUserPasswo
                 throw new DomainException(message);
             }
             user.UpdateLastPasswordChange();
+            await userManager.UpdateAsync(user);
         }
     }
 }
