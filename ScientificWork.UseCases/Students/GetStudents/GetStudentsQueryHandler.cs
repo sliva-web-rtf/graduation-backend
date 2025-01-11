@@ -85,7 +85,6 @@ public class GetStudentsQueryHandler : IRequestHandler<GetStudentsQuery, GetStud
         {
             favorites = professorManager.Users
                 .Where(s => s.Id == userId)
-                .Include(s => s.ProfessorFavoriteStudents)
                 .SelectMany(s => s.ProfessorFavoriteStudents)
                 .Where(x => x.IsActive)
                 .Select(s => s.StudentId)
@@ -95,7 +94,6 @@ public class GetStudentsQueryHandler : IRequestHandler<GetStudentsQuery, GetStud
         {
             favorites = studentManager.Users
                 .Where(s => s.Id == userId)
-                .Include(s => s.StudentFavoriteStudents)
                 .SelectMany(s => s.StudentFavoriteStudents)
                 .Where(x => x.IsActive)
                 .Select(s => s.FavoriteStudentId)
