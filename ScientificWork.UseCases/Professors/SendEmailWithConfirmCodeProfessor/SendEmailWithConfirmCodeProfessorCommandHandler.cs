@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ScientificWork.Domain.Professors;
-using ScientificWork.Infrastructure.Abstractions.Interfaces.Email;
+using ScientificWork.UseCases.CodeSender;
 using ScientificWork.UseCases.Professors.CreateProfessor;
 
 namespace ScientificWork.UseCases.Professors.SendEmailWithConfirmCodeProfessor;
@@ -13,7 +13,7 @@ public class SendEmailWithConfirmCodeProfessorCommandHandler : IRequestHandler<S
 {
     private readonly UserManager<Professor> professorManager;
     private readonly ILogger<CreateProfessorCommandHandler> logger;
-    private readonly IEmailSender sender;
+    private readonly IMediator mediator;
 
     /// <summary>
     /// Constructor.
@@ -21,11 +21,11 @@ public class SendEmailWithConfirmCodeProfessorCommandHandler : IRequestHandler<S
     public SendEmailWithConfirmCodeProfessorCommandHandler(
         UserManager<Professor> professorManager,
         ILogger<CreateProfessorCommandHandler> logger,
-        IEmailSender sender)
+        IMediator mediator)
     {
         this.professorManager = professorManager;
         this.logger = logger;
-        this.sender = sender;
+        this.mediator = mediator;
     }
 
     public async Task<SendEmailWithConfirmCodeProfessorCommandResult> Handle(
@@ -36,9 +36,7 @@ public class SendEmailWithConfirmCodeProfessorCommandHandler : IRequestHandler<S
         ArgumentException.ThrowIfNullOrEmpty(request.ProfessorId);
 
         var professor = await GetProfessorByIdAsync(request.ProfessorId, cancellationToken);
-        var confirmEmailCode = await professorManager.GenerateEmailConfirmationTokenAsync(professor);
-        await sender.SendEmailAsync(request.Email, $"Ваш новый код для подтверждения регистрации: {confirmEmailCode}",
-            "Ваш новый код");
+        await mediator.Send(new SendConfirmationCodeCommand(professor, request.Email), cancellationToken);
         logger.LogInformation($"Professor confirm email code sent. Id: {professor.Id}.");
 
         return await Task.FromResult(new SendEmailWithConfirmCodeProfessorCommandResult { Succeeded = true });

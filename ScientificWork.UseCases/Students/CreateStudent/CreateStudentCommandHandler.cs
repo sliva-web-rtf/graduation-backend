@@ -1,11 +1,12 @@
-﻿using System.Text.RegularExpressions;
-using MediatR;
+﻿using MediatR;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using ScientificWork.Infrastructure.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Abstractions.Interfaces.Email;
+using ScientificWork.UseCases.CodeSender;
 using ScientificWork.UseCases.Common.Settings.WebRoot;
 
 namespace ScientificWork.UseCases.Students.CreateStudent;
@@ -19,6 +20,7 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
     private readonly ILogger<CreateStudentCommandHandler> logger;
     private readonly IHostingEnvironment environment;
     private readonly IEmailSender sender;
+    private readonly IMediator mediator;
 
     /// <summary>
     /// Constructor.
@@ -27,12 +29,14 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
         UserManager<Student> userManager,
         ILogger<CreateStudentCommandHandler> logger,
         IHostingEnvironment environment,
-        IEmailSender sender)
+        IEmailSender sender,
+        IMediator mediator)
     {
         this.userManager = userManager;
         this.logger = logger;
         this.environment = environment;
         this.sender = sender;
+        this.mediator = mediator;
     }
 
     /// <inheritdoc />
@@ -71,8 +75,7 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
 
         logger.LogInformation($"Student created successfully. Id: {student.Id}.");
 
-        var confirmEmailCode = await userManager.GenerateEmailConfirmationTokenAsync(student);
-        await sender.SendEmailAsync(request.Email, $"Ваш код для подтверждения регистрации: {confirmEmailCode}", "Ваш код");
+        await mediator.Send(new SendConfirmationCodeCommand(student, request.Email), cancellationToken);
         logger.LogInformation($"Student confirm email code sent. Id: {student.Id}.");
         
         return new CreateStudentCommandResult(student.Id);

@@ -175,7 +175,7 @@ public class UsersController : ControllerBase
     /// Confirm student email.
     /// </summary>
     [HttpPatch("student-confirm-email")]
-    public async Task<ActionResult> UpdateStudentPassword(ConfirmStudentEmailCommand command)
+    public async Task<ActionResult> ConfirmStudentEmailByCode(ConfirmStudentEmailCommand command)
     {
         var result = await mediator.Send(command);
         return Ok(result);
@@ -195,7 +195,7 @@ public class UsersController : ControllerBase
     /// Confirm professor email.
     /// </summary>
     [HttpPatch("professor-confirm-email")]
-    public async Task<ActionResult> UpdateProfessorPassword(ConfirmProfessorEmailCommand command)
+    public async Task<ActionResult> ConfirmProfessorEmailByCode(ConfirmProfessorEmailCommand command)
     {
         var result = await mediator.Send(command);
         return Ok(result);

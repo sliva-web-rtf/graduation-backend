@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ScientificWork.Domain.Students;
-using ScientificWork.Infrastructure.Abstractions.Interfaces.Email;
+using ScientificWork.UseCases.CodeSender;
 using ScientificWork.UseCases.Students.CreateStudent;
 
 namespace ScientificWork.UseCases.Students.SendEmailWithConfirmCodeStudent;
@@ -13,7 +13,7 @@ public class SendEmailWithConfirmCodeStudentCommandHandler : IRequestHandler<Sen
 {
     private readonly UserManager<Student> studentManager;
     private readonly ILogger<CreateStudentCommandHandler> logger;
-    private readonly IEmailSender sender;
+    private readonly IMediator mediator;
 
     /// <summary>
     /// Constructor.
@@ -21,11 +21,11 @@ public class SendEmailWithConfirmCodeStudentCommandHandler : IRequestHandler<Sen
     public SendEmailWithConfirmCodeStudentCommandHandler(
         UserManager<Student> studentManager,
         ILogger<CreateStudentCommandHandler> logger,
-        IEmailSender sender)
+        IMediator mediator)
     {
         this.studentManager = studentManager;
         this.logger = logger;
-        this.sender = sender;
+        this.mediator = mediator;
     }
 
     public async Task<SendEmailWithConfirmCodeStudentCommandResult> Handle(
@@ -36,9 +36,7 @@ public class SendEmailWithConfirmCodeStudentCommandHandler : IRequestHandler<Sen
         ArgumentException.ThrowIfNullOrEmpty(request.StudentId);
 
         var student = await GetStudentByIdAsync(request.StudentId, cancellationToken);
-        var confirmEmailCode = await studentManager.GenerateEmailConfirmationTokenAsync(student);
-        await sender.SendEmailAsync(request.Email, $"Ваш новый код для подтверждения регистрации: {confirmEmailCode}",
-            "Ваш новый код");
+        await mediator.Send(new SendConfirmationCodeCommand(student, request.Email), cancellationToken);
         logger.LogInformation($"Student confirm email code sent. Id: {student.Id}.");
 
         return await Task.FromResult(new SendEmailWithConfirmCodeStudentCommandResult { Succeeded = true });
