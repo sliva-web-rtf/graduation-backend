@@ -36,7 +36,7 @@ internal class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Login
     public async Task<LoginUserCommandResult> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
         // Password sign in.
-        var result = await signInManager.PasswordSignInAsync(request.Email, request.Password, 
+        var result = await signInManager.PasswordSignInAsync(request.Email, request.Password,
             false, false);
         ValidateSignInResult(result, request.Email);
 
@@ -46,6 +46,12 @@ internal class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Login
         {
             throw new NotFoundException($"User with email {request.Email} not found.");
         }
+
+        if (user.EmailConfirmed == false)
+        {
+            throw new DomainException($"User with email {request.Email} is not confirmed.");
+        }
+
         logger.LogInformation("User with email {email} has logged in.", user.Email);
 
         // Update last login date.
@@ -53,11 +59,7 @@ internal class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Login
         await signInManager.UserManager.UpdateAsync(user);
         var token = await tokenService.Generate(user);
         // Give token.
-        return new LoginUserCommandResult
-        {
-            UserId = user.Id,
-            TokenModel = token
-        };
+        return new LoginUserCommandResult { UserId = user.Id, TokenModel = token };
     }
 
     private void ValidateSignInResult(SignInResult signInResult, string email)

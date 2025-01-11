@@ -34,12 +34,12 @@ public static class Startup
             .PersistKeysToDbContext<AppDbContext>();
 
         services.AddEmailSender(configuration)
-                .AddIdentity()
-                .AddJwt(configuration)
-                .AddScoped<ITokenModelService, TokenModelService>()
-                .AddSingleton<IJsonHelper, SystemTextJsonHelper>()
-                .AddScoped<IAuthenticationTokenService, SystemJwtTokenService>()
-                .AddScoped<ILoggedUserAccessor, LoggedUserAccessor>();
+            .AddIdentity()
+            .AddJwt(configuration)
+            .AddScoped<ITokenModelService, TokenModelService>()
+            .AddSingleton<IJsonHelper, SystemTextJsonHelper>()
+            .AddScoped<IAuthenticationTokenService, SystemJwtTokenService>()
+            .AddScoped<ILoggedUserAccessor, LoggedUserAccessor>();
         return services;
     }
 
@@ -62,6 +62,27 @@ public static class Startup
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders()
             .AddTokenProvider<RefreshTokenProvider<User>>(AuthenticationConstants.AppLoginProvider);
+
+        // Настройка только для Student
+        services.AddIdentityCore<Student>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+                options.Password.RequireNonAlphanumeric = false;
+            })
+            .AddRoles<AppIdentityRole>()
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddTokenProvider<EmailTokenProvider<Student>>("Default");
+        
+        // Настройка только для Professor
+        services.AddIdentityCore<Professor>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+                options.Password.RequireNonAlphanumeric = false;
+            })
+            .AddRoles<AppIdentityRole>()
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddTokenProvider<EmailTokenProvider<Professor>>("Default");
+        
         services.Configure<IdentityOptions>(options =>
         {
             options.User.RequireUniqueEmail = true;

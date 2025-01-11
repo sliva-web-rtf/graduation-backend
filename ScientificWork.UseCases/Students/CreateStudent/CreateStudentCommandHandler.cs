@@ -1,11 +1,12 @@
-﻿using System.Text.RegularExpressions;
-using MediatR;
+﻿using MediatR;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using ScientificWork.Infrastructure.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Abstractions.Interfaces.Email;
+using ScientificWork.UseCases.CodeSender;
 using ScientificWork.UseCases.Common.Settings.WebRoot;
 
 namespace ScientificWork.UseCases.Students.CreateStudent;
@@ -19,6 +20,7 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
     private readonly ILogger<CreateStudentCommandHandler> logger;
     private readonly IHostingEnvironment environment;
     private readonly IEmailSender sender;
+    private readonly IMediator mediator;
 
     /// <summary>
     /// Constructor.
@@ -27,30 +29,33 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
         UserManager<Student> userManager,
         ILogger<CreateStudentCommandHandler> logger,
         IHostingEnvironment environment,
-        IEmailSender sender)
+        IEmailSender sender,
+        IMediator mediator)
     {
         this.userManager = userManager;
         this.logger = logger;
         this.environment = environment;
         this.sender = sender;
+        this.mediator = mediator;
     }
 
     /// <inheritdoc />
-    public async Task<CreateStudentCommandResult> Handle(CreateStudentCommand request,
+    public async Task<CreateStudentCommandResult> Handle(
+        CreateStudentCommand request,
         CancellationToken cancellationToken)
     {
         ValidateEmail(request.Email);
         ValidatePassword(request.Password);
-        
+
         if (await userManager.FindByEmailAsync(request.Email) is not null)
         {
             logger.LogInformation($"Student already created. Email: {request.Email}.");
             throw new DomainException("Student already created.", 409);
         }
-        
+
         var student = Student.Create(request.Email, WebRootConstants.DefaultAvatarPath);
         var result = await userManager.CreateAsync(student, request.Password);
-        
+
         if (!result.Succeeded)
         {
             var errors = result.Errors
@@ -61,6 +66,7 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
         await userManager.AddToRoleAsync(student, nameof(Student).ToLower());
 
         student.UpdateLastLogin();
+
         await userManager.UpdateAsync(student);
         if (environment.IsProduction())
         {
@@ -69,27 +75,30 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
 
         logger.LogInformation($"Student created successfully. Id: {student.Id}.");
 
+        await mediator.Send(new SendConfirmationCodeCommand(student, request.Email), cancellationToken);
+        logger.LogInformation($"Student confirm email code sent. Id: {student.Id}.");
+        
         return new CreateStudentCommandResult(student.Id);
     }
-    
+
     private void ValidateEmail(string email)
     {
-        var emailRegex = new Regex( @"[.\-_a-z0-9]+@([a-z0-9][\-a-z0-9]+\.)+[a-z]{2,6}", RegexOptions.IgnoreCase);
+        var emailRegex = new Regex(@"[.\-_a-z0-9]+@([a-z0-9][\-a-z0-9]+\.)+[a-z]{2,6}", RegexOptions.IgnoreCase);
         var isMatch = emailRegex.Match(email);
-        
+
         if (!isMatch.Success)
         {
             logger.LogInformation($"Invalid email format. Email: {email}.");
             throw new ValidationException("Invalid email format.");
         }
-        
+
         if (email.Length is < 6 or > 255)
         {
             logger.LogInformation($"Email length is not valid. Email: {email}.");
             throw new ValidationException("Email length is not valid.");
         }
     }
-    
+
     private void ValidatePassword(string password)
     {
         if (!password.Any(char.IsUpper) || !password.Any(char.IsLower))

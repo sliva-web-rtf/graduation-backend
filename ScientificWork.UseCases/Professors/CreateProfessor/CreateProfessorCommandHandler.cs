@@ -5,31 +5,34 @@ using Microsoft.Extensions.Logging;
 using ScientificWork.Infrastructure.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Professors;
 using ScientificWork.Infrastructure.Abstractions.Interfaces.Email;
+using ScientificWork.UseCases.CodeSender;
 using ScientificWork.UseCases.Common.Settings.WebRoot;
-using ScientificWork.UseCases.Students.CreateStudent;
 
 namespace ScientificWork.UseCases.Professors.CreateProfessor;
 
 public class CreateProfessorCommandHandler : IRequestHandler<CreateProfessorCommand, CreateProfessorCommandResult>
 {
     private readonly UserManager<Professor> userManager;
-    private readonly ILogger<CreateStudentCommandHandler> logger;
+    private readonly ILogger<CreateProfessorCommandHandler> logger;
     private readonly IHostingEnvironment environment;
     private readonly IEmailSender sender;
+    private readonly IMediator mediator;
 
     /// <summary>
     /// Constructor.
     /// </summary>
     public CreateProfessorCommandHandler(
         UserManager<Professor> userManager,
-        ILogger<CreateStudentCommandHandler> logger,
+        ILogger<CreateProfessorCommandHandler> logger,
         IHostingEnvironment environment,
-        IEmailSender sender)
+        IEmailSender sender,
+        IMediator mediator)
     {
         this.userManager = userManager;
         this.logger = logger;
         this.environment = environment;
         this.sender = sender;
+        this.mediator = mediator;
     }
 
     public async Task<CreateProfessorCommandResult> Handle(CreateProfessorCommand request, CancellationToken cancellationToken)
@@ -59,6 +62,10 @@ public class CreateProfessorCommandHandler : IRequestHandler<CreateProfessorComm
         }
 
         logger.LogInformation($"Professor created successfully. Id: {professor.Id}.");
+        
+        await mediator.Send(new SendConfirmationCodeCommand(professor, request.Email), cancellationToken);
+        logger.LogInformation($"Professor confirm email code sent. Id: {professor.Id}.");
+        
         return new CreateProfessorCommandResult(professor.Id);
     }
 }
