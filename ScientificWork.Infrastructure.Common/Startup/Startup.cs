@@ -50,48 +50,42 @@ public static class Startup
         configuration.Bind(EmailSettings.SectionName, emailSettings);
         services.AddSingleton(Options.Create(emailSettings));
         services.AddScoped<IEmailSender, EmailSender>();
-        
+
         return services;
     }
 
     private static IServiceCollection AddIdentity(this IServiceCollection services)
     {
         services.AddScoped<RefreshTokenCreationOptions>();
-        
+
         services.AddIdentity<User, AppIdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders()
             .AddTokenProvider<RefreshTokenProvider<User>>(AuthenticationConstants.AppLoginProvider);
 
-        // Настройка только для Student
-        services.AddIdentityCore<Student>(options =>
-            {
-                options.User.RequireUniqueEmail = true;
-                options.Password.RequireNonAlphanumeric = false;
-            })
-            .AddRoles<AppIdentityRole>()
-            .AddEntityFrameworkStores<AppDbContext>()
-            .AddTokenProvider<EmailTokenProvider<Student>>("Default");
-        
-        // Настройка только для Professor
-        services.AddIdentityCore<Professor>(options =>
-            {
-                options.User.RequireUniqueEmail = true;
-                options.Password.RequireNonAlphanumeric = false;
-            })
-            .AddRoles<AppIdentityRole>()
-            .AddEntityFrameworkStores<AppDbContext>()
-            .AddTokenProvider<EmailTokenProvider<Professor>>("Default");
-        
         services.Configure<IdentityOptions>(options =>
         {
             options.User.RequireUniqueEmail = true;
             options.Password.RequireNonAlphanumeric = false;
         });
-        services.AddIdentityCore<Professor>().AddRoles<AppIdentityRole>().AddEntityFrameworkStores<AppDbContext>();
-        services.AddIdentityCore<Student>().AddRoles<AppIdentityRole>().AddEntityFrameworkStores<AppDbContext>();
-        services.AddIdentityCore<SystemAdmin>().AddRoles<AppIdentityRole>().AddEntityFrameworkStores<AppDbContext>();
-        
+
+        // Настройка только для Student
+        services.AddIdentityCore<Student>()
+            .AddRoles<AppIdentityRole>()
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddTokenProvider<EmailTokenProvider<Student>>("Default");
+
+        // Настройка только для Professor
+        services.AddIdentityCore<Professor>()
+            .AddRoles<AppIdentityRole>()
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddTokenProvider<EmailTokenProvider<Professor>>("Default");
+
+        services.AddIdentityCore<SystemAdmin>()
+            .AddRoles<AppIdentityRole>()
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddTokenProvider<EmailTokenProvider<SystemAdmin>>("Default");
+
         return services;
     }
 
@@ -111,7 +105,8 @@ public static class Startup
 
         services.AddAuthorizationBuilder()
             .AddPolicy("RegistrationComplete", builder => { builder.RequireClaim("registrationComplete", "true"); })
-            .AddPolicy("RegistrationNotComplete", builder => { builder.RequireClaim("registrationComplete", "false"); });
+            .AddPolicy("RegistrationNotComplete",
+                builder => { builder.RequireClaim("registrationComplete", "false"); });
 
         return services;
     }
