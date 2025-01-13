@@ -43,13 +43,15 @@ public class RoleInitializer : IAsyncInitializer
             firstName: "Admin",
             lastName: "Adminov");
 
-        var isAdmin = await userManager.FindByEmailAsync(admin.Email!);
+        var isAdminExists = await userManager.FindByEmailAsync(admin.Email!);
 
-        if (isAdmin == null)
+        if (isAdminExists == null)
         {
             var createAdmin = await userManager.CreateAsync(admin, configuration["AdminOptions:Password"]!);
             if (createAdmin.Succeeded)
             {
+                var token = await userManager.GenerateEmailConfirmationTokenAsync(admin);
+                await userManager.ConfirmEmailAsync(admin, token);
                 await userManager.AddToRoleAsync(admin, nameof(SystemAdmin));
             }
         }
