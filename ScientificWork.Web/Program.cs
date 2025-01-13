@@ -12,10 +12,10 @@ using ScientificWork.Infrastructure.Presentation.Startup.Swagger;
 var builder = WebApplication.CreateBuilder(args);
 var environment = builder.Environment;
 var configuration = builder.Configuration;
-builder.Services.AddApi(environment, configuration)
-                .AddInfrastructure(configuration)
+builder.Services.AddInfrastructure(configuration)
                 .AddDataAccess(configuration)
-                .AddDomain();
+                .AddDomain()
+                .AddApi(environment, configuration);
 
 
 var app = builder.Build();
