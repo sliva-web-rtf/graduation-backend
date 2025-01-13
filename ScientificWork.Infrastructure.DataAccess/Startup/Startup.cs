@@ -24,8 +24,7 @@ public static class Startup
                     databaseConnectionString,
                     sqlOptions => sqlOptions.MigrationsAssembly(typeof(AppDbContext).Assembly.GetName().Name)
                 ));
-        services.AddAsyncInitializer<DatabaseInitializer>()
-            .AddAsyncInitializer<RoleInitializer>();
+        services.AddAsyncInitializer<DatabaseInitializer>();
         
         services.AddScoped<IAppDbContext>(s => s.GetRequiredService<AppDbContext>());
         return services;

@@ -18,6 +18,7 @@ public static class Startup
             .AddApplicationMvc() // MVC
             .AddLogging(new LoggingOptionsSetup(configuration, environment).Setup) // Logging.
             .Configure<AppSettings>(configuration.GetSection("Application")) // Application settings.
+            .AddInitializers()
             .AddHttpClient(); // HTTP client.
         return services;
     }
@@ -56,6 +57,13 @@ public static class Startup
             frontendOrigin
         ).Setup);
         
+        return services;
+    }
+
+    private static IServiceCollection AddInitializers(this IServiceCollection services)
+    {
+        services.AddAsyncInitializer<RoleInitializer>();
+
         return services;
     }
 }
