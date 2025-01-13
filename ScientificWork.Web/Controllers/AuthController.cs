@@ -35,9 +35,9 @@ public class AuthController : ControllerBase
     /// </summary>
     /// <param name="command">Create command</param>
     [HttpPost("create-student")]
-    public async Task CreateStudent(CreateStudentCommand command)
+    public async Task<CreateStudentCommandResult> CreateStudent(CreateStudentCommand command)
     {
-        await mediator.Send(command);
+        return await mediator.Send(command);
     }
     
     /// <summary>
@@ -45,9 +45,9 @@ public class AuthController : ControllerBase
     /// </summary>
     /// <param name="command">Create command</param>
     [HttpPost("create-professor")]
-    public async Task CreateProfessor(CreateProfessorCommand command)
+    public async Task<CreateProfessorCommandResult> CreateProfessor(CreateProfessorCommand command)
     {
-        await mediator.Send(command);
+        return await mediator.Send(command);
     }
 
     /// <summary>
