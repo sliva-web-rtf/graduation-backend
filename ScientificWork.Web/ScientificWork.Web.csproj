@@ -65,12 +65,6 @@
     <Content Include="..\.dockerignore">
       <Link>.dockerignore</Link>
     </Content>
-    <Content Include="..\.env">
-      <Link>.env</Link>
-    </Content>
-    <Content Include="..\docker-compose.yml">
-      <Link>docker-compose.yml</Link>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>

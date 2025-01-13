@@ -65,6 +65,11 @@ jobs:
               -e ConnectionStrings__AppDatabase='${{ secrets.DATABASE_STAGE }}' \
               -e Jwt__SecretKey='${{ secrets.JWT_SECRET_STAGE }}' \
               -e ASPNETCORE_HTTP_PORTS=5000 \
+              -e ASPNETCORE_ENVIRONMENT=Staging \
+              -e Mail__Host='${{ secrets.EMAIL_HOST }}' \
+              -e Mail__Password='${{ secrets.EMAIL_PASSWORD }}' \
+              -e Mail__Username='${{ secrets.EMAIL_USERNAME }}' \
+              -e Mail__FromAddress='${{ secrets.EMAIL_FROMADDRESS }}' \
               cr.yandex/${{ vars.CR_ID }}/app:${{ github.event.inputs.version }}_latest
 
       - name: Remove old Docker image
