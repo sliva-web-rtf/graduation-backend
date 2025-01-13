@@ -67,6 +67,7 @@ public static class Startup
         {
             options.User.RequireUniqueEmail = true;
             options.Password.RequireNonAlphanumeric = false;
+            options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
         });
 
         // Настройка только для Student
