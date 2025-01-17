@@ -58,9 +58,9 @@ public class AuthController : ControllerBase
     [HttpPost]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
-    public async Task<TokenModel> Authenticate([Required] LoginUserCommand command, CancellationToken cancellationToken)
+    public async Task<LoginUserCommandResult> Authenticate([Required] LoginUserCommand command, CancellationToken cancellationToken)
     {
-        return (await mediator.Send(command, cancellationToken)).TokenModel;
+        return await mediator.Send(command, cancellationToken);
     }
 
     /// <summary>
