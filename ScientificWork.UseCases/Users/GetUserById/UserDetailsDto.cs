@@ -31,6 +31,8 @@ public class UserDetailsDto
     required public IList<string> Roles { get; set; }
 
     required public bool IsRegistrationComplete { get; set; }
+    
+    required public bool EmailConfirmed { get; set; }
 
     /// <summary>
     /// Last login date time.
