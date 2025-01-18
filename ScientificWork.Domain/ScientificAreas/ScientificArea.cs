@@ -7,7 +7,7 @@ public class ScientificArea
 {
     public Guid Id { get; set; }
 
-    public string Name { get; private set; }
+    public string Name { get; set; }
 
     private List<ScientificAreaSubsection> scientificAreaSubsections = new();
 
