@@ -20,13 +20,7 @@ public record GetProfileByIdResult
 
     public string? Degree { get; init; }
 
-    public string? Address { get; private set; }
-
-    public string? Post { get; private set; }
-
     public string? About { get; init; }
-    
-    public int? WorkExperienceYears { get; private set; }
 
     public string? SearchStatus { get; set; }
     

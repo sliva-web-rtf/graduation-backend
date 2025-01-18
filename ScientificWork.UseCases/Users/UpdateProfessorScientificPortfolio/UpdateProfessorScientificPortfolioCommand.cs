@@ -19,10 +19,4 @@ public class UpdateProfessorScientificPortfolioCommand : IRequest
     public string? RISCUri { get; init; }
 
     public string? About { get; init; }
-
-    /*public string? Address { get; init; }
-
-    public string? Post { get; init; }
-
-    public int? WorkExperienceYears { get; init; }*/
 }

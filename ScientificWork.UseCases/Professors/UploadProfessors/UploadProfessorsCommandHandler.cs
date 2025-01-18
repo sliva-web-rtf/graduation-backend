@@ -87,7 +87,6 @@ public class UploadProfessorsCommandHandler : IRequestHandler<UploadProfessorsCo
             var scientificAreaSubsections = ws.Cell($"R{i}").GetValue<string>();
             if (!string.IsNullOrWhiteSpace(degree)
                 && !string.IsNullOrWhiteSpace(limit)
-                && !string.IsNullOrWhiteSpace(workExperienceYears)
                 && !string.IsNullOrWhiteSpace(scientificInterests)
                 && !string.IsNullOrWhiteSpace(scientificAreaSubsections))
             {

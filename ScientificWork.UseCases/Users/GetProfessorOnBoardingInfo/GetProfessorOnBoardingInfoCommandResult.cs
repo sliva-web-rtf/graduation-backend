@@ -20,12 +20,6 @@ public class GetProfessorOnBoardingInfoCommandResult
 
     public string? Degree { get; init; }
 
-    public string? Address { get; private set; }
-
-    public string? Post { get; private set; }
-    
-    public int? WorkExperienceYears { get; private set; }
-
     public string? About { get; init; }
 
     public string? SearchStatus { get; set; }

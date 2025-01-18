@@ -15,18 +15,11 @@ namespace ScientificWork.Domain.Professors;
 /// </summary>
 public sealed class Professor : User
 {
-    public string? Address { get; private set; }
-
     public string? Degree { get; private set; }
-
-    public string? Post { get; private set; }
 
     public ProfessorSearchStatus? SearchStatus { get; private set; }
 
-    // ReSharper disable once UnusedAutoPropertyAccessor.Local
     public int? Fullness { get; private set; }
-
-    public int? WorkExperienceYears { get; private set; }
 
     public string? ScopusUri { get; private set; }
 
@@ -136,8 +129,7 @@ public sealed class Professor : User
     {
         if (!FieldValidator.ValidateNotNull(Degree)
             || scientificInterests.Count == 0
-            || scientificAreaSubsections.Count == 0
-            || !WorkExperienceYears.HasValue)
+            || scientificAreaSubsections.Count == 0)
         {
             return false;
         }
