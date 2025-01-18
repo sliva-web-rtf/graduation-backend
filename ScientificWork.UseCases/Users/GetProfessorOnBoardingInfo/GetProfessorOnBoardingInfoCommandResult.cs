@@ -23,9 +23,9 @@ public class GetProfessorOnBoardingInfoCommandResult
     public string? About { get; init; }
 
     public string? SearchStatus { get; set; }
-    
-    public int Limit { get; init; }
-    
+
+    public int? Limit { get; init; }
+
     public List<ScientificAreasDto> ScientificArea { get; init; } = new List<ScientificAreasDto>();
 
     public IList<string> ScientificInterests { get; init; }

@@ -27,9 +27,13 @@ public class UpdateProfileInfoCommandHandler : IRequestHandler<UpdateProfileInfo
             throw new NotFoundException($"User with id {userId} not found.");
         }
 
-        await userManager.SetUserNameAsync(user, request.Email);
-        await userManager.SetEmailAsync(user, request.Email);
-        await userManager.UpdateAsync(user);
+        if (user.Email != request.Email)
+        {
+            // когда реально будем отправлять код юзеру, нужно сначала проверить, что юзера с таким имейлом нет
+            var token = await userManager.GenerateChangeEmailTokenAsync(user, request.Email);
+            ValidateResult(await userManager.ChangeEmailAsync(user, request.Email, token));
+            ValidateResult(await userManager.SetUserNameAsync(user, request.Email));
+        }
 
         user.UpdateProfileInformation(
             firstName: request.FirstName,
@@ -37,7 +41,17 @@ public class UpdateProfileInfoCommandHandler : IRequestHandler<UpdateProfileInfo
             patronymic: request.Patronymic,
             phoneNumber: request.Phone,
             contacts: request.ContactsTg);
-        
+
         await userManager.UpdateAsync(user);
+    }
+
+    private void ValidateResult(IdentityResult result)
+    {
+        if (!result.Succeeded)
+        {
+            var errors = result.Errors
+                .ToDictionary(grouping => grouping.Code, grouping => grouping.Description);
+            throw new ValidationException(errors);
+        }
     }
 }
