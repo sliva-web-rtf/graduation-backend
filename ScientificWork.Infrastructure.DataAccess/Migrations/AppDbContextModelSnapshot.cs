@@ -1040,20 +1040,12 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                 {
                     b.HasBaseType("ScientificWork.Domain.Users.User");
 
-                    b.Property<string>("Address")
-                        .IsUnicode(false)
-                        .HasColumnType("text");
-
                     b.Property<string>("Degree")
                         .IsUnicode(false)
                         .HasColumnType("text");
 
                     b.Property<int?>("Fullness")
                         .HasColumnType("integer");
-
-                    b.Property<string>("Post")
-                        .IsUnicode(false)
-                        .HasColumnType("text");
 
                     b.Property<string>("RISCUri")
                         .IsUnicode(false)
@@ -1066,9 +1058,6 @@ namespace ScientificWork.Infrastructure.DataAccess.Migrations
                     b.Property<string>("URPUri")
                         .IsUnicode(false)
                         .HasColumnType("text");
-
-                    b.Property<int?>("WorkExperienceYears")
-                        .HasColumnType("integer");
 
                     b.ToTable("Professors", (string)null);
                 });
