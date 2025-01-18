@@ -38,17 +38,6 @@ public class UpdateProfileInfoCommandHandler : IRequestHandler<UpdateProfileInfo
             phoneNumber: request.Phone,
             contacts: request.ContactsTg);
         
-        if (!string.IsNullOrWhiteSpace(request.CurrentPassword) && !string.IsNullOrWhiteSpace(request.NewPassword))
-        {
-            var task = await userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
-            if (!task.Succeeded)
-            {
-                var message = task.Errors.FirstOrDefault()?.Description ?? "Current password or new password not valid.";
-                throw new DomainException(message);
-            }
-            user.UpdateLastPasswordChange();
-        }
-        
         await userManager.UpdateAsync(user);
     }
 }
