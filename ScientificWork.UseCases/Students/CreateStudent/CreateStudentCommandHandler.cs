@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using ScientificWork.Domain.Professors;
 using ScientificWork.Infrastructure.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Students;
 using ScientificWork.Infrastructure.Abstractions.Interfaces.Email;
@@ -16,7 +17,8 @@ namespace ScientificWork.UseCases.Students.CreateStudent;
 /// </summary>
 public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand, CreateStudentCommandResult>
 {
-    private readonly UserManager<Student> userManager;
+    private readonly UserManager<Student> studentManager;
+    private readonly UserManager<Professor> professorManager;
     private readonly ILogger<CreateStudentCommandHandler> logger;
     private readonly IHostingEnvironment environment;
     private readonly IEmailSender sender;
@@ -26,13 +28,15 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
     /// Constructor.
     /// </summary>
     public CreateStudentCommandHandler(
-        UserManager<Student> userManager,
+        UserManager<Student> studentManager,
+        UserManager<Professor> professorManager,
         ILogger<CreateStudentCommandHandler> logger,
         IHostingEnvironment environment,
         IEmailSender sender,
         IMediator mediator)
     {
-        this.userManager = userManager;
+        this.studentManager = studentManager;
+        this.professorManager = professorManager;
         this.logger = logger;
         this.environment = environment;
         this.sender = sender;
@@ -47,14 +51,15 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
         ValidateEmail(request.Email);
         ValidatePassword(request.Password);
 
-        if (await userManager.FindByEmailAsync(request.Email) is not null)
+        if (await studentManager.FindByEmailAsync(request.Email) is not null ||
+            await professorManager.FindByEmailAsync(request.Email) is not null)
         {
-            logger.LogInformation($"Student already created. Email: {request.Email}.");
-            throw new DomainException("Student already created.", 409);
+            logger.LogInformation($"User already created. Email: {request.Email}.");
+            throw new DomainException("User already created.", 409);
         }
 
         var student = Student.Create(request.Email, WebRootConstants.DefaultAvatarPath);
-        var result = await userManager.CreateAsync(student, request.Password);
+        var result = await studentManager.CreateAsync(student, request.Password);
 
         if (!result.Succeeded)
         {
@@ -63,11 +68,11 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
             throw new ValidationException(errors);
         }
 
-        await userManager.AddToRoleAsync(student, nameof(Student).ToLower());
+        await studentManager.AddToRoleAsync(student, nameof(Student).ToLower());
 
         student.UpdateLastLogin();
 
-        await userManager.UpdateAsync(student);
+        await studentManager.UpdateAsync(student);
         if (environment.IsProduction())
         {
             await sender.SendEmailAsync(request.Email, $"Your password is {request.Password}", "ScientificWork");
@@ -77,7 +82,7 @@ public class CreateStudentCommandHandler : IRequestHandler<CreateStudentCommand,
 
         await mediator.Send(new SendConfirmationCodeCommand(student, request.Email), cancellationToken);
         logger.LogInformation($"Student confirm email code sent. Id: {student.Id}.");
-        
+
         return new CreateStudentCommandResult(student.Id);
     }
 
