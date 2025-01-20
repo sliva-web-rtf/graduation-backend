@@ -1,11 +1,11 @@
-﻿using System.Text.RegularExpressions;
-using MediatR;
+﻿using MediatR;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using ScientificWork.Infrastructure.Tools.Domain.Exceptions;
 using ScientificWork.Domain.Professors;
-using ScientificWork.Domain.Students;
+using ScientificWork.Domain.Users;
 using ScientificWork.Infrastructure.Abstractions.Interfaces.Email;
 using ScientificWork.UseCases.CodeSender;
 using ScientificWork.UseCases.Common.Settings.WebRoot;
@@ -15,7 +15,7 @@ namespace ScientificWork.UseCases.Professors.CreateProfessor;
 public class CreateProfessorCommandHandler : IRequestHandler<CreateProfessorCommand, CreateProfessorCommandResult>
 {
     private readonly UserManager<Professor> professorManager;
-    private readonly UserManager<Student> studentManager;
+    private readonly UserManager<User> userManager;
     private readonly ILogger<CreateProfessorCommandHandler> logger;
     private readonly IHostingEnvironment environment;
     private readonly IEmailSender sender;
@@ -26,14 +26,14 @@ public class CreateProfessorCommandHandler : IRequestHandler<CreateProfessorComm
     /// </summary>
     public CreateProfessorCommandHandler(
         UserManager<Professor> professorManager,
-        UserManager<Student> studentManager,
+        UserManager<User> userManager,
         ILogger<CreateProfessorCommandHandler> logger,
         IHostingEnvironment environment,
         IEmailSender sender,
         IMediator mediator)
     {
         this.professorManager = professorManager;
-        this.studentManager = studentManager;
+        this.userManager = userManager;
         this.logger = logger;
         this.environment = environment;
         this.sender = sender;
@@ -47,8 +47,7 @@ public class CreateProfessorCommandHandler : IRequestHandler<CreateProfessorComm
         ValidateEmail(request.Email);
         ValidatePassword(request.Password);
 
-        if (await studentManager.FindByEmailAsync(request.Email) is not null ||
-            await professorManager.FindByEmailAsync(request.Email) is not null)
+        if (await userManager.FindByEmailAsync(request.Email) is not null)
         {
             logger.LogInformation($"User already created. Email: {request.Email}.");
             throw new DomainException("User already created.", 409);
