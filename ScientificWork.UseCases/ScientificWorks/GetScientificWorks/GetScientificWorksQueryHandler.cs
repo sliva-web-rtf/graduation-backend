@@ -48,12 +48,6 @@ public class GetScientificWorksQueryHandler : IRequestHandler<GetScientificWorks
                 .Where(x => x.Id == userAccessor.GetCurrentUserId())
                 .Include(x => x.ScientificWorks)
                 .Include(x => x.ProfessorFavoriteScientificWorks);
-            swUser =
-            [
-                ..p
-                    .SelectMany(x => x.ScientificWorks)
-                    .Select(x => x.Id)
-            ];
             favoriteId =
             [
                 ..p
@@ -62,8 +56,7 @@ public class GetScientificWorksQueryHandler : IRequestHandler<GetScientificWorks
                     .Select(x => x.ScientificWorkId)
             ];
             scientificWorks = scientificWorks
-                .Where(x => x.WorkStatus == WorkStatus.NotConfirmed)
-                .Where(x => !swUser.Contains(x.Id));
+                .Where(x => x.WorkStatus == WorkStatus.NotConfirmed);
         }
         else
         {
@@ -71,12 +64,6 @@ public class GetScientificWorksQueryHandler : IRequestHandler<GetScientificWorks
                 .Where(x => x.Id == userAccessor.GetCurrentUserId())
                 .Include(x => x.ScientificWorks)
                 .Include(x => x.StudentFavoriteScientificWorks);
-            swUser =
-            [
-                ..s
-                    .SelectMany(x => x.ScientificWorks)
-                    .Select(x => x.Id)
-            ];
             favoriteId =
             [
                 ..s
@@ -84,8 +71,6 @@ public class GetScientificWorksQueryHandler : IRequestHandler<GetScientificWorks
                     .Where(x => x.IsActive)
                     .Select(x => x.ScientificWorkId)
             ];
-            scientificWorks = scientificWorks
-                .Where(x => !swUser.Contains(x.Id));
         }
 
         if (request.ScientificAreaSubsections != null)
