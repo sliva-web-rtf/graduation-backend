@@ -70,6 +70,7 @@ jobs:
               -e Mail__Password='${{ secrets.EMAIL_PASSWORD }}' \
               -e Mail__Username='${{ secrets.EMAIL_USERNAME }}' \
               -e Mail__FromAddress='${{ secrets.EMAIL_FROMADDRESS }}' \
+              -v /apps/back/stage/wwwroot:/app/wwwroot \
               cr.yandex/${{ vars.CR_ID }}/app:${{ github.event.inputs.version }}_latest
 
       - name: Remove old Docker image
