@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Graduation.Infrastructure.Persistance;
+namespace Graduation.Infrastructure.Persistence;
 
 public static class DependencyInjection
 {

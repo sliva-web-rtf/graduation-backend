@@ -1,6 +1,6 @@
 ﻿using Graduation.Application;
 using Graduation.Infrastructure.Authentication;
-using Graduation.Infrastructure.Persistance;
+using Graduation.Infrastructure.Persistence;
 using Graduation.Web;
 using Graduation.Web.Configuration;
 using Graduation.Web.HealthCheck;

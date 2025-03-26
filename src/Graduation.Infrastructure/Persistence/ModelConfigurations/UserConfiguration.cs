@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Graduation.Infrastructure.Persistance.ModelConfigurations;
+namespace Graduation.Infrastructure.Persistence.ModelConfigurations;
 
 internal class UserConfiguration : IEntityTypeConfiguration<User>
 {

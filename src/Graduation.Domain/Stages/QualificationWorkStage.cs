@@ -1,0 +1,15 @@
+﻿using Graduation.Domain.Common;
+
+namespace Graduation.Domain.Stages;
+
+public class QualificationWorkStage : Entity<Guid>
+{
+    public Guid StageId { get; set; }
+    public Guid QualificationWorkId { get; set; }
+    public Guid CommissionId { get; set; }
+    public string TopicName { get; set; }
+    public StageResult Result { get; set; }
+    public int? Mark { get; set; }
+    public string? Comment { get; set; }
+    public DateTime Date { get; set; }
+}

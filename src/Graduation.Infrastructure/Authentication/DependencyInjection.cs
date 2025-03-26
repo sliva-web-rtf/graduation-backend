@@ -1,6 +1,6 @@
 ﻿using Graduation.Application.Interfaces.Authentication;
 using Graduation.Domain.Users;
-using Graduation.Infrastructure.Persistance;
+using Graduation.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
