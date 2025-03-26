@@ -1,0 +1,30 @@
+﻿using Graduation.Domain.Users;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace Graduation.Infrastructure.Persistance.ModelConfigurations;
+
+internal class UserConfiguration : IEntityTypeConfiguration<User>
+{
+    public void Configure(EntityTypeBuilder<User> builder)
+    {
+        builder.ToTable("Users");
+        builder.HasIndex(e => e.Email, "Email");
+        builder.HasIndex(e => e.NormalizedEmail, "NormalizedEmail").IsUnique();
+        builder.HasIndex(e => e.RemovedAt);
+        
+        ConfigureProperties(builder);
+    }
+
+    private void ConfigureProperties(EntityTypeBuilder<User> builder)
+    {
+        builder.Property(u => u.FirstName)
+            .HasMaxLength(255);
+
+        builder.Property(u => u.LastName)
+            .HasMaxLength(255);
+
+        builder.Property(u => u.Patronymic)
+            .HasMaxLength(255);
+    }
+}

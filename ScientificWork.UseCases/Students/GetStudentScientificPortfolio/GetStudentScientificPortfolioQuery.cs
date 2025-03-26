@@ -1,5 +1,0 @@
-using MediatR;
-
-namespace ScientificWork.UseCases.Students.GetStudentScientificPortfolio;
-
-public record GetStudentScientificPortfolioQuery : IRequest<GetStudentScientificPortfolioQueryResult>;
