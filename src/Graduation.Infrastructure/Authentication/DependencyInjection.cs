@@ -25,6 +25,7 @@ public static class DependencyInjection
             .AddJwt(configuration)
             .AddSingleton<IJsonHelper, SystemTextJsonHelper>()
             .AddScoped<IAuthenticationTokenService, SystemJwtTokenService>()
+            .AddScoped<IAuthenticationService, AuthenticationService>()
             .AddScoped<ILoggedUserAccessor, LoggedUserAccessor>();
         return services;
     }

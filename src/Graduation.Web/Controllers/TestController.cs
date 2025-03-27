@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Graduation.Application.Users.CreateUser;
+using Graduation.Application.Users.LoginUser;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Graduation.Web.Controllers;
 
@@ -7,9 +11,29 @@ namespace Graduation.Web.Controllers;
 [ApiExplorerSettings(GroupName = "test")]
 public class TestController : ControllerBase
 {
-    [HttpGet]
-    public async Task<ActionResult> Test()
+    private readonly IMediator mediator;
+
+    public TestController(IMediator mediator)
     {
-        return await Task.FromResult(Ok());
+        this.mediator = mediator;
+    }
+
+    [HttpPost("create")]
+    public async Task<IActionResult> CreateUser(CreateUserCommand command)
+    {
+        return Ok(await mediator.Send(command));
+    }
+    
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(LoginUserCommand command)
+    {
+        return Ok(await mediator.Send(command));
+    }
+
+    [HttpGet("check")]
+    [Authorize]
+    public async Task<IActionResult> Check()
+    {
+        return Ok();
     }
 }

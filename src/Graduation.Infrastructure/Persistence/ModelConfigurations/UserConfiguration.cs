@@ -11,7 +11,6 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
         builder.ToTable("Users");
         builder.HasIndex(e => e.Email, "Email");
         builder.HasIndex(e => e.NormalizedEmail, "NormalizedEmail").IsUnique();
-        builder.HasIndex(e => e.RemovedAt);
         
         ConfigureProperties(builder);
     }

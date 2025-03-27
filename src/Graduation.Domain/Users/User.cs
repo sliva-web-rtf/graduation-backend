@@ -5,24 +5,52 @@ namespace Graduation.Domain.Users;
 
 public class User : IdentityUser<Guid>
 {
-    public string? FirstName { get; protected set; }
+    public string? FirstName { get; set; }
 
-    public string? LastName { get; protected set; }
+    public string? LastName { get; set; }
 
-    public string? Patronymic { get; protected set; }
+    public string? Patronymic { get; set; }
 
     public string FullName => string.Join(' ', FirstName, LastName, Patronymic);
 
-    public DateTime? RemovedAt { get; protected set; }
+    public string? Contacts { get; set; }
 
-    public string? Contacts { get; protected set; }
+    public string? About { get; set; }
 
-    public string? About { get; protected set; }
+    public UserStatus UserStatus { get; set; }
 
-    public UserStatus UserStatus { get; protected set; }
-
-    protected User(Guid id)
+    public User(Guid id)
     {
         Id = id;
+        UserStatus = UserStatus.Active;
+    }
+
+    public static User Create(Guid id,
+        string email,
+        string firstName,
+        string lastName,
+        string patronymic,
+        string? contacts,
+        string? about)
+    {
+        var user = new User(id);
+        user.UpdateProfileInfo(email, firstName, lastName, patronymic, contacts, about);
+        return user;
+    }
+
+    public void UpdateProfileInfo(string email,
+        string firstName,
+        string lastName,
+        string patronymic,
+        string? contacts,
+        string? about)
+    {
+        Email = email;
+        UserName = email;
+        FirstName = firstName;
+        LastName = lastName;
+        Patronymic = patronymic;
+        Contacts = contacts;
+        About = about;
     }
 }

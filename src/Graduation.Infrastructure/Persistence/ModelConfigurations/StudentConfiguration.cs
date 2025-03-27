@@ -9,6 +9,8 @@ public class StudentConfiguration :  IEntityTypeConfiguration<Student>
 {
     public void Configure(EntityTypeBuilder<Student> builder)
     {
+        builder.ToTable("Students");
+        
         builder.HasOne<AcademicGroup>().WithMany().HasForeignKey(x => x.AcademicGroupId);
     }
 }
