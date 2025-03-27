@@ -1,5 +1,6 @@
 ﻿using Graduation.Application;
 using Graduation.Infrastructure;
+using Graduation.Infrastructure;
 using Graduation.Infrastructure.Authentication;
 using Graduation.Infrastructure.Persistence;
 using Graduation.Web;
@@ -19,6 +20,7 @@ builder.Services.AddApi(environment, configuration)
     .AddAuthentication(configuration)
     .AddInfrastructure()
     .AddApplication();
+    .AddValidation();
 
 
 var app = builder.Build();
