@@ -17,6 +17,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Creat
     public async Task<CreateUserCommandResult> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         var user = User.Create(Guid.NewGuid(),
+            request.UserName,
             request.Email,
             request.FirstName,
             request.LastName,

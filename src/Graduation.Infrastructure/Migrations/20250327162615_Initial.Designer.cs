@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Graduation.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250327090030_Initial")]
+    [Migration("20250327162615_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -373,8 +373,11 @@ namespace Graduation.Infrastructure.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("Mark")
-                        .HasColumnType("integer");
+                    b.Property<bool>("IsCommand")
+                        .HasColumnType("boolean");
+
+                    b.Property<decimal?>("Mark")
+                        .HasColumnType("numeric");
 
                     b.Property<Guid>("QualificationWorkId")
                         .HasColumnType("uuid");

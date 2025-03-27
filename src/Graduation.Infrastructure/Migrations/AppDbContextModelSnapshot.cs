@@ -370,8 +370,11 @@ namespace Graduation.Infrastructure.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("Mark")
-                        .HasColumnType("integer");
+                    b.Property<bool>("IsCommand")
+                        .HasColumnType("boolean");
+
+                    b.Property<decimal?>("Mark")
+                        .HasColumnType("numeric");
 
                     b.Property<Guid>("QualificationWorkId")
                         .HasColumnType("uuid");

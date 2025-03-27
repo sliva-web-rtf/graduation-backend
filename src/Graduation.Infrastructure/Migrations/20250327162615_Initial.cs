@@ -632,7 +632,8 @@ namespace Graduation.Infrastructure.Migrations
                     CommissionId = table.Column<Guid>(type: "uuid", nullable: false),
                     TopicName = table.Column<string>(type: "text", nullable: false),
                     Result = table.Column<int>(type: "integer", nullable: false),
-                    Mark = table.Column<int>(type: "integer", nullable: true),
+                    Mark = table.Column<decimal>(type: "numeric", nullable: true),
+                    IsCommand = table.Column<bool>(type: "boolean", nullable: false),
                     Comment = table.Column<string>(type: "text", nullable: true),
                     Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
