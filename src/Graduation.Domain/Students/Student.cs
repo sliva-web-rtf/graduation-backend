@@ -12,8 +12,9 @@ public class Student : User
     {
     }
 
-    public static Student Create(Guid id,
-        string email,
+    public new static Student Create(Guid id,
+        string userName,
+        string? email,
         string firstName,
         string lastName,
         string patronymic,
@@ -21,7 +22,7 @@ public class Student : User
         string? about)
     {
         var student = new Student(id);
-        student.UpdateProfileInfo(email, firstName, lastName, patronymic, contacts, about);
+        student.UpdateProfileInfo(userName, email, firstName, lastName, patronymic, contacts, about);
         return student;
     }
 }

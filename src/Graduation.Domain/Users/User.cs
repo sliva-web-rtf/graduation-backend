@@ -26,7 +26,8 @@ public class User : IdentityUser<Guid>
     }
 
     public static User Create(Guid id,
-        string email,
+        string userName,
+        string? email,
         string firstName,
         string lastName,
         string patronymic,
@@ -34,19 +35,20 @@ public class User : IdentityUser<Guid>
         string? about)
     {
         var user = new User(id);
-        user.UpdateProfileInfo(email, firstName, lastName, patronymic, contacts, about);
+        user.UpdateProfileInfo(userName, email, firstName, lastName, patronymic, contacts, about);
         return user;
     }
 
-    public void UpdateProfileInfo(string email,
+    public void UpdateProfileInfo(string userName,
+        string? email,
         string firstName,
         string lastName,
         string patronymic,
         string? contacts,
         string? about)
     {
+        UserName = userName;
         Email = email;
-        UserName = email;
         FirstName = firstName;
         LastName = lastName;
         Patronymic = patronymic;
