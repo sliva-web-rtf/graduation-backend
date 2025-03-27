@@ -16,7 +16,8 @@ configuration.AddJsonFiles(environment);
 builder.Services.AddApi(environment, configuration)
     .AddDataAccess(configuration)
     .AddAuthentication(configuration)
-    .AddApplication();
+    .AddApplication()
+    .AddValidation();
 
 
 var app = builder.Build();
