@@ -11,15 +11,13 @@ public record LoginUserCommand : IRequest<LoginUserCommandResult>
     /// <summary>
     /// Email.
     /// </summary>
-    [EmailAddress]
     [Required]
-    [DataType(DataType.EmailAddress)]
-    required public string Email { get; init; }
+    public required string UserName { get; init; }
 
     /// <summary>
     /// Password.
     /// </summary>
     [Required]
     [DataType(DataType.Password)]
-    required public string Password { get; init; }
+    public required string Password { get; init; }
 }

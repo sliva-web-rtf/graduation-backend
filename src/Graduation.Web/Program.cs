@@ -1,4 +1,5 @@
 ﻿using Graduation.Application;
+using Graduation.Infrastructure;
 using Graduation.Infrastructure.Authentication;
 using Graduation.Infrastructure.Persistence;
 using Graduation.Web;
@@ -16,8 +17,8 @@ configuration.AddJsonFiles(environment);
 builder.Services.AddApi(environment, configuration)
     .AddDataAccess(configuration)
     .AddAuthentication(configuration)
-    .AddApplication()
-    .AddValidation();
+	.AddInfrastructure()
+	.AddValidation();
 
 
 var app = builder.Build();
