@@ -1,5 +1,5 @@
-﻿using Graduation.Application.Interfaces.Services;
-using Graduation.Domain.Users;
+﻿using Graduation.Domain.Users;
+using Graduation.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
@@ -28,9 +28,10 @@ public class ApplicationUserStore : UserStore<User, AppIdentityRole, AppDbContex
         };
     }
 
-    protected override Task<ApplicationUserRole?> FindUserRoleAsync(Guid userId, Guid roleId, CancellationToken cancellationToken)
+    protected override async Task<ApplicationUserRole?> FindUserRoleAsync(Guid userId, Guid roleId, CancellationToken cancellationToken)
     {
         var year = currentYearProvider.GetCurrentYear();
-        return Context.Set<ApplicationUserRole>().FindAsync([userId, roleId, year], cancellationToken).AsTask();
+        var role = await Context.Set<ApplicationUserRole>().FindAsync([userId, roleId, year], cancellationToken).AsTask();
+        return role;
     }
 }

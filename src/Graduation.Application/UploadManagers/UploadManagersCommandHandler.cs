@@ -1,19 +1,23 @@
-using ClosedXML.Excel;
-using Graduation.Application.Interfaces.Authentication;
-using Graduation.Application.Users.CreateUser;
 using MediatR;
+using ClosedXML.Excel;
+using Graduation.Application.Users.CreateUser;
+using Graduation.Application.Users.AddUserToRole;
+using Graduation.Application.Interfaces.Authentication;
+using Graduation.Domain;
+using Graduation.Domain.Users;
+using Microsoft.AspNetCore.Identity;
 
 namespace Graduation.Application.UploadManagers;
 
 public class UploadManagersCommandHandler : IRequestHandler<UploadManagersCommand>
 {
     private readonly ISender sender;
-    private readonly ILoggedUserAccessor userAccessor;
+    private readonly UserManager<User> userManager;
 
-    public UploadManagersCommandHandler(ISender sender, ILoggedUserAccessor userAccessor)
+    public UploadManagersCommandHandler(ISender sender, ILoggedUserAccessor userAccessor, UserManager<User> userManager)
     {
         this.sender = sender;
-        this.userAccessor = userAccessor;
+        this.userManager = userManager;
     }
 
     public async Task Handle(UploadManagersCommand request, CancellationToken cancellationToken)
@@ -58,17 +62,25 @@ public class UploadManagersCommandHandler : IRequestHandler<UploadManagersComman
                 (lastName, firstName, patronymic) = (splitFullName[0], splitFullName[1], splitFullName[2]);
             }
 
-            var result =
-                await sender.Send(new CreateUserCommand(fullName.Replace(" ", ""),
-                        null,
-                        "Aa1234#", firstName, lastName, patronymic, parsedContacts, null),
-                    cancellationToken);
+            var userName = fullName.Replace(" ", "");
+            var user = await userManager.FindByNameAsync(userName);
+            var userId = user.Id;
 
-            if (result.UserId == default)
+            if (user.Equals(null))
             {
-                continue;
+                userId =
+                    (await sender.Send(new CreateUserCommand(userName,
+                            null,
+                            "Aa1234#", firstName, lastName, patronymic, parsedContacts, null),
+                        cancellationToken)).UserId;
             }
-            userAccessor.UserId = result.UserId;
+            user = userManager.FindByIdAsync(userId.ToString()).Result;
+
+            if (!await userManager.IsInRoleAsync(user, WellKnownRoles.Supervisor))
+            {
+                await sender.Send(new AddUserToRoleCommand(userId, WellKnownRoles.Supervisor),
+                    cancellationToken);
+            }
         }
     }
 }

@@ -8,4 +8,8 @@ public class AcademicGroup : Entity<Guid>
     public string? AcademicProgram { get; set; }
     public Guid? CommissionId { get; set; }
     public string Year { get; set; }
+
+    public AcademicGroup(Guid id) : base(id)
+    {
+    }
 }
