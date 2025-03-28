@@ -15,4 +15,8 @@ public class AcademicGroup : Entity<Guid>
     public Guid? FormattingReviewerId { get; set; }
     public User? FormattingReviewer { get; set; }
     public string Year { get; set; }
+
+    public AcademicGroup(Guid id) : base(id)
+    {
+    }
 }

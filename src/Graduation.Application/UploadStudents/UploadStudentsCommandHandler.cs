@@ -1,19 +1,38 @@
-using ClosedXML.Excel;
-using Graduation.Application.Interfaces.Authentication;
-using Graduation.Application.Users.CreateUser;
 using MediatR;
+using ClosedXML.Excel;
+using Graduation.Application.Users.CreateUser;
+using Graduation.Application.Users.AddUserToRole;
+using Graduation.Application.Interfaces.Services;
+using Graduation.Application.Interfaces.DataAccess;
+using Graduation.Application.Interfaces.Authentication;
+using Graduation.Domain;
+using Graduation.Domain.Users;
+using Graduation.Domain.AcademicGroups;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Graduation.Application.UploadStudents;
 
 public class UploadStudentsCommandHandler : IRequestHandler<UploadStudentsCommand>
 {
+    private readonly ICurrentYearProvider currentYearProvider;
     private readonly ISender sender;
     private readonly ILoggedUserAccessor userAccessor;
+    private readonly UserManager<User> userManager;
+    private readonly IAppDbContext dbContext;
 
-    public UploadStudentsCommandHandler(ISender sender, ILoggedUserAccessor userAccessor)
+    public UploadStudentsCommandHandler(
+        ISender sender,
+        ILoggedUserAccessor userAccessor,
+        UserManager<User> userManager,
+        IAppDbContext dbContext,
+        ICurrentYearProvider currentYearProvider)
     {
         this.sender = sender;
         this.userAccessor = userAccessor;
+        this.userManager = userManager;
+        this.dbContext = dbContext;
+        this.currentYearProvider = currentYearProvider;
     }
 
     public async Task Handle(UploadStudentsCommand request, CancellationToken cancellationToken)
@@ -56,18 +75,46 @@ public class UploadStudentsCommandHandler : IRequestHandler<UploadStudentsComman
                 {
                     (lastName, firstName, patronymic) = (splitFullName[0], splitFullName[1], splitFullName[2]);
                 }
-                
-                var result =
-                    await sender.Send(new CreateUserCommand(fullName.Replace(" ", "") + studentsGroup.Replace("-", ""),
-                            null,
-                            "Aa1234#", firstName, lastName, patronymic, null, null),
-                        cancellationToken);
-                
-                if (result.UserId == default)
+
+                var userName = fullName.Replace(" ", "") + studentsGroup.Replace("-", "");
+
+                var user = await userManager.FindByNameAsync(userName);
+                var userId = user.Id;
+
+                if (user.Equals(null))
                 {
-                    continue;
+                    userId =
+                        (await sender.Send(new CreateUserCommand(userName,
+                                null,
+                                "Aa1234#", firstName, lastName, patronymic, null, null),
+                            cancellationToken)).UserId;
                 }
-                userAccessor.UserId = result.UserId;
+
+                user = userManager.FindByIdAsync(userId.ToString()).Result;
+
+                if (!await userManager.IsInRoleAsync(user, WellKnownRoles.Student))
+                {
+                    await sender.Send(new AddUserToRoleCommand(userId, WellKnownRoles.Student),
+                        cancellationToken);
+                }
+
+                var academicGroup = dbContext.AcademicGroups.SingleOrDefault(x => x.Name.Equals(studentsGroup));
+
+                if (academicGroup == null)
+                {
+                    academicGroup = new AcademicGroup(Guid.NewGuid())
+                    {
+                        Name = studentsGroup,
+                        Year = currentYearProvider.GetCurrentYear()
+                    };
+                    dbContext.AcademicGroups.Add(academicGroup);
+                    await dbContext.SaveChangesAsync(cancellationToken);
+                }
+
+                var student = await dbContext.Students.FirstOrDefaultAsync(x => x.Id == userId,
+                    cancellationToken);
+                student.AcademicGroupId = academicGroup.Id;
+                await dbContext.SaveChangesAsync(cancellationToken);
             }
         }
     }
