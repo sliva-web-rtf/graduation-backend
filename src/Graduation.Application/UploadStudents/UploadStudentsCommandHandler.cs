@@ -9,7 +9,7 @@ public class UploadStudentsCommandHandler : IRequestHandler<UploadStudentsComman
 {
     private readonly ISender sender;
     private readonly ILoggedUserAccessor userAccessor;
-    
+
     public UploadStudentsCommandHandler(ISender sender, ILoggedUserAccessor userAccessor)
     {
         this.sender = sender;
@@ -22,29 +22,53 @@ public class UploadStudentsCommandHandler : IRequestHandler<UploadStudentsComman
         await request.File.CopyToAsync(stream, cancellationToken);
 
         using var workbook = new XLWorkbook(stream);
-        var ws = workbook.Worksheet(1);
-        var countRow = ws.Rows().Count();
-        var studentsGroup = ws.Cell("B2").GetValue<string>();
-        for (var i = 4; i <= countRow; i++)
-        {
-            var fullName = ws.Cell($"D{i}").GetValue<string>();
-            var role = ws.Cell($"G{i}").GetValue<string>();
+        var countWs = workbook.Worksheets.Count;
 
-            if (string.IsNullOrWhiteSpace(fullName) || string.IsNullOrWhiteSpace(role))
+        for (var k = 4; k <= 23; k++)
+        {
+            var ws = workbook.Worksheet(k);
+            var countRow = ws.Rows().Count();
+            var studentsGroup = ws.Cell("B2").GetValue<string>();
+
+            if (string.IsNullOrWhiteSpace(studentsGroup))
             {
                 continue;
             }
-            
-            var splitFullName = fullName.Split();
-            var (lastName, firstName, patronymic) = (splitFullName[0], splitFullName[1], splitFullName[2]);
-            var result =
-                await sender.Send(new CreateUserCommand(fullName.Replace(" ", "") + studentsGroup.Replace("-", ""), null, "Aa1234#", firstName, lastName, patronymic, null, role),
-                    cancellationToken);
-            if (result.UserId == default)
+
+            for (var i = 4; i <= countRow; i++)
             {
-                continue;
+                var fullName = ws.Cell($"D{i}").GetValue<string>().Trim();
+                var role = ws.Cell($"G{i}").GetValue<string>();
+
+                if (string.IsNullOrWhiteSpace(fullName) || string.IsNullOrWhiteSpace(role))
+                {
+                    continue;
+                }
+
+                var splitFullName = fullName.Split();
+                var (lastName, firstName, patronymic) = (string.Empty, string.Empty, string.Empty);
+
+                if (splitFullName.Length < 3)
+                {
+                    (lastName, firstName) = (splitFullName[0], splitFullName[1]);
+                }
+                else
+                {
+                    (lastName, firstName, patronymic) = (splitFullName[0], splitFullName[1], splitFullName[2]);
+                }
+                
+                var result =
+                    await sender.Send(new CreateUserCommand(fullName.Replace(" ", "") + studentsGroup.Replace("-", ""),
+                            null,
+                            "Aa1234#", firstName, lastName, patronymic, null, null),
+                        cancellationToken);
+                
+                if (result.UserId == default)
+                {
+                    continue;
+                }
+                userAccessor.UserId = result.UserId;
             }
-            userAccessor.UserId = result.UserId;
         }
     }
 }
