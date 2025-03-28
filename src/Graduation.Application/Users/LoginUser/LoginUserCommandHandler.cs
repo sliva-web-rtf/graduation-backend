@@ -36,15 +36,15 @@ internal class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Login
     public async Task<LoginUserCommandResult> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
         // Password sign in.
-        var result = await signInManager.PasswordSignInAsync(request.Email, request.Password,
+        var result = await signInManager.PasswordSignInAsync(request.UserName, request.Password,
             false, false);
-        ValidateSignInResult(result, request.Email);
+        ValidateSignInResult(result, request.UserName);
 
         // Get user and log.
-        var user = await signInManager.UserManager.FindByEmailAsync(request.Email);
+        var user = await signInManager.UserManager.FindByNameAsync(request.UserName);
         if (user == null)
         {
-            throw new NotFoundException($"User with email {request.Email} not found.");
+            throw new NotFoundException($"User with email {request.UserName} not found.");
         }
 
         logger.LogInformation("User with Id {Id} has logged in.", user.Id);

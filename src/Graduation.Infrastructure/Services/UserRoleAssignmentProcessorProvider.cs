@@ -1,6 +1,5 @@
 ﻿using Graduation.Application.Interfaces.Services;
 using Graduation.Domain;
-using Graduation.Infrastructure.Authentication;
 
 namespace Graduation.Infrastructure.Services;
 
