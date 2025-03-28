@@ -1,4 +1,5 @@
-﻿using Graduation.Application.Users.CreateUser;
+﻿using Graduation.Application.Users.AddUserToRole;
+using Graduation.Application.Users.CreateUser;
 using Graduation.Application.Users.LoginUser;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -28,6 +29,13 @@ public class TestController : ControllerBase
     public async Task<IActionResult> Login(LoginUserCommand command)
     {
         return Ok(await mediator.Send(command));
+    }
+    
+    [HttpPost("addtorole")]
+    public async Task<IActionResult> AddToRole(AddUserToRoleCommand command)
+    {
+        await mediator.Send(command);
+        return Ok();
     }
 
     [HttpGet("check")]

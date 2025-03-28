@@ -1,28 +1,33 @@
-﻿using Graduation.Domain.Users;
+﻿using Graduation.Domain.Common;
+using Graduation.Domain.Users;
 
 namespace Graduation.Domain.Students;
 
-public class Student : User
+public class Student : Entity<Guid>
 {
     public string? Comment { get; set; }
     public StudentStatus Status { get; set; }
-    public Guid AcademicGroupId { get; set; }
+    public Guid? AcademicGroupId { get; set; }
+    public User User { get; set; }
 
-    private Student(Guid id) : base(id)
+    private Student(User user)
     {
+        User = user;
     }
 
-    public new static Student Create(Guid id,
-        string userName,
-        string? email,
-        string firstName,
-        string lastName,
-        string patronymic,
-        string? contacts,
-        string? about)
+    public static Student Create(User user)
     {
-        var student = new Student(id);
-        student.UpdateProfileInfo(userName, email, firstName, lastName, patronymic, contacts, about);
+        var student = new Student(user)
+        {
+            Status = StudentStatus.Active
+        };
+
         return student;
     }
+
+#pragma warning disable CS8618, CS9264
+    private Student()
+    {
+    }
+#pragma warning restore CS8618, CS9264
 }

@@ -34,7 +34,8 @@ public static class DependencyInjection
     {
         services.Configure<IdentityOptions>(options =>
         {
-            options.User.RequireUniqueEmail = true;
+            options.User.RequireUniqueEmail = false;
+            options.User.AllowedUserNameCharacters = null;
             options.Password.RequireNonAlphanumeric = false;
             options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
         });
@@ -42,6 +43,8 @@ public static class DependencyInjection
         services.AddIdentity<User, AppIdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
+
+        services.AddScoped<IUserStore<User>, ApplicationUserStore>();
 
         return services;
     }

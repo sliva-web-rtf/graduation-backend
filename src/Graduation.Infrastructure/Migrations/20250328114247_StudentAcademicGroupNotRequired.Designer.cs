@@ -3,6 +3,7 @@ using System;
 using Graduation.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Graduation.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250328114247_StudentAcademicGroupNotRequired")]
+    partial class StudentAcademicGroupNotRequired
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -427,27 +430,6 @@ namespace Graduation.Infrastructure.Migrations
                     b.ToTable("Stages");
                 });
 
-            modelBuilder.Entity("Graduation.Domain.Students.Student", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("AcademicGroupId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AcademicGroupId");
-
-                    b.ToTable("Students", (string)null);
-                });
-
             modelBuilder.Entity("Graduation.Domain.Topics.Topic", b =>
                 {
                     b.Property<Guid>("Id")
@@ -652,6 +634,8 @@ namespace Graduation.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Users", (string)null);
+
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("Graduation.Domain.Years.Year", b =>
@@ -772,6 +756,24 @@ namespace Graduation.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("Graduation.Domain.Students.Student", b =>
+                {
+                    b.HasBaseType("Graduation.Domain.Users.User");
+
+                    b.Property<Guid?>("AcademicGroupId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.HasIndex("AcademicGroupId");
+
+                    b.ToTable("Students", (string)null);
                 });
 
             modelBuilder.Entity("Graduation.Domain.AcademicGroups.AcademicGroup", b =>
@@ -976,21 +978,6 @@ namespace Graduation.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Graduation.Domain.Students.Student", b =>
-                {
-                    b.HasOne("Graduation.Domain.AcademicGroups.AcademicGroup", null)
-                        .WithMany()
-                        .HasForeignKey("AcademicGroupId");
-
-                    b.HasOne("Graduation.Domain.Users.User", "User")
-                        .WithOne()
-                        .HasForeignKey("Graduation.Domain.Students.Student", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Graduation.Domain.Topics.Topic", b =>
                 {
                     b.HasOne("Graduation.Domain.Years.Year", null)
@@ -1089,6 +1076,19 @@ namespace Graduation.Infrastructure.Migrations
                     b.HasOne("Graduation.Domain.Users.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Graduation.Domain.Students.Student", b =>
+                {
+                    b.HasOne("Graduation.Domain.AcademicGroups.AcademicGroup", null)
+                        .WithMany()
+                        .HasForeignKey("AcademicGroupId");
+
+                    b.HasOne("Graduation.Domain.Users.User", null)
+                        .WithOne()
+                        .HasForeignKey("Graduation.Domain.Students.Student", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

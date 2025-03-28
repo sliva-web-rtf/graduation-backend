@@ -42,7 +42,6 @@ public class AppDbContext
     public DbSet<QualificationWork> QualificationWork { get; private set; }
     public DbSet<Request> Request { get; private set; }
     public DbSet<TopicChangeRequest> TopicChangeRequest { get; private set; }
-
     public DbSet<DataProtectionKey> DataProtectionKeys { get; private set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
