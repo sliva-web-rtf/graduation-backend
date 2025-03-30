@@ -43,14 +43,6 @@ public class TestController : ControllerBase
         await mediator.Send(command);
         return Ok();
     }
-    
-    [Authorize]
-    [HttpPost("get-topics")]
-    public async Task<IActionResult> GetTopics(bool includeOwnedTopics)
-    {
-        var command = new GetTopicsCommand(userAccessor.GetCurrentUserId(), includeOwnedTopics);
-        return Ok(await mediator.Send(command));
-    }
 
     [HttpGet("check")]
     [Authorize(Roles = WellKnownRoles.Student)]

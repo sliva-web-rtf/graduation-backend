@@ -1,6 +1,6 @@
 ﻿namespace Graduation.Application.Topics.GetTopics;
 
-public record GetTopicsCommandResult(IReadOnlyList<GetTopicsCommandTopic> Topics);
+public record GetTopicsCommandResult(IReadOnlyList<GetTopicsCommandTopic> Topics, int PagesCount);
 
 public record GetTopicsCommandTopic(
     Guid Id,
