@@ -29,12 +29,12 @@ public class AuthController : ControllerBase
 
     [HttpGet]
     [Authorize]
-    public async Task<UserDetailsDto> GetMe(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetMe(CancellationToken cancellationToken)
     {
         var request = new GetUserByIdQuery
         {
             UserId = User.GetCurrentUserId()
         };
-        return await mediator.Send(request, cancellationToken);
+        return Ok(await mediator.Send(request, cancellationToken));
     }
 }

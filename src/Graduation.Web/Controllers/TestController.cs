@@ -1,12 +1,6 @@
-﻿using AutoMapper;
-using Graduation.Application.Interfaces.Authentication;
-using Graduation.Application.Topics.GetTopics;
-using Graduation.Application.Users.AddUserToRole;
+﻿using Graduation.Application.Users.AddUserToRole;
 using Graduation.Application.Users.CreateUser;
-using Graduation.Application.Users.LoginUser;
-using Graduation.Domain;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Graduation.Web.Controllers;

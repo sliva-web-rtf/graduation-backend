@@ -7,21 +7,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Graduation.Application.Users.LoginUser;
 
-/// <summary>
-/// Handler for <see cref="LoginUserCommand"/>.
-/// </summary>
 internal class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, LoginUserCommandResult>
 {
-    private readonly SignInManager<User> signInManager;
     private readonly IAuthenticationService authService;
     private readonly ILogger<LoginUserCommandHandler> logger;
+    private readonly SignInManager<User> signInManager;
 
-    /// <summary>
-    /// Constructor.
-    /// </summary>
-    /// <param name="signInManager">Sign in manager.</param>
-    /// <param name="authService">Token service.</param>
-    /// <param name="logger">Logger.</param>
     public LoginUserCommandHandler(
         SignInManager<User> signInManager,
         IAuthenticationService authService,
@@ -32,20 +23,14 @@ internal class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Login
         this.logger = logger;
     }
 
-    /// <inheritdoc />
     public async Task<LoginUserCommandResult> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
-        // Password sign in.
         var result = await signInManager.PasswordSignInAsync(request.UserName, request.Password,
             false, false);
         ValidateSignInResult(result, request.UserName);
 
-        // Get user and log.
         var user = await signInManager.UserManager.FindByNameAsync(request.UserName);
-        if (user == null)
-        {
-            throw new NotFoundException($"User with email {request.UserName} not found.");
-        }
+        if (user == null) throw new NotFoundException($"User with email {request.UserName} not found.");
 
         logger.LogInformation("User with Id {Id} has logged in.", user.Id);
 
@@ -57,15 +42,9 @@ internal class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Login
     {
         if (!signInResult.Succeeded)
         {
-            if (signInResult.IsNotAllowed)
-            {
-                throw new DomainException($"User {email} is not allowed to Sign In.");
-            }
+            if (signInResult.IsNotAllowed) throw new DomainException($"User {email} is not allowed to Sign In.");
 
-            if (signInResult.IsLockedOut)
-            {
-                throw new DomainException($"User {email} is locked out.");
-            }
+            if (signInResult.IsLockedOut) throw new DomainException($"User {email} is locked out.");
 
             throw new DomainException("Email or password is incorrect.");
         }
