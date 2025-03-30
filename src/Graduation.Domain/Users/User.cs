@@ -11,7 +11,7 @@ public class User : IdentityUser<Guid>
 
     public string? Patronymic { get; set; }
 
-    public string FullName => string.Join(' ', FirstName, LastName, Patronymic);
+    public string FullName => string.Join(' ', LastName, FirstName, Patronymic);
 
     public string? Contacts { get; set; }
 

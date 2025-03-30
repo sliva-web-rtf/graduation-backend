@@ -3,6 +3,7 @@ using System;
 using Graduation.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Graduation.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250330110940_AddedTopicOwnerId")]
+    partial class AddedTopicOwnerId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +53,7 @@ namespace Graduation.Infrastructure.Migrations
 
                     b.HasIndex("Year");
 
-                    b.ToTable("AcademicGroups", (string)null);
+                    b.ToTable("AcademicGroups");
                 });
 
             modelBuilder.Entity("Graduation.Domain.AcademicPrograms.AcademicProgram", b =>
@@ -71,7 +74,7 @@ namespace Graduation.Infrastructure.Migrations
 
                     b.HasIndex("Year");
 
-                    b.ToTable("AcademicPrograms", (string)null);
+                    b.ToTable("AcademicPrograms");
                 });
 
             modelBuilder.Entity("Graduation.Domain.AcademicPrograms.TopicAcademicProgram", b =>
@@ -86,7 +89,7 @@ namespace Graduation.Infrastructure.Migrations
 
                     b.HasIndex("AcademicProgramId");
 
-                    b.ToTable("TopicAcademicPrograms", (string)null);
+                    b.ToTable("TopicAcademicPrograms");
                 });
 
             modelBuilder.Entity("Graduation.Domain.Commissions.Commission", b =>
@@ -112,7 +115,7 @@ namespace Graduation.Infrastructure.Migrations
 
                     b.HasIndex("Year");
 
-                    b.ToTable("Commissions", (string)null);
+                    b.ToTable("Commissions");
                 });
 
             modelBuilder.Entity("Graduation.Domain.Commissions.CommissionExpert", b =>
@@ -132,7 +135,7 @@ namespace Graduation.Infrastructure.Migrations
 
                     b.HasIndex("StageId");
 
-                    b.ToTable("CommissionExperts", (string)null);
+                    b.ToTable("CommissionExperts");
                 });
 
             modelBuilder.Entity("Graduation.Domain.Documents.Document", b =>
@@ -166,7 +169,7 @@ namespace Graduation.Infrastructure.Migrations
 
                     b.HasIndex("QualificationWorkId");
 
-                    b.ToTable("Documents", (string)null);
+                    b.ToTable("Documents");
                 });
 
             modelBuilder.Entity("Graduation.Domain.QualificationWorkRoles.QualificationWorkRole", b =>
@@ -187,7 +190,7 @@ namespace Graduation.Infrastructure.Migrations
 
                     b.HasIndex("Year");
 
-                    b.ToTable("QualificationWorkRoles", (string)null);
+                    b.ToTable("QualificationWorkRoles");
                 });
 
             modelBuilder.Entity("Graduation.Domain.QualificationWorks.QualificationWork", b =>
@@ -243,7 +246,7 @@ namespace Graduation.Infrastructure.Migrations
 
                     b.HasIndex("Year");
 
-                    b.ToTable("QualificationWorks", (string)null);
+                    b.ToTable("QualificationWorks");
                 });
 
             modelBuilder.Entity("Graduation.Domain.Requests.Request", b =>
@@ -291,7 +294,7 @@ namespace Graduation.Infrastructure.Migrations
 
                     b.HasIndex("TopicId");
 
-                    b.ToTable("Request", (string)null);
+                    b.ToTable("Request");
                 });
 
             modelBuilder.Entity("Graduation.Domain.Requests.TopicChangeRequest", b =>
@@ -324,7 +327,7 @@ namespace Graduation.Infrastructure.Migrations
 
                     b.HasIndex("QualificationWorkId");
 
-                    b.ToTable("TopicChangeRequest", (string)null);
+                    b.ToTable("TopicChangeRequest");
                 });
 
             modelBuilder.Entity("Graduation.Domain.ScientificInterest.ScientificInterest", b =>
@@ -339,7 +342,7 @@ namespace Graduation.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ScientificInterests", (string)null);
+                    b.ToTable("ScientificInterests");
                 });
 
             modelBuilder.Entity("Graduation.Domain.ScientificInterest.UserScientificInterest", b =>
@@ -354,7 +357,7 @@ namespace Graduation.Infrastructure.Migrations
 
                     b.HasIndex("ScientificInterestId");
 
-                    b.ToTable("UserScientificInterest", (string)null);
+                    b.ToTable("UserScientificInterest");
                 });
 
             modelBuilder.Entity("Graduation.Domain.Skills.Skill", b =>
@@ -369,7 +372,7 @@ namespace Graduation.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Skills", (string)null);
+                    b.ToTable("Skills");
                 });
 
             modelBuilder.Entity("Graduation.Domain.Skills.UserSkill", b =>
@@ -384,7 +387,7 @@ namespace Graduation.Infrastructure.Migrations
 
                     b.HasIndex("SkillId");
 
-                    b.ToTable("UserSkills", (string)null);
+                    b.ToTable("UserSkills");
                 });
 
             modelBuilder.Entity("Graduation.Domain.Stages.QualificationWorkStage", b =>
@@ -429,7 +432,7 @@ namespace Graduation.Infrastructure.Migrations
 
                     b.HasIndex("StageId");
 
-                    b.ToTable("QualificationWorkStages", (string)null);
+                    b.ToTable("QualificationWorkStages");
                 });
 
             modelBuilder.Entity("Graduation.Domain.Stages.Stage", b =>
@@ -456,7 +459,7 @@ namespace Graduation.Infrastructure.Migrations
 
                     b.HasIndex("Year");
 
-                    b.ToTable("Stages", (string)null);
+                    b.ToTable("Stages");
                 });
 
             modelBuilder.Entity("Graduation.Domain.Students.Student", b =>
@@ -499,7 +502,7 @@ namespace Graduation.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("OwnerId")
+                    b.Property<Guid?>("OwnerId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Result")
@@ -515,7 +518,7 @@ namespace Graduation.Infrastructure.Migrations
 
                     b.HasIndex("Year");
 
-                    b.ToTable("Topics", (string)null);
+                    b.ToTable("Topics");
                 });
 
             modelBuilder.Entity("Graduation.Domain.Topics.TopicRequestedRole", b =>
@@ -533,7 +536,7 @@ namespace Graduation.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("TopicRequestedRoles", (string)null);
+                    b.ToTable("TopicRequestedRoles");
                 });
 
             modelBuilder.Entity("Graduation.Domain.Topics.UserRoleTopic", b =>
@@ -553,7 +556,7 @@ namespace Graduation.Infrastructure.Migrations
 
                     b.HasIndex("TopicId");
 
-                    b.ToTable("UserRoleTopics", (string)null);
+                    b.ToTable("UserRoleTopics");
                 });
 
             modelBuilder.Entity("Graduation.Domain.Users.AppIdentityRole", b =>
@@ -618,7 +621,7 @@ namespace Graduation.Infrastructure.Migrations
 
                     b.HasIndex("Year");
 
-                    b.ToTable("SupervisorLimits", (string)null);
+                    b.ToTable("SupervisorLimits");
                 });
 
             modelBuilder.Entity("Graduation.Domain.Users.User", b =>
@@ -722,7 +725,7 @@ namespace Graduation.Infrastructure.Migrations
 
                     b.HasKey("YearName");
 
-                    b.ToTable("Years", (string)null);
+                    b.ToTable("Years");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.DataProtection.EntityFrameworkCore.DataProtectionKey", b =>
@@ -741,7 +744,7 @@ namespace Graduation.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DataProtectionKeys", (string)null);
+                    b.ToTable("DataProtectionKeys");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -1079,9 +1082,7 @@ namespace Graduation.Infrastructure.Migrations
                 {
                     b.HasOne("Graduation.Domain.Users.User", null)
                         .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OwnerId");
 
                     b.HasOne("Graduation.Domain.Years.Year", null)
                         .WithMany()

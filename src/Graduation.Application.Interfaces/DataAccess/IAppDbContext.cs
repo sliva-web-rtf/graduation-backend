@@ -40,4 +40,5 @@ public interface IAppDbContext : IDbContextWithSets, IDisposable
     DbSet<TopicChangeRequest> TopicChangeRequest { get; }
     DbSet<ApplicationUserRole> UserRoles { get; }
     DbSet<AppIdentityRole> Roles { get; set; }
+    DbSet<User> Users { get; set; }
 }

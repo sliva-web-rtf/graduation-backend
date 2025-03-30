@@ -1,4 +1,6 @@
-﻿using Graduation.Domain.Topics;
+﻿using Graduation.Domain.AcademicPrograms;
+using Graduation.Domain.Topics;
+using Graduation.Domain.Users;
 using Graduation.Domain.Years;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -11,6 +13,8 @@ public class TopicConfiguration :  IEntityTypeConfiguration<Topic>
     {
         builder.HasKey(x => x.Id);
 
+        builder.HasOne(x => x.Owner).WithMany().HasForeignKey(x => x.OwnerId);
         builder.HasOne<Year>().WithMany().HasForeignKey(x => x.Year);
+        builder.HasMany(x => x.AcademicPrograms).WithMany().UsingEntity<TopicAcademicProgram>();
     }
 }
