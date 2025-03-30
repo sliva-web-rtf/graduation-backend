@@ -1,5 +1,6 @@
 using Graduation.Application.UploadManagers;
 using Graduation.Application.UploadStudents;
+using Graduation.Application.UploadTopics;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,4 +31,13 @@ public class UploadController : ControllerBase
         await mediator.Send(command);
         return Ok();
     }
+    
+    [HttpPost("upload-topics-by-excel")]
+    public async Task<IActionResult> UploadTopics([FromForm] UploadTopicsCommand command)
+    {
+        await mediator.Send(command);
+        return Ok();
+    }
+    
+    
 }
