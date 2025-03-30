@@ -38,7 +38,7 @@ public class GetTopicsCommandHandler : IRequestHandler<GetTopicsCommand, GetTopi
     {
         var year = currentYearProvider.GetCurrentYear();
         var user = (await userManager.FindByIdAsync(request.UserId.ToString()))!;
-        
+
         var data = new GetTopicsData(
             user,
             await userManager.GetRolesAsync(user),
@@ -48,11 +48,11 @@ public class GetTopicsCommandHandler : IRequestHandler<GetTopicsCommand, GetTopi
             request.PageSize,
             request.Query ?? string.Empty,
             cancellationToken);
-        
+
         var topicsCount = await GetTopicsQuery(data).CountAsync(cancellationToken: cancellationToken);
-        var pagesCount = (topicsCount + request.PageSize - 1) / request.PageSize; 
+        var pagesCount = (topicsCount + request.PageSize - 1) / request.PageSize;
         var topics = await GetTopicsForRoles(data);
-        
+
         return new GetTopicsCommandResult(topics.ToList(), pagesCount);
     }
 
@@ -69,7 +69,7 @@ public class GetTopicsCommandHandler : IRequestHandler<GetTopicsCommand, GetTopi
             new GetTopicsCommandTopic(x.Id,
                 x.Name,
                 x.Description,
-                new GetTopicsCommandTopicOwner(x.OwnerId, x.Owner.FullName),
+                new GetTopicsCommandTopicOwner(x.OwnerId, x.Owner!.FullName),
                 x.AcademicPrograms.Select(ap => ap.Name).ToList()));
 
         return result;
@@ -87,6 +87,9 @@ public class GetTopicsCommandHandler : IRequestHandler<GetTopicsCommand, GetTopi
                    (data.IncludeOwnedTopics && topic.OwnerId == data.User.Id))
             select topic;
 
-        return topicsQuery.Distinct().Where(topic => topic.Name.ToUpper().Contains(data.Query.ToUpper()));
+        return topicsQuery
+            .Distinct()
+            .Where(topic => topic.Name.ToUpper().Contains(data.Query.ToUpper()))
+            .OrderByDescending(x => x.OwnerId == data.User.Id);
     }
 }

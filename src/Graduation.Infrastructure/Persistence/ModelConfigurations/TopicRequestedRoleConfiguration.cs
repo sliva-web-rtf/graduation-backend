@@ -11,7 +11,7 @@ public class TopicRequestedRoleConfiguration : IEntityTypeConfiguration<TopicReq
     {
         builder.HasKey(x => new { x.TopicId, x.RoleId });
         
-        builder.HasOne<Topic>().WithMany().HasForeignKey(x => x.TopicId);
-        builder.HasOne<QualificationWorkRole>().WithMany().HasForeignKey(x => x.RoleId);
+        builder.HasOne(x => x.Topic).WithMany().HasForeignKey(x => x.TopicId);
+        builder.HasOne(x => x.Role).WithMany().HasForeignKey(x => x.RoleId);
     }
 }
