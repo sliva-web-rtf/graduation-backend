@@ -1,5 +1,6 @@
 ﻿using Graduation.Application.Interfaces.DataAccess;
 using Graduation.Domain.AcademicGroups;
+using Graduation.Domain.AcademicPrograms;
 using Graduation.Domain.Commissions;
 using Graduation.Domain.Documents;
 using Graduation.Domain.QualificationWorkRoles;
@@ -35,11 +36,13 @@ public class AppDbContext
     public DbSet<QualificationWorkStage> QualificationWorkStages { get; private set; }
     public DbSet<Stage> Stages { get; private set; }
     public DbSet<AcademicGroup> AcademicGroups { get; private set; }
+    public DbSet<AcademicProgram> AcademicPrograms { get; private set; }
+    public DbSet<TopicAcademicProgram> TopicAcademicPrograms { get; private set; }
     public DbSet<Topic> Topics { get; private set; }
     public DbSet<UserRoleTopic> UserRoleTopics { get; private set; }
     public DbSet<QualificationWorkRole> QualificationWorkRoles { get; private set; }
     public DbSet<Document> Documents { get; private set; }
-    public DbSet<QualificationWork> QualificationWork { get; private set; }
+    public DbSet<QualificationWork> QualificationWorks { get; private set; }
     public DbSet<Request> Request { get; private set; }
     public DbSet<TopicChangeRequest> TopicChangeRequest { get; private set; }
     public DbSet<DataProtectionKey> DataProtectionKeys { get; private set; }

@@ -1,4 +1,5 @@
 ﻿using Graduation.Domain.AcademicGroups;
+using Graduation.Domain.AcademicPrograms;
 using Graduation.Domain.Commissions;
 using Graduation.Domain.Documents;
 using Graduation.Domain.QualificationWorkRoles;
@@ -28,11 +29,15 @@ public interface IAppDbContext : IDbContextWithSets, IDisposable
     DbSet<QualificationWorkStage> QualificationWorkStages { get; }
     DbSet<Stage> Stages { get; }
     DbSet<AcademicGroup> AcademicGroups { get; }
+    DbSet<AcademicProgram> AcademicPrograms { get; }
+    DbSet<TopicAcademicProgram> TopicAcademicPrograms { get; }
     DbSet<Topic> Topics { get; }
     DbSet<UserRoleTopic> UserRoleTopics { get; }
     DbSet<QualificationWorkRole> QualificationWorkRoles { get; }
     DbSet<Document> Documents { get; }
-    DbSet<QualificationWork> QualificationWork { get; }
+    DbSet<QualificationWork> QualificationWorks { get; }
     DbSet<Request> Request { get; }
     DbSet<TopicChangeRequest> TopicChangeRequest { get; }
+    DbSet<ApplicationUserRole> UserRoles { get; }
+    DbSet<AppIdentityRole> Roles { get; set; }
 }

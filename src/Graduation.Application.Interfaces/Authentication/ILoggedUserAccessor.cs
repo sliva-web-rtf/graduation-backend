@@ -5,8 +5,6 @@ namespace Graduation.Application.Interfaces.Authentication;
 /// </summary>
 public interface ILoggedUserAccessor
 {
-    Guid? UserId { get; set; }
-
     /// <summary>
     /// Get current logged user identifier.
     /// </summary>

@@ -1,4 +1,7 @@
-﻿using Graduation.Application.Users.AddUserToRole;
+﻿using AutoMapper;
+using Graduation.Application.Interfaces.Authentication;
+using Graduation.Application.Topics.GetTopics;
+using Graduation.Application.Users.AddUserToRole;
 using Graduation.Application.Users.CreateUser;
 using Graduation.Application.Users.LoginUser;
 using Graduation.Domain;
@@ -14,10 +17,12 @@ namespace Graduation.Web.Controllers;
 public class TestController : ControllerBase
 {
     private readonly IMediator mediator;
+    private readonly ILoggedUserAccessor userAccessor;
 
-    public TestController(IMediator mediator)
+    public TestController(IMediator mediator, ILoggedUserAccessor userAccessor)
     {
         this.mediator = mediator;
+        this.userAccessor = userAccessor;
     }
 
     [HttpPost("create")]
@@ -32,11 +37,19 @@ public class TestController : ControllerBase
         return Ok(await mediator.Send(command));
     }
     
-    [HttpPost("addtorole")]
+    [HttpPost("add-torole")]
     public async Task<IActionResult> AddToRole(AddUserToRoleCommand command)
     {
         await mediator.Send(command);
         return Ok();
+    }
+    
+    [Authorize]
+    [HttpPost("get-topics")]
+    public async Task<IActionResult> GetTopics()
+    {
+        var command = new GetTopicsCommand(userAccessor.GetCurrentUserId());
+        return Ok(await mediator.Send(command));
     }
 
     [HttpGet("check")]

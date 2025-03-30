@@ -5,7 +5,7 @@ namespace Graduation.Domain.QualificationWorks;
 public class QualificationWork : Entity<Guid>
 {
     public Guid StudentId { get; set; }
-    public Guid SupervisorId { get; set; }
+    public Guid? SupervisorId { get; set; }
     public Guid TopicId { get; set; }
     public Guid QualificationWorkRoleId { get; set; }
     public string? ExpertComment { get; set; }
