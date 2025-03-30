@@ -19,7 +19,7 @@ builder.Services.AddApi(environment, configuration)
     .AddDataAccess(configuration)
     .AddAuthentication(configuration)
     .AddInfrastructure()
-    .AddApplication();
+    .AddApplication()
     .AddValidation();
 
 
