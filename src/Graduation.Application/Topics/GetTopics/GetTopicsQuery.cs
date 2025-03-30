@@ -2,10 +2,10 @@
 
 namespace Graduation.Application.Topics.GetTopics;
 
-public record GetTopicsCommand(
+public record GetTopicsQuery(
     Guid UserId,
     bool IncludeOwnedTopics,
     int Page,
     int PageSize,
     string? Query)
-    : IRequest<GetTopicsCommandResult>;
+    : IRequest<GetTopicsQueryResult>;

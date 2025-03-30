@@ -25,15 +25,15 @@ public class TopicsController(IMediator mediator, ILoggedUserAccessor userAccess
         int size,
         string? query)
     {
-        var command = new GetTopicsCommand(userAccessor.GetCurrentUserId(), includeOwnedTopics, page, size, query);
-        return Ok(await mediator.Send(command));
+        var request = new GetTopicsQuery(userAccessor.GetCurrentUserId(), includeOwnedTopics, page, size, query);
+        return Ok(await mediator.Send(request));
     }
     
     [Authorize]
     [HttpGet("{id:Guid}")]
     public async Task<IActionResult> GetTopic(Guid id)
     {
-        var command = new GetTopicRequest(id);
-        return Ok(await mediator.Send(command));
+        var request = new GetTopicQuery(id);
+        return Ok(await mediator.Send(request));
     }
 }

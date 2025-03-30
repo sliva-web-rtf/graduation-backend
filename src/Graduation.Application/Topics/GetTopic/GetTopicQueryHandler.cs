@@ -6,19 +6,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Graduation.Application.Topics.GetTopic;
 
-public class GetTopicRequestHandler : IRequestHandler<GetTopicRequest, GetTopicRequestResult>
+public class GetTopicQueryHandler : IRequestHandler<GetTopicQuery, GetTopicQueryResult>
 {
     private readonly IAppDbContext dbContext;
 
-    public GetTopicRequestHandler(IAppDbContext dbContext)
+    public GetTopicQueryHandler(IAppDbContext dbContext)
     {
         this.dbContext = dbContext;
     }
 
-    public async Task<GetTopicRequestResult> Handle(GetTopicRequest request, CancellationToken cancellationToken)
+    public async Task<GetTopicQueryResult> Handle(GetTopicQuery query, CancellationToken cancellationToken)
     {
         var topicInfo = await dbContext.Topics
-            .Where(t => t.Id == request.TopicId)
+            .Where(t => t.Id == query.TopicId)
             .Include(t => t.RequestedRoles)
             .Include(t => t.AcademicPrograms)
             .Include(t => t.Owner)
@@ -43,22 +43,22 @@ public class GetTopicRequestHandler : IRequestHandler<GetTopicRequest, GetTopicR
 
         var requestedRoleName = topicInfo.Topic.RequestedRoles.FirstOrDefault()?.Role;
         var academicPrograms = topicInfo.Topic.AcademicPrograms.Select(p => p.Name).ToList();
-        var topicOwner = new GetTopicRequestTopicOwner(topicInfo.Topic.OwnerId, topicInfo.Topic.Owner!.FullName);
+        var topicOwner = new GetTopicQueryTopicOwner(topicInfo.Topic.OwnerId, topicInfo.Topic.Owner!.FullName);
         
-        GetTopicRequestTopicStudent? topicStudent = null;
+        GetTopicQueryTopicStudent? topicStudent = null;
         if (topicInfo.StudentInfo != null)
-            topicStudent = new GetTopicRequestTopicStudent(
+            topicStudent = new GetTopicQueryTopicStudent(
                 topicInfo.StudentInfo.Student.Id,
                 topicInfo.StudentInfo.Student.FullName,
                 topicInfo.StudentInfo.Role);
         
-        GetTopicRequestTopicSupervisor? topicSupervisor = null;
+        GetTopicQueryTopicSupervisor? topicSupervisor = null;
         if (topicInfo.Supervisor != null)
-            topicSupervisor = new GetTopicRequestTopicSupervisor(
+            topicSupervisor = new GetTopicQueryTopicSupervisor(
                 topicInfo.Supervisor.Id,
                 topicInfo.Supervisor.FullName);
 
-        var result = new GetTopicRequestResult(
+        var result = new GetTopicQueryResult(
             topicInfo.Topic.Name,
             topicInfo.Topic.Description,
             topicInfo.Topic.Result,

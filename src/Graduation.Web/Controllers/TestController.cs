@@ -17,37 +17,22 @@ namespace Graduation.Web.Controllers;
 public class TestController : ControllerBase
 {
     private readonly IMediator mediator;
-    private readonly ILoggedUserAccessor userAccessor;
 
-    public TestController(IMediator mediator, ILoggedUserAccessor userAccessor)
+    public TestController(IMediator mediator)
     {
         this.mediator = mediator;
-        this.userAccessor = userAccessor;
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> CreateUser(CreateUserCommand command)
+    public async Task<IActionResult> CreateUser(CreateUserCommand request)
     {
-        return Ok(await mediator.Send(command));
-    }
-    
-    [HttpPost("login")]
-    public async Task<IActionResult> Login(LoginUserCommand command)
-    {
-        return Ok(await mediator.Send(command));
-    }
-    
-    [HttpPost("add-torole")]
-    public async Task<IActionResult> AddToRole(AddUserToRoleCommand command)
-    {
-        await mediator.Send(command);
-        return Ok();
+        return Ok(await mediator.Send(request));
     }
 
-    [HttpGet("check")]
-    [Authorize(Roles = WellKnownRoles.Student)]
-    public async Task<IActionResult> Check()
+    [HttpPost("add-torole")]
+    public async Task<IActionResult> AddToRole(AddUserToRoleCommand request)
     {
+        await mediator.Send(request);
         return Ok();
     }
 }

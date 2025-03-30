@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Graduation.Application.Topics.GetTopics;
 
-public class GetTopicsCommandHandler : IRequestHandler<GetTopicsCommand, GetTopicsCommandResult>
+public class GetTopicsQueryHandler : IRequestHandler<GetTopicsQuery, GetTopicsQueryResult>
 {
     private record GetTopicsData(
         User User,
@@ -25,7 +25,7 @@ public class GetTopicsCommandHandler : IRequestHandler<GetTopicsCommand, GetTopi
     private readonly ICurrentYearProvider currentYearProvider;
     private readonly IAppDbContext dbContext;
 
-    public GetTopicsCommandHandler(UserManager<User> userManager,
+    public GetTopicsQueryHandler(UserManager<User> userManager,
         ICurrentYearProvider currentYearProvider,
         IAppDbContext dbContext)
     {
@@ -34,29 +34,29 @@ public class GetTopicsCommandHandler : IRequestHandler<GetTopicsCommand, GetTopi
         this.dbContext = dbContext;
     }
 
-    public async Task<GetTopicsCommandResult> Handle(GetTopicsCommand request, CancellationToken cancellationToken)
+    public async Task<GetTopicsQueryResult> Handle(GetTopicsQuery query, CancellationToken cancellationToken)
     {
         var year = currentYearProvider.GetCurrentYear();
-        var user = (await userManager.FindByIdAsync(request.UserId.ToString()))!;
+        var user = (await userManager.FindByIdAsync(query.UserId.ToString()))!;
 
         var data = new GetTopicsData(
             user,
             await userManager.GetRolesAsync(user),
             year,
-            request.IncludeOwnedTopics,
-            request.Page,
-            request.PageSize,
-            request.Query ?? string.Empty,
+            query.IncludeOwnedTopics,
+            query.Page,
+            query.PageSize,
+            query.Query ?? string.Empty,
             cancellationToken);
 
         var topicsCount = await GetTopicsQuery(data).CountAsync(cancellationToken: cancellationToken);
-        var pagesCount = (topicsCount + request.PageSize - 1) / request.PageSize;
+        var pagesCount = (topicsCount + query.PageSize - 1) / query.PageSize;
         var topics = await GetTopicsForRoles(data);
 
-        return new GetTopicsCommandResult(topics.ToList(), pagesCount);
+        return new GetTopicsQueryResult(topics.ToList(), pagesCount);
     }
 
-    private async Task<IEnumerable<GetTopicsCommandTopic>> GetTopicsForRoles(GetTopicsData data)
+    private async Task<IEnumerable<GetTopicsQueryTopic>> GetTopicsForRoles(GetTopicsData data)
     {
         var topics = await GetTopicsQuery(data)
             .Include(x => x.Owner)
@@ -66,10 +66,10 @@ public class GetTopicsCommandHandler : IRequestHandler<GetTopicsCommand, GetTopi
             .ToListAsync(data.CancellationToken);
 
         var result = topics.Select(x =>
-            new GetTopicsCommandTopic(x.Id,
+            new GetTopicsQueryTopic(x.Id,
                 x.Name,
                 x.Description,
-                new GetTopicsCommandTopicOwner(x.OwnerId, x.Owner!.FullName),
+                new GetTopicsQueryTopicOwner(x.OwnerId, x.Owner!.FullName),
                 x.AcademicPrograms.Select(ap => ap.Name).ToList()));
 
         return result;

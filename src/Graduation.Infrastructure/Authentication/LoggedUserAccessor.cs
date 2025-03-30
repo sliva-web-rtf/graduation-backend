@@ -34,31 +34,7 @@ internal class LoggedUserAccessor : ILoggedUserAccessor
         {
             return false;
         }
+
         return httpContextAccessor.HttpContext.User.TryGetCurrentUserId(out _);
-    }
-}
-
-internal static class ClaimsPrincipalExtensions
-{
-    public static bool TryGetCurrentUserId(this ClaimsPrincipal principal, out Guid userId)
-    {
-        var currentUserId = principal.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (!string.IsNullOrEmpty(currentUserId))
-        {
-            userId = Guid.Parse(currentUserId);
-            return true;
-        }
-        userId = Guid.Empty;
-        return false;
-    }
-    
-    public static Guid GetCurrentUserId(this ClaimsPrincipal principal)
-    {
-        if (TryGetCurrentUserId(principal, out Guid userId))
-        {
-            return userId;
-        }
-
-        throw new InvalidOperationException("Cannot get current logged user identifier.");
     }
 }
