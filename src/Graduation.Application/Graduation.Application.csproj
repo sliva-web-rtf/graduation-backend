@@ -17,8 +17,4 @@
     <ProjectReference Include="..\Graduation.Application.Interfaces\Graduation.Application.Interfaces.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="UploadExperts\" />
-  </ItemGroup>
-
 </Project>
