@@ -18,6 +18,7 @@ public class TopicsController(IMediator mediator, ILoggedUserAccessor userAccess
 {
     [Authorize]
     [HttpGet]
+    [ProducesResponseType<GetTopicsQueryResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetTopics(
         bool includeOwnedTopics,
         [Required] [Range(0, int.MaxValue)] int page,
@@ -30,6 +31,7 @@ public class TopicsController(IMediator mediator, ILoggedUserAccessor userAccess
 
     [Authorize]
     [HttpGet("{id:Guid}")]
+    [ProducesResponseType<GetTopicQueryResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetTopic(Guid id)
     {
         var request = new GetTopicQuery(id);
@@ -38,6 +40,7 @@ public class TopicsController(IMediator mediator, ILoggedUserAccessor userAccess
 
     [Authorize]
     [HttpPost]
+    [ProducesResponseType<CreateTopicCommandResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> CreateTopic(CreateTopicCommand request)
     {
         return Ok(await mediator.Send(request));
@@ -45,6 +48,7 @@ public class TopicsController(IMediator mediator, ILoggedUserAccessor userAccess
 
     [Authorize]
     [HttpGet("academic-programs")]
+    [ProducesResponseType<GetAcademicProgramsQueryResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAcademicPrograms()
     {
         var request = new GetAcademicProgramsQuery();
@@ -54,6 +58,7 @@ public class TopicsController(IMediator mediator, ILoggedUserAccessor userAccess
 
     [Authorize]
     [HttpGet("qualification-work-roles")]
+    [ProducesResponseType<GetQualificationWorkRolesQueryResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetQualificationWorkRoles()
     {
         var request = new GetQualificationWorkRolesQuery();

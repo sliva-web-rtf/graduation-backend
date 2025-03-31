@@ -21,6 +21,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType<LoginUserCommandResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> Authenticate([Required] LoginUserCommand request,
         CancellationToken cancellationToken)
     {
@@ -29,6 +30,7 @@ public class AuthController : ControllerBase
 
     [HttpGet]
     [Authorize]
+    [ProducesResponseType<UserDetailsDto>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetMe(CancellationToken cancellationToken)
     {
         var request = new GetUserByIdQuery
