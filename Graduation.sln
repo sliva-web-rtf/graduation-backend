@@ -23,10 +23,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BA4CB6D2
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1AAC31B4-1F84-4F0E-ADB9-23844077097E}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\deploy.prod.yml = .github\workflows\deploy.prod.yml
-		.github\workflows\release.yml = .github\workflows\release.yml
-		.github\workflows\deploy.stage.yml = .github\workflows\deploy.stage.yml
 		src\Directory.Build.props = src\Directory.Build.props
+		compose.yaml = compose.yaml
+		.env = .env
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graduation.Infrastructure", "src\Graduation.Infrastructure\Graduation.Infrastructure.csproj", "{F891C264-A919-494D-975A-2F9112BF12E6}"
