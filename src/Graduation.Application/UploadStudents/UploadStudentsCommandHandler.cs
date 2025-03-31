@@ -4,7 +4,6 @@ using Graduation.Application.Users.CreateUser;
 using Graduation.Application.Users.AddUserToRole;
 using Graduation.Application.Interfaces.Services;
 using Graduation.Application.Interfaces.DataAccess;
-using Graduation.Application.Interfaces.Authentication;
 using Graduation.Domain;
 using Graduation.Domain.Users;
 using Graduation.Domain.AcademicGroups;
@@ -17,19 +16,16 @@ public class UploadStudentsCommandHandler : IRequestHandler<UploadStudentsComman
 {
     private readonly ICurrentYearProvider currentYearProvider;
     private readonly ISender sender;
-    private readonly ILoggedUserAccessor userAccessor;
     private readonly UserManager<User> userManager;
     private readonly IAppDbContext dbContext;
 
     public UploadStudentsCommandHandler(
         ISender sender,
-        ILoggedUserAccessor userAccessor,
         UserManager<User> userManager,
         IAppDbContext dbContext,
         ICurrentYearProvider currentYearProvider)
     {
         this.sender = sender;
-        this.userAccessor = userAccessor;
         this.userManager = userManager;
         this.dbContext = dbContext;
         this.currentYearProvider = currentYearProvider;
@@ -43,7 +39,7 @@ public class UploadStudentsCommandHandler : IRequestHandler<UploadStudentsComman
         using var workbook = new XLWorkbook(stream);
         var countWs = workbook.Worksheets.Count;
 
-        for (var k = 4; k <= 23; k++)
+        for (var k = 3; k <= 23; k++)
         {
             var ws = workbook.Worksheet(k);
             var countRow = ws.Rows().Count();
@@ -59,7 +55,7 @@ public class UploadStudentsCommandHandler : IRequestHandler<UploadStudentsComman
                 var fullName = ws.Cell($"D{i}").GetValue<string>().Trim();
                 var role = ws.Cell($"G{i}").GetValue<string>();
 
-                if (string.IsNullOrWhiteSpace(fullName) || string.IsNullOrWhiteSpace(role))
+                if (string.IsNullOrWhiteSpace(fullName))
                 {
                     continue;
                 }
@@ -79,9 +75,9 @@ public class UploadStudentsCommandHandler : IRequestHandler<UploadStudentsComman
                 var userName = fullName.Replace(" ", "") + studentsGroup.Replace("-", "");
 
                 var user = await userManager.FindByNameAsync(userName);
-                var userId = user.Id;
+                var userId = user?.Id ?? Guid.Empty;
 
-                if (user.Equals(null))
+                if (user is null)
                 {
                     userId =
                         (await sender.Send(new CreateUserCommand(userName,

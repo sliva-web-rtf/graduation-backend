@@ -1,5 +1,6 @@
 using Graduation.Application.UploadExperts;
 using Graduation.Application.UploadManagers;
+using Graduation.Application.UploadReinstatedStudents;
 using Graduation.Application.UploadSecretaries;
 using Graduation.Application.UploadStudents;
 using MediatR;
@@ -43,6 +44,13 @@ public class UploadController : ControllerBase
     
     [HttpPost("upload-experts-by-excel")]
     public async Task<IActionResult> UploadExperts([FromForm] UploadExpertsCommand command)
+    {
+        await mediator.Send(command);
+        return Ok();
+    }  
+    
+    [HttpPost("upload-reinstated-students-by-excel")]
+    public async Task<IActionResult> UploadReinstatedStudents([FromForm] UploadReinstatedStudentsCommand command)
     {
         await mediator.Send(command);
         return Ok();

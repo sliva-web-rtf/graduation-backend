@@ -1,5 +1,4 @@
 using ClosedXML.Excel;
-using Graduation.Application.UploadSecretaries;
 using Graduation.Application.Users.AddUserToRole;
 using Graduation.Application.Users.CreateUser;
 using Graduation.Domain;
@@ -7,7 +6,7 @@ using Graduation.Domain.Users;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace Graduation.Application.UploadSecretary;
+namespace Graduation.Application.UploadSecretaries;
 
 public class UploadSecretariesCommandHandler : IRequestHandler<UploadSecretariesCommand>
 {
