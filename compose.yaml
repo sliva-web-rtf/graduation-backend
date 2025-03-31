@@ -1,0 +1,13 @@
+﻿services:
+  graduation.web:
+    image: graduation.web
+    build:
+      context: .
+      dockerfile: src/Graduation.Web/Dockerfile
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_URLS: http://+:5000
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__PgConnection: Server=${Server:-};User Id=${Uid:-};Password=${Pwd:-};Port=${Port:-};Database=${Database:-};
+    ports:
+      - "5000:5000"

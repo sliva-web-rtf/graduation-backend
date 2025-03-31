@@ -8,12 +8,12 @@ using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 namespace Graduation.Web.Startup.Swagger;
 
 /// <summary>
-/// Swagger generation options.
+///     Swagger generation options.
 /// </summary>
 public class SwaggerGenOptionsSetup
 {
     /// <summary>
-    /// Setup.
+    ///     Setup.
     /// </summary>
     /// <param name="options">Swagger generation options.</param>
     /// <param name="assembly"></param>
@@ -23,10 +23,9 @@ public class SwaggerGenOptionsSetup
 
         options.SwaggerDoc("v1", new OpenApiInfo
         {
-            Version = fileVersionInfo.ProductVersion,
-            // TODO:
-            Title = "Swagger Setup Example",
-            Description = "API documentation for the project.",
+            Version = fileVersionInfo.FileVersion,
+            Title = "Graduation swagger",
+            Description = "API documentation for the project."
         });
         options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
         {
@@ -36,13 +35,12 @@ public class SwaggerGenOptionsSetup
             Name = "bearer",
             Type = SecuritySchemeType.Http
         });
-        // TODO: Add your assemblies here.
         options.IncludeXmlCommentsWithRemarks(GetAssemblyLocation(assembly));
         options.SchemaFilterDescriptors = options
             .SchemaFilterDescriptors
             .Where(filterDescriptor => filterDescriptor.Arguments is not null)
             .ToList();
-        options.IncludeXmlCommentsFromInheritDocs(includeRemarks: true);
+        options.IncludeXmlCommentsFromInheritDocs(true);
 
         // Our custom filters.
         options.SchemaFilter<SwaggerExampleSetterSchemaFilter>();
@@ -51,10 +49,7 @@ public class SwaggerGenOptionsSetup
         options.OperationFilter<SwaggerSecurityRequirementsOperationFilter>();
 
         // Group by ApiExplorerSettings.GroupName name.
-        options.TagActionsBy(apiDescription => new[]
-        {
-            apiDescription.GroupName
-        });
+        options.TagActionsBy(apiDescription => [apiDescription.GroupName]);
         options.DocInclusionPredicate((_, api) => !string.IsNullOrWhiteSpace(api.GroupName));
 
         options.CustomOperationIds(a =>
@@ -65,6 +60,8 @@ public class SwaggerGenOptionsSetup
         options.UseDateOnlyTimeOnlyStringConverters();
     }
 
-    private static string GetAssemblyLocation(Assembly assembly) =>
-        Path.Combine(AppContext.BaseDirectory, $"{assembly.GetName().Name}.xml");
+    private static string GetAssemblyLocation(Assembly assembly)
+    {
+        return Path.Combine(AppContext.BaseDirectory, $"{assembly.GetName().Name}.xml");
+    }
 }

@@ -1,3 +1,3 @@
 ﻿namespace Graduation.Application.Topics.CreateTopic;
 
-public record CreateTopicCommandResult;
+public record CreateTopicCommandResult(Guid Id);
