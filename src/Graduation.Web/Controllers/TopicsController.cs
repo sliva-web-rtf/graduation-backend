@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Graduation.Application.Interfaces.Authentication;
 using Graduation.Application.Topics.CreateTopic;
+using Graduation.Application.Topics.GetAcademicPrograms;
+using Graduation.Application.Topics.GetQualificationWorkRoles;
 using Graduation.Application.Topics.GetTopic;
 using Graduation.Application.Topics.GetTopics;
 using MediatR;
@@ -38,6 +40,23 @@ public class TopicsController(IMediator mediator, ILoggedUserAccessor userAccess
     [HttpPost]
     public async Task<IActionResult> CreateTopic(CreateTopicCommand request)
     {
+        return Ok(await mediator.Send(request));
+    }
+
+    [Authorize]
+    [HttpGet("academic-programs")]
+    public async Task<IActionResult> GetAcademicPrograms()
+    {
+        var request = new GetAcademicProgramsQuery();
+        return Ok(await mediator.Send(request));
+    }
+
+
+    [Authorize]
+    [HttpGet("qualification-work-roles")]
+    public async Task<IActionResult> GetQualificationWorkRoles()
+    {
+        var request = new GetQualificationWorkRolesQuery();
         return Ok(await mediator.Send(request));
     }
 }
