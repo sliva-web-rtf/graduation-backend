@@ -1,32 +1,30 @@
 using ClosedXML.Excel;
-using Graduation.Application.UploadSecretaries;
-using Graduation.Application.Users.AddUserToRole;
-using Graduation.Application.Users.CreateUser;
 using Graduation.Domain;
 using Graduation.Domain.Users;
+using Graduation.Application.Users.CreateUser;
+using Graduation.Application.Users.AddUserToRole;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace Graduation.Application.UploadSecretary;
+namespace Graduation.Application.UploadExperts;
 
-public class UploadSecretariesCommandHandler : IRequestHandler<UploadSecretariesCommand>
+public class UploadExpertsCommandHandler : IRequestHandler<UploadExpertsCommand>
 {
     private readonly ISender sender;
     private readonly UserManager<User> userManager;
 
-    public UploadSecretariesCommandHandler(ISender sender, UserManager<User> userManager)
+    public UploadExpertsCommandHandler(ISender sender, UserManager<User> userManager)
     {
         this.sender = sender;
         this.userManager = userManager;
     }
 
-    public async Task Handle(UploadSecretariesCommand request, CancellationToken cancellationToken)
+    public async Task Handle(UploadExpertsCommand request, CancellationToken cancellationToken)
     {
         using var stream = new MemoryStream();
         await request.File.CopyToAsync(stream, cancellationToken);
 
         using var workbook = new XLWorkbook(stream);
-
         var ws = workbook.Worksheet(1);
         var countRow = ws.Rows().Count();
 
@@ -66,8 +64,8 @@ public class UploadSecretariesCommandHandler : IRequestHandler<UploadSecretaries
             }
 
             user = userManager.FindByIdAsync(userId.ToString()).Result;
-            const string role = WellKnownRoles.Secretary;
-
+            const string role = WellKnownRoles.Expert;
+            
             if (!await userManager.IsInRoleAsync(user, role))
             {
                 await sender.Send(new AddUserToRoleCommand(userId, role),
