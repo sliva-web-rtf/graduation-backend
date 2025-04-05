@@ -1,6 +1,6 @@
 ﻿namespace Graduation.Application.Supervisors.GetSupervisors;
 
-public record GetSupervisorsQueryResult(IList<GetSupervisorsQuerySupervisor> Professors, int PagesCount);
+public record GetSupervisorsQueryResult(IList<GetSupervisorsQuerySupervisor> Supervisors, int PagesCount);
 
 public record GetSupervisorsQuerySupervisor(
     Guid Id,

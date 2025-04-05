@@ -10,7 +10,7 @@ public class Year : Entity
     }
 
 #pragma warning disable CS8618, CS9264
-    public Year()
+    private Year()
 #pragma warning restore CS8618, CS9264
     {
     }
