@@ -19,7 +19,6 @@ public class GetStudentQueryHandler : IRequestHandler<GetStudentQuery, GetStuden
         this.userManager = userManager;
     }
 
-
     public async Task<GetStudentQueryResult> Handle(GetStudentQuery request, CancellationToken cancellationToken)
     {
         var user = await userManager.FindByIdAsync(request.Id.ToString())
@@ -28,13 +27,14 @@ public class GetStudentQueryHandler : IRequestHandler<GetStudentQuery, GetStuden
             throw new DomainException("User is not student");
 
         var student = await dbContext.Students
+            .Where(s => s.Id == request.Id)
             .Include(s => s.User)
             .Include(s => s.AcademicGroup)
             .ThenInclude(s => s!.AcademicProgram)
             .FirstAsync(cancellationToken);
 
         var result = new GetStudentQueryResult(
-            student.User.FullName,
+            student.User!.FullName,
             student.AcademicGroup?.Name,
             student.AcademicGroup?.AcademicProgram?.Name,
             student.User.Contacts,

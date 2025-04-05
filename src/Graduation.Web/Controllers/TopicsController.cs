@@ -20,11 +20,12 @@ public class TopicsController(IMediator mediator) : ControllerBase
     [HttpGet]
     [ProducesResponseType<GetTopicsQueryResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetTopics(
+        [FromHeader(Name = "X-Year")] string year,
         [Required] [Range(0, int.MaxValue)] int page,
         [Required] [Range(1, 1000)] int size,
         string? query)
     {
-        var request = new GetTopicsQuery(page, size, query);
+        var request = new GetTopicsQuery(year, page, size, query);
         return Ok(await mediator.Send(request));
     }
 
@@ -32,12 +33,13 @@ public class TopicsController(IMediator mediator) : ControllerBase
     [HttpGet("by-user/{userId:Guid}")]
     [ProducesResponseType<GetUserTopicsQueryResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetUserTopics(
+        [FromHeader(Name = "X-Year")] string year,
         Guid userId,
         [Required] [Range(0, int.MaxValue)] int page,
         [Required] [Range(1, 1000)] int size,
         string? query)
     {
-        var request = new GetUserTopicsQuery(userId, page, size, query);
+        var request = new GetUserTopicsQuery(year, userId, page, size, query);
         return Ok(await mediator.Send(request));
     }
 

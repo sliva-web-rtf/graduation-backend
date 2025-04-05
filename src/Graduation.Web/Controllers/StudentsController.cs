@@ -16,11 +16,12 @@ public class StudentsController(IMediator mediator) : ControllerBase
     [HttpGet]
     [ProducesResponseType<GetStudentsQueryResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetStudents(
+        [FromHeader(Name = "X-Year")] string year,
         [Required] [Range(0, int.MaxValue)] int page,
         [Required] [Range(1, 1000)] int size,
         string? query)
     {
-        var request = new GetStudentsQuery(page, size, query);
+        var request = new GetStudentsQuery(year, page, size, query);
         return Ok(await mediator.Send(request));
     }
 

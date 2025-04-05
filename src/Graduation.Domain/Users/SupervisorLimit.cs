@@ -5,6 +5,7 @@ namespace Graduation.Domain.Users;
 public class SupervisorLimit : Entity
 {
     public Guid UserId { get; set; }
+    public User? User { get; set; }
     public string Year { get; set; }
     public int Limit { get; set; }
 

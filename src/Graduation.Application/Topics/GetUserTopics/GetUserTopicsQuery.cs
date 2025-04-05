@@ -1,9 +1,9 @@
-﻿using Graduation.Application.Topics.GetTopics;
-using MediatR;
+﻿using MediatR;
 
 namespace Graduation.Application.Topics.GetUserTopics;
 
 public record GetUserTopicsQuery(
+    string Year,
     Guid UserId,
     int Page,
     int PageSize,

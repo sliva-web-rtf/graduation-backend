@@ -6,16 +6,21 @@ namespace Graduation.Domain.Students;
 
 public class Student : Entity<Guid>
 {
-    public string? Comment { get; set; }
-    public StudentStatus Status { get; set; }
-    public Guid? AcademicGroupId { get; set; }
-    public AcademicGroup? AcademicGroup { get; set; }
-    public User User { get; set; }
-
     private Student(User user)
     {
         User = user;
     }
+
+#pragma warning disable CS8618, CS9264
+    private Student()
+    {
+    }
+#pragma warning restore CS8618, CS9264
+    public string? Comment { get; set; }
+    public StudentStatus Status { get; set; }
+    public Guid? AcademicGroupId { get; set; }
+    public AcademicGroup? AcademicGroup { get; set; }
+    public User? User { get; set; }
 
     public static Student Create(User user)
     {
@@ -26,10 +31,4 @@ public class Student : Entity<Guid>
 
         return student;
     }
-
-#pragma warning disable CS8618, CS9264
-    private Student()
-    {
-    }
-#pragma warning restore CS8618, CS9264
 }

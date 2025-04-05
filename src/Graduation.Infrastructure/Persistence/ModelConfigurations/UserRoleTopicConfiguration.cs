@@ -10,7 +10,7 @@ public class UserRoleTopicConfiguration : IEntityTypeConfiguration<UserRoleTopic
     {
         builder.HasKey(x => new { x.UserId, x.TopicId, x.QualificationWorkRoleId });
 
-        builder.HasOne(x => x.User).WithMany().HasForeignKey(x => x.UserId);
+        builder.HasOne(x => x.User).WithMany(x => x.UserRoleTopics).HasForeignKey(x => x.UserId);
         builder.HasOne(x => x.QualificationWorkRole).WithMany().HasForeignKey(x => x.QualificationWorkRoleId);
         builder.HasOne(x => x.Topic).WithMany(x => x.UserRoleTopics).HasForeignKey(x => x.TopicId);
     }

@@ -1,10 +1,17 @@
-﻿using Graduation.Domain.Users.Enums;
+﻿using Graduation.Domain.Topics;
+using Graduation.Domain.Users.Enums;
 using Microsoft.AspNetCore.Identity;
 
 namespace Graduation.Domain.Users;
 
 public class User : IdentityUser<Guid>
 {
+    public User(Guid id)
+    {
+        Id = id;
+        UserStatus = UserStatus.Active;
+    }
+
     public string? FirstName { get; set; }
 
     public string? LastName { get; set; }
@@ -19,13 +26,8 @@ public class User : IdentityUser<Guid>
 
     public UserStatus UserStatus { get; set; }
 
-    public List<ApplicationUserRole> UserRoles { get; set; } = new();
-
-    public User(Guid id)
-    {
-        Id = id;
-        UserStatus = UserStatus.Active;
-    }
+    public List<ApplicationUserRole> UserRoles { get; set; } = [];
+    public List<UserRoleTopic> UserRoleTopics { get; set; } = [];
 
     public static User Create(Guid id,
         string userName,

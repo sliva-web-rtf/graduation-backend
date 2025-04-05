@@ -1,6 +1,10 @@
-﻿using Graduation.Domain.Students;
+﻿namespace Graduation.Application.Students.GetStudents;
 
-namespace Graduation.Application.Students.GetStudents;
+public record GetStudentsQueryResult(IList<GetStudentsQueryStudent> Students, int PagesCount);
 
-public record GetStudentsQueryResult(IList<GetStudentsQueryStudent> Students);
-public record GetStudentsQueryStudent(Guid Id, string FullName, string? AcademicGroup, string? AcademicProgram, string? About);
+public record GetStudentsQueryStudent(
+    Guid Id,
+    string FullName,
+    string? AcademicGroup,
+    string? AcademicProgram,
+    string? About);

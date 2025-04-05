@@ -1,6 +1,5 @@
 ﻿using Graduation.Application.Interfaces.Authentication;
 using Graduation.Application.Interfaces.DataAccess;
-using Graduation.Application.Interfaces.Services;
 using Graduation.Domain;
 using Graduation.Domain.Topics;
 using Graduation.Domain.Users;
@@ -12,32 +11,28 @@ namespace Graduation.Application.Topics.GetTopics;
 
 public class GetTopicsQueryHandler : IRequestHandler<GetTopicsQuery, GetTopicsQueryResult>
 {
-    private readonly ICurrentYearProvider currentYearProvider;
     private readonly IAppDbContext dbContext;
     private readonly ILoggedUserAccessor loggedUserAccessor;
 
     private readonly UserManager<User> userManager;
 
     public GetTopicsQueryHandler(UserManager<User> userManager,
-        ICurrentYearProvider currentYearProvider,
         IAppDbContext dbContext,
         ILoggedUserAccessor loggedUserAccessor)
     {
         this.userManager = userManager;
-        this.currentYearProvider = currentYearProvider;
         this.dbContext = dbContext;
         this.loggedUserAccessor = loggedUserAccessor;
     }
 
     public async Task<GetTopicsQueryResult> Handle(GetTopicsQuery query, CancellationToken cancellationToken)
     {
-        var year = currentYearProvider.GetCurrentYear();
         var user = (await userManager.FindByIdAsync(loggedUserAccessor.GetCurrentUserId().ToString()))!;
 
         var data = new GetTopicsData(
             user,
             await userManager.GetRolesAsync(user),
-            year,
+            query.Year,
             query.Page,
             query.PageSize,
             query.Query ?? string.Empty,
@@ -71,6 +66,8 @@ public class GetTopicsQueryHandler : IRequestHandler<GetTopicsQuery, GetTopicsQu
 
     private IQueryable<Topic> GetTopicsQuery(GetTopicsData data)
     {
+        var searchQuery = $"%{data.Query}%";
+
         var topicsQuery = from topic in dbContext.Topics
             join userRoleTopic in dbContext.UserRoleTopics on topic.Id equals userRoleTopic.TopicId
             join userRole in dbContext.UserRoles on userRoleTopic.UserId equals userRole.UserId
@@ -82,7 +79,7 @@ public class GetTopicsQueryHandler : IRequestHandler<GetTopicsQuery, GetTopicsQu
 
         return topicsQuery
             .Distinct()
-            .Where(topic => topic.Name.ToUpper().Contains(data.Query.ToUpper()))
+            .Where(topic => EF.Functions.ILike(topic.Name, searchQuery))
             .OrderByDescending(x => x.OwnerId == data.User.Id);
     }
 
