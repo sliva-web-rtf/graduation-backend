@@ -12,20 +12,11 @@ namespace Graduation.Application.Topics.GetTopics;
 
 public class GetTopicsQueryHandler : IRequestHandler<GetTopicsQuery, GetTopicsQueryResult>
 {
-    private record GetTopicsData(
-        User User,
-        IList<string> Roles,
-        string Year,
-        bool IncludeOwnedTopics,
-        int Page,
-        int Size,
-        string Query,
-        CancellationToken CancellationToken);
-
-    private readonly UserManager<User> userManager;
     private readonly ICurrentYearProvider currentYearProvider;
     private readonly IAppDbContext dbContext;
     private readonly ILoggedUserAccessor loggedUserAccessor;
+
+    private readonly UserManager<User> userManager;
 
     public GetTopicsQueryHandler(UserManager<User> userManager,
         ICurrentYearProvider currentYearProvider,
@@ -47,13 +38,12 @@ public class GetTopicsQueryHandler : IRequestHandler<GetTopicsQuery, GetTopicsQu
             user,
             await userManager.GetRolesAsync(user),
             year,
-            query.IncludeOwnedTopics,
             query.Page,
             query.PageSize,
             query.Query ?? string.Empty,
             cancellationToken);
 
-        var topicsCount = await GetTopicsQuery(data).CountAsync(cancellationToken: cancellationToken);
+        var topicsCount = await GetTopicsQuery(data).CountAsync(cancellationToken);
         var pagesCount = (topicsCount + query.PageSize - 1) / query.PageSize;
         var topics = await GetTopicsForRoles(data);
 
@@ -87,8 +77,7 @@ public class GetTopicsQueryHandler : IRequestHandler<GetTopicsQuery, GetTopicsQu
             join role in dbContext.Roles on userRole.RoleId equals role.Id
             where topic.Year == data.Year && userRole.Year == data.Year &&
                   ((data.Roles.Contains(WellKnownRoles.Student) && role.Name != WellKnownRoles.Student) ||
-                   (data.Roles.Contains(WellKnownRoles.Supervisor) && role.Name != WellKnownRoles.Supervisor) ||
-                   (data.IncludeOwnedTopics && topic.OwnerId == data.User.Id))
+                   (data.Roles.Contains(WellKnownRoles.Supervisor) && role.Name != WellKnownRoles.Supervisor))
             select topic;
 
         return topicsQuery
@@ -96,4 +85,13 @@ public class GetTopicsQueryHandler : IRequestHandler<GetTopicsQuery, GetTopicsQu
             .Where(topic => topic.Name.ToUpper().Contains(data.Query.ToUpper()))
             .OrderByDescending(x => x.OwnerId == data.User.Id);
     }
+
+    private record GetTopicsData(
+        User User,
+        IList<string> Roles,
+        string Year,
+        int Page,
+        int Size,
+        string Query,
+        CancellationToken CancellationToken);
 }
