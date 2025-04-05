@@ -14,7 +14,7 @@ namespace Graduation.Web.Controllers;
 [ApiController]
 [Route("topics")]
 [ApiExplorerSettings(GroupName = "topics")]
-public class TopicsController(IMediator mediator, ILoggedUserAccessor userAccessor) : ControllerBase
+public class TopicsController(IMediator mediator) : ControllerBase
 {
     [Authorize]
     [HttpGet]
@@ -25,7 +25,7 @@ public class TopicsController(IMediator mediator, ILoggedUserAccessor userAccess
         [Required] [Range(1, 1000)] int size,
         string? query)
     {
-        var request = new GetTopicsQuery(userAccessor.GetCurrentUserId(), includeOwnedTopics, page, size, query);
+        var request = new GetTopicsQuery(includeOwnedTopics, page, size, query);
         return Ok(await mediator.Send(request));
     }
 

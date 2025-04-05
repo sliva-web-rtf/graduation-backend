@@ -19,6 +19,8 @@ public class User : IdentityUser<Guid>
 
     public UserStatus UserStatus { get; set; }
 
+    public List<ApplicationUserRole> UserRoles { get; set; } = new();
+
     public User(Guid id)
     {
         Id = id;

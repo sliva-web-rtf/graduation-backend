@@ -21,10 +21,17 @@ using Microsoft.EntityFrameworkCore;
 namespace Graduation.Infrastructure.Persistence;
 
 public class AppDbContext
-    : IdentityDbContext<User, AppIdentityRole, Guid, IdentityUserClaim<Guid>, ApplicationUserRole, IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>,
+    : IdentityDbContext<User, AppIdentityRole, Guid, IdentityUserClaim<Guid>, ApplicationUserRole,
+            IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>,
         IAppDbContext,
         IDataProtectionKeyContext
 {
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    {
+    }
+
+    public DbSet<CommissionStudent> CommissionStudents { get; private set; }
+    public DbSet<TopicRequestedRole> TopicRequestedRoles { get; private set; }
     public DbSet<SupervisorLimit> SupervisorLimits { get; private set; }
     public DbSet<Year> Years { get; private set; }
     public DbSet<Skill> Skills { get; private set; }
@@ -46,11 +53,6 @@ public class AppDbContext
     public DbSet<Request> Request { get; private set; }
     public DbSet<TopicChangeRequest> TopicChangeRequest { get; private set; }
     public DbSet<DataProtectionKey> DataProtectionKeys { get; private set; }
-    public DbSet<TopicRequestedRole> TopicRequestedRoles { get; private set; }
-
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-    {
-    }
 
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)

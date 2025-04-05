@@ -11,8 +11,8 @@ public class ApplicationUserRoleConfiguration : IEntityTypeConfiguration<Applica
     {
         builder.HasKey(x => new { x.UserId, x.RoleId, x.Year });
         
-        builder.HasOne<User>().WithMany().HasForeignKey(x => x.UserId);
-        builder.HasOne<AppIdentityRole>().WithMany().HasForeignKey(x => x.RoleId);
+        builder.HasOne<User>(x => x.User).WithMany(x => x.UserRoles).HasForeignKey(x => x.UserId);
+        builder.HasOne<AppIdentityRole>(x => x.Role).WithMany().HasForeignKey(x => x.RoleId);
         builder.HasOne<Year>().WithMany().HasForeignKey(x => x.Year);
     }
 }

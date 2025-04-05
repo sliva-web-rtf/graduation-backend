@@ -1,4 +1,5 @@
-﻿using Graduation.Application.Interfaces.DataAccess;
+﻿using Graduation.Application.Interfaces.Authentication;
+using Graduation.Application.Interfaces.DataAccess;
 using Graduation.Application.Interfaces.Services;
 using Graduation.Domain;
 using Graduation.Domain.Topics;
@@ -24,20 +25,23 @@ public class GetTopicsQueryHandler : IRequestHandler<GetTopicsQuery, GetTopicsQu
     private readonly UserManager<User> userManager;
     private readonly ICurrentYearProvider currentYearProvider;
     private readonly IAppDbContext dbContext;
+    private readonly ILoggedUserAccessor loggedUserAccessor;
 
     public GetTopicsQueryHandler(UserManager<User> userManager,
         ICurrentYearProvider currentYearProvider,
-        IAppDbContext dbContext)
+        IAppDbContext dbContext,
+        ILoggedUserAccessor loggedUserAccessor)
     {
         this.userManager = userManager;
         this.currentYearProvider = currentYearProvider;
         this.dbContext = dbContext;
+        this.loggedUserAccessor = loggedUserAccessor;
     }
 
     public async Task<GetTopicsQueryResult> Handle(GetTopicsQuery query, CancellationToken cancellationToken)
     {
         var year = currentYearProvider.GetCurrentYear();
-        var user = (await userManager.FindByIdAsync(query.UserId.ToString()))!;
+        var user = (await userManager.FindByIdAsync(loggedUserAccessor.GetCurrentUserId().ToString()))!;
 
         var data = new GetTopicsData(
             user,

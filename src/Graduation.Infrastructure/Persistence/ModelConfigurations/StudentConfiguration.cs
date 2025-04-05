@@ -15,6 +15,6 @@ public class StudentConfiguration :  IEntityTypeConfiguration<Student>
         builder.HasKey(x => x.Id);
         
         builder.HasOne<User>(x => x.User).WithOne().HasForeignKey<Student>(x => x.Id);
-        builder.HasOne<AcademicGroup>().WithMany().HasForeignKey(x => x.AcademicGroupId);
+        builder.HasOne<AcademicGroup>(x => x.AcademicGroup).WithMany().HasForeignKey(x => x.AcademicGroupId);
     }
 }

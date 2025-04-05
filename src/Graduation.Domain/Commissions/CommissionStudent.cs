@@ -2,12 +2,11 @@
 
 namespace Graduation.Domain.Commissions;
 
-public class CommissionExpert : Entity
+public class CommissionStudent : Entity
 {
     public Guid UserId { get; set; }
     public Guid CommissionId { get; set; }
     public Guid StageId { get; set; }
-    public bool IsInvited { get; set; }
 
     public override IEnumerable<object?> GetEqualityComponents()
     {

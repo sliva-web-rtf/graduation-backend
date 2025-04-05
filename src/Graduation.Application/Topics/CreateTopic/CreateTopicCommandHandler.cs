@@ -45,7 +45,7 @@ public class CreateTopicCommandHandler : IRequestHandler<CreateTopicCommand, Cre
         if (request.RequestedRoles.Count != requestedRoles.Count)
         {
             var foundRoles = requestedRoles.Select(x => x.Role).ToList();
-            var notFoundRoles = request.AcademicPrograms.Except(foundRoles);
+            var notFoundRoles = request.RequestedRoles.Except(foundRoles);
             throw new DomainException($"{string.Join(" ", notFoundRoles)} roles not found");
         }
 
