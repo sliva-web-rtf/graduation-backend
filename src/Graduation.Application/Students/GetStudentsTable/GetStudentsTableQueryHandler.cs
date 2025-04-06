@@ -85,11 +85,11 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
         return dbContext.Students
             .Where(s => s.User!.UserRoles.Any(ur => ur.Year == request.Year && ur.Role!.Name == WellKnownRoles.Student))
             .Where(s => queryParts.All(p =>
-                s.User!.FirstName == null || EF.Functions.ILike(s.User.FirstName, p) ||
-                s.User.LastName == null || EF.Functions.ILike(s.User.LastName, p) ||
-                s.User.Patronymic == null || EF.Functions.ILike(s.User.Patronymic, p) ||
-                s.AcademicGroup == null || EF.Functions.ILike(s.AcademicGroup.Name, p) ||
-                s.QualificationWork == null || EF.Functions.ILike(s.QualificationWork.Name, p)
+                EF.Functions.ILike(s.User!.FirstName!, p) ||
+                EF.Functions.ILike(s.User.LastName!, p) ||
+                EF.Functions.ILike(s.User.Patronymic!, p) ||
+                EF.Functions.ILike(s.AcademicGroup!.Name, p) ||
+                EF.Functions.ILike(s.QualificationWork!.Name, p)
             ));
     }
 
