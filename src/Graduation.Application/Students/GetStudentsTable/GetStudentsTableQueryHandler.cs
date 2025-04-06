@@ -48,7 +48,7 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
                 var qualificationWork = s.QualificationWork == null
                     ? null
                     : new GetStudentsTableQueryQualificationWork(
-                        s.QualificationWork.Id,
+                        s.QualificationWork.TopicId,
                         s.QualificationWork.Name,
                         s.QualificationWork.Status.ToString(),
                         s.QualificationWork.CompanyName,
