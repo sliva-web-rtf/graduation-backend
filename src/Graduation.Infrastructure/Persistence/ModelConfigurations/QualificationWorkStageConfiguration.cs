@@ -13,7 +13,7 @@ public class QualificationWorkStageConfiguration : IEntityTypeConfiguration<Qual
         builder.HasKey(x => x.Id);
 
         builder.HasOne<Stage>().WithMany().HasForeignKey(x => x.StageId);
-        builder.HasOne<QualificationWork>().WithMany().HasForeignKey(x => x.QualificationWorkId);
+        builder.HasOne<QualificationWork>().WithMany(x => x.Stages).HasForeignKey(x => x.QualificationWorkId);
         builder.HasOne<Commission>().WithMany().HasForeignKey(x => x.CommissionId);
     }
 }

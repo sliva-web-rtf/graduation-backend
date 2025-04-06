@@ -29,9 +29,6 @@ public class StudentsController(IMediator mediator) : ControllerBase
     [Authorize]
     [HttpGet("table")]
     [ProducesResponseType<GetStudentsTableQueryResult>(StatusCodes.Status200OK)]
-    [ProducesResponseType<GetStudentsTableQueryDefenceStageData>(StatusCodes.Status201Created)]
-    [ProducesResponseType<GetStudentsTableQueryPreDefenceStageData>(StatusCodes.Status202Accepted)]
-    [ProducesResponseType<GetStudentsTableQueryFormattingReviewStageData>(StatusCodes.Status203NonAuthoritative)]
     public async Task<IActionResult> GetStudentsTable(
         [FromHeader(Name = "X-Year")] string year,
         [Required] string stage,

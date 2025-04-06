@@ -1,4 +1,6 @@
-﻿namespace Graduation.Application.Students.GetStudentsTable;
+﻿using System.Text.Json.Serialization;
+
+namespace Graduation.Application.Students.GetStudentsTable;
 
 public record GetStudentsTableQueryResult(
     IList<GetStudentsTableQueryStudent> Students,
@@ -24,6 +26,9 @@ public record GetStudentsTableQueryQualificationWork(
 
 public record GetStudentsTableQuerySupervisor(Guid Id, string FullName);
 
+[JsonDerivedType(typeof(GetStudentsTableQueryDefenceStageData))]
+[JsonDerivedType(typeof(GetStudentsTableQueryPreDefenceStageData))]
+[JsonDerivedType(typeof(GetStudentsTableQueryFormattingReviewStageData))]
 public interface IGetStudentsTableQueryStageData;
 
 public record GetStudentsTableQueryDefenceStageData(

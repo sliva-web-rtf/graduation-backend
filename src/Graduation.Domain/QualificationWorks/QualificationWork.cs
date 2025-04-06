@@ -1,4 +1,6 @@
 ﻿using Graduation.Domain.Common;
+using Graduation.Domain.Documents;
+using Graduation.Domain.Stages;
 using Graduation.Domain.Topics;
 using Graduation.Domain.Users;
 
@@ -19,4 +21,6 @@ public class QualificationWork : Entity<Guid>
     public string? Annotation { get; set; }
     public QualificationWorkStatus Status { get; set; }
     public string Year { get; set; }
+    public List<Document> Documents { get; set; } = [];
+    public List<QualificationWorkStage> Stages { get; set; } = [];
 }
