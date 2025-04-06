@@ -1,5 +1,6 @@
 ﻿using Graduation.Domain.AcademicGroups;
 using Graduation.Domain.Common;
+using Graduation.Domain.QualificationWorks;
 using Graduation.Domain.Users;
 
 namespace Graduation.Domain.Students;
@@ -21,6 +22,8 @@ public class Student : Entity<Guid>
     public Guid? AcademicGroupId { get; set; }
     public AcademicGroup? AcademicGroup { get; set; }
     public User? User { get; set; }
+    public QualificationWork? QualificationWork { get; set; }
+
 
     public static Student Create(User user)
     {

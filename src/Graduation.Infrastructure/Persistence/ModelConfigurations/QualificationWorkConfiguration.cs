@@ -15,9 +15,9 @@ public class QualificationWorkConfiguration : IEntityTypeConfiguration<Qualifica
     {
         builder.HasKey(x => x.Id);
 
-        builder.HasOne<Topic>().WithMany().HasForeignKey(x => x.TopicId);
-        builder.HasOne<User>().WithMany().HasForeignKey(x => x.SupervisorId);
-        builder.HasOne<Student>().WithMany().HasForeignKey(x => x.StudentId);
+        builder.HasOne<Topic>(x => x.Topic).WithMany().HasForeignKey(x => x.TopicId);
+        builder.HasOne<User>(x => x.Supervisor).WithMany().HasForeignKey(x => x.SupervisorId);
+        builder.HasOne<Student>().WithOne(x => x.QualificationWork).HasForeignKey<QualificationWork>(x => x.StudentId);
         builder.HasOne<QualificationWorkRole>().WithMany().HasForeignKey(x => x.QualificationWorkRoleId);
         builder.HasOne<Year>().WithMany().HasForeignKey(x => x.Year);
     }

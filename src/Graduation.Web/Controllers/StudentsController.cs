@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Graduation.Application.Students.GetStudent;
 using Graduation.Application.Students.GetStudents;
+using Graduation.Application.Students.GetStudentsTable;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,23 @@ public class StudentsController(IMediator mediator) : ControllerBase
         string? query)
     {
         var request = new GetStudentsQuery(year, page, size, query);
+        return Ok(await mediator.Send(request));
+    }
+
+    [Authorize]
+    [HttpGet("table")]
+    [ProducesResponseType<GetStudentsTableQueryResult>(StatusCodes.Status200OK)]
+    [ProducesResponseType<GetStudentsTableQueryDefenceStageData>(StatusCodes.Status201Created)]
+    [ProducesResponseType<GetStudentsTableQueryPreDefenceStageData>(StatusCodes.Status202Accepted)]
+    [ProducesResponseType<GetStudentsTableQueryFormattingReviewStageData>(StatusCodes.Status203NonAuthoritative)]
+    public async Task<IActionResult> GetStudentsTable(
+        [FromHeader(Name = "X-Year")] string year,
+        [Required] string stage,
+        [Required] [Range(0, int.MaxValue)] int page,
+        [Required] [Range(1, 1000)] int size,
+        string? query)
+    {
+        var request = new GetStudentsTableQuery(year, stage, page, size, query);
         return Ok(await mediator.Send(request));
     }
 
