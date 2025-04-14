@@ -1,13 +1,68 @@
 ﻿services:
-  graduation.web:
-    image: graduation.web
+  graduation-web:
+    restart: unless-stopped
+    image: graduation-web
+    container_name: graduation-web
     build:
       context: .
       dockerfile: src/Graduation.Web/Dockerfile
-    restart: unless-stopped
+    networks:
+      - graduation-net
     environment:
       ASPNETCORE_URLS: http://+:5000
-      ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__PgConnection: Server=${Server:-};User Id=${Uid:-};Password=${Pwd:-};Port=${Port:-};Database=${Database:-};
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__AppDatabase: Server=postgres;User Id=${Uid:-};Password=${Pwd:-};Port=5432;Database=${Database:-};
     ports:
       - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+        
+  graduation-front:
+    restart: unless-stopped
+    image: graduation-front
+    container_name: graduation-front
+    ports:
+      - "3000:3000"
+    networks:
+      - graduation-net
+        
+  nginx:
+    restart: unless-stopped
+    image: nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx:/etc/nginx
+      - ./log/nginx:/var/log/nginx
+    networks:
+      - graduation-net
+  
+  postgres:
+    restart: unless-stopped
+    image: postgres:13
+    container_name: postgres
+    environment:
+      POSTGRES_USER: ${Uid:-}
+      POSTGRES_PASSWORD: ${Pwd:-}
+      POSTGRES_DB: ${Database:-}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - graduation-net
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready", "-d", "db_prod" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+networks:
+  graduation-net:
+    driver: bridge
+
+volumes:
+  pg_data:
