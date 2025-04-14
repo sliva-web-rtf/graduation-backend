@@ -1,5 +1,6 @@
 ﻿using Graduation.Application.Interfaces.Authentication;
 using Graduation.Application.Interfaces.DataAccess;
+using Graduation.Application.Interfaces.Services;
 using Graduation.Domain;
 using Graduation.Domain.Topics;
 using Graduation.Domain.Users;
@@ -9,22 +10,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Graduation.Application.Topics.GetTopics;
 
-public class GetTopicsQueryHandler : IRequestHandler<GetTopicsQuery, GetTopicsQueryResult>
+public class GetTopicsQueryHandler(
+    UserManager<User> userManager,
+    IAppDbContext dbContext,
+    ILoggedUserAccessor loggedUserAccessor,
+    ICurrentYearProvider currentYearProvider)
+    : IRequestHandler<GetTopicsQuery, GetTopicsQueryResult>
 {
-    private readonly IAppDbContext dbContext;
-    private readonly ILoggedUserAccessor loggedUserAccessor;
-
-    private readonly UserManager<User> userManager;
-
-    public GetTopicsQueryHandler(UserManager<User> userManager,
-        IAppDbContext dbContext,
-        ILoggedUserAccessor loggedUserAccessor)
-    {
-        this.userManager = userManager;
-        this.dbContext = dbContext;
-        this.loggedUserAccessor = loggedUserAccessor;
-    }
-
     public async Task<GetTopicsQueryResult> Handle(GetTopicsQuery query, CancellationToken cancellationToken)
     {
         var user = (await userManager.FindByIdAsync(loggedUserAccessor.GetCurrentUserId().ToString()))!;
@@ -45,42 +37,45 @@ public class GetTopicsQueryHandler : IRequestHandler<GetTopicsQuery, GetTopicsQu
         return new GetTopicsQueryResult(topics.ToList(), pagesCount);
     }
 
-    private async Task<IEnumerable<GetTopicsQueryTopic>> GetTopicsForRoles(GetTopicsData data)
+    private async Task<IEnumerable<GetTopicsQueryTopic>> GetTopicsForRoles(GetTopicsData request)
     {
-        var topics = await GetTopicsQuery(data)
+        var topics = await GetTopicsQuery(request)
             .Include(x => x.Owner)
             .Include(x => x.AcademicPrograms)
-            .Skip(data.Page * data.Size)
-            .Take(data.Size)
-            .ToListAsync(data.CancellationToken);
+            .Include(x => x.UserRoleTopics)
+            .ThenInclude(x => x.QualificationWorkRole)
+            .Skip(request.Page * request.Size)
+            .Take(request.Size)
+            .ToListAsync(request.CancellationToken);
+
+        var currentYear = currentYearProvider.GetCurrentYear();
 
         var result = topics.Select(x =>
-            new GetTopicsQueryTopic(x.Id,
+        {
+            var canJoin = request.Roles.Contains(WellKnownRoles.Supervisor)
+                ? x.UserRoleTopics.All(urt => urt.QualificationWorkRole?.Role is not WellKnownRoles.Supervisor)
+                : !x.UserRoleTopics.Any(urt => urt.QualificationWorkRole?.Role is not WellKnownRoles.Supervisor);
+            canJoin = request.Year == currentYear && canJoin;
+
+            return new GetTopicsQueryTopic(x.Id,
+                canJoin,
                 x.Name,
                 x.Description,
                 new GetTopicsQueryTopicOwner(x.OwnerId, x.Owner!.FullName),
-                x.AcademicPrograms.Select(ap => ap.Name).ToList()));
+                x.AcademicPrograms.Select(ap => ap.Name).ToList());
+        });
 
         return result;
     }
 
-    private IQueryable<Topic> GetTopicsQuery(GetTopicsData data)
+    private IQueryable<Topic> GetTopicsQuery(GetTopicsData request)
     {
-        var searchQuery = $"%{data.Query}%";
+        var searchQuery = $"%{request.Query}%";
 
-        var topicsQuery = from topic in dbContext.Topics
-            join userRoleTopic in dbContext.UserRoleTopics on topic.Id equals userRoleTopic.TopicId
-            join userRole in dbContext.UserRoles on userRoleTopic.UserId equals userRole.UserId
-            join role in dbContext.Roles on userRole.RoleId equals role.Id
-            where topic.Year == data.Year && userRole.Year == data.Year &&
-                  ((data.Roles.Contains(WellKnownRoles.Student) && role.Name != WellKnownRoles.Student) ||
-                   (data.Roles.Contains(WellKnownRoles.Supervisor) && role.Name != WellKnownRoles.Supervisor))
-            select topic;
-
-        return topicsQuery
-            .Distinct()
+        return dbContext.Topics
+            .Where(t => t.Year == request.Year)
             .Where(topic => EF.Functions.ILike(topic.Name, searchQuery))
-            .OrderByDescending(x => x.OwnerId == data.User.Id);
+            .OrderByDescending(x => x.OwnerId == request.User.Id);
     }
 
     private record GetTopicsData(

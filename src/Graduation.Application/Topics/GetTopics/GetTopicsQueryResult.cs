@@ -4,6 +4,7 @@ public record GetTopicsQueryResult(IReadOnlyList<GetTopicsQueryTopic> Topics, in
 
 public record GetTopicsQueryTopic(
     Guid Id,
+    bool CanJoin,
     string Name,
     string? Description,
     GetTopicsQueryTopicOwner Owner,

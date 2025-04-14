@@ -1,14 +1,12 @@
-﻿using Graduation.Application.Topics.GetTopics;
+﻿namespace Graduation.Application.Topics.GetUserTopics;
 
-namespace Graduation.Application.Topics.GetUserTopics;
-
-public record GetUserTopicsQueryResult(IReadOnlyList<GetTopicsQueryTopic> Topics, int PagesCount);
+public record GetUserTopicsQueryResult(IReadOnlyList<GetUserTopicsQueryTopic> Topics, int PagesCount);
 
 public record GetUserTopicsQueryTopic(
     Guid Id,
     string Name,
     string? Description,
-    GetTopicsQueryTopicOwner Owner,
+    GetUserTopicsQueryTopicOwner Owner,
     IReadOnlyList<string> AcademicPrograms);
 
 public record GetUserTopicsQueryTopicOwner(Guid Id, string Name);

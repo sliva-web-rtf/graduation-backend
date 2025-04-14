@@ -1,5 +1,4 @@
 ﻿using Graduation.Application.Interfaces.DataAccess;
-using Graduation.Application.Topics.GetTopics;
 using Graduation.Domain.Topics;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -28,10 +27,10 @@ public class GetUserTopicsQueryHandler : IRequestHandler<GetUserTopicsQuery, Get
             .ToListAsync(cancellationToken);
 
         var result = topics.Select(x =>
-            new GetTopicsQueryTopic(x.Id,
+            new GetUserTopicsQueryTopic(x.Id,
                 x.Name,
                 x.Description,
-                new GetTopicsQueryTopicOwner(x.OwnerId, x.Owner!.FullName),
+                new GetUserTopicsQueryTopicOwner(x.OwnerId, x.Owner!.FullName),
                 x.AcademicPrograms.Select(ap => ap.Name).ToList()));
 
         return new GetUserTopicsQueryResult(result.ToList(), pagesCount);
