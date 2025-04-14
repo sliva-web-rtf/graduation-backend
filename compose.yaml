@@ -33,9 +33,11 @@
     container_name: nginx
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./nginx:/etc/nginx
       - ./log/nginx:/var/log/nginx
+      - ./ssl:/etc/nginx/ssl
     networks:
       - graduation-net
   

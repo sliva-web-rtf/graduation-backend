@@ -29,7 +29,7 @@ app
         c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
         {
             swaggerDoc.Servers = new List<OpenApiServer>
-                { new() { Url = $"{httpReq.Scheme}://{httpReq.Host.Value}/api" } };
+                { new() { Url = $"https://{httpReq.Host.Value}/api" } };
         });
     })
     .UseSwaggerUI(new SwaggerUIOptionsSetup().Setup)
