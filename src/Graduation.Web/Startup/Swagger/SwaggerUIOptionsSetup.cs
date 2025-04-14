@@ -14,7 +14,7 @@ public class SwaggerUIOptionsSetup
     public void Setup(SwaggerUIOptions options)
     {
         options.ShowExtensions();
-        options.SwaggerEndpoint("/swagger/v1/swagger.json?v=1", "API Documentation");
+        options.SwaggerEndpoint("/api/swagger/v1/swagger.json?v=1", "API Documentation");
         options.EnableValidator();
         options.EnableDeepLinking();
         options.DisplayOperationId();

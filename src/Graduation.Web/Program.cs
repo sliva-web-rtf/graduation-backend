@@ -9,6 +9,7 @@ using Graduation.Web.Middlewares;
 using Graduation.Web.Startup;
 using Graduation.Web.Startup.Swagger;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 var environment = builder.Environment;
@@ -23,7 +24,14 @@ builder.Services.AddApi(environment, configuration)
 
 var app = builder.Build();
 app
-    .UseSwagger()
+    .UseSwagger(c =>
+    {
+        c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
+        {
+            swaggerDoc.Servers = new List<OpenApiServer>
+                { new() { Url = $"{httpReq.Scheme}://{httpReq.Host.Value}/api" } };
+        });
+    })
     .UseSwaggerUI(new SwaggerUIOptionsSetup().Setup)
     .UseMiddleware<ApiExceptionMiddleware>()
     .UseRouting()
