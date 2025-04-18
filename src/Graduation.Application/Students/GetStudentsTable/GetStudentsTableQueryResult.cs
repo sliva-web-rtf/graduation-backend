@@ -19,7 +19,7 @@ public record GetStudentsTableQueryStudent(
 
 public record GetStudentsTableQueryQualificationWork(
     Guid Id,
-    string Topic,
+    string? Topic,
     string? Status,
     string? CompanyName,
     string? CompanySupervisorName);
@@ -48,7 +48,8 @@ public record GetStudentsTableQueryPreDefenceStageData(
 ) : IGetStudentsTableQueryStageData;
 
 public record GetStudentsTableQueryFormattingReviewStageData(
-    IList<GetStudentsTableQueryFormattingReviewStageDataDocument> Documents
+    IList<GetStudentsTableQueryFormattingReviewStageDataDocument> Documents,
+    string? Result
 ) : IGetStudentsTableQueryStageData;
 
 public record GetStudentsTableQueryFormattingReviewStageDataDocument(

@@ -1,4 +1,6 @@
 ﻿using Graduation.Domain.Common;
+using Graduation.Domain.Topics;
+using Graduation.Domain.Users;
 
 namespace Graduation.Domain.Stages;
 
@@ -7,10 +9,19 @@ public class QualificationWorkStage : Entity<Guid>
     public Guid StageId { get; set; }
     public Guid QualificationWorkId { get; set; }
     public Guid? CommissionId { get; set; }
-    public string TopicName { get; set; }
+    public Guid? SupervisorId { get; set; }
+    public User? Supervisor { get; set; }
+    public Guid? TopicId { get; set; }
+    public Topic? Topic { get; set; }
+    public Guid? QualificationWorkRoleId { get; set; }
+    public required string TopicName { get; set; }
+    public string? CompanyName { get; set; }
+    public string? CompanySupervisorName { get; set; }
+    public string? Location { get; set; }
     public string? Result { get; set; }
     public decimal? Mark { get; set; }
     public bool IsCommand { get; set; }
     public string? Comment { get; set; }
-    public DateTime Date { get; set; }
+    public DateOnly? Date { get; set; }
+    public TimeOnly? Time { get; set; }
 }

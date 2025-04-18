@@ -20,22 +20,24 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
     public async Task<GetStudentsTableQueryResult> Handle(GetStudentsTableQuery request,
         CancellationToken cancellationToken)
     {
-        var usersCount = await GetStudentsQuery(request).CountAsync(cancellationToken);
-        var pagesCount = (usersCount + request.PageSize - 1) / request.PageSize;
-
         var stage = await dbContext.Stages.SingleOrDefaultAsync(s => s.Name == request.Stage,
                         cancellationToken)
                     ?? throw new DomainException("Stage not found");
+        
+        var usersCount = await GetStudentsQuery(request, stage).CountAsync(cancellationToken);
+        var pagesCount = (usersCount + request.PageSize - 1) / request.PageSize;
 
-        var studentsQuery = GetStudentsQuery(request)
+        var studentsQuery = GetStudentsQuery(request, stage)
             .Include(s => s.User)
             .Include(s => s.AcademicGroup)
             .Include(s => s.QualificationWork)
-            .ThenInclude(s => s!.Topic)
+            .ThenInclude(qw => qw!.Stages)
+            .ThenInclude(s => s.Topic)
             .ThenInclude(t => t!.UserRoleTopics)
             .ThenInclude(urt => urt.QualificationWorkRole)
             .Include(s => s.QualificationWork)
-            .ThenInclude(s => s!.Supervisor);
+            .ThenInclude(qw => qw!.Stages)
+            .ThenInclude(s => s.Supervisor);
 
         var stagePreparedQuery = PrepareForStage(studentsQuery, stage);
 
@@ -45,22 +47,23 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
 
         var formattedStudents = students.Select(s =>
             {
+                var qualificationWorkStage = s.QualificationWork?.Stages.SingleOrDefault(st => st.StageId == stage.Id);
                 var qualificationWork = s.QualificationWork == null
                     ? null
                     : new GetStudentsTableQueryQualificationWork(
-                        s.QualificationWork.TopicId,
-                        s.QualificationWork.Name,
+                        s.QualificationWork.Id,
+                        qualificationWorkStage?.TopicName,
                         s.QualificationWork.Status.ToString(),
-                        s.QualificationWork.CompanyName,
-                        s.QualificationWork.CompanySupervisorName);
-                var role = s.QualificationWork?.Topic!.UserRoleTopics
+                        qualificationWorkStage?.CompanyName,
+                        qualificationWorkStage?.CompanySupervisorName);
+                var role = qualificationWorkStage?.Topic!.UserRoleTopics
                     .SingleOrDefault(urt => urt.UserId == s.Id)?.QualificationWorkRole?.Role;
-                var supervisor = s.QualificationWork?.Supervisor == null
+                var supervisor = qualificationWorkStage?.Supervisor == null
                     ? null
                     : new GetStudentsTableQuerySupervisor(
-                        s.QualificationWork.Supervisor.Id,
-                        s.QualificationWork.Supervisor.FullName);
-                var data = GetStageData(s, stage);
+                        qualificationWorkStage.Supervisor.Id,
+                        qualificationWorkStage.Supervisor.FullName);
+                var data = GetStageData(s, stage, qualificationWorkStage);
 
                 return new GetStudentsTableQueryStudent(
                     s.Id,
@@ -78,7 +81,7 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
         return new GetStudentsTableQueryResult(formattedStudents, stage.Type.ToString(), pagesCount);
     }
 
-    private IQueryable<Student> GetStudentsQuery(GetStudentsTableQuery request)
+    private IQueryable<Student> GetStudentsQuery(GetStudentsTableQuery request, Stage stage)
     {
         var queryParts = (request.Query ?? "").Split(' ').Select(p => $"%{p}%").ToList();
 
@@ -89,7 +92,7 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
                 EF.Functions.ILike(s.User.LastName!, p) ||
                 EF.Functions.ILike(s.User.Patronymic!, p) ||
                 EF.Functions.ILike(s.AcademicGroup!.Name, p) ||
-                EF.Functions.ILike(s.QualificationWork!.Name, p)
+                s.QualificationWork!.Stages.Any(st => st.StageId == stage.Id && EF.Functions.ILike(st.TopicName, p))
             ));
     }
 
@@ -108,10 +111,12 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
         return query;
     }
 
-    private IGetStudentsTableQueryStageData GetStageData(Student student, Stage stage)
+    private IGetStudentsTableQueryStageData GetStageData(
+        Student student,
+        Stage stage,
+        QualificationWorkStage? qualificationWorkStage)
     {
-        var qualificationWorkStage = student.QualificationWork?.Stages.SingleOrDefault();
-        var docs = student.QualificationWork?.Documents?
+        var docs = student.QualificationWork?.Documents
             .Select(d => new GetStudentsTableQueryFormattingReviewStageDataDocument(d.Name, d.Status.ToString()))
             .ToList();
         return stage.Type switch
@@ -122,7 +127,7 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
             StageType.PreDefence => new GetStudentsTableQueryPreDefenceStageData(qualificationWorkStage?.Mark,
                 qualificationWorkStage?.Result, qualificationWorkStage?.Comment, qualificationWorkStage?.TopicName,
                 qualificationWorkStage?.IsCommand),
-            StageType.FormattingReview => new GetStudentsTableQueryFormattingReviewStageData(docs ?? []),
+            StageType.FormattingReview => new GetStudentsTableQueryFormattingReviewStageData(docs ?? [], qualificationWorkStage?.Result),
             _ => throw new ArgumentOutOfRangeException(nameof(stage))
         };
     }
