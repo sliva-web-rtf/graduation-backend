@@ -6,7 +6,7 @@ using Graduation.Domain.Students;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Graduation.Application.Students.GetStudentsTable;
+namespace Graduation.Application.Table.GetStudentsTable;
 
 public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuery, GetStudentsTableQueryResult>
 {
@@ -123,10 +123,10 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
         {
             StageType.Defence => new GetStudentsTableQueryDefenceStageData(qualificationWorkStage?.Mark,
                 qualificationWorkStage?.Result, qualificationWorkStage?.Comment, qualificationWorkStage?.TopicName,
-                qualificationWorkStage?.IsCommand),
+                qualificationWorkStage?.IsCommand, qualificationWorkStage?.Date, qualificationWorkStage?.Time),
             StageType.PreDefence => new GetStudentsTableQueryPreDefenceStageData(qualificationWorkStage?.Mark,
                 qualificationWorkStage?.Result, qualificationWorkStage?.Comment, qualificationWorkStage?.TopicName,
-                qualificationWorkStage?.IsCommand),
+                qualificationWorkStage?.IsCommand, qualificationWorkStage?.Date, qualificationWorkStage?.Time),
             StageType.FormattingReview => new GetStudentsTableQueryFormattingReviewStageData(docs ?? [], qualificationWorkStage?.Result),
             _ => throw new ArgumentOutOfRangeException(nameof(stage))
         };

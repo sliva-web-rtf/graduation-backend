@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Graduation.Application.Students.GetStudent;
 using Graduation.Application.Students.GetStudents;
-using Graduation.Application.Students.GetStudentsTable;
+using Graduation.Application.Table.EditStudentsTable;
+using Graduation.Application.Table.GetStudentsTable;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -37,6 +38,14 @@ public class StudentsController(IMediator mediator) : ControllerBase
         string? query)
     {
         var request = new GetStudentsTableQuery(year, stage, page, size, query);
+        return Ok(await mediator.Send(request));
+    }
+    
+    [Authorize]
+    [HttpPut("table")]
+    [ProducesResponseType<GetStudentsTableQueryResult>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> EditStudentsTable(EditStudentsTableCommand request)
+    {
         return Ok(await mediator.Send(request));
     }
 

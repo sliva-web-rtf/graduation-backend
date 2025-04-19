@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Graduation.Application.Students.GetStudentsTable;
+namespace Graduation.Application.Table.GetStudentsTable;
 
 public record GetStudentsTableQueryResult(
     IList<GetStudentsTableQueryStudent> Students,
@@ -36,7 +36,9 @@ public record GetStudentsTableQueryDefenceStageData(
     string? Result,
     string? Comment,
     string? Topic,
-    bool? IsCommand
+    bool? IsCommand,
+    DateOnly? Date,
+    TimeOnly? Time
 ) : IGetStudentsTableQueryStageData;
 
 public record GetStudentsTableQueryPreDefenceStageData(
@@ -44,7 +46,9 @@ public record GetStudentsTableQueryPreDefenceStageData(
     string? Result,
     string? Comment,
     string? Topic,
-    bool? IsCommand
+    bool? IsCommand,
+    DateOnly? Date,
+    TimeOnly? Time
 ) : IGetStudentsTableQueryStageData;
 
 public record GetStudentsTableQueryFormattingReviewStageData(

@@ -2,5 +2,7 @@
 
 public enum DocumentStatus
 {
-    
+    Empty,
+    Uploaded,
+    Checked
 }

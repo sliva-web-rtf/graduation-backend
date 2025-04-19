@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Graduation.Application.Students.GetStudentsTable;
+namespace Graduation.Application.Table.GetStudentsTable;
 
 public record GetStudentsTableQuery(
     string Year,
