@@ -87,6 +87,7 @@ public class EditStudentsTableCommandHandler(IAppDbContext dbContext)
         qualificationWorkStage.IsCommand = request.IsCommand;
         qualificationWorkStage.Date = request.Date;
         qualificationWorkStage.Time = request.Time;
+        qualificationWorkStage.Location = request.Location;
     }
 
     private void SetFormattingReviewData(Student student, EditStudentsTableCommand request, Stage stage)

@@ -23,6 +23,7 @@ public record EditStudentsTableCommand(
     string? Result,
     string? Comment,
     bool IsCommand,
+    string? Location,
     DateOnly? Date,
     TimeOnly? Time,
     List<EditStudentsTableCommandDocument>? Documents
