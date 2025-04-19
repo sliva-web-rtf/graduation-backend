@@ -1,4 +1,5 @@
-﻿using Graduation.Domain.Common;
+﻿using Graduation.Domain.Commissions;
+using Graduation.Domain.Common;
 using Graduation.Domain.QualificationWorkRoles;
 using Graduation.Domain.Topics;
 using Graduation.Domain.Users;
@@ -19,6 +20,7 @@ public class QualificationWorkStage : Entity<Guid>
     public Stage Stage { get; set; }
     public Guid QualificationWorkId { get; set; }
     public Guid? CommissionId { get; set; }
+    public Commission? Commission { get; set; }
     public Guid? SupervisorId { get; set; }
     public User? Supervisor { get; set; }
     public Guid? TopicId { get; set; }

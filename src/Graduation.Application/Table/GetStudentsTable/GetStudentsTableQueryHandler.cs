@@ -23,7 +23,7 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
         var stage = await dbContext.Stages.SingleOrDefaultAsync(s => s.Name == request.Stage,
                         cancellationToken)
                     ?? throw new DomainException("Stage not found");
-        
+
         var usersCount = await GetStudentsQuery(request, stage).CountAsync(cancellationToken);
         var pagesCount = (usersCount + request.PageSize - 1) / request.PageSize;
 
@@ -91,7 +91,9 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
                 EF.Functions.ILike(s.User.Patronymic!, p) ||
                 EF.Functions.ILike(s.AcademicGroup!.Name, p) ||
                 s.QualificationWork!.Stages.Any(st => st.StageId == stage.Id && EF.Functions.ILike(st.TopicName, p))
-            ));
+            ))
+            .Where(s => request.CommissionName == null || s.QualificationWork!.Stages
+                .Any(st => st.StageId == stage.Id && st.Commission!.Name == request.CommissionName));
     }
 
     private IQueryable<Student> PrepareForStage(IQueryable<Student> query, Stage stage)
@@ -125,7 +127,8 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
             StageType.PreDefence => new GetStudentsTableQueryPreDefenceStageData(qualificationWorkStage?.Mark,
                 qualificationWorkStage?.Result, qualificationWorkStage?.Comment, qualificationWorkStage?.TopicName,
                 qualificationWorkStage?.IsCommand, qualificationWorkStage?.Date, qualificationWorkStage?.Time),
-            StageType.FormattingReview => new GetStudentsTableQueryFormattingReviewStageData(docs ?? [], qualificationWorkStage?.Result),
+            StageType.FormattingReview => new GetStudentsTableQueryFormattingReviewStageData(docs ?? [],
+                qualificationWorkStage?.Result),
             _ => throw new ArgumentOutOfRangeException(nameof(stage))
         };
     }
