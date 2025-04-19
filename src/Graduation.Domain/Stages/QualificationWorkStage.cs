@@ -16,6 +16,7 @@ public class QualificationWorkStage : Entity<Guid>
     }
 
     public Guid StageId { get; set; }
+    public Stage Stage { get; set; }
     public Guid QualificationWorkId { get; set; }
     public Guid? CommissionId { get; set; }
     public Guid? SupervisorId { get; set; }

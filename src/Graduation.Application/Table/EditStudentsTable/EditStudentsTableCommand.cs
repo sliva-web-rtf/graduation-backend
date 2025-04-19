@@ -17,6 +17,7 @@ public record EditStudentsTableCommand(
     string? CompanySupervisorName,
     string? Role,
     Guid? SupervisorId,
+    string? StudentComment,
     StudentStatus StudentStatus,
     decimal? Mark,
     string? Result,

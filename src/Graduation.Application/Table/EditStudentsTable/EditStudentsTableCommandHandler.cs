@@ -1,7 +1,6 @@
 ﻿using Graduation.Application.Interfaces.DataAccess;
-using Graduation.Application.Table.GetStudentsTable;
+using Graduation.Domain.Documents;
 using Graduation.Domain.Exceptions;
-using Graduation.Domain.QualificationWorks;
 using Graduation.Domain.Stages;
 using Graduation.Domain.Students;
 using MediatR;
@@ -9,15 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Graduation.Application.Table.EditStudentsTable;
 
-public class EditStudentsTableCommandHandler : IRequestHandler<EditStudentsTableCommand, EditStudentsTableCommandResult>
+public class EditStudentsTableCommandHandler(IAppDbContext dbContext)
+    : IRequestHandler<EditStudentsTableCommand, EditStudentsTableCommandResult>
 {
-    private readonly IAppDbContext dbContext;
-
-    public EditStudentsTableCommandHandler(IAppDbContext dbContext)
-    {
-        this.dbContext = dbContext;
-    }
-
     public async Task<EditStudentsTableCommandResult> Handle(EditStudentsTableCommand request,
         CancellationToken cancellationToken)
     {
@@ -31,76 +24,91 @@ public class EditStudentsTableCommandHandler : IRequestHandler<EditStudentsTable
             .ThenInclude(s => s.Supervisor)
             .Include(s => s.QualificationWork)
             .ThenInclude(qw => qw!.Stages)
+            .ThenInclude(s => s.Stage)
+            .Include(s => s.QualificationWork)
+            .ThenInclude(qw => qw!.Stages)
             .ThenInclude(s => s.QualificationWorkRole);
 
         var student = await studentsQuery.SingleOrDefaultAsync(cancellationToken)
                       ?? throw new DomainException("Student not found");
 
-        await SetQualificationWorkAsync(student, request);
+        var stage = await dbContext.Stages.SingleOrDefaultAsync(s => s.Name == request.Stage, cancellationToken)
+                    ?? throw new DomainException("Stage not found");
+        if (student.QualificationWork != null)
+        {
+            await SetQualificationWorkAsync(student, request, stage);
+            SetStageData(student, request, stage);
+        }
 
-        // var qualificationWorkStage = student.QualificationWork?.Stages.SingleOrDefault(st => st.StageId == stage.Id);
-        // var qualificationWork = student.QualificationWork == null
-        //     ? null
-        //     : new GetStudentsTableQueryQualificationWork(
-        //         student.QualificationWork.Id,
-        //         qualificationWorkStage?.TopicName,
-        //         student.QualificationWork.Status.ToString(),
-        //         qualificationWorkStage?.CompanyName,
-        //         qualificationWorkStage?.CompanySupervisorName);
-        // var role = qualificationWorkStage?.QualificationWorkRole?.Role;
-        // var supervisor = qualificationWorkStage?.Supervisor == null
-        //     ? null
-        //     : new GetStudentsTableQuerySupervisor(
-        //         qualificationWorkStage.Supervisor.Id,
-        //         qualificationWorkStage.Supervisor.FullName);
-        // var data = GetStageData(student, stage, qualificationWorkStage);
-        //
-        // new GetStudentsTableQueryStudent(
-        //     student.Id,
-        //     student.User!.FullName,
-        //     student.AcademicGroup?.Name,
-        //     qualificationWork,
-        //     role,
-        //     supervisor,
-        //     student.Status.ToString(),
-        //     data
-        // );
+        student.Status = request.StudentStatus;
+        student.Comment = request.StudentComment;
+
+        await dbContext.SaveChangesAsync(cancellationToken);
 
         return new EditStudentsTableCommandResult(request.StudentId);
     }
 
-    private async Task SetQualificationWorkAsync(Student student, EditStudentsTableCommand request)
+    private async Task SetQualificationWorkAsync(Student student, EditStudentsTableCommand request, Stage stage)
     {
-        if (student.QualificationWork is null)
-            return;
-        var stage = await dbContext.Stages.SingleOrDefaultAsync(s => s.Name == request.Stage)
-                    ?? throw new DomainException("Stage not found");
-        var qualificationWorkStage = student.QualificationWork?.Stages.SingleOrDefault(st => st.StageId == stage.Id);
+        student.QualificationWork!.Status = request.QualificationWorkStatus;
 
-        var role = await dbContext.QualificationWorkRoles.FirstOrDefaultAsync(r => r.Role == request.Role);
-        qualificationWorkStage.QualificationWorkRoleId = role.Id;
+        var role = await dbContext.QualificationWorkRoles.SingleAsync(r => r.Role == request.Role);
 
+        foreach (var qwStage in student.QualificationWork.Stages.Where(s => s.Stage.Begin >= stage.Begin))
+        {
+            qwStage.QualificationWorkRoleId = role.Id;
+            qwStage.TopicName = request.Topic!;
+            qwStage.CompanyName = request.CompanyName;
+            qwStage.CompanySupervisorName = request.CompanySupervisorName;
+            qwStage.SupervisorId = request.SupervisorId;
+        }
     }
 
-    private IGetStudentsTableQueryStageData GetStageData(
-        Student student,
-        Stage stage,
-        QualificationWorkStage? qualificationWorkStage)
+    private void SetStageData(Student student, EditStudentsTableCommand request, Stage stage)
     {
-        var docs = student.QualificationWork?.Documents
-            .Select(d => new GetStudentsTableQueryFormattingReviewStageDataDocument(d.Name, d.Status.ToString()))
-            .ToList();
-        return stage.Type switch
+        switch (stage.Type)
         {
-            StageType.Defence => new GetStudentsTableQueryDefenceStageData(qualificationWorkStage?.Mark,
-                qualificationWorkStage?.Result, qualificationWorkStage?.Comment, qualificationWorkStage?.TopicName,
-                qualificationWorkStage?.IsCommand, qualificationWorkStage?.Date, qualificationWorkStage?.Time),
-            StageType.PreDefence => new GetStudentsTableQueryPreDefenceStageData(qualificationWorkStage?.Mark,
-                qualificationWorkStage?.Result, qualificationWorkStage?.Comment, qualificationWorkStage?.TopicName,
-                qualificationWorkStage?.IsCommand, qualificationWorkStage?.Date, qualificationWorkStage?.Time),
-            StageType.FormattingReview => new GetStudentsTableQueryFormattingReviewStageData(docs ?? [],
-                qualificationWorkStage?.Result),
-            _ => throw new ArgumentOutOfRangeException(nameof(stage))
-        };
+            case StageType.Defence:
+            case StageType.PreDefence:
+                SetDefenceData(student, request, stage);
+                break;
+            case StageType.FormattingReview:
+                SetFormattingReviewData(student, request, stage);
+                break;
+        }
+    }
+
+    private void SetDefenceData(Student student, EditStudentsTableCommand request, Stage stage)
+    {
+        var qualificationWorkStage = student.QualificationWork!.Stages.Single(s => s.StageId == stage.Id);
+        qualificationWorkStage.Mark = request.Mark;
+        qualificationWorkStage.Result = request.Result;
+        qualificationWorkStage.Comment = request.Comment;
+        qualificationWorkStage.IsCommand = request.IsCommand;
+        qualificationWorkStage.Date = request.Date;
+        qualificationWorkStage.Time = request.Time;
+    }
+
+    private void SetFormattingReviewData(Student student, EditStudentsTableCommand request, Stage stage)
+    {
+        var qualificationWorkStage = student.QualificationWork!.Stages.Single(s => s.StageId == stage.Id);
+
+        foreach (var document in request.Documents ?? [])
+        {
+            var doc = student.QualificationWork.Documents.SingleOrDefault(d => d.Name == document.Name);
+            if (doc == null)
+            {
+                doc = new Document(Guid.NewGuid())
+                {
+                    Name = document.Name,
+                    QualificationWorkId = student.QualificationWork.Id
+                };
+                dbContext.Documents.Add(doc);
+            }
+
+            doc.Status = document.DocumentStatus;
+        }
+
+        qualificationWorkStage.Result = request.Result;
     }
 }
