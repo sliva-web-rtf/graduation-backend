@@ -1,4 +1,5 @@
 ﻿using Graduation.Domain.Common;
+using Graduation.Domain.QualificationWorkRoles;
 using Graduation.Domain.Topics;
 using Graduation.Domain.Users;
 
@@ -22,6 +23,7 @@ public class QualificationWorkStage : Entity<Guid>
     public Guid? TopicId { get; set; }
     public Topic? Topic { get; set; }
     public Guid? QualificationWorkRoleId { get; set; }
+    public QualificationWorkRole? QualificationWorkRole { get; set; }
     public required string TopicName { get; set; }
     public string? CompanyName { get; set; }
     public string? CompanySupervisorName { get; set; }

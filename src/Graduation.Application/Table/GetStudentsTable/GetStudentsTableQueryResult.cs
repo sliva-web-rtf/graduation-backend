@@ -15,6 +15,7 @@ public record GetStudentsTableQueryStudent(
     string? Role,
     GetStudentsTableQuerySupervisor? Supervisor,
     string Status,
+    string? Comment,
     IGetStudentsTableQueryStageData Data);
 
 public record GetStudentsTableQueryQualificationWork(

@@ -32,12 +32,10 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
             .Include(s => s.AcademicGroup)
             .Include(s => s.QualificationWork)
             .ThenInclude(qw => qw!.Stages)
-            .ThenInclude(s => s.Topic)
-            .ThenInclude(t => t!.UserRoleTopics)
-            .ThenInclude(urt => urt.QualificationWorkRole)
+            .ThenInclude(s => s.Supervisor)
             .Include(s => s.QualificationWork)
             .ThenInclude(qw => qw!.Stages)
-            .ThenInclude(s => s.Supervisor);
+            .ThenInclude(s => s.QualificationWorkRole);
 
         var stagePreparedQuery = PrepareForStage(studentsQuery, stage);
 
@@ -56,8 +54,7 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
                         s.QualificationWork.Status.ToString(),
                         qualificationWorkStage?.CompanyName,
                         qualificationWorkStage?.CompanySupervisorName);
-                var role = qualificationWorkStage?.Topic!.UserRoleTopics
-                    .SingleOrDefault(urt => urt.UserId == s.Id)?.QualificationWorkRole?.Role;
+                var role = qualificationWorkStage?.QualificationWorkRole?.Role;
                 var supervisor = qualificationWorkStage?.Supervisor == null
                     ? null
                     : new GetStudentsTableQuerySupervisor(
@@ -73,6 +70,7 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
                     role,
                     supervisor,
                     s.Status.ToString(),
+                    s.Comment,
                     data
                 );
             })

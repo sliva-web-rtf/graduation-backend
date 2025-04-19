@@ -20,6 +20,6 @@ public class QualificationWorkStageConfiguration : IEntityTypeConfiguration<Qual
         builder.HasOne<Commission>().WithMany().HasForeignKey(x => x.CommissionId);
         builder.HasOne<Topic>(x => x.Topic).WithMany().HasForeignKey(x => x.TopicId);
         builder.HasOne<User>(x => x.Supervisor).WithMany().HasForeignKey(x => x.SupervisorId);
-        builder.HasOne<QualificationWorkRole>().WithMany().HasForeignKey(x => x.QualificationWorkRoleId);
+        builder.HasOne<QualificationWorkRole>(x => x.QualificationWorkRole).WithMany().HasForeignKey(x => x.QualificationWorkRoleId);
     }
 }
