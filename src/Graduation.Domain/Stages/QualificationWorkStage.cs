@@ -6,6 +6,14 @@ namespace Graduation.Domain.Stages;
 
 public class QualificationWorkStage : Entity<Guid>
 {
+    public QualificationWorkStage(Guid id) : base(id)
+    {
+    }
+
+    private QualificationWorkStage()
+    {
+    }
+
     public Guid StageId { get; set; }
     public Guid QualificationWorkId { get; set; }
     public Guid? CommissionId { get; set; }
