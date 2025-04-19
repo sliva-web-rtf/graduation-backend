@@ -3,6 +3,7 @@ using Graduation.Application.Students.GetStudent;
 using Graduation.Application.Students.GetStudents;
 using Graduation.Application.Table.EditStudentsTable;
 using Graduation.Application.Table.GetStudentsTable;
+using Graduation.Application.Table.SetStudentsStageDate;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -47,6 +48,15 @@ public class StudentsController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> EditStudentsTable(EditStudentsTableCommand request)
     {
         return Ok(await mediator.Send(request));
+    }
+    
+    [Authorize]
+    [HttpPut("table/date")]
+    [ProducesResponseType<GetStudentsTableQueryResult>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> SetStudentsTableStageDate(SetStudentsStageDateCommand request)
+    {
+        await mediator.Send(request);
+        return Ok();
     }
 
     [Authorize]
