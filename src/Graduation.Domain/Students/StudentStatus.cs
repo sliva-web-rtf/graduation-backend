@@ -2,5 +2,7 @@
 
 public enum StudentStatus
 {
-    Active
+    Active,
+    Kicked,
+    Academ
 }

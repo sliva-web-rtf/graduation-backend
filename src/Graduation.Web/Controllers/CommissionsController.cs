@@ -13,7 +13,7 @@ public class CommissionsController(IMediator mediator) : ControllerBase
     [Authorize]
     [HttpGet]
     [ProducesResponseType<GetCommissionsQuery>(StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetCommissions([FromHeader] string year)
+    public async Task<IActionResult> GetCommissions([FromHeader(Name = "X-Year")] string year)
     {
         var request = new GetCommissionsQuery(year);
         return Ok(await mediator.Send(request));

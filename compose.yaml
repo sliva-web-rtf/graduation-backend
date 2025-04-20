@@ -11,7 +11,7 @@
     environment:
       ASPNETCORE_URLS: http://+:5000
       ASPNETCORE_ENVIRONMENT: Production
-      ConnectionStrings__AppDatabase: Server=postgres;User Id=${Uid:-};Password=${Pwd:-};Port=5432;Database=${Database:-};
+      ConnectionStrings__AppDatabase: Server=${Server:-};User Id=${Uid:-};Password=${Pwd:-};Port=${Port:-};Database=${Database:-};
     ports:
       - "5000:5000"
     depends_on:

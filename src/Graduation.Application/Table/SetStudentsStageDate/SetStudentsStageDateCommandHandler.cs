@@ -31,6 +31,7 @@ public class SetStudentsStageDateCommandHandler : IRequestHandler<SetStudentsSta
                 continue;
 
             qwStage.Date = request.Date;
+            qwStage.Location = request.Location;
         }
 
         await dbContext.SaveChangesAsync(cancellationToken);
