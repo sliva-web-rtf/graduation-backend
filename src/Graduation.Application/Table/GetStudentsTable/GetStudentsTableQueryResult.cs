@@ -38,6 +38,7 @@ public record GetStudentsTableQueryDefenceStageData(
     string? Comment,
     string? Topic,
     bool? IsCommand,
+    string? Location,
     DateOnly? Date,
     TimeOnly? Time
 ) : IGetStudentsTableQueryStageData;
@@ -48,6 +49,7 @@ public record GetStudentsTableQueryPreDefenceStageData(
     string? Comment,
     string? Topic,
     bool? IsCommand,
+    string? Location,
     DateOnly? Date,
     TimeOnly? Time
 ) : IGetStudentsTableQueryStageData;

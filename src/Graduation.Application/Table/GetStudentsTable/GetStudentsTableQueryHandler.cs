@@ -123,10 +123,12 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
         {
             StageType.Defence => new GetStudentsTableQueryDefenceStageData(qualificationWorkStage?.Mark,
                 qualificationWorkStage?.Result, qualificationWorkStage?.Comment, qualificationWorkStage?.TopicName,
-                qualificationWorkStage?.IsCommand, qualificationWorkStage?.Date, qualificationWorkStage?.Time),
+                qualificationWorkStage?.IsCommand, qualificationWorkStage?.Location, qualificationWorkStage?.Date,
+                qualificationWorkStage?.Time),
             StageType.PreDefence => new GetStudentsTableQueryPreDefenceStageData(qualificationWorkStage?.Mark,
                 qualificationWorkStage?.Result, qualificationWorkStage?.Comment, qualificationWorkStage?.TopicName,
-                qualificationWorkStage?.IsCommand, qualificationWorkStage?.Date, qualificationWorkStage?.Time),
+                qualificationWorkStage?.IsCommand, qualificationWorkStage?.Location, qualificationWorkStage?.Date,
+                qualificationWorkStage?.Time),
             StageType.FormattingReview => new GetStudentsTableQueryFormattingReviewStageData(docs ?? [],
                 qualificationWorkStage?.Result),
             _ => throw new ArgumentOutOfRangeException(nameof(stage))
