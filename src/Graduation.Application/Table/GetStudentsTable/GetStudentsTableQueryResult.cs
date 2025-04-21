@@ -15,6 +15,7 @@ public record GetStudentsTableQueryStudent(
     string? Role,
     GetStudentsTableQuerySupervisor? Supervisor,
     string Status,
+    string? Comment,
     IGetStudentsTableQueryStageData Data);
 
 public record GetStudentsTableQueryQualificationWork(
@@ -37,6 +38,7 @@ public record GetStudentsTableQueryDefenceStageData(
     string? Comment,
     string? Topic,
     bool? IsCommand,
+    string? Location,
     DateOnly? Date,
     TimeOnly? Time
 ) : IGetStudentsTableQueryStageData;
@@ -47,6 +49,7 @@ public record GetStudentsTableQueryPreDefenceStageData(
     string? Comment,
     string? Topic,
     bool? IsCommand,
+    string? Location,
     DateOnly? Date,
     TimeOnly? Time
 ) : IGetStudentsTableQueryStageData;

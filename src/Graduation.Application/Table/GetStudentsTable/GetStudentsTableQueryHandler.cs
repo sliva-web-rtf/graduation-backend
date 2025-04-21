@@ -23,7 +23,7 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
         var stage = await dbContext.Stages.SingleOrDefaultAsync(s => s.Name == request.Stage,
                         cancellationToken)
                     ?? throw new DomainException("Stage not found");
-        
+
         var usersCount = await GetStudentsQuery(request, stage).CountAsync(cancellationToken);
         var pagesCount = (usersCount + request.PageSize - 1) / request.PageSize;
 
@@ -32,12 +32,10 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
             .Include(s => s.AcademicGroup)
             .Include(s => s.QualificationWork)
             .ThenInclude(qw => qw!.Stages)
-            .ThenInclude(s => s.Topic)
-            .ThenInclude(t => t!.UserRoleTopics)
-            .ThenInclude(urt => urt.QualificationWorkRole)
+            .ThenInclude(s => s.Supervisor)
             .Include(s => s.QualificationWork)
             .ThenInclude(qw => qw!.Stages)
-            .ThenInclude(s => s.Supervisor);
+            .ThenInclude(s => s.QualificationWorkRole);
 
         var stagePreparedQuery = PrepareForStage(studentsQuery, stage);
 
@@ -56,8 +54,7 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
                         s.QualificationWork.Status.ToString(),
                         qualificationWorkStage?.CompanyName,
                         qualificationWorkStage?.CompanySupervisorName);
-                var role = qualificationWorkStage?.Topic!.UserRoleTopics
-                    .SingleOrDefault(urt => urt.UserId == s.Id)?.QualificationWorkRole?.Role;
+                var role = qualificationWorkStage?.QualificationWorkRole?.Role;
                 var supervisor = qualificationWorkStage?.Supervisor == null
                     ? null
                     : new GetStudentsTableQuerySupervisor(
@@ -73,6 +70,7 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
                     role,
                     supervisor,
                     s.Status.ToString(),
+                    s.Comment,
                     data
                 );
             })
@@ -93,7 +91,9 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
                 EF.Functions.ILike(s.User.Patronymic!, p) ||
                 EF.Functions.ILike(s.AcademicGroup!.Name, p) ||
                 s.QualificationWork!.Stages.Any(st => st.StageId == stage.Id && EF.Functions.ILike(st.TopicName, p))
-            ));
+            ))
+            .Where(s => request.CommissionName == null || s.QualificationWork!.Stages
+                .Any(st => st.StageId == stage.Id && st.Commission!.Name == request.CommissionName));
     }
 
     private IQueryable<Student> PrepareForStage(IQueryable<Student> query, Stage stage)
@@ -123,11 +123,14 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
         {
             StageType.Defence => new GetStudentsTableQueryDefenceStageData(qualificationWorkStage?.Mark,
                 qualificationWorkStage?.Result, qualificationWorkStage?.Comment, qualificationWorkStage?.TopicName,
-                qualificationWorkStage?.IsCommand, qualificationWorkStage?.Date, qualificationWorkStage?.Time),
+                qualificationWorkStage?.IsCommand, qualificationWorkStage?.Location, qualificationWorkStage?.Date,
+                qualificationWorkStage?.Time),
             StageType.PreDefence => new GetStudentsTableQueryPreDefenceStageData(qualificationWorkStage?.Mark,
                 qualificationWorkStage?.Result, qualificationWorkStage?.Comment, qualificationWorkStage?.TopicName,
-                qualificationWorkStage?.IsCommand, qualificationWorkStage?.Date, qualificationWorkStage?.Time),
-            StageType.FormattingReview => new GetStudentsTableQueryFormattingReviewStageData(docs ?? [], qualificationWorkStage?.Result),
+                qualificationWorkStage?.IsCommand, qualificationWorkStage?.Location, qualificationWorkStage?.Date,
+                qualificationWorkStage?.Time),
+            StageType.FormattingReview => new GetStudentsTableQueryFormattingReviewStageData(docs ?? [],
+                qualificationWorkStage?.Result),
             _ => throw new ArgumentOutOfRangeException(nameof(stage))
         };
     }

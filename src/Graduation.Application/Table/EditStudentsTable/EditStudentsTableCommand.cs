@@ -17,11 +17,13 @@ public record EditStudentsTableCommand(
     string? CompanySupervisorName,
     string? Role,
     Guid? SupervisorId,
+    string? StudentComment,
     StudentStatus StudentStatus,
     decimal? Mark,
     string? Result,
     string? Comment,
     bool IsCommand,
+    string? Location,
     DateOnly? Date,
     TimeOnly? Time,
     List<EditStudentsTableCommandDocument>? Documents

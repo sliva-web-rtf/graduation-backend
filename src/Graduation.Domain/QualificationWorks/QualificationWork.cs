@@ -12,12 +12,12 @@ public class QualificationWork : Entity<Guid>
     public string Year { get; set; }
     public List<Document> Documents { get; set; } = [];
     public List<QualificationWorkStage> Stages { get; set; } = [];
-    
-    
+    public string? ExpertComment { get; set; }
+
+
     public Guid? SupervisorId { get; set; }
     public Guid TopicId { get; set; }
     public Guid? QualificationWorkRoleId { get; set; }
-    public string? ExpertComment { get; set; }
     public string Name { get; set; }
     public string? CompanyName { get; set; }
     public string? CompanySupervisorName { get; set; }

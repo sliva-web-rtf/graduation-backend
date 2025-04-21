@@ -2,5 +2,7 @@
 
 public enum QualificationWorkStatus
 {
-    Approved
+    Approved,
+    Consideration,
+    Cancelled
 }

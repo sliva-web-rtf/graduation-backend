@@ -15,11 +15,12 @@ public class QualificationWorkStageConfiguration : IEntityTypeConfiguration<Qual
     {
         builder.HasKey(x => x.Id);
 
-        builder.HasOne<Stage>().WithMany().HasForeignKey(x => x.StageId);
+        builder.HasOne<Stage>(x => x.Stage).WithMany().HasForeignKey(x => x.StageId);
         builder.HasOne<QualificationWork>().WithMany(x => x.Stages).HasForeignKey(x => x.QualificationWorkId);
-        builder.HasOne<Commission>().WithMany().HasForeignKey(x => x.CommissionId);
+        builder.HasOne<Commission>(x => x.Commission).WithMany().HasForeignKey(x => x.CommissionId);
         builder.HasOne<Topic>(x => x.Topic).WithMany().HasForeignKey(x => x.TopicId);
         builder.HasOne<User>(x => x.Supervisor).WithMany().HasForeignKey(x => x.SupervisorId);
-        builder.HasOne<QualificationWorkRole>().WithMany().HasForeignKey(x => x.QualificationWorkRoleId);
+        builder.HasOne<QualificationWorkRole>(x => x.QualificationWorkRole).WithMany()
+            .HasForeignKey(x => x.QualificationWorkRoleId);
     }
 }
