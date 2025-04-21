@@ -28,7 +28,7 @@ public class UploadExpertsCommandHandler : IRequestHandler<UploadExpertsCommand>
         var ws = workbook.Worksheet(1);
         var countRow = ws.Rows().Count();
 
-        for (var i = 2; i <= countRow; i++)
+        for (var i = 2; i < countRow + 2; i++)
         {
             var fullName = ws.Cell($"A{i}").GetValue<string>().Trim();
             var contacts = ws.Cell($"B{i}").GetValue<string>();
