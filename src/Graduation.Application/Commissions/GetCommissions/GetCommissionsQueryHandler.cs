@@ -17,11 +17,22 @@ public class GetCommissionsQueryHandler : IRequestHandler<GetCommissionsQuery, G
         CancellationToken cancellationToken)
     {
         var commissions = await dbContext.Commissions
+            .Include(c => c.Secretary)
             .Where(c => c.Year == request.Year)
-            .ToListAsync();
-
+            .ToListAsync(cancellationToken);
+        
         var formattedCommissions = commissions
-            .Select(c => new GetCommissionsQueryResultCommission(c.Name))
+            .Select(c =>
+            {
+                var name = $"{c.Secretary.LastName}";
+                var firstNameChar = c.Secretary.FirstName?.FirstOrDefault();
+                if (firstNameChar != null)
+                    name += $" {firstNameChar}.";
+                var patronymicChar = c.Secretary.Patronymic?.FirstOrDefault();
+                if (patronymicChar != null)
+                    name += $" {patronymicChar}.";
+                return new GetCommissionsQueryResultCommission($"{c.Name} ({name})");
+            })
             .ToList();
 
         return new GetCommissionsQueryResult(formattedCommissions);
