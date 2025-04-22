@@ -21,4 +21,14 @@ public class QualificationWork : Entity<Guid>
     public string Name { get; set; }
     public string? CompanyName { get; set; }
     public string? CompanySupervisorName { get; set; }
+
+    public QualificationWork(Guid id) : base(id)
+    {
+        
+    }
+
+    private QualificationWork()
+    {
+        
+    }
 }
