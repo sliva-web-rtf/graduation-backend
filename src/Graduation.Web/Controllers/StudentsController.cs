@@ -4,6 +4,7 @@ using Graduation.Application.Students.GetStudents;
 using Graduation.Application.Table.EditStudentsTable;
 using Graduation.Application.Table.GetStudentsTable;
 using Graduation.Application.Table.SetStudentsStageDate;
+using Graduation.Domain;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,15 @@ public class StudentsController(IMediator mediator) : ControllerBase
     }
 
     [Authorize]
+    [HttpGet("{id:Guid}")]
+    [ProducesResponseType<GetStudentQueryResult>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetStudent(Guid id)
+    {
+        var request = new GetStudentQuery(id);
+        return Ok(await mediator.Send(request));
+    }
+
+    [Authorize(Roles = nameof(WellKnownRoles.Secretary))]
     [HttpGet("table")]
     [ProducesResponseType<GetStudentsTableQueryResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetStudentsTable(
@@ -43,7 +53,7 @@ public class StudentsController(IMediator mediator) : ControllerBase
         return Ok(await mediator.Send(request));
     }
 
-    [Authorize]
+    [Authorize(Roles = nameof(WellKnownRoles.Secretary))]
     [HttpPut("table")]
     [ProducesResponseType<EditStudentsTableCommandResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> EditStudentsTable(EditStudentsTableCommand request)
@@ -51,21 +61,12 @@ public class StudentsController(IMediator mediator) : ControllerBase
         return Ok(await mediator.Send(request));
     }
 
-    [Authorize]
+    [Authorize(Roles = nameof(WellKnownRoles.Secretary))]
     [HttpPut("table/date")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> SetStudentsTableStageDate(SetStudentsStageDateCommand request)
     {
         await mediator.Send(request);
         return Ok();
-    }
-
-    [Authorize]
-    [HttpGet("{id:Guid}")]
-    [ProducesResponseType<GetStudentQueryResult>(StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetStudent(Guid id)
-    {
-        var request = new GetStudentQuery(id);
-        return Ok(await mediator.Send(request));
     }
 }

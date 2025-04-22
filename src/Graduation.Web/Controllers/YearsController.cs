@@ -2,6 +2,7 @@
 using Graduation.Application.Years.GetCurrentYear;
 using Graduation.Application.Years.GetYears;
 using Graduation.Application.Years.SetCurrentYear;
+using Graduation.Domain;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,7 @@ public class YearsController(IMediator mediator) : ControllerBase
         return Ok(await mediator.Send(request));
     }
 
-    [Authorize]
+    [Authorize(Roles = nameof(WellKnownRoles.Secretary))]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> CreateYear(CreateYearCommand request)
@@ -40,7 +41,7 @@ public class YearsController(IMediator mediator) : ControllerBase
         return Ok(await mediator.Send(request));
     }
 
-    [Authorize]
+    [Authorize(Roles = nameof(WellKnownRoles.Secretary))]
     [HttpPost("current")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> SetYear(SetCurrentYear request)

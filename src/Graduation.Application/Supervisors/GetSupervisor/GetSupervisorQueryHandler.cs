@@ -30,7 +30,7 @@ public class GetSupervisorQueryHandler : IRequestHandler<GetSupervisorQuery, Get
             .Where(s => s.UserId == request.Id)
             .Include(s => s.User)
             .ThenInclude(s => s!.UserRoleTopics.Where(urt => urt.Topic!.Year == request.Year))
-            .FirstAsync(cancellationToken);
+            .FirstOrDefaultAsync(cancellationToken);
 
         var result = new GetSupervisorQueryResult(
             supervisor.User!.FullName,

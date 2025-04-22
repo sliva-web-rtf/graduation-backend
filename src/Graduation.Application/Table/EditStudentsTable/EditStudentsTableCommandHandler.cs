@@ -52,11 +52,11 @@ public class EditStudentsTableCommandHandler(IAppDbContext dbContext)
     {
         student.QualificationWork!.Status = request.QualificationWorkStatus;
 
-        var role = await dbContext.QualificationWorkRoles.SingleAsync(r => r.Role == request.Role);
+        var role = await dbContext.QualificationWorkRoles.SingleOrDefaultAsync(r => r.Role == request.Role);
 
         foreach (var qwStage in student.QualificationWork.Stages.Where(s => s.Stage.Begin >= stage.Begin))
         {
-            qwStage.QualificationWorkRoleId = role.Id;
+            qwStage.QualificationWorkRoleId = role?.Id;
             qwStage.TopicName = request.Topic!;
             qwStage.CompanyName = request.CompanyName;
             qwStage.CompanySupervisorName = request.CompanySupervisorName;
