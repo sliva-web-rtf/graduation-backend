@@ -16,14 +16,14 @@ public class SetCurrentYearHandler : IRequestHandler<SetCurrentYear>
 
     public async Task Handle(SetCurrentYear request, CancellationToken cancellationToken)
     {
-        var year = dbContext.Years.SingleOrDefault(y => y.YearName == request.Year)
+        var year = await dbContext.Years.SingleOrDefaultAsync(y => y.YearName == request.Year, cancellationToken)
                    ?? throw new DomainException("Year does not exist");
 
-        year.IsCurrent = true;
-
         var currentYear = await dbContext.Years.SingleAsync(cancellationToken);
-        currentYear.IsCurrent = false;
 
+        currentYear.IsCurrent = false;
+        year.IsCurrent = true;
+        
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 }
