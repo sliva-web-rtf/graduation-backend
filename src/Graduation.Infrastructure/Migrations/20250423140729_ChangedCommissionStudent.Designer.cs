@@ -3,6 +3,7 @@ using System;
 using Graduation.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Graduation.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250423140729_ChangedCommissionStudent")]
+    partial class ChangedCommissionStudent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -902,7 +905,7 @@ namespace Graduation.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("AcademicProgramId");
 
-                    b.HasOne("Graduation.Domain.Commissions.Commission", "Commission")
+                    b.HasOne("Graduation.Domain.Commissions.Commission", null)
                         .WithMany()
                         .HasForeignKey("CommissionId");
 
@@ -913,8 +916,6 @@ namespace Graduation.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("AcademicProgram");
-
-                    b.Navigation("Commission");
                 });
 
             modelBuilder.Entity("Graduation.Domain.AcademicPrograms.AcademicProgram", b =>
@@ -981,7 +982,7 @@ namespace Graduation.Infrastructure.Migrations
 
             modelBuilder.Entity("Graduation.Domain.Commissions.CommissionStudent", b =>
                 {
-                    b.HasOne("Graduation.Domain.Commissions.Commission", "Commission")
+                    b.HasOne("Graduation.Domain.Commissions.Commission", null)
                         .WithMany()
                         .HasForeignKey("CommissionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -998,8 +999,6 @@ namespace Graduation.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Commission");
                 });
 
             modelBuilder.Entity("Graduation.Domain.Documents.Document", b =>

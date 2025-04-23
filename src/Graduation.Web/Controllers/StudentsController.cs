@@ -39,17 +39,18 @@ public class StudentsController(IMediator mediator) : ControllerBase
     }
 
     [Authorize(Roles = nameof(WellKnownRoles.Secretary))]
-    [HttpGet("table")]
+    [HttpPost("table")]
     [ProducesResponseType<GetStudentsTableQueryResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetStudentsTable(
         [FromHeader(Name = "X-Year")] string year,
         [Required] string stage,
-        string? commission,
+        [FromQuery] List<string> commissions,
         [Required] [Range(0, int.MaxValue)] int page,
         [Required] [Range(1, 1000)] int size,
-        string? query)
+        string? query,
+        [FromBody] List<SortStatus> sort)
     {
-        var request = new GetStudentsTableQuery(year, stage, commission, page, size, query);
+        var request = new GetStudentsTableQuery(year, stage, commissions, page, size, query, sort);
         return Ok(await mediator.Send(request));
     }
 
