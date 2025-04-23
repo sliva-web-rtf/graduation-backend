@@ -95,42 +95,39 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
         var orderedQuery = query.OrderBy(x => 0);
         foreach (var sortStatus in sortStatuses)
         {
-            var splitSort = sortStatus.Sort.Split(' ');
-            var order = splitSort[0];
-            var notnull = splitSort.Length > 1 && splitSort[1] == "notnull";
-
 #pragma warning disable CS0472 // The result of the expression is always the same since a value of this type is never equal to 'null'
             switch (sortStatus.Field)
             {
                 case "student":
                     orderedQuery = orderedQuery.ThenBy(s =>
-                        string.Join(' ', s.User!.LastName, s.User.FirstName, s.User.Patronymic), order);
+                        string.Join(' ', s.User!.LastName, s.User.FirstName, s.User.Patronymic), sortStatus.Sort);
                     break;
                 case "academicGroup":
                     orderedQuery = orderedQuery
-                        .ThenBy(s => notnull || s.AcademicGroup!.Name == null)
-                        .ThenBy(s => s.AcademicGroup!.Name, order);
+                        .ThenBy(s => s.AcademicGroup!.Name == null)
+                        .ThenBy(s => s.AcademicGroup!.Name, sortStatus.Sort);
                     break;
                 case "status":
-                    orderedQuery = orderedQuery.ThenBy(s => s.Status, order);
+                    orderedQuery = orderedQuery.ThenBy(s => s.Status, sortStatus.Sort);
                     break;
                 case "topicStatus":
                     orderedQuery = orderedQuery
-                        .ThenBy(s => notnull || s.QualificationWork!.Status == null)
-                        .ThenBy(s => s.QualificationWork!.Status, order);
+                        .ThenBy(s => s.QualificationWork!.Status == null)
+                        .ThenBy(s => s.QualificationWork!.Status, sortStatus.Sort);
                     break;
                 case "role":
                     orderedQuery = orderedQuery
-                        .ThenBy(s => notnull || s.QualificationWork!.Stages
+                        .ThenBy(s => s.QualificationWork!.Stages
                             .SingleOrDefault(qws => qws.StageId == stage.Id)!.QualificationWorkRole!.Role == null)
                         .ThenBy(s => s.QualificationWork!.Stages
-                            .SingleOrDefault(qws => qws.StageId == stage.Id)!.QualificationWorkRole!.Role, order);
+                                .SingleOrDefault(qws => qws.StageId == stage.Id)!.QualificationWorkRole!.Role,
+                            sortStatus.Sort);
                     break;
                 case "supervisor":
                     orderedQuery = orderedQuery
                         .ThenBy(s =>
-                            notnull || s.QualificationWork!.Stages.SingleOrDefault(qws => qws.StageId == stage.Id)!
-                                .Supervisor == null)
+                            s.QualificationWork!.Stages.SingleOrDefault(qws => qws.StageId == stage.Id)!.Supervisor ==
+                            null)
                         .ThenBy(s =>
                                 string.Join(' ',
                                     s.QualificationWork!.Stages.SingleOrDefault(qws => qws.StageId == stage.Id)!
@@ -142,60 +139,55 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
                                     s.QualificationWork!.Stages.SingleOrDefault(qws => qws.StageId == stage.Id)!
                                         .Supervisor!
                                         .Patronymic)
-                            , order);
+                            , sortStatus.Sort);
                     break;
                 case "date":
                     orderedQuery = orderedQuery
                         .ThenBy(s =>
-                            notnull ||
                             s.QualificationWork!.Stages.SingleOrDefault(qws => qws.StageId == stage.Id)!.Date == null)
                         .ThenBy(s => s.QualificationWork!.Stages
-                            .SingleOrDefault(qws => qws.StageId == stage.Id)!.Date, order);
+                            .SingleOrDefault(qws => qws.StageId == stage.Id)!.Date, sortStatus.Sort);
                     break;
                 case "time":
                     orderedQuery = orderedQuery
                         .ThenBy(s =>
-                            notnull ||
                             s.QualificationWork!.Stages.SingleOrDefault(qws => qws.StageId == stage.Id)!.Date == null)
                         .ThenBy(s =>
-                            notnull ||
                             s.QualificationWork!.Stages.SingleOrDefault(qws => qws.StageId == stage.Id)!.Time == null)
                         .ThenBy(s => s.QualificationWork!.Stages
-                            .SingleOrDefault(qws => qws.StageId == stage.Id)!.Date, order)
+                            .SingleOrDefault(qws => qws.StageId == stage.Id)!.Date, sortStatus.Sort)
                         .ThenBy(s => s.QualificationWork!.Stages
-                            .SingleOrDefault(qws => qws.StageId == stage.Id)!.Time, order);
+                            .SingleOrDefault(qws => qws.StageId == stage.Id)!.Time, sortStatus.Sort);
                     break;
                 case "isCommand":
                     orderedQuery = orderedQuery
                         .ThenBy(s =>
-                            notnull || s.QualificationWork!.Stages.SingleOrDefault(qws => qws.StageId == stage.Id)!
-                                .IsCommand == null)
+                            s.QualificationWork!.Stages.SingleOrDefault(qws => qws.StageId == stage.Id)!.IsCommand ==
+                            null)
                         .ThenBy(s => s.QualificationWork!.Stages
-                            .SingleOrDefault(qws => qws.StageId == stage.Id)!.IsCommand, order);
+                            .SingleOrDefault(qws => qws.StageId == stage.Id)!.IsCommand, sortStatus.Sort);
                     break;
                 case "mark":
                     orderedQuery = orderedQuery
                         .ThenBy(s =>
-                            notnull ||
                             s.QualificationWork!.Stages.SingleOrDefault(qws => qws.StageId == stage.Id)!.Mark == null)
                         .ThenBy(s => s.QualificationWork!.Stages
-                            .SingleOrDefault(qws => qws.StageId == stage.Id)!.Mark, order);
+                            .SingleOrDefault(qws => qws.StageId == stage.Id)!.Mark, sortStatus.Sort);
                     break;
                 case "result":
                     orderedQuery = orderedQuery
                         .ThenBy(s =>
-                            notnull || s.QualificationWork!.Stages.SingleOrDefault(qws => qws.StageId == stage.Id)!
-                                .Result == null)
+                            s.QualificationWork!.Stages.SingleOrDefault(qws => qws.StageId == stage.Id)!.Result == null)
                         .ThenBy(s => s.QualificationWork!.Stages
-                            .SingleOrDefault(qws => qws.StageId == stage.Id)!.Result, order);
+                            .SingleOrDefault(qws => qws.StageId == stage.Id)!.Result, sortStatus.Sort);
                     break;
                 case "topic":
                     orderedQuery = orderedQuery
                         .ThenBy(s =>
-                            notnull || s.QualificationWork!.Stages.SingleOrDefault(qws => qws.StageId == stage.Id)!
-                                .TopicName == null)
+                            s.QualificationWork!.Stages.SingleOrDefault(qws => qws.StageId == stage.Id)!.TopicName ==
+                            null)
                         .ThenBy(s => s.QualificationWork!.Stages
-                            .SingleOrDefault(qws => qws.StageId == stage.Id)!.TopicName, order);
+                            .SingleOrDefault(qws => qws.StageId == stage.Id)!.TopicName, sortStatus.Sort);
                     break;
             }
 #pragma warning restore CS0472 // The result of the expression is always the same since a value of this type is never equal to 'null'
