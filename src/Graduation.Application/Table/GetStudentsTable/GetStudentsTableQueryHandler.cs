@@ -141,6 +141,10 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
                     orderedQuery = orderedQuery.ThenBy(s => s.QualificationWork!.Stages
                         .SingleOrDefault(qws => qws.StageId == stage.Id)!.Result, sortStatus.Sort);
                     break;
+                case "topic":
+                    orderedQuery = orderedQuery.ThenBy(s => s.QualificationWork!.Stages
+                        .SingleOrDefault(qws => qws.StageId == stage.Id)!.TopicName, sortStatus.Sort);
+                    break;
             }
 
         return orderedQuery;
