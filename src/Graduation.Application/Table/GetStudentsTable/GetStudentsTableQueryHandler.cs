@@ -1,4 +1,5 @@
-﻿using Graduation.Application.Interfaces.DataAccess;
+﻿using Graduation.Application.Extensions;
+using Graduation.Application.Interfaces.DataAccess;
 using Graduation.Domain;
 using Graduation.Domain.Commissions;
 using Graduation.Domain.Exceptions;
@@ -41,8 +42,9 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
             .ThenInclude(s => s.QualificationWorkRole);
 
         var stagePreparedQuery = PrepareForStage(studentsQuery, stage);
+        var sortedQuery = Sort(stagePreparedQuery, request.Sort, stage);
 
-        var students = await stagePreparedQuery.Skip(request.Page * request.PageSize)
+        var students = await sortedQuery.Skip(request.Page * request.PageSize)
             .Take(request.PageSize)
             .ToListAsync(cancellationToken);
 
@@ -82,6 +84,36 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
             .ToList();
 
         return new GetStudentsTableQueryResult(formattedStudents, stage.Type.ToString(), pagesCount);
+    }
+
+    private IQueryable<Student> Sort(IQueryable<Student> query, IList<SortStatus> sortStatuses, Stage stage)
+    {
+        if (sortStatuses.Count == 0)
+            return query;
+        var orderedQuery = query.OrderBy(x => 0);
+        foreach (var sortStatus in sortStatuses)
+            switch (sortStatus.Field)
+            {
+                case "student":
+                    orderedQuery = orderedQuery.ThenBy(s =>
+                        string.Join(' ', s.User!.LastName, s.User.FirstName, s.User.Patronymic), sortStatus.Sort);
+                    break;
+                case "academicGroup":
+                    orderedQuery = orderedQuery.ThenBy(s => s.AcademicGroup!.Name, sortStatus.Sort);
+                    break;
+                case "status":
+                    orderedQuery = orderedQuery.ThenBy(s => s.Status, sortStatus.Sort);
+                    break;
+                case "topicStatus":
+                    orderedQuery = orderedQuery.ThenBy(s => s.QualificationWork!.Status, sortStatus.Sort);
+                    break;
+                case "role":
+                    orderedQuery = orderedQuery.ThenBy(s => s.QualificationWork!.Stages
+                        .FirstOrDefault(qws => qws.StageId == stage.Id)!.QualificationWorkRole!.Role, sortStatus.Sort);
+                    break;
+            }
+
+        return query;
     }
 
     private IQueryable<Student> GetStudentsQuery(GetStudentsTableQuery request, Stage stage)
@@ -149,8 +181,8 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
         if (realCommission == null)
             return null;
 
-        var movementStatus = commissions.Count > 0 
-            ? GetMovementStatus(realCommission, academicGroupCommission, commissions) 
+        var movementStatus = commissions.Count > 0
+            ? GetMovementStatus(realCommission, academicGroupCommission, commissions)
             : "Default";
 
         return new GetStudentsTableQueryCommission(realCommission.Name, movementStatus);

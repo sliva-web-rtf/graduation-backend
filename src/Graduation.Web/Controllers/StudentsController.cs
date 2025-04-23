@@ -39,7 +39,7 @@ public class StudentsController(IMediator mediator) : ControllerBase
     }
 
     [Authorize(Roles = nameof(WellKnownRoles.Secretary))]
-    [HttpGet("table")]
+    [HttpPost("table")]
     [ProducesResponseType<GetStudentsTableQueryResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetStudentsTable(
         [FromHeader(Name = "X-Year")] string year,
@@ -48,9 +48,9 @@ public class StudentsController(IMediator mediator) : ControllerBase
         [Required] [Range(0, int.MaxValue)] int page,
         [Required] [Range(1, 1000)] int size,
         string? query,
-        [FromQuery] List<SortStatus> sort)
+        [FromBody] List<SortStatus> sort)
     {
-        var request = new GetStudentsTableQuery(year, stage, commissions, page, size, query);
+        var request = new GetStudentsTableQuery(year, stage, commissions, page, size, query, sort);
         return Ok(await mediator.Send(request));
     }
 
@@ -70,6 +70,4 @@ public class StudentsController(IMediator mediator) : ControllerBase
         await mediator.Send(request);
         return Ok();
     }
-
-    public record SortStatus(string Field, string Sort);
 }
