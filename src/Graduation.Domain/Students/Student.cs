@@ -1,4 +1,5 @@
 ﻿using Graduation.Domain.AcademicGroups;
+using Graduation.Domain.Commissions;
 using Graduation.Domain.Common;
 using Graduation.Domain.QualificationWorks;
 using Graduation.Domain.Users;
@@ -23,6 +24,8 @@ public class Student : Entity<Guid>
     public AcademicGroup? AcademicGroup { get; set; }
     public User? User { get; set; }
     public QualificationWork? QualificationWork { get; set; }
+    
+    public List<CommissionStudent> CommissionStudents { get; set; }
 
 
     public static Student Create(User user)

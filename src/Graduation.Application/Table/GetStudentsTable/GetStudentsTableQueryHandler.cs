@@ -1,5 +1,6 @@
 ﻿using Graduation.Application.Interfaces.DataAccess;
 using Graduation.Domain;
+using Graduation.Domain.Commissions;
 using Graduation.Domain.Exceptions;
 using Graduation.Domain.Stages;
 using Graduation.Domain.Students;
@@ -30,6 +31,8 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
         var studentsQuery = GetStudentsQuery(request, stage)
             .Include(s => s.User)
             .Include(s => s.AcademicGroup)
+            .Include(s => s.CommissionStudents)
+            .ThenInclude(cs => cs.Commission)
             .Include(s => s.QualificationWork)
             .ThenInclude(qw => qw!.Stages)
             .ThenInclude(s => s.Supervisor)
@@ -61,6 +64,7 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
                         qualificationWorkStage.Supervisor.Id,
                         qualificationWorkStage.Supervisor.FullName);
                 var data = GetStageData(s, stage, qualificationWorkStage);
+                var commission = GetCommission(s, stage, request.Commissions);
 
                 return new GetStudentsTableQueryStudent(
                     s.Id,
@@ -70,6 +74,7 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
                     role,
                     supervisor,
                     s.Status.ToString(),
+                    commission,
                     s.Comment,
                     data
                 );
@@ -92,8 +97,9 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
                 EF.Functions.ILike(s.AcademicGroup!.Name, p) ||
                 s.QualificationWork!.Stages.Any(st => st.StageId == stage.Id && EF.Functions.ILike(st.TopicName, p))
             ))
-            .Where(s => request.CommissionName == null || s.QualificationWork!.Stages
-                .Any(st => st.StageId == stage.Id && st.Commission!.Name == request.CommissionName));
+            .Where(s => request.Commissions.Count == 0 || request.Commissions
+                .Any(c => s.AcademicGroup!.Commission!.Name == c ||
+                          s.CommissionStudents.Any(st => st.StageId == stage.Id && st.Commission!.Name == c)));
     }
 
     private IQueryable<Student> PrepareForStage(IQueryable<Student> query, Stage stage)
@@ -133,5 +139,37 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
                 qualificationWorkStage?.Result),
             _ => throw new ArgumentOutOfRangeException(nameof(stage))
         };
+    }
+
+    private GetStudentsTableQueryCommission? GetCommission(Student student, Stage stage, IList<string> commissions)
+    {
+        var realCommission = student.CommissionStudents.SingleOrDefault(c => c.StageId == stage.Id)?.Commission;
+        var academicGroupCommission = student.AcademicGroup?.Commission;
+
+        if (realCommission == null)
+            return null;
+
+        var movementStatus = commissions.Count > 0 
+            ? GetMovementStatus(realCommission, academicGroupCommission, commissions) 
+            : "Default";
+
+        return new GetStudentsTableQueryCommission(realCommission.Name, movementStatus);
+    }
+
+    private string GetMovementStatus(
+        Commission realCommission,
+        Commission? academicGroupCommission,
+        IList<string> commissions)
+    {
+        if (academicGroupCommission is null)
+            return "Ingoing";
+
+        if (realCommission.Name == academicGroupCommission.Name)
+            return "Default";
+
+        if (commissions.Contains(academicGroupCommission.Name) && commissions.Contains(realCommission.Name))
+            return "Default";
+
+        return commissions.Contains(realCommission.Name) ? "Ingoing" : "Outgoing";
     }
 }

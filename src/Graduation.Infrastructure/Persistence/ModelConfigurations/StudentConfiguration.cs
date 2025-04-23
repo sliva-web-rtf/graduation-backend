@@ -1,4 +1,5 @@
 ﻿using Graduation.Domain.AcademicGroups;
+using Graduation.Domain.Commissions;
 using Graduation.Domain.Students;
 using Graduation.Domain.Users;
 using Microsoft.EntityFrameworkCore;
@@ -16,5 +17,6 @@ public class StudentConfiguration :  IEntityTypeConfiguration<Student>
         
         builder.HasOne<User>(x => x.User).WithOne().HasForeignKey<Student>(x => x.Id);
         builder.HasOne<AcademicGroup>(x => x.AcademicGroup).WithMany().HasForeignKey(x => x.AcademicGroupId);
+        builder.HasMany(s => s.CommissionStudents).WithOne().HasForeignKey(x => x.UserId);
     }
 }

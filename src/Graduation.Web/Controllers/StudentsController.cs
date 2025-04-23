@@ -44,12 +44,13 @@ public class StudentsController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> GetStudentsTable(
         [FromHeader(Name = "X-Year")] string year,
         [Required] string stage,
-        string? commission,
+        [FromQuery] List<string> commissions,
         [Required] [Range(0, int.MaxValue)] int page,
         [Required] [Range(1, 1000)] int size,
-        string? query)
+        string? query,
+        [FromQuery] List<SortStatus> sort)
     {
-        var request = new GetStudentsTableQuery(year, stage, commission, page, size, query);
+        var request = new GetStudentsTableQuery(year, stage, commissions, page, size, query);
         return Ok(await mediator.Send(request));
     }
 
@@ -69,4 +70,6 @@ public class StudentsController(IMediator mediator) : ControllerBase
         await mediator.Send(request);
         return Ok();
     }
+
+    public record SortStatus(string Field, string Sort);
 }

@@ -13,7 +13,7 @@ public class AcademicGroupConfiguration :  IEntityTypeConfiguration<AcademicGrou
     {
         builder.HasKey(x => x.Id);
         
-        builder.HasOne<Commission>().WithMany().HasForeignKey(x => x.CommissionId);
+        builder.HasOne<Commission>(x => x.Commission).WithMany().HasForeignKey(x => x.CommissionId);
         builder.HasOne<AcademicProgram>(x => x.AcademicProgram).WithMany().HasForeignKey(x => x.AcademicProgramId);
         builder.HasOne<Year>().WithMany().HasForeignKey(x => x.Year);
     }
