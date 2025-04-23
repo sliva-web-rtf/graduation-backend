@@ -109,11 +109,11 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
                     break;
                 case "role":
                     orderedQuery = orderedQuery.ThenBy(s => s.QualificationWork!.Stages
-                        .FirstOrDefault(qws => qws.StageId == stage.Id)!.QualificationWorkRole!.Role, sortStatus.Sort);
+                        .SingleOrDefault(qws => qws.StageId == stage.Id)!.QualificationWorkRole!.Role, sortStatus.Sort);
                     break;
             }
 
-        return query;
+        return orderedQuery;
     }
 
     private IQueryable<Student> GetStudentsQuery(GetStudentsTableQuery request, Stage stage)
