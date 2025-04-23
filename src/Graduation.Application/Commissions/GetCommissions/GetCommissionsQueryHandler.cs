@@ -24,14 +24,14 @@ public class GetCommissionsQueryHandler : IRequestHandler<GetCommissionsQuery, G
         var formattedCommissions = commissions
             .Select(c =>
             {
-                var name = $"{c.Secretary.LastName}";
+                var secretaryName = $"{c.Secretary.LastName}";
                 var firstNameChar = c.Secretary.FirstName?.FirstOrDefault();
                 if (firstNameChar != null)
-                    name += $" {firstNameChar}.";
+                    secretaryName += $" {firstNameChar}.";
                 var patronymicChar = c.Secretary.Patronymic?.FirstOrDefault();
                 if (patronymicChar != null)
-                    name += $" {patronymicChar}.";
-                return new GetCommissionsQueryResultCommission($"{c.Name} ({name})");
+                    secretaryName += $" {patronymicChar}.";
+                return new GetCommissionsQueryResultCommission(c.Name, secretaryName);
             })
             .ToList();
 
