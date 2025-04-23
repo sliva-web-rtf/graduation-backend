@@ -111,6 +111,36 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
                     orderedQuery = orderedQuery.ThenBy(s => s.QualificationWork!.Stages
                         .SingleOrDefault(qws => qws.StageId == stage.Id)!.QualificationWorkRole!.Role, sortStatus.Sort);
                     break;
+                case "supervisor":
+                    orderedQuery = orderedQuery.ThenBy(s =>
+                            string.Join(' ', 
+                                s.QualificationWork!.Stages.SingleOrDefault(qws => qws.StageId == stage.Id)!.Supervisor!.LastName,
+                                s.QualificationWork!.Stages.SingleOrDefault(qws => qws.StageId == stage.Id)!.Supervisor!.FirstName,
+                                s.QualificationWork!.Stages.SingleOrDefault(qws => qws.StageId == stage.Id)!.Supervisor!.Patronymic)
+                        , sortStatus.Sort);
+                    break;
+                case "date":
+                    orderedQuery = orderedQuery.ThenBy(s => s.QualificationWork!.Stages
+                        .SingleOrDefault(qws => qws.StageId == stage.Id)!.Date, sortStatus.Sort);
+                    break;
+                case "time":
+                    orderedQuery = orderedQuery.ThenBy(s => s.QualificationWork!.Stages
+                            .SingleOrDefault(qws => qws.StageId == stage.Id)!.Date, sortStatus.Sort)
+                        .ThenBy(s => s.QualificationWork!.Stages
+                            .SingleOrDefault(qws => qws.StageId == stage.Id)!.Time, sortStatus.Sort);
+                    break;
+                case "isCommand":
+                    orderedQuery = orderedQuery.ThenBy(s => s.QualificationWork!.Stages
+                        .SingleOrDefault(qws => qws.StageId == stage.Id)!.IsCommand, sortStatus.Sort);
+                    break;
+                case "mark":
+                    orderedQuery = orderedQuery.ThenBy(s => s.QualificationWork!.Stages
+                        .SingleOrDefault(qws => qws.StageId == stage.Id)!.Mark, sortStatus.Sort);
+                    break;
+                case "result":
+                    orderedQuery = orderedQuery.ThenBy(s => s.QualificationWork!.Stages
+                        .SingleOrDefault(qws => qws.StageId == stage.Id)!.Result, sortStatus.Sort);
+                    break;
             }
 
         return orderedQuery;
