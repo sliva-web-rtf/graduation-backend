@@ -1,4 +1,5 @@
 ﻿using Graduation.Application.Interfaces.DataAccess;
+using Graduation.Domain;
 using Graduation.Domain.QualificationWorks;
 using Graduation.Domain.Stages;
 using Microsoft.AspNetCore.Authorization;
@@ -12,7 +13,7 @@ namespace Graduation.Web.Controllers;
 [ApiExplorerSettings(GroupName = "test")]
 public class TestController(IAppDbContext appDbContext) : ControllerBase
 {
-    [Authorize]
+    [Authorize(Roles = WellKnownRoles.Admin)]
     [HttpPost("fix-db")]
     public async Task<IActionResult> FixDb()
     {
@@ -35,7 +36,7 @@ public class TestController(IAppDbContext appDbContext) : ControllerBase
         return Ok();
     }
 
-    [Authorize]
+    [Authorize(Roles = WellKnownRoles.Admin)]
     [HttpPost("fill-stages")]
     public async Task<IActionResult> FillStages()
     {
@@ -75,7 +76,7 @@ public class TestController(IAppDbContext appDbContext) : ControllerBase
         return Ok();
     }
 
-    [Authorize]
+    [Authorize(Roles = WellKnownRoles.Admin)]
     [HttpPost("fill-qw")]
     public async Task<IActionResult> FillQW(FillQWData data)
     {
