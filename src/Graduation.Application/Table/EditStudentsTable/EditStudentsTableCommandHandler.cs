@@ -54,14 +54,14 @@ public class EditStudentsTableCommandHandler(IAppDbContext dbContext)
 
         var role = await dbContext.QualificationWorkRoles.SingleOrDefaultAsync(r => r.Role == request.Role);
 
-        foreach (var qwStage in student.QualificationWork.Stages.Where(s => s.Stage.Begin >= stage.Begin))
-        {
-            qwStage.QualificationWorkRoleId = role?.Id;
-            qwStage.TopicName = request.Topic!;
-            qwStage.CompanyName = request.CompanyName;
-            qwStage.CompanySupervisorName = request.CompanySupervisorName;
-            qwStage.SupervisorId = request.SupervisorId;
-        }
+        var qwStage = student.QualificationWork.Stages.FirstOrDefault(s => s.StageId == stage.Id);
+        if (qwStage == null) 
+            return;
+        qwStage.QualificationWorkRoleId = role?.Id;
+        qwStage.TopicName = request.Topic!;
+        qwStage.CompanyName = request.CompanyName;
+        qwStage.CompanySupervisorName = request.CompanySupervisorName;
+        qwStage.SupervisorId = request.SupervisorId;
     }
 
     private void SetStageData(Student student, EditStudentsTableCommand request, Stage stage)

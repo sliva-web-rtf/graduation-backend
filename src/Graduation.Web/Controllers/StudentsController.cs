@@ -38,7 +38,7 @@ public class StudentsController(IMediator mediator) : ControllerBase
         return Ok(await mediator.Send(request));
     }
 
-    [Authorize(Roles = nameof(WellKnownRoles.Secretary))]
+    [Authorize(Roles = $"{WellKnownRoles.Secretary},{WellKnownRoles.HeadSecretary},{WellKnownRoles.Admin}")]
     [HttpPost("table")]
     [ProducesResponseType<GetStudentsTableQueryResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetStudentsTable(
@@ -54,7 +54,7 @@ public class StudentsController(IMediator mediator) : ControllerBase
         return Ok(await mediator.Send(request));
     }
 
-    [Authorize(Roles = nameof(WellKnownRoles.Secretary))]
+    [Authorize(Roles = $"{WellKnownRoles.Secretary},{WellKnownRoles.HeadSecretary},{WellKnownRoles.Admin}")]
     [HttpPut("table")]
     [ProducesResponseType<EditStudentsTableCommandResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> EditStudentsTable(EditStudentsTableCommand request)
@@ -62,7 +62,7 @@ public class StudentsController(IMediator mediator) : ControllerBase
         return Ok(await mediator.Send(request));
     }
 
-    [Authorize(Roles = nameof(WellKnownRoles.Secretary))]
+    [Authorize(Roles = $"{WellKnownRoles.Secretary},{WellKnownRoles.HeadSecretary},{WellKnownRoles.Admin}")]
     [HttpPut("table/date")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> SetStudentsTableStageDate(SetStudentsStageDateCommand request)

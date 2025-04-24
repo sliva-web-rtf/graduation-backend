@@ -1,12 +1,15 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Graduation.Application.Extensions;
+using Graduation.Application.Interfaces.Authentication;
 using Graduation.Application.Interfaces.DataAccess;
 using Graduation.Domain;
 using Graduation.Domain.Commissions;
 using Graduation.Domain.Exceptions;
 using Graduation.Domain.Stages;
 using Graduation.Domain.Students;
+using Graduation.Domain.Users;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Graduation.Application.Table.GetStudentsTable;
@@ -14,15 +17,33 @@ namespace Graduation.Application.Table.GetStudentsTable;
 public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuery, GetStudentsTableQueryResult>
 {
     private readonly IAppDbContext dbContext;
+    private readonly ILoggedUserAccessor userAccessor;
+    private readonly UserManager<User> userManager;
 
-    public GetStudentsTableQueryHandler(IAppDbContext dbContext)
+    public GetStudentsTableQueryHandler(IAppDbContext dbContext, ILoggedUserAccessor userAccessor,
+        UserManager<User> userManager)
     {
         this.dbContext = dbContext;
+        this.userAccessor = userAccessor;
+        this.userManager = userManager;
     }
 
     public async Task<GetStudentsTableQueryResult> Handle(GetStudentsTableQuery request,
         CancellationToken cancellationToken)
     {
+        var userId = userAccessor.GetCurrentUserId();
+        var user = await userManager.FindByIdAsync(userId.ToString());
+        var roles = await userManager.GetRolesAsync(user!);
+        if (!roles.Contains(WellKnownRoles.HeadSecretary) && !roles.Contains(WellKnownRoles.Admin))
+        {
+            request.Commissions.Clear();
+            var secretaryCommission =
+                await dbContext.Commissions.FirstOrDefaultAsync(c => c.SecretaryId == userId, cancellationToken);
+            if (secretaryCommission == null)
+                throw new DomainException("Привязанных комиссий не найдено");
+            request.Commissions.Add(secretaryCommission.Name);
+        }
+
         var stage = await dbContext.Stages.SingleOrDefaultAsync(s => s.Name == request.Stage,
                         cancellationToken)
                     ?? throw new DomainException("Stage not found");
@@ -253,19 +274,19 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
         };
     }
 
-    private GetStudentsTableQueryCommission? GetCommission(Student student, Stage stage, IList<string> commissions)
+    private GetStudentsTableQueryCommission GetCommission(Student student, Stage stage, IList<string> commissions)
     {
         var realCommission = student.CommissionStudents.SingleOrDefault(c => c.StageId == stage.Id)?.Commission;
         var academicGroupCommission = student.AcademicGroup?.Commission;
 
         if (realCommission == null)
-            return null;
+            return new GetStudentsTableQueryCommission(academicGroupCommission?.Name, academicGroupCommission?.Name, "Default");
 
         var movementStatus = commissions.Count > 0
             ? GetMovementStatus(realCommission, academicGroupCommission, commissions)
             : "Default";
 
-        return new GetStudentsTableQueryCommission(realCommission.Name, movementStatus);
+        return new GetStudentsTableQueryCommission(realCommission.Name, academicGroupCommission?.Name, movementStatus);
     }
 
     private string GetMovementStatus(

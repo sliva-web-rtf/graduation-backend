@@ -23,7 +23,7 @@ public class YearsController(IMediator mediator) : ControllerBase
         return Ok(await mediator.Send(request));
     }
 
-    [Authorize(Roles = nameof(WellKnownRoles.Secretary))]
+    [Authorize(Roles = $"{WellKnownRoles.HeadSecretary},{WellKnownRoles.Admin}")]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> CreateYear(CreateYearCommand request)
@@ -41,7 +41,7 @@ public class YearsController(IMediator mediator) : ControllerBase
         return Ok(await mediator.Send(request));
     }
 
-    [Authorize(Roles = nameof(WellKnownRoles.Secretary))]
+    [Authorize(Roles = $"{WellKnownRoles.HeadSecretary},{WellKnownRoles.Admin}")]
     [HttpPost("current")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> SetYear(SetCurrentYear request)

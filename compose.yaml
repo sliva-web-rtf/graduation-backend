@@ -11,13 +11,14 @@
     environment:
       ASPNETCORE_URLS: http://+:5000
       ASPNETCORE_ENVIRONMENT: Production
+      Jwt__SecretKey: ${jwt:-}
       ConnectionStrings__AppDatabase: Server=${Server:-};User Id=${Uid:-};Password=${Pwd:-};Port=${Port:-};Database=${Database:-};
     ports:
       - "5000:5000"
     depends_on:
       postgres:
         condition: service_healthy
-        
+
   graduation-front:
     restart: unless-stopped
     image: graduation-front
@@ -26,7 +27,7 @@
       - "3000:3000"
     networks:
       - graduation-net
-        
+
   nginx:
     restart: unless-stopped
     image: nginx
