@@ -56,7 +56,18 @@ public class EditStudentsTableCommandHandler(IAppDbContext dbContext)
 
         var qwStage = student.QualificationWork.Stages.FirstOrDefault(s => s.StageId == stage.Id);
         if (qwStage == null)
-            return;
+            throw new DomainException("Qualification work for stage not found");
+        var lastStage = student.QualificationWork.Stages.OrderByDescending(qws => qws.Stage.Begin).First();
+
+        if (qwStage == lastStage)
+        {
+            student.QualificationWork.QualificationWorkRoleId = role?.Id;
+            student.QualificationWork.Name = request.Topic!;
+            student.QualificationWork.CompanyName = request.CompanyName;
+            student.QualificationWork.CompanySupervisorName = request.CompanySupervisorName;
+            student.QualificationWork.SupervisorId = request.SupervisorId;
+        }
+
         qwStage.QualificationWorkRoleId = role?.Id;
         qwStage.TopicName = request.Topic!;
         qwStage.CompanyName = request.CompanyName;
