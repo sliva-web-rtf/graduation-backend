@@ -54,12 +54,6 @@ public class EditStudentsTableCommandHandler(IAppDbContext dbContext)
 
         var role = await dbContext.QualificationWorkRoles.SingleOrDefaultAsync(r => r.Role == request.Role);
 
-        student.QualificationWork.QualificationWorkRoleId = role?.Id;
-        student.QualificationWork.Name = request.Topic!;
-        student.QualificationWork.CompanyName = request.CompanyName;
-        student.QualificationWork.CompanySupervisorName = request.CompanySupervisorName;
-        student.QualificationWork.SupervisorId = request.SupervisorId;
-
         var qwStage = student.QualificationWork.Stages.FirstOrDefault(s => s.StageId == stage.Id);
         if (qwStage == null)
             return;
