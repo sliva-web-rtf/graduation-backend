@@ -11,5 +11,6 @@ public class AcademicGroup : Entity<Guid>
     public AcademicProgram? AcademicProgram { get; set; }
     public Guid? CommissionId { get; set; }
     public Commission? Commission { get; set; }
+    public Guid? FormattingReviewer { get; set; }
     public string Year { get; set; }
 }
