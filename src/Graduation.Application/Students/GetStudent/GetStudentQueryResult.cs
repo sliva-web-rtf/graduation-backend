@@ -5,4 +5,5 @@ public record GetStudentQueryResult(
     string? AcademicGroup,
     string? AcademicProgram,
     string? Contacts,
-    string? About);
+    string? About,
+    Guid? QualificationWorkId);

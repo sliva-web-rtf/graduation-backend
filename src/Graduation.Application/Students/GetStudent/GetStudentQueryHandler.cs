@@ -29,6 +29,7 @@ public class GetStudentQueryHandler : IRequestHandler<GetStudentQuery, GetStuden
         var student = await dbContext.Students
             .Where(s => s.Id == request.Id)
             .Include(s => s.User)
+            .Include(s => s.QualificationWork)
             .Include(s => s.AcademicGroup)
             .ThenInclude(s => s!.AcademicProgram)
             .FirstAsync(cancellationToken);
@@ -38,7 +39,8 @@ public class GetStudentQueryHandler : IRequestHandler<GetStudentQuery, GetStuden
             student.AcademicGroup?.Name,
             student.AcademicGroup?.AcademicProgram?.Name,
             student.User.Contacts,
-            student.User.About);
+            student.User.About,
+            student.QualificationWork?.Id);
 
         return result;
     }
