@@ -274,19 +274,19 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
         };
     }
 
-    private GetStudentsTableQueryCommission? GetCommission(Student student, Stage stage, IList<string> commissions)
+    private GetStudentsTableQueryCommission GetCommission(Student student, Stage stage, IList<string> commissions)
     {
         var realCommission = student.CommissionStudents.SingleOrDefault(c => c.StageId == stage.Id)?.Commission;
         var academicGroupCommission = student.AcademicGroup?.Commission;
 
         if (realCommission == null)
-            return null;
+            return new GetStudentsTableQueryCommission(academicGroupCommission?.Name, academicGroupCommission?.Name, "Default");
 
         var movementStatus = commissions.Count > 0
             ? GetMovementStatus(realCommission, academicGroupCommission, commissions)
             : "Default";
 
-        return new GetStudentsTableQueryCommission(realCommission.Name, movementStatus);
+        return new GetStudentsTableQueryCommission(realCommission.Name, academicGroupCommission?.Name, movementStatus);
     }
 
     private string GetMovementStatus(

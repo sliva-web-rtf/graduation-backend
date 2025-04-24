@@ -15,7 +15,7 @@ public record GetStudentsTableQueryStudent(
     string? Role,
     GetStudentsTableQuerySupervisor? Supervisor,
     string Status,
-    GetStudentsTableQueryCommission? Commission,
+    GetStudentsTableQueryCommission Commission,
     string? Comment,
     IGetStudentsTableQueryStageData Data);
 
@@ -28,7 +28,7 @@ public record GetStudentsTableQueryQualificationWork(
 
 public record GetStudentsTableQuerySupervisor(Guid Id, string FullName);
 
-public record GetStudentsTableQueryCommission(string Name, string MovementStatus);
+public record GetStudentsTableQueryCommission(string? Current, string? Prev, string MovementStatus);
 
 [JsonDerivedType(typeof(GetStudentsTableQueryDefenceStageData))]
 [JsonDerivedType(typeof(GetStudentsTableQueryPreDefenceStageData))]
