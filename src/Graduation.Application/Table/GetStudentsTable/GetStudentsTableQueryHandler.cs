@@ -54,6 +54,7 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
         var studentsQuery = GetStudentsQuery(request, stage)
             .Include(s => s.User)
             .Include(s => s.AcademicGroup)
+            .ThenInclude(ag => ag!.Commission)
             .Include(s => s.CommissionStudents)
             .ThenInclude(cs => cs.Commission)
             .Include(s => s.QualificationWork)
