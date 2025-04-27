@@ -19,6 +19,9 @@ public class GetQualificationWorkQueryHandler(IAppDbContext dbContext)
             .ThenInclude(ag => ag!.Commission)
             .ThenInclude(c => c!.Secretary)
             .Include(qw => qw.Student)
+            .ThenInclude(s => s!.AcademicGroup)
+            .ThenInclude(ag => ag!.FormattingReviewer)
+            .Include(qw => qw.Student)
             .ThenInclude(s => s!.User)
             .Include(qw => qw.Supervisor)
             .Include(qw => qw.QualificationWorkRole)
@@ -153,6 +156,8 @@ public class GetQualificationWorkQueryHandler(IAppDbContext dbContext)
         return new GetQualificationWorkQueryFormattingReviewStage(
             documents,
             qualificationWork.Annotation,
-            qualificationWorkStage?.Result);
+            qualificationWorkStage?.Result,
+            qualificationWork.Student!.AcademicGroup?.FormattingReviewer?.FullName
+        );
     }
 }

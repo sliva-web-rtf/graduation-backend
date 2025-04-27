@@ -45,6 +45,7 @@ public record GetQualificationWorkQueryResultStageInfo(
 
 public record GetQualificationWorkQueryFormattingReviewStage(
     IList<GetQualificationWorkQueryFormattingReviewStageDocument> Documents,
+    string? FormattingReviewerName,
     string? Annotation,
     string? Result
 );
