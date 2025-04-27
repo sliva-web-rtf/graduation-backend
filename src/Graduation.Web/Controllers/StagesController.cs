@@ -1,5 +1,4 @@
 ﻿using Graduation.Application.Stages.GetStages;
-using Graduation.Application.Years.GetYears;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +12,7 @@ public class StagesController(IMediator mediator) : ControllerBase
 {
     [Authorize]
     [HttpGet]
-    [ProducesResponseType<GetYearsQueryResult>(StatusCodes.Status200OK)]
+    [ProducesResponseType<GetStagesQueryResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetStages()
     {
         var request = new GetStagesQuery();

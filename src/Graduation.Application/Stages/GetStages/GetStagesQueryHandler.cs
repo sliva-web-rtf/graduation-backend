@@ -16,9 +16,19 @@ public class GetStagesQueryHandler : IRequestHandler<GetStagesQuery, GetStagesQu
     public async Task<GetStagesQueryResult> Handle(GetStagesQuery request, CancellationToken cancellationToken)
     {
         var stages = await dbContext.Stages
-            .OrderBy(s => s.Begin)
-            .Select(s => s.Name)
+            .OrderBy(s => s.End)
             .ToListAsync(cancellationToken);
-        return new GetStagesQueryResult(stages);
+
+        var currentFound = false;
+        var formattedStages = stages
+            .Select(s =>
+            {
+                var isCurrent = DateOnly.FromDateTime(DateTime.UtcNow) <= s.End && !currentFound;
+                if (isCurrent)
+                    currentFound = true;
+                return new GetStagesQueryResultStage(s.Name, s.Type, s.Begin, s.End, isCurrent);
+            })
+            .ToList();
+        return new GetStagesQueryResult(formattedStages);
     }
 }
