@@ -229,7 +229,15 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
                 EF.Functions.ILike(s.User.LastName!, p) ||
                 EF.Functions.ILike(s.User.Patronymic!, p) ||
                 EF.Functions.ILike(s.AcademicGroup!.Name, p) ||
-                s.QualificationWork!.Stages.Any(st => st.StageId == stage.Id && EF.Functions.ILike(st.TopicName, p))
+                s.QualificationWork!.Stages.Where(st => st.StageId == stage.Id)
+                    .Any(st =>
+                        EF.Functions.ILike(st.TopicName, p) ||
+                        dbContext.Users
+                            .Where(u => u.Id == st.SupervisorId)
+                            .Any(u =>
+                                EF.Functions.ILike(u.FirstName!, p) ||
+                                EF.Functions.ILike(u.LastName!, p) ||
+                                EF.Functions.ILike(u.Patronymic!, p)))
             ))
             .Where(s => request.Commissions.Count == 0 || request.Commissions
                 .Any(c => s.AcademicGroup!.Commission!.Name == c ||
@@ -281,7 +289,8 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
         var academicGroupCommission = student.AcademicGroup?.Commission;
 
         if (realCommission == null)
-            return new GetStudentsTableQueryCommission(academicGroupCommission?.Name, academicGroupCommission?.Name, "Default");
+            return new GetStudentsTableQueryCommission(academicGroupCommission?.Name, academicGroupCommission?.Name,
+                "Default");
 
         var movementStatus = commissions.Count > 0
             ? GetMovementStatus(realCommission, academicGroupCommission, commissions)
