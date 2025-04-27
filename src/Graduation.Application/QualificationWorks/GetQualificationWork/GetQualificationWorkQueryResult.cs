@@ -52,7 +52,7 @@ public record GetQualificationWorkQueryFormattingReviewStage(
 public record GetQualificationWorkQueryFormattingReviewStageDocument(
     string Name,
     string Status,
-    string FileName,
-    string Path,
+    string? FileName,
+    string? Path,
     DateTime? UploadedAt
 );
