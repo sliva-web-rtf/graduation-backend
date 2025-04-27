@@ -4,8 +4,8 @@ namespace Graduation.Application.QualificationWorks.GetQualificationWork;
 
 public record GetQualificationWorkQueryResult(
     GetQualificationWorkQueryResultMainInfo MainInfo,
-    GetQualificationWorkQueryResultStageInfo StageInfo,
-    GetQualificationWorkQueryFormattingReviewStage FormattingReview);
+    GetQualificationWorkQueryResultStageInfo? StageInfo,
+    GetQualificationWorkQueryFormattingReviewStage? FormattingReview);
 
 public record GetQualificationWorkQueryResultMainInfo(
     QualificationWorkStatus Status,
