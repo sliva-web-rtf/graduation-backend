@@ -11,8 +11,8 @@ public class CommissionExpertConfiguration : IEntityTypeConfiguration<Commission
     public void Configure(EntityTypeBuilder<CommissionExpert> builder)
     {
         builder.HasKey(x => new { x.UserId, x.CommissionId, x.StageId });
-        
-        builder.HasOne<User>().WithMany().HasForeignKey(x => x.UserId);
+
+        builder.HasOne<User>(x => x.Expert).WithMany().HasForeignKey(x => x.UserId);
         builder.HasOne<Commission>().WithMany().HasForeignKey(x => x.CommissionId);
         builder.HasOne<Stage>().WithMany().HasForeignKey(x => x.StageId);
     }
