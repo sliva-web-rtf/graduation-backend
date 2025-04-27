@@ -26,7 +26,7 @@ public class GetStagesQueryHandler : IRequestHandler<GetStagesQuery, GetStagesQu
                 var isCurrent = DateOnly.FromDateTime(DateTime.UtcNow) <= s.End && !currentFound;
                 if (isCurrent)
                     currentFound = true;
-                return new GetStagesQueryResultStage(s.Name, s.Type, s.Begin, s.End, isCurrent);
+                return new GetStagesQueryResultStage(s.Name, s.Description, s.Type, s.Begin, s.End, isCurrent);
             })
             .ToList();
         return new GetStagesQueryResult(formattedStages);
