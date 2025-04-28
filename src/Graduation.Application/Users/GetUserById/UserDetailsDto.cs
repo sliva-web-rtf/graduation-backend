@@ -8,5 +8,6 @@ public record UserDetailsDto(
     string Email
 )
 {
+    public required Guid? QualificationWorkId { get; set; }
     public required IList<string> Roles { get; set; }
 }

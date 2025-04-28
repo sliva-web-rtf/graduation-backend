@@ -15,11 +15,13 @@ public class QualificationWorkConfiguration : IEntityTypeConfiguration<Qualifica
     {
         builder.HasKey(x => x.Id);
 
-        builder.HasOne<Student>().WithOne(x => x.QualificationWork).HasForeignKey<QualificationWork>(x => x.StudentId);
+        builder.HasOne<Student>(qw => qw.Student).WithOne(x => x.QualificationWork)
+            .HasForeignKey<QualificationWork>(x => x.StudentId);
         builder.HasOne<Year>().WithMany().HasForeignKey(x => x.Year);
-        
+
         builder.HasOne<Topic>().WithMany().HasForeignKey(x => x.TopicId);
-        builder.HasOne<User>().WithMany().HasForeignKey(x => x.SupervisorId);
-        builder.HasOne<QualificationWorkRole>().WithMany().HasForeignKey(x => x.QualificationWorkRoleId);
+        builder.HasOne<User>(qw => qw.Supervisor).WithMany().HasForeignKey(x => x.SupervisorId);
+        builder.HasOne<QualificationWorkRole>(qw => qw.QualificationWorkRole).WithMany()
+            .HasForeignKey(x => x.QualificationWorkRoleId);
     }
 }

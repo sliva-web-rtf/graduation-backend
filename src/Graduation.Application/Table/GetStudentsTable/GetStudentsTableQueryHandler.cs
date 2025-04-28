@@ -55,8 +55,10 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
             .Include(s => s.User)
             .Include(s => s.AcademicGroup)
             .ThenInclude(ag => ag!.Commission)
+            .ThenInclude(c => c!.Secretary)
             .Include(s => s.CommissionStudents)
             .ThenInclude(cs => cs.Commission)
+            .ThenInclude(c => c!.Secretary)
             .Include(s => s.QualificationWork)
             .ThenInclude(qw => qw!.Stages)
             .ThenInclude(s => s.Supervisor)
@@ -229,8 +231,17 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
                 EF.Functions.ILike(s.User.LastName!, p) ||
                 EF.Functions.ILike(s.User.Patronymic!, p) ||
                 EF.Functions.ILike(s.AcademicGroup!.Name, p) ||
-                s.QualificationWork!.Stages.Any(st => st.StageId == stage.Id && EF.Functions.ILike(st.TopicName, p))
+                s.QualificationWork!.Stages.Where(st => st.StageId == stage.Id)
+                    .Any(st =>
+                        EF.Functions.ILike(st.TopicName, p) ||
+                        dbContext.Users
+                            .Where(u => u.Id == st.SupervisorId)
+                            .Any(u =>
+                                EF.Functions.ILike(u.FirstName!, p) ||
+                                EF.Functions.ILike(u.LastName!, p) ||
+                                EF.Functions.ILike(u.Patronymic!, p)))
             ))
+            .Where(s => request.StudentStatuses.Count == 0 || request.StudentStatuses.Any(status => s.Status == status))
             .Where(s => request.Commissions.Count == 0 || request.Commissions
                 .Any(c => s.AcademicGroup!.Commission!.Name == c ||
                           s.CommissionStudents.Any(st => st.StageId == stage.Id && st.Commission!.Name == c)));
@@ -281,13 +292,23 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
         var academicGroupCommission = student.AcademicGroup?.Commission;
 
         if (realCommission == null)
-            return new GetStudentsTableQueryCommission(academicGroupCommission?.Name, academicGroupCommission?.Name, "Default");
+            return new GetStudentsTableQueryCommission(
+                academicGroupCommission?.Name,
+                academicGroupCommission?.Secretary?.GetInitials(),
+                academicGroupCommission?.Name,
+                academicGroupCommission?.Secretary?.GetInitials(),
+                "Default");
 
         var movementStatus = commissions.Count > 0
             ? GetMovementStatus(realCommission, academicGroupCommission, commissions)
             : "Default";
 
-        return new GetStudentsTableQueryCommission(realCommission.Name, academicGroupCommission?.Name, movementStatus);
+        return new GetStudentsTableQueryCommission(
+            realCommission.Name,
+            realCommission.Secretary?.GetInitials(),
+            academicGroupCommission?.Name,
+            academicGroupCommission?.Secretary?.GetInitials(),
+            movementStatus);
     }
 
     private string GetMovementStatus(

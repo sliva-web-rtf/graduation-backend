@@ -36,8 +36,15 @@ internal class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, UserD
         {
             throw new NotFoundException("User not found");
         }
+
+        var qualificationWorkId = await dbContext.QualificationWorks
+            .Where(qw => qw.StudentId == user.Id)
+            .Select(qw => qw.Id)
+            .FirstOrDefaultAsync(cancellationToken);
+        
         var res = mapper.Map<UserDetailsDto>(user);
         res.Roles = await userManager.GetRolesAsync(user);
+        res.QualificationWorkId = qualificationWorkId == Guid.Empty ? null : qualificationWorkId; 
         return res;
     }
 }

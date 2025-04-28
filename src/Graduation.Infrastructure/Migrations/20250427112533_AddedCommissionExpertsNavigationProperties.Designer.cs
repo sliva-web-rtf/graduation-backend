@@ -3,6 +3,7 @@ using System;
 using Graduation.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Graduation.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250427112533_AddedCommissionExpertsNavigationProperties")]
+    partial class AddedCommissionExpertsNavigationProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace Graduation.Infrastructure.Migrations
                     b.Property<Guid?>("CommissionId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("FormattingReviewerId")
+                    b.Property<Guid?>("FormattingReviewer")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -51,7 +54,7 @@ namespace Graduation.Infrastructure.Migrations
 
                     b.HasIndex("CommissionId");
 
-                    b.HasIndex("FormattingReviewerId");
+                    b.HasIndex("FormattingReviewer");
 
                     b.HasIndex("Year");
 
@@ -911,9 +914,9 @@ namespace Graduation.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("CommissionId");
 
-                    b.HasOne("Graduation.Domain.Users.User", "FormattingReviewer")
+                    b.HasOne("Graduation.Domain.Users.User", null)
                         .WithMany()
-                        .HasForeignKey("FormattingReviewerId");
+                        .HasForeignKey("FormattingReviewer");
 
                     b.HasOne("Graduation.Domain.Years.Year", null)
                         .WithMany()
@@ -924,8 +927,6 @@ namespace Graduation.Infrastructure.Migrations
                     b.Navigation("AcademicProgram");
 
                     b.Navigation("Commission");
-
-                    b.Navigation("FormattingReviewer");
                 });
 
             modelBuilder.Entity("Graduation.Domain.AcademicPrograms.AcademicProgram", b =>

@@ -1,8 +1,11 @@
-﻿using Graduation.Application.Interfaces.DataAccess;
+﻿using ClosedXML.Excel;
+using Graduation.Application.Interfaces.DataAccess;
 using Graduation.Domain;
 using Graduation.Domain.QualificationWorks;
 using Graduation.Domain.Stages;
+using Graduation.Domain.Users;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,28 +14,52 @@ namespace Graduation.Web.Controllers;
 [ApiController]
 [Route("test")]
 [ApiExplorerSettings(GroupName = "test")]
-public class TestController(IAppDbContext appDbContext) : ControllerBase
+public class TestController(IAppDbContext appDbContext, UserManager<User> userManager) : ControllerBase
 {
     [Authorize(Roles = WellKnownRoles.Admin)]
-    [HttpPost("fix-db")]
-    public async Task<IActionResult> FixDb()
+    [HttpPost("fix-logins")]
+    public async Task<IActionResult> FixLogins()
     {
-        var works = await appDbContext.QualificationWorks
-            .Include(w => w.Stages)
+        var students = await appDbContext.Students
+            .Include(s => s.User)
+            .Include(s => s.AcademicGroup)
             .ToListAsync();
-
-        foreach (var qualificationWork in works)
-        foreach (var stage in qualificationWork.Stages)
+        
+        var counter = 0;
+        using (var workbook = new XLWorkbook())
         {
-            stage.TopicId = qualificationWork.TopicId;
-            stage.SupervisorId = qualificationWork.SupervisorId;
-            stage.QualificationWorkRoleId = qualificationWork.QualificationWorkRoleId;
-            stage.TopicName = qualificationWork.Name;
-            stage.CompanyName = qualificationWork.CompanyName;
-            stage.CompanySupervisorName = qualificationWork.CompanySupervisorName;
+            var worksheet = workbook.Worksheets.Add("Имена");
+        
+            for (int i = 0; i < students.Count; i++)
+            {
+                var student = students[i];
+                var expectedUserName = $"{student.User.LastName?.Replace(" ", "")}" +
+                                       $"{student.User.FirstName?.Replace(" ", "")}" +
+                                       $"{student.User.Patronymic?.Replace(" ", "")}" +
+                                       $"{student.AcademicGroup.Name.Replace("-", "")}";
+                if (expectedUserName != student.User.UserName)
+                {
+                    counter++;
+                    worksheet.Cell(counter, 1).Value = expectedUserName;
+                    worksheet.Cell(counter, 2).Value = student.User.UserName;
+                }
+            }
+        
+            workbook.SaveAs("Сломанные логины.xlsx");
         }
 
-        await appDbContext.SaveChangesAsync();
+        var workbook2 = new XLWorkbook("Сломанные логины.xlsx");
+        var worksheet2 = workbook2.Worksheet(1);
+        var countRow = worksheet2.Rows().Count();
+        for (var i = 1; i <= countRow; i++)
+        {
+            var login = worksheet2.Cell($"B{i}").GetValue<string>().Trim();
+            var newLogin = worksheet2.Cell($"C{i}").GetValue<string>().Trim();
+        
+            var user = await userManager.FindByNameAsync(login);
+            await userManager.SetUserNameAsync(user, newLogin);
+        }
+
         return Ok();
     }
 
@@ -52,7 +79,7 @@ public class TestController(IAppDbContext appDbContext) : ControllerBase
             if (qualificationWork.Stages.Any(s => s.StageId == stage.Id))
                 continue;
 
-            var oldQwStage = qualificationWork.Stages.FirstOrDefault();
+            var oldQwStage = qualificationWork.Stages.OrderByDescending(s => s.Stage.End).FirstOrDefault();
             if (oldQwStage == null)
                 continue;
 

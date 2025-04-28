@@ -4,5 +4,6 @@ public enum StudentStatus
 {
     Active,
     Kicked,
-    Academ
+    Academ,
+    Transferred
 }
