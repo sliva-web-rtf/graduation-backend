@@ -55,8 +55,10 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
             .Include(s => s.User)
             .Include(s => s.AcademicGroup)
             .ThenInclude(ag => ag!.Commission)
+            .ThenInclude(c => c!.Secretary)
             .Include(s => s.CommissionStudents)
             .ThenInclude(cs => cs.Commission)
+            .ThenInclude(c => c!.Secretary)
             .Include(s => s.QualificationWork)
             .ThenInclude(qw => qw!.Stages)
             .ThenInclude(s => s.Supervisor)
@@ -290,14 +292,23 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
         var academicGroupCommission = student.AcademicGroup?.Commission;
 
         if (realCommission == null)
-            return new GetStudentsTableQueryCommission(academicGroupCommission?.Name, academicGroupCommission?.Name,
+            return new GetStudentsTableQueryCommission(
+                academicGroupCommission?.Name,
+                academicGroupCommission?.Secretary?.GetInitials(),
+                academicGroupCommission?.Name,
+                academicGroupCommission?.Secretary?.GetInitials(),
                 "Default");
 
         var movementStatus = commissions.Count > 0
             ? GetMovementStatus(realCommission, academicGroupCommission, commissions)
             : "Default";
 
-        return new GetStudentsTableQueryCommission(realCommission.Name, academicGroupCommission?.Name, movementStatus);
+        return new GetStudentsTableQueryCommission(
+            realCommission.Name,
+            realCommission.Secretary?.GetInitials(),
+            academicGroupCommission?.Name,
+            academicGroupCommission?.Secretary?.GetInitials(),
+            movementStatus);
     }
 
     private string GetMovementStatus(

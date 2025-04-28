@@ -79,7 +79,7 @@ public class TestController(IAppDbContext appDbContext, UserManager<User> userMa
             if (qualificationWork.Stages.Any(s => s.StageId == stage.Id))
                 continue;
 
-            var oldQwStage = qualificationWork.Stages.FirstOrDefault();
+            var oldQwStage = qualificationWork.Stages.OrderByDescending(s => s.Stage.End).FirstOrDefault();
             if (oldQwStage == null)
                 continue;
 

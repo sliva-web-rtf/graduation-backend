@@ -59,4 +59,17 @@ public class User : IdentityUser<Guid>
         Contacts = contacts;
         About = about;
     }
+
+    public string GetInitials()
+    {
+        var name = $"{LastName}";
+        var firstNameChar = FirstName?.FirstOrDefault();
+        if (firstNameChar != null)
+            name += $" {firstNameChar}.";
+        var patronymicChar = Patronymic?.FirstOrDefault();
+        if (patronymicChar != null)
+            name += $" {patronymicChar}.";
+
+        return name;
+    }
 }

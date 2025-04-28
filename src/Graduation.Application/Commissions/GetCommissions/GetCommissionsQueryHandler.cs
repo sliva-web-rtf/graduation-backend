@@ -22,17 +22,7 @@ public class GetCommissionsQueryHandler : IRequestHandler<GetCommissionsQuery, G
             .ToListAsync(cancellationToken);
         
         var formattedCommissions = commissions
-            .Select(c =>
-            {
-                var secretaryName = $"{c.Secretary.LastName}";
-                var firstNameChar = c.Secretary.FirstName?.FirstOrDefault();
-                if (firstNameChar != null)
-                    secretaryName += $" {firstNameChar}.";
-                var patronymicChar = c.Secretary.Patronymic?.FirstOrDefault();
-                if (patronymicChar != null)
-                    secretaryName += $" {patronymicChar}.";
-                return new GetCommissionsQueryResultCommission(c.Name, secretaryName);
-            })
+            .Select(c => new GetCommissionsQueryResultCommission(c.Name, c.Secretary!.GetInitials()))
             .ToList();
 
         return new GetCommissionsQueryResult(formattedCommissions);
