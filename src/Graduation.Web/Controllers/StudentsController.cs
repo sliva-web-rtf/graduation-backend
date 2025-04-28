@@ -5,6 +5,7 @@ using Graduation.Application.Table.EditStudentsTable;
 using Graduation.Application.Table.GetStudentsTable;
 using Graduation.Application.Table.SetStudentsStageDate;
 using Graduation.Domain;
+using Graduation.Domain.Students;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -45,12 +46,13 @@ public class StudentsController(IMediator mediator) : ControllerBase
         [FromHeader(Name = "X-Year")] string year,
         [Required] string stage,
         [FromQuery] List<string> commissions,
+        [FromQuery] List<StudentStatus> studentStatuses,
         [Required] [Range(0, int.MaxValue)] int page,
         [Required] [Range(1, 1000)] int size,
         string? query,
         [FromBody] List<SortStatus> sort)
     {
-        var request = new GetStudentsTableQuery(year, stage, commissions, page, size, query, sort);
+        var request = new GetStudentsTableQuery(year, stage, commissions, studentStatuses, page, size, query, sort);
         return Ok(await mediator.Send(request));
     }
 

@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Graduation.Domain.Students;
+using MediatR;
 
 namespace Graduation.Application.Table.GetStudentsTable;
 
@@ -6,6 +7,7 @@ public record GetStudentsTableQuery(
     string Year,
     string Stage,
     IList<string> Commissions,
+    IList<StudentStatus> StudentStatuses,
     int Page,
     int PageSize,
     string? Query,
