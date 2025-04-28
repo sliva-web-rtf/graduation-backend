@@ -239,7 +239,7 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
                                 EF.Functions.ILike(u.LastName!, p) ||
                                 EF.Functions.ILike(u.Patronymic!, p)))
             ))
-            .Where(s => request.StudentStatuses.Any(status => s.Status == status))
+            .Where(s => request.StudentStatuses.Count == 0 || request.StudentStatuses.Any(status => s.Status == status))
             .Where(s => request.Commissions.Count == 0 || request.Commissions
                 .Any(c => s.AcademicGroup!.Commission!.Name == c ||
                           s.CommissionStudents.Any(st => st.StageId == stage.Id && st.Commission!.Name == c)));
