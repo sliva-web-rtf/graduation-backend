@@ -20,6 +20,10 @@ public class GetQualificationWorkQueryHandler(IAppDbContext dbContext)
             .ThenInclude(c => c!.Secretary)
             .Include(qw => qw.Student)
             .ThenInclude(s => s!.AcademicGroup)
+            .ThenInclude(ag => ag!.Commission)
+            .ThenInclude(c => c!.Chairperson)
+            .Include(qw => qw.Student)
+            .ThenInclude(s => s!.AcademicGroup)
             .ThenInclude(ag => ag!.FormattingReviewer)
             .Include(qw => qw.Student)
             .ThenInclude(s => s!.User)
@@ -59,14 +63,16 @@ public class GetQualificationWorkQueryHandler(IAppDbContext dbContext)
         if (qualificationWork.Student?.AcademicGroup?.Commission is { } commissionDbo)
         {
             var experts = await dbContext.CommissionExperts
+                .Include(c => c.Expert)
                 .Where(c => c.CommissionId == commissionDbo.Id)
-                .Select(c => c.Expert)
-                .Distinct()
                 .ToListAsync();
             commission = new GetQualificationWorkQueryCommission(
                 qualificationWork.Student.AcademicGroup.Commission.Name,
                 qualificationWork.Student.AcademicGroup.Commission.Secretary!.FullName,
-                experts.Select(e => e!.FullName).ToList()
+                qualificationWork.Student.AcademicGroup.Commission.Chairperson?.FullName,
+                experts.DistinctBy(e => e.Expert)
+                    .Select(e => new GetQualificationWorkQueryCommissionExpert(e.Expert!.FullName, e.IsInvited))
+                    .ToList()
             );
         }
 
@@ -107,14 +113,16 @@ public class GetQualificationWorkQueryHandler(IAppDbContext dbContext)
         if (qualificationWork.Student?.AcademicGroup?.Commission is { } commissionDbo)
         {
             var experts = await dbContext.CommissionExperts
+                .Include(c => c.Expert)
                 .Where(c => c.CommissionId == commissionDbo.Id && c.StageId == stage.Id)
-                .Select(c => c.Expert)
-                .Distinct()
                 .ToListAsync();
             commission = new GetQualificationWorkQueryCommission(
                 qualificationWork.Student.AcademicGroup.Commission.Name,
                 qualificationWork.Student.AcademicGroup.Commission.Secretary!.FullName,
-                experts.Select(e => e!.FullName).ToList()
+                qualificationWork.Student.AcademicGroup.Commission.Chairperson?.FullName,
+                experts.DistinctBy(e => e.Expert)
+                    .Select(e => new GetQualificationWorkQueryCommissionExpert(e.Expert!.FullName, e.IsInvited))
+                    .ToList()
             );
         }
 

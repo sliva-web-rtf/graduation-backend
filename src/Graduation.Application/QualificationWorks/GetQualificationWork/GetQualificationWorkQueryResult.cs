@@ -25,7 +25,12 @@ public record GetQualificationWorkQueryStudent(Guid Id, string Name, string? Rol
 public record GetQualificationWorkQueryCommission(
     string Name,
     string SecretaryName,
-    IList<string> ExpertsNames);
+    string? ChairpersonName,
+    IList<GetQualificationWorkQueryCommissionExpert> ExpertsNames);
+
+public record GetQualificationWorkQueryCommissionExpert(
+    string Name,
+    bool IsInvited);
 
 public record GetQualificationWorkQueryResultStageInfo(
     GetQualificationWorkQueryCommission? Commission,
