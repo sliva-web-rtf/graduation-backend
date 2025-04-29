@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Graduation.Application.Commissions.CreateCommission;
 using Graduation.Application.Commissions.GetCommissions;
 using Graduation.Application.Students.GetCommissionStudentsForStage;
+using Graduation.Domain;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +35,14 @@ public class CommissionsController(IMediator mediator) : ControllerBase
         [FromQuery] List<string> sortByAcademicGroups)
     {
         var request = new GetCommissionStudentsForStageQuery(year, stage, query, page, size, sortByAcademicGroups);
+        return Ok(await mediator.Send(request));
+    }
+
+    [Authorize(Roles = $"{WellKnownRoles.HeadSecretary},{WellKnownRoles.Admin}")]
+    [HttpPost]
+    [ProducesResponseType<CreateCommissionQueryResult>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> CreateCommission(CreateCommissionQuery request)
+    {
         return Ok(await mediator.Send(request));
     }
 }

@@ -6,4 +6,6 @@ public record GetAcademicGroupsQueryResult(
 
 public record GetAcademicGroupsQueryResultAcademicGroup(
     Guid Id,
-    string Name);
+    string Name,
+    string? AcademicProgram,
+    bool Blocked);

@@ -5,6 +5,14 @@ namespace Graduation.Domain.Commissions;
 
 public class Commission : Entity<Guid>
 {
+    public Commission(Guid id) : base(id)
+    {
+    }
+
+    private Commission()
+    {
+    }
+
     public string Name { get; set; }
     public Guid SecretaryId { get; set; }
     public User? Secretary { get; set; }

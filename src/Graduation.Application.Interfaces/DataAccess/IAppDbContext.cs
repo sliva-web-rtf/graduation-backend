@@ -25,6 +25,7 @@ public interface IAppDbContext : IDbContextWithSets, IDisposable
     DbSet<ScientificInterest> ScientificInterests { get; }
     DbSet<Commission> Commissions { get; }
     DbSet<CommissionExpert> CommissionExperts { get; }
+    DbSet<CommissionStudent> CommissionStudents { get; }
     DbSet<Student> Students { get; }
     DbSet<QualificationWorkStage> QualificationWorkStages { get; }
     DbSet<Stage> Stages { get; }
