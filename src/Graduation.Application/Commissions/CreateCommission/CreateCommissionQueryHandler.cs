@@ -22,10 +22,9 @@ public class CreateCommissionQueryHandler(
         if (await dbContext.Commissions.FirstOrDefaultAsync(c => c.Name == request.Name, cancellationToken) != null)
             throw new DomainException("Commission with given name already exists");
 
-        var chairperson = await userManager.FindByIdAsync(request.ChairpersonId.ToString())
-                          ?? throw new DomainException("Chairperson with given id does not exist");
+        var chairperson = await userManager.FindByIdAsync(request.ChairpersonId.ToString());
 
-        if (!(await userManager.GetRolesAsync(chairperson)).Any(r => r is WellKnownRoles.Expert))
+        if (chairperson != null && !(await userManager.GetRolesAsync(chairperson)).Any(r => r is WellKnownRoles.Expert))
             throw new DomainException("Chairperson must be in role expert");
 
         var secretary = await userManager.FindByIdAsync(request.SecretaryId.ToString())
@@ -42,7 +41,7 @@ public class CreateCommissionQueryHandler(
 
         var commission = new Commission(Guid.NewGuid())
         {
-            ChairpersonId = chairperson.Id,
+            ChairpersonId = chairperson?.Id,
             SecretaryId = secretary.Id,
             Name = request.Name,
             Year = currentYearProvider.GetCurrentYear()

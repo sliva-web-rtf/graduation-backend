@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Graduation.Application.Commissions.CreateCommission;
+using Graduation.Application.Commissions.GetCommission;
 using Graduation.Application.Commissions.GetCommissions;
 using Graduation.Application.Students.GetCommissionStudentsForStage;
 using Graduation.Domain;
@@ -43,6 +44,15 @@ public class CommissionsController(IMediator mediator) : ControllerBase
     [ProducesResponseType<CreateCommissionQueryResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> CreateCommission(CreateCommissionQuery request)
     {
+        return Ok(await mediator.Send(request));
+    }
+
+    [Authorize(Roles = $"{WellKnownRoles.HeadSecretary},{WellKnownRoles.Admin}")]
+    [HttpGet("{id:guid}")]
+    [ProducesResponseType<GetCommissionQueryResult>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetCommission(Guid id)
+    {
+        var request = new GetCommissionQuery(id);
         return Ok(await mediator.Send(request));
     }
 }
