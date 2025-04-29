@@ -65,7 +65,8 @@ public class CreateCommissionQueryHandler(
             var stage = stages.Single(s => s.Name == queryStage.Stage);
             foreach (var student in queryStage.MovedStudents)
             {
-                if (await dbContext.CommissionStudents.FirstOrDefaultAsync(cancellationToken) is { } commissionStudent)
+                if (await dbContext.CommissionStudents.FirstOrDefaultAsync(cs => cs.StageId == stage.Id &&
+                        cs.UserId == student.Id, cancellationToken) is { } commissionStudent)
                     dbContext.CommissionStudents.Remove(commissionStudent);
 
                 dbContext.CommissionStudents.Add(new CommissionStudent
@@ -78,7 +79,8 @@ public class CreateCommissionQueryHandler(
 
             foreach (var expert in queryStage.Experts)
             {
-                if (await dbContext.CommissionExperts.FirstOrDefaultAsync(cancellationToken) is { } commissionExpert)
+                if (await dbContext.CommissionExperts.FirstOrDefaultAsync(ce => ce.StageId == stage.Id &&
+                        ce.UserId == expert.Id, cancellationToken) is { } commissionExpert)
                     dbContext.CommissionExperts.Remove(commissionExpert);
 
                 dbContext.CommissionExperts.Add(new CommissionExpert
