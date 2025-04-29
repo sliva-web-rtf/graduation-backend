@@ -6,4 +6,5 @@ public record GetStudentsQuery(
     string Year,
     int Page,
     int PageSize,
-    string? Query) : IRequest<GetStudentsQueryResult>;
+    string? Query,
+    IList<string> SortByAcademicGroups) : IRequest<GetStudentsQueryResult>;
