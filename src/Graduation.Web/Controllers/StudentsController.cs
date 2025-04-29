@@ -24,10 +24,9 @@ public class StudentsController(IMediator mediator) : ControllerBase
         [FromHeader(Name = "X-Year")] string year,
         [Required] [Range(0, int.MaxValue)] int page,
         [Required] [Range(1, 1000)] int size,
-        [FromQuery] List<string> sortByAcademicGroups,
         string? query)
     {
-        var request = new GetStudentsQuery(year, page, size, query, sortByAcademicGroups);
+        var request = new GetStudentsQuery(year, page, size, query);
         return Ok(await mediator.Send(request));
     }
 

@@ -20,17 +20,15 @@ public class GetStudentsQueryHandler : IRequestHandler<GetStudentsQuery, GetStud
         var usersCount = await GetStudentsQuery(request).CountAsync(cancellationToken);
         var pagesCount = (usersCount + request.PageSize - 1) / request.PageSize;
 
-        var students = GetStudentsQuery(request)
+        var students = await GetStudentsQuery(request)
             .Include(s => s.User)
             .Include(s => s.AcademicGroup)
-            .ThenInclude(g => g!.AcademicProgram);
-
-        var sortedStudents = await Sort(students, request)
+            .ThenInclude(g => g!.AcademicProgram)
             .Skip(request.Page * request.PageSize)
             .Take(request.PageSize)
             .ToListAsync(cancellationToken);
 
-        var formattedStudents = sortedStudents.Select(s => new GetStudentsQueryStudent(
+        var formattedStudents = students.Select(s => new GetStudentsQueryStudent(
                 s.Id,
                 s.User!.FullName,
                 s.AcademicGroup?.Name,
@@ -52,10 +50,5 @@ public class GetStudentsQueryHandler : IRequestHandler<GetStudentsQuery, GetStud
                 EF.Functions.ILike(s.User!.FirstName!, p) ||
                 EF.Functions.ILike(s.User.LastName!, p) ||
                 EF.Functions.ILike(s.User.Patronymic!, p)));
-    }
-
-    private IQueryable<Student> Sort(IQueryable<Student> query, GetStudentsQuery request)
-    {
-        return query.OrderByDescending(s => request.SortByAcademicGroups.Contains(s.AcademicGroup!.Name));
     }
 }
