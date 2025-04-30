@@ -1,5 +1,4 @@
 ﻿using Graduation.Application.Interfaces.DataAccess;
-using Graduation.Application.Interfaces.Services;
 using Graduation.Domain;
 using Graduation.Domain.Commissions;
 using Graduation.Domain.Exceptions;
@@ -8,18 +7,18 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Graduation.Application.Commissions.CreateCommission;
+namespace Graduation.Application.Commissions.EditCommissionCommand;
 
-public class CreateCommissionQueryHandler(
+public class EditCommissionCommandHandler(
     IAppDbContext dbContext,
-    UserManager<User> userManager,
-    ICurrentYearProvider currentYearProvider)
-    : IRequestHandler<CreateCommissionQuery, CreateCommissionQueryResult>
+    UserManager<User> userManager)
+    : IRequestHandler<EditCommissionCommand, EditCommissionCommandResult>
 {
-    public async Task<CreateCommissionQueryResult> Handle(CreateCommissionQuery request,
+    public async Task<EditCommissionCommandResult> Handle(EditCommissionCommand request,
         CancellationToken cancellationToken)
     {
-        if (await dbContext.Commissions.FirstOrDefaultAsync(c => c.Name == request.Name, cancellationToken) != null)
+        if (await dbContext.Commissions.FirstOrDefaultAsync(c => c.Name == request.Name && request.CommissionId != c.Id,
+                cancellationToken) != null)
             throw new DomainException("Commission with given name already exists");
 
         var chairperson = await userManager.FindByIdAsync(request.ChairpersonId.ToString());
@@ -39,14 +38,17 @@ public class CreateCommissionQueryHandler(
         if (stagesNames.Count != stages.Count)
             throw new DomainException("Some of stages not found");
 
-        var commission = new Commission(Guid.NewGuid())
-        {
-            ChairpersonId = chairperson?.Id,
-            SecretaryId = secretary.Id,
-            Name = request.Name,
-            Year = currentYearProvider.GetCurrentYear()
-        };
-        dbContext.Commissions.Add(commission);
+        var commission = await dbContext.Commissions
+                             .Include(c => c.AcademicGroups)
+                             .Include(c => c.CommissionExperts)
+                             .Include(c => c.CommissionStudents)
+                             .FirstOrDefaultAsync(c => c.Id == request.CommissionId, cancellationToken)
+                         ?? throw new NotFoundException("Commission not found");
+        commission.ChairpersonId = chairperson?.Id;
+        commission.SecretaryId = secretary.Id;
+        commission.Name = request.Name;
+
+        commission.AcademicGroups.Clear();
 
         var groups = await dbContext.AcademicGroups
             .Where(ag => request.AcademicGroups.Contains(ag.Id))
@@ -54,10 +56,13 @@ public class CreateCommissionQueryHandler(
 
         foreach (var group in groups)
         {
-            if (group.CommissionId != null)
+            if (group.CommissionId != null && group.CommissionId != commission.Id)
                 throw new DomainException($"Group {group.Name} already has commission");
-            group.CommissionId = commission.Id;
+            commission.AcademicGroups.Add(group);
         }
+
+        commission.CommissionStudents.Clear();
+        commission.CommissionExperts.Clear();
 
         foreach (var queryStage in request.Stages)
         {
@@ -94,6 +99,6 @@ public class CreateCommissionQueryHandler(
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return new CreateCommissionQueryResult(commission.Id);
+        return new EditCommissionCommandResult(request.CommissionId);
     }
 }

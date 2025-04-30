@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Graduation.Application.Commissions.CreateCommission;
+using Graduation.Application.Commissions.EditCommissionCommand;
 using Graduation.Application.Commissions.GetCommission;
 using Graduation.Application.Commissions.GetCommissions;
 using Graduation.Application.Commissions.GetCommissionsForEditing;
@@ -42,8 +43,16 @@ public class CommissionsController(IMediator mediator) : ControllerBase
 
     [Authorize(Roles = $"{WellKnownRoles.HeadSecretary},{WellKnownRoles.Admin}")]
     [HttpPost]
-    [ProducesResponseType<CreateCommissionQueryResult>(StatusCodes.Status200OK)]
-    public async Task<IActionResult> CreateCommission(CreateCommissionQuery request)
+    [ProducesResponseType<CreateCommissionCommandResult>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> CreateCommission(CreateCommissionCommand request)
+    {
+        return Ok(await mediator.Send(request));
+    }
+
+    [Authorize(Roles = $"{WellKnownRoles.HeadSecretary},{WellKnownRoles.Admin}")]
+    [HttpPut]
+    [ProducesResponseType<EditCommissionCommandResult>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> EditCommission(EditCommissionCommand request)
     {
         return Ok(await mediator.Send(request));
     }

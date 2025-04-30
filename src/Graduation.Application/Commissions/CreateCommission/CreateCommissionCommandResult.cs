@@ -1,3 +1,3 @@
 ﻿namespace Graduation.Application.Commissions.CreateCommission;
 
-public record CreateCommissionQueryResult(Guid CommissionId);
+public record CreateCommissionCommandResult(Guid CommissionId);
