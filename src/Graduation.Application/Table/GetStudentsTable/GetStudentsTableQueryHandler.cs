@@ -299,9 +299,7 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
                 academicGroupCommission?.Secretary?.GetInitials(),
                 "Default");
 
-        var movementStatus = commissions.Count > 0
-            ? GetMovementStatus(realCommission, academicGroupCommission, commissions)
-            : "Default";
+        var movementStatus = GetMovementStatus(realCommission, academicGroupCommission, commissions);
 
         return new GetStudentsTableQueryCommission(
             realCommission.Name,
@@ -322,8 +320,9 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
         if (realCommission.Name == academicGroupCommission.Name)
             return "Default";
 
-        if (commissions.Contains(academicGroupCommission.Name) && commissions.Contains(realCommission.Name))
-            return "Default";
+        if (commissions.Count == 0 || (commissions.Contains(academicGroupCommission.Name) &&
+                                       commissions.Contains(realCommission.Name)))
+            return "Transferred";
 
         return commissions.Contains(realCommission.Name) ? "Ingoing" : "Outgoing";
     }
