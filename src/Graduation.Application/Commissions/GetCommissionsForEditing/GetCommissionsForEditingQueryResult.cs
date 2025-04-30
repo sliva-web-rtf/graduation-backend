@@ -6,4 +6,5 @@ public record GetCommissionsForEditingQueryResultCommission(
     Guid Id,
     string Name,
     string SecretaryName,
-    string? ChairpersonName);
+    string? ChairpersonName,
+    IList<string> AcademicGroups);

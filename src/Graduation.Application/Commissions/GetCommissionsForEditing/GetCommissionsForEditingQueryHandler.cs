@@ -13,7 +13,9 @@ public class GetCommissionsForEditingQueryHandler(IAppDbContext dbContext)
         var commissions = await dbContext.Commissions
             .Include(c => c.Secretary)
             .Include(c => c.Chairperson)
+            .Include(c => c.AcademicGroups)
             .Where(c => c.Year == request.Year)
+            .OrderBy(c => c.Name)
             .ToListAsync(cancellationToken);
 
         var formattedCommissions = commissions
@@ -22,7 +24,8 @@ public class GetCommissionsForEditingQueryHandler(IAppDbContext dbContext)
                     c.Id,
                     c.Name,
                     c.Secretary!.FullName,
-                    c.Chairperson?.FullName))
+                    c.Chairperson?.FullName,
+                    c.AcademicGroups.Select(ag => ag.Name).ToList()))
             .ToList();
 
         return new GetCommissionsForEditingQueryResult(formattedCommissions);

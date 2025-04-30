@@ -14,7 +14,11 @@ public class GetSecretariesQueryHandler(IAppDbContext dbContext) : IRequestHandl
         var usersCount = await GetSecretariesQuery(request).CountAsync(cancellationToken);
         var pagesCount = (usersCount + request.PageSize - 1) / request.PageSize;
 
-        var secretaries = await GetSecretariesQuery(request).Skip(request.Page * request.PageSize)
+        var secretaries = await GetSecretariesQuery(request)
+            .OrderBy(s => s.LastName)
+            .ThenBy(s => s.FirstName)
+            .ThenBy(s => s.Patronymic)
+            .Skip(request.Page * request.PageSize)
             .Take(request.PageSize)
             .ToListAsync(cancellationToken);
 

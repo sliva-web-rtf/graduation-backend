@@ -74,6 +74,14 @@ public class GetCommissionStudentsForStageQueryHandler(IAppDbContext dbContext)
 
     private IQueryable<Student> Sort(IQueryable<Student> query, GetCommissionStudentsForStageQuery request)
     {
-        return query.OrderByDescending(s => request.SortByAcademicGroups.Contains(s.AcademicGroup!.Name));
+        var sorted = query.OrderBy(s => 0);
+        foreach (var group in request.SortByAcademicGroups)
+        {
+            sorted = sorted.ThenByDescending(s => s.AcademicGroup!.Name == group);
+        }
+
+        return sorted.ThenBy(s => s.User!.LastName)
+            .ThenBy(s => s.User!.FirstName)
+            .ThenBy(s => s.User!.Patronymic);
     }
 }
