@@ -27,13 +27,13 @@ public class UploadManagersCommandHandler : IRequestHandler<UploadManagersComman
 
         using var workbook = new XLWorkbook(stream);
 
-        var ws = workbook.Worksheet(2);
+        var ws = workbook.Worksheet(1);
         var countRow = ws.Rows().Count();
 
-        for (var i = 2; i <= countRow; i++)
+        for (var i = 1; i <= countRow; i++)
         {
-            var fullName = ws.Cell($"B{i}").GetValue<string>().Trim();
-            var contacts = ws.Cell($"E{i}").GetValue<string>();
+            var fullName = ws.Cell($"A{i}").GetValue<string>().Trim();
+            var contacts = ws.Cell($"B{i}").GetValue<string>();
 
             if (string.IsNullOrWhiteSpace(fullName))
             {
@@ -64,9 +64,9 @@ public class UploadManagersCommandHandler : IRequestHandler<UploadManagersComman
 
             var userName = fullName.Replace(" ", "");
             var user = await userManager.FindByNameAsync(userName);
-            var userId = user.Id;
+            var userId = user?.Id;
 
-            if (user.Equals(null))
+            if (user == null)
             {
                 userId =
                     (await sender.Send(new CreateUserCommand(userName,
@@ -78,7 +78,7 @@ public class UploadManagersCommandHandler : IRequestHandler<UploadManagersComman
 
             if (!await userManager.IsInRoleAsync(user, WellKnownRoles.Supervisor))
             {
-                await sender.Send(new AddUserToRoleCommand(userId, WellKnownRoles.Supervisor),
+                await sender.Send(new AddUserToRoleCommand(userId.Value, WellKnownRoles.Supervisor),
                     cancellationToken);
             }
         }

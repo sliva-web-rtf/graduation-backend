@@ -19,8 +19,7 @@ builder.Services.AddApi(environment, configuration)
     .AddDataAccess(configuration)
     .AddAuthentication(configuration)
     .AddInfrastructure()
-    .AddApplication()
-    .AddValidation();
+    .AddApplication();
 
 
 var app = builder.Build();
