@@ -34,6 +34,8 @@ public static class DependencyInjection
             options.User.RequireUniqueEmail = false;
             options.User.AllowedUserNameCharacters = null;
             options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireUppercase = false;
+            options.Password.RequireDigit = false;
             options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
         });
 
