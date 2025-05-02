@@ -11,24 +11,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Graduation.Application.Topics.CreateTopic;
 
-public class CreateTopicCommandHandler : IRequestHandler<CreateTopicCommand, CreateTopicCommandResult>
+public class CreateTopicCommandHandler(
+    IAppDbContext dbContext,
+    ILoggedUserAccessor loggedUserAccessor,
+    UserManager<User> userManager,
+    ICurrentYearProvider currentYearProvider,
+    IEventsCreator eventsCreator)
+    : IRequestHandler<CreateTopicCommand, CreateTopicCommandResult>
 {
-    private readonly ICurrentYearProvider currentYearProvider;
-    private readonly IAppDbContext dbContext;
-    private readonly ILoggedUserAccessor loggedUserAccessor;
-    private readonly UserManager<User> userManager;
-
-    public CreateTopicCommandHandler(IAppDbContext dbContext, ILoggedUserAccessor loggedUserAccessor,
-        UserManager<User> userManager, ICurrentYearProvider currentYearProvider)
-    {
-        this.dbContext = dbContext;
-        this.loggedUserAccessor = loggedUserAccessor;
-        this.userManager = userManager;
-        this.currentYearProvider = currentYearProvider;
-    }
-
     public async Task<CreateTopicCommandResult> Handle(CreateTopicCommand request, CancellationToken cancellationToken)
     {
+        await eventsCreator.Create("User tried to create topic", request);
+        
         var academicPrograms = await dbContext.AcademicPrograms
             .Where(x => request.AcademicPrograms.Contains(x.Name))
             .ToListAsync(cancellationToken);

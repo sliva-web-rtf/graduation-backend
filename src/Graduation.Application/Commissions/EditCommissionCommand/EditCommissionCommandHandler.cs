@@ -1,4 +1,5 @@
 ﻿using Graduation.Application.Interfaces.DataAccess;
+using Graduation.Application.Interfaces.Services;
 using Graduation.Domain;
 using Graduation.Domain.Commissions;
 using Graduation.Domain.Exceptions;
@@ -11,17 +12,22 @@ namespace Graduation.Application.Commissions.EditCommissionCommand;
 
 public class EditCommissionCommandHandler(
     IAppDbContext dbContext,
-    UserManager<User> userManager)
+    UserManager<User> userManager,
+    IEventsCreator eventsCreator)
     : IRequestHandler<EditCommissionCommand, EditCommissionCommandResult>
 {
     public async Task<EditCommissionCommandResult> Handle(EditCommissionCommand request,
         CancellationToken cancellationToken)
     {
+        await eventsCreator.Create("User tried to edit commission", request);
+
         if (await dbContext.Commissions.FirstOrDefaultAsync(c => c.Name == request.Name && request.CommissionId != c.Id,
                 cancellationToken) != null)
             throw new DomainException("Commission with given name already exists");
 
-        var chairperson = await userManager.FindByIdAsync(request.ChairpersonId.ToString());
+        var chairperson = request.ChairpersonId != null 
+            ? await userManager.FindByIdAsync(request.ChairpersonId.ToString()!)
+            : null;
 
         if (chairperson != null && !(await userManager.GetRolesAsync(chairperson)).Any(r => r is WellKnownRoles.Expert))
             throw new DomainException("Chairperson must be in role expert");

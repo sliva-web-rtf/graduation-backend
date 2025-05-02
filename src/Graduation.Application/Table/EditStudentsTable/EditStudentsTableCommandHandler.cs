@@ -1,4 +1,5 @@
 ﻿using Graduation.Application.Interfaces.DataAccess;
+using Graduation.Application.Interfaces.Services;
 using Graduation.Domain.Documents;
 using Graduation.Domain.Exceptions;
 using Graduation.Domain.Stages;
@@ -8,12 +9,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Graduation.Application.Table.EditStudentsTable;
 
-public class EditStudentsTableCommandHandler(IAppDbContext dbContext)
+public class EditStudentsTableCommandHandler(IAppDbContext dbContext, IEventsCreator eventsCreator)
     : IRequestHandler<EditStudentsTableCommand, EditStudentsTableCommandResult>
 {
     public async Task<EditStudentsTableCommandResult> Handle(EditStudentsTableCommand request,
         CancellationToken cancellationToken)
     {
+        await eventsCreator.Create("User tried to edit table", request);
+        
         var studentsQuery = dbContext.Students
             .Where(s => s.Id == request.StudentId)
             .Include(s => s.User)

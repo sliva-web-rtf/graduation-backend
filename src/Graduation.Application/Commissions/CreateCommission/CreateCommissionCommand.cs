@@ -5,7 +5,7 @@ namespace Graduation.Application.Commissions.CreateCommission;
 public record CreateCommissionCommand(
     string Name,
     Guid SecretaryId,
-    Guid ChairpersonId,
+    Guid? ChairpersonId,
     IList<Guid> AcademicGroups,
     IList<CreateCommissionCommandStage> Stages
 ) : IRequest<CreateCommissionCommandResult>;

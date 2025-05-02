@@ -13,16 +13,21 @@ namespace Graduation.Application.Commissions.CreateCommission;
 public class CreateCommissionCommandHandler(
     IAppDbContext dbContext,
     UserManager<User> userManager,
-    ICurrentYearProvider currentYearProvider)
+    ICurrentYearProvider currentYearProvider,
+    IEventsCreator eventsCreator)
     : IRequestHandler<CreateCommissionCommand, CreateCommissionCommandResult>
 {
     public async Task<CreateCommissionCommandResult> Handle(CreateCommissionCommand request,
         CancellationToken cancellationToken)
     {
+        await eventsCreator.Create("User tried to create commission", request);
+
         if (await dbContext.Commissions.FirstOrDefaultAsync(c => c.Name == request.Name, cancellationToken) != null)
             throw new DomainException("Commission with given name already exists");
 
-        var chairperson = await userManager.FindByIdAsync(request.ChairpersonId.ToString());
+        var chairperson = request.ChairpersonId != null
+            ? await userManager.FindByIdAsync(request.ChairpersonId.ToString()!)
+            : null;
 
         if (chairperson != null && !(await userManager.GetRolesAsync(chairperson)).Any(r => r is WellKnownRoles.Expert))
             throw new DomainException("Chairperson must be in role expert");

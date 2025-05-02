@@ -6,7 +6,7 @@ public record EditCommissionCommand(
     Guid CommissionId,
     string Name,
     Guid SecretaryId,
-    Guid ChairpersonId,
+    Guid? ChairpersonId,
     IList<Guid> AcademicGroups,
     IList<EditCommissionCommandStage> Stages
 ) : IRequest<EditCommissionCommandResult>;

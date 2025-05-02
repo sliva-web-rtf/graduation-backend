@@ -3,6 +3,7 @@ using Graduation.Domain.AcademicGroups;
 using Graduation.Domain.AcademicPrograms;
 using Graduation.Domain.Commissions;
 using Graduation.Domain.Documents;
+using Graduation.Domain.Events;
 using Graduation.Domain.QualificationWorkRoles;
 using Graduation.Domain.QualificationWorks;
 using Graduation.Domain.Requests;
@@ -30,8 +31,9 @@ public class AppDbContext
     {
     }
 
-    public DbSet<CommissionStudent> CommissionStudents { get; private set; }
     public DbSet<TopicRequestedRole> TopicRequestedRoles { get; private set; }
+
+    public DbSet<CommissionStudent> CommissionStudents { get; private set; }
     public DbSet<SupervisorLimit> SupervisorLimits { get; private set; }
     public DbSet<Year> Years { get; private set; }
     public DbSet<Skill> Skills { get; private set; }
@@ -52,6 +54,7 @@ public class AppDbContext
     public DbSet<QualificationWork> QualificationWorks { get; private set; }
     public DbSet<Request> Request { get; private set; }
     public DbSet<TopicChangeRequest> TopicChangeRequest { get; private set; }
+    public DbSet<Event> Events { get; private set; }
     public DbSet<DataProtectionKey> DataProtectionKeys { get; private set; }
 
     /// <inheritdoc />

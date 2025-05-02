@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
 
 namespace Graduation.Infrastructure.Persistence;
 
@@ -22,10 +23,15 @@ public static class DependencyInjection
         services.AddHealthChecks()
             .AddNpgSql(databaseConnectionString);
 
+        var dataSourceBuilder = new NpgsqlDataSourceBuilder(databaseConnectionString);
+        dataSourceBuilder.EnableDynamicJson();
+
+        var dataSource = dataSourceBuilder.Build();
+
         services.AddDbContext<AppDbContext>(
             options =>
                 options.UseNpgsql(
-                    databaseConnectionString,
+                    dataSource,
                     sqlOptions => sqlOptions.MigrationsAssembly(typeof(AppDbContext).Assembly.GetName().Name)
                 ));
 
