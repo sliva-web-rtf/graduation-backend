@@ -21,6 +21,14 @@ public class GetCommissionQueryHandler(IAppDbContext dbContext)
                              .ThenInclude(s => s!.User)
                              .Include(c => c.AcademicGroups)
                              .ThenInclude(ag => ag.AcademicProgram)
+                             .AsSplitQuery()
+                             .Include(c => c.AcademicGroups)
+                             .ThenInclude(ag => ag.Students)
+                             .ThenInclude(s => s.User)
+                             .Include(c => c.AcademicGroups)
+                             .ThenInclude(ag => ag.Students)
+                             .ThenInclude(s => s.CommissionStudents)
+                             .ThenInclude(s => s.Commission)
                              .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken)
                          ?? throw new NotFoundException("Commission not found");
 
@@ -42,11 +50,19 @@ public class GetCommissionQueryHandler(IAppDbContext dbContext)
     {
         var stages = await dbContext.Stages.Where(s => s.Year == commission.Year).ToListAsync();
         var stagesResult = new List<GetCommissionQueryResultStage>();
+        var commissionStudents = commission.AcademicGroups
+            .SelectMany(ag => ag.Students)
+            .SelectMany(s => s.CommissionStudents)
+            .ToList();
         foreach (var stage in stages)
         {
             var students = commission.CommissionStudents
+                .Concat(commissionStudents)
                 .Where(cs => cs.StageId == stage.Id)
-                .Select(s => new GetCommissionQueryResultStudent(s.Student!.Id, s.Student.User!.FullName))
+                .Select(s => new GetCommissionQueryResultMovedStudent(
+                    s.Student!.Id, s.Student.User!.FullName,
+                    s.CommissionId, s.Commission!.Name))
+                .Distinct()
                 .ToList();
 
             var experts = commission.CommissionExperts

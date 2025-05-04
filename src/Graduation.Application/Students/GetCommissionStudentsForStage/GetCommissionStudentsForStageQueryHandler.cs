@@ -17,12 +17,10 @@ public class GetCommissionStudentsForStageQueryHandler(IAppDbContext dbContext)
 
         var students = GetStudentsQuery(request)
             .Include(s => s.User)
-            .Include(s => s.QualificationWork)
-            .ThenInclude(qw => qw!.Stages)
-            .ThenInclude(qws => qws.Commission)
-            .Include(s => s.QualificationWork)
-            .ThenInclude(qw => qw!.Stages)
-            .ThenInclude(qws => qws.Stage)
+            .Include(s => s.CommissionStudents)
+            .ThenInclude(s => s.Commission)
+            .Include(s => s.CommissionStudents)
+            .ThenInclude(s => s.StageId)
             .Include(s => s.AcademicGroup)
             .ThenInclude(g => g!.AcademicProgram);
 
@@ -33,8 +31,8 @@ public class GetCommissionStudentsForStageQueryHandler(IAppDbContext dbContext)
 
         var formattedStudents = sortedStudents.Select(s =>
             {
-                var commission = s.QualificationWork?.Stages
-                    .FirstOrDefault(qws => qws.Stage.Name == request.Stage)?.Commission;
+                var commission = s.CommissionStudents
+                    .FirstOrDefault(cs => cs.Stage!.Name == request.Stage)?.Commission;
 
                 var academicGroup = s.AcademicGroup == null
                     ? null

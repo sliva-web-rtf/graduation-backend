@@ -15,6 +15,6 @@ public class CommissionStudentConfiguration : IEntityTypeConfiguration<Commissio
         builder.HasOne<Student>(x => x.Student).WithMany(s => s.CommissionStudents).HasForeignKey(x => x.UserId);
         builder.HasOne<Commission>(cs => cs.Commission).WithMany(x => x.CommissionStudents)
             .HasForeignKey(x => x.CommissionId);
-        builder.HasOne<Stage>().WithMany().HasForeignKey(x => x.StageId);
+        builder.HasOne<Stage>(x => x.Stage).WithMany().HasForeignKey(x => x.StageId);
     }
 }

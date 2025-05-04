@@ -17,8 +17,8 @@ public record GetCommissionQueryResultAcademicGroup(Guid Id, string Name, string
 public record GetCommissionQueryResultStage(
     string Stage,
     IList<GetCommissionQueryResultExpert> Experts,
-    IList<GetCommissionQueryResultStudent> Students);
+    IList<GetCommissionQueryResultMovedStudent> MovedStudents);
 
 public record GetCommissionQueryResultExpert(Guid Id, string Name, bool IsInvited);
 
-public record GetCommissionQueryResultStudent(Guid Id, string Name);
+public record GetCommissionQueryResultMovedStudent(Guid Id, string Name, Guid? CommissionId, string? CommissionName);
