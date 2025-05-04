@@ -18,9 +18,11 @@ public class ExpertsController(IMediator mediator) : ControllerBase
         [FromHeader(Name = "X-Year")] string year,
         string? query,
         [Required] [Range(0, int.MaxValue)] int page,
-        [Required] [Range(1, 1000)] int size)
+        [Required] [Range(1, 1000)] int size,
+        Guid sortByCommissionId,
+        string? stage)
     {
-        var request = new GetExpertsQuery(year, query, page, size);
+        var request = new GetExpertsQuery(year, query, sortByCommissionId, stage, page, size);
         return Ok(await mediator.Send(request));
     }
 }

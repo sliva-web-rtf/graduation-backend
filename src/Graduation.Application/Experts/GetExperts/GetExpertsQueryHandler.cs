@@ -13,8 +13,14 @@ public class GetExpertsQueryHandler(IAppDbContext dbContext) : IRequestHandler<G
         var usersCount = await GetExpertsQuery(request).CountAsync(cancellationToken);
         var pagesCount = (usersCount + request.PageSize - 1) / request.PageSize;
 
+        var commissionExperts = await dbContext.CommissionExperts
+            .Where(c => c.CommissionId == request.SortByCommissionId && c.Stage!.Name == request.Stage)
+            .Select(c => c.UserId)
+            .ToListAsync(cancellationToken);
+        
         var experts = await GetExpertsQuery(request)
-            .OrderBy(e => e.LastName)
+            .OrderByDescending(e => commissionExperts.Contains(e.Id))
+            .ThenBy(e => e.LastName)
             .ThenBy(e => e.FirstName)
             .ThenBy(e => e.Patronymic)
             .Skip(request.Page * request.PageSize)
