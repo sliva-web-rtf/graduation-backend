@@ -18,9 +18,10 @@ public class AcademicGroupsController(IMediator mediator) : ControllerBase
         [FromHeader(Name = "X-Year")] string year,
         string? query,
         [Required] [Range(0, int.MaxValue)] int page,
-        [Required] [Range(1, 1000)] int size)
+        [Required] [Range(1, 1000)] int size,
+        Guid? commissionId)
     {
-        var request = new GetAcademicGroupsQuery(year, query, page, size);
+        var request = new GetAcademicGroupsQuery(year, query, commissionId, page, size);
         return Ok(await mediator.Send(request));
     }
 }

@@ -19,7 +19,7 @@ public class ExpertsController(IMediator mediator) : ControllerBase
         string? query,
         [Required] [Range(0, int.MaxValue)] int page,
         [Required] [Range(1, 1000)] int size,
-        Guid sortByCommissionId,
+        Guid? sortByCommissionId,
         string? stage)
     {
         var request = new GetExpertsQuery(year, query, sortByCommissionId, stage, page, size);

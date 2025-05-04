@@ -16,7 +16,8 @@ public class GetAcademicGroupsQueryHandler(IAppDbContext dbContext)
 
         var academicGroups = await GetAcademicGroupsQuery(request)
             .Include(ag => ag.AcademicProgram)
-            .OrderBy(ag => ag.Name)
+            .OrderByDescending(ag => request.CommissionId != null && ag.CommissionId == request.CommissionId)
+            .ThenBy(ag => ag.Name)
             .Skip(request.Page * request.PageSize)
             .Take(request.PageSize)
             .ToListAsync(cancellationToken);
@@ -26,7 +27,7 @@ public class GetAcademicGroupsQueryHandler(IAppDbContext dbContext)
                 ag.Id,
                 ag.Name,
                 ag.AcademicProgram?.Name,
-                ag.CommissionId != null))
+                ag.CommissionId != null && request.CommissionId != ag.CommissionId))
             .ToList();
 
         return new GetAcademicGroupsQueryResult(formattedAcademicGroups, pagesCount);
