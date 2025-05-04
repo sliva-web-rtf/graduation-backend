@@ -58,12 +58,19 @@ public class EditCommissionCommandHandler(
 
         var groups = await dbContext.AcademicGroups
             .Where(ag => request.AcademicGroups.Contains(ag.Id))
+            .Include(ag => ag.Students)
+            .ThenInclude(ag => ag.CommissionStudents)
+            .ThenInclude(ag => ag.Commission)
             .ToListAsync(cancellationToken);
 
         foreach (var group in groups)
         {
             if (group.CommissionId != null && group.CommissionId != commission.Id)
                 throw new DomainException($"Group {group.Name} already has commission");
+            foreach (var student in group.Students)
+            {
+                student.CommissionStudents.Clear();
+            }
             commission.AcademicGroups.Add(group);
         }
 
