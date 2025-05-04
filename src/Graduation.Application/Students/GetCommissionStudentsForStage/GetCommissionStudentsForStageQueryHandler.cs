@@ -20,7 +20,7 @@ public class GetCommissionStudentsForStageQueryHandler(IAppDbContext dbContext)
             .Include(s => s.CommissionStudents)
             .ThenInclude(s => s.Commission)
             .Include(s => s.CommissionStudents)
-            .ThenInclude(s => s.StageId)
+            .ThenInclude(s => s.Stage)
             .Include(s => s.AcademicGroup)
             .ThenInclude(g => g!.AcademicProgram);
 
