@@ -58,11 +58,13 @@ public class GetCommissionStudentsForStageQueryHandler(IAppDbContext dbContext)
                         commission.Id,
                         $"{commission.Name} ({commission.Secretary!.GetInitials()})");
 
-                var isCurrentCommission = (s.AcademicGroup?.CommissionId == null &&
-                               s.CommissionStudents.All(cs => cs.Stage!.Name != request.Stage)) ||
-                              s.AcademicGroup!.CommissionId == request.CommissionId ||
-                              s.CommissionStudents.Any(cs =>
-                                  cs.Stage!.Name == request.Stage && cs.CommissionId == request.CommissionId);
+                var isCurrentCommission = (s.CommissionStudents.All(cs => cs.Stage!.Name != request.Stage) &&
+                                           s.AcademicGroup?.CommissionId == null) ||
+                                          (s.CommissionStudents.All(cs => cs.Stage!.Name != request.Stage) &&
+                                           s.AcademicGroup!.CommissionId == request.CommissionId) ||
+                                          s.CommissionStudents.Any(cs =>
+                                              cs.Stage!.Name == request.Stage &&
+                                              cs.CommissionId == request.CommissionId);
 
                 return new GetCommissionStudentsForStageQueryResultStudent(
                     s.Id,
