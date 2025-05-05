@@ -1,0 +1,3 @@
+﻿namespace Graduation.Application.AcademicGroups.SetFormattingReviewer;
+
+public record SetFormattingReviewerCommandResult(Guid AcademicGroupId);
