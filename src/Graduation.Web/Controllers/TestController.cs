@@ -30,4 +30,29 @@ public class TestController(IAppDbContext appDbContext, UserManager<User> userMa
 
         return Ok();
     }
+
+    [Authorize(Roles = WellKnownRoles.Admin)]
+    [HttpPost("fix-commissions-students")]
+    public async Task<IActionResult> FixCommissionsStudents()
+    {
+        var students = await appDbContext.Students
+            .Include(s => s.AcademicGroup!.Commission)
+            .Include(s => s.CommissionStudents)
+            .ToListAsync();
+
+        foreach (var student in students)
+        {
+            if (student.AcademicGroup.CommissionId == null)
+                continue;
+            foreach (var commissionStudent in student.CommissionStudents)
+            {
+                if (commissionStudent.CommissionId == student.AcademicGroup.CommissionId)
+                    appDbContext.CommissionStudents.Remove(commissionStudent);
+            }
+        }
+
+        await appDbContext.SaveChangesAsync();
+
+        return Ok();
+    }
 }

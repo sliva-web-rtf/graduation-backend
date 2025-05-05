@@ -25,7 +25,7 @@ public class EditCommissionCommandHandler(
                 cancellationToken) != null)
             throw new DomainException("Commission with given name already exists");
 
-        var chairperson = request.ChairpersonId != null 
+        var chairperson = request.ChairpersonId != null
             ? await userManager.FindByIdAsync(request.ChairpersonId.ToString()!)
             : null;
 
@@ -54,6 +54,8 @@ public class EditCommissionCommandHandler(
         commission.SecretaryId = secretary.Id;
         commission.Name = request.Name;
 
+        var oldAcademicGroups = commission.AcademicGroups.ToList();
+
         commission.AcademicGroups.Clear();
 
         var groups = await dbContext.AcademicGroups
@@ -67,10 +69,13 @@ public class EditCommissionCommandHandler(
         {
             if (group.CommissionId != null && group.CommissionId != commission.Id)
                 throw new DomainException($"Group {group.Name} already has commission");
-            foreach (var student in group.Students)
-            {
-                student.CommissionStudents.Clear();
-            }
+
+            if (oldAcademicGroups.Any(ag => ag.Id == group.Id))
+                foreach (var student in group.Students)
+                {
+                    student.CommissionStudents.Clear();
+                }
+
             commission.AcademicGroups.Add(group);
         }
 

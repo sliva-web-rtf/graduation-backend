@@ -43,8 +43,7 @@ public class GetCommissionQueryHandler(IAppDbContext dbContext)
 
         var stages = await GetStages(commission);
 
-        return new GetCommissionQueryResult($"{commission.Name} ({commission.Secretary.GetInitials()})", secretary,
-            chairperson, academicGroups, stages);
+        return new GetCommissionQueryResult(commission.Name, secretary, chairperson, academicGroups, stages);
     }
 
     private async Task<IList<GetCommissionQueryResultStage>> GetStages(Commission commission)
