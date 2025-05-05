@@ -19,10 +19,14 @@ public class GetCommissionStudentsForStageQueryHandler(IAppDbContext dbContext)
             .Include(s => s.User)
             .Include(s => s.CommissionStudents)
             .ThenInclude(s => s.Commission)
+            .ThenInclude(c => c!.Secretary)
             .Include(s => s.CommissionStudents)
             .ThenInclude(s => s.Stage)
             .Include(s => s.AcademicGroup)
-            .ThenInclude(g => g!.AcademicProgram);
+            .ThenInclude(g => g!.AcademicProgram)
+            .Include(s => s.AcademicGroup)
+            .ThenInclude(ag => ag!.Commission)
+            .ThenInclude(c => c!.Secretary);
 
         var sortedStudents = await Sort(students, request)
             .Skip(request.Page * request.PageSize)
@@ -31,6 +35,8 @@ public class GetCommissionStudentsForStageQueryHandler(IAppDbContext dbContext)
 
         var formattedStudents = sortedStudents.Select(s =>
             {
+                var prevCommission = s.AcademicGroup?.Commission;
+
                 var commission = s.CommissionStudents
                     .FirstOrDefault(cs => cs.Stage!.Name == request.Stage)?.Commission;
 
@@ -40,17 +46,31 @@ public class GetCommissionStudentsForStageQueryHandler(IAppDbContext dbContext)
                         s.AcademicGroup.Id,
                         s.AcademicGroup.Name);
 
+                var formattedPrevCommission = prevCommission == null
+                    ? null
+                    : new GetCommissionStudentsForStageQueryResultCommission(
+                        prevCommission.Id,
+                        $"{prevCommission.Name} ({prevCommission.Secretary!.GetInitials()})");
+
                 var formattedCommission = commission == null
                     ? null
                     : new GetCommissionStudentsForStageQueryResultCommission(
                         commission.Id,
-                        commission.Name);
+                        $"{commission.Name} ({commission.Secretary!.GetInitials()})");
+
+                var isCurrentCommission = (s.AcademicGroup?.CommissionId == null &&
+                               s.CommissionStudents.All(cs => cs.Stage!.Name != request.Stage)) ||
+                              s.AcademicGroup!.CommissionId == request.CommissionId ||
+                              s.CommissionStudents.Any(cs =>
+                                  cs.Stage!.Name == request.Stage && cs.CommissionId == request.CommissionId);
 
                 return new GetCommissionStudentsForStageQueryResultStudent(
                     s.Id,
                     s.User!.FullName,
+                    !isCurrentCommission,
                     academicGroup,
-                    formattedCommission
+                    formattedCommission,
+                    formattedPrevCommission
                 );
             })
             .ToList();
@@ -74,9 +94,10 @@ public class GetCommissionStudentsForStageQueryHandler(IAppDbContext dbContext)
     {
         var sorted = query.OrderBy(s => 0);
         foreach (var group in request.SortByAcademicGroups)
-        {
             sorted = sorted.ThenByDescending(s => s.AcademicGroup!.Name == group);
-        }
+
+        sorted = sorted.ThenByDescending(s => s.CommissionStudents
+            .FirstOrDefault(cs => cs.Stage!.Name == request.Stage)!.CommissionId == request.CommissionId);
 
         return sorted.ThenBy(s => s.User!.LastName)
             .ThenBy(s => s.User!.FirstName)

@@ -7,8 +7,10 @@ public record GetCommissionStudentsForStageQueryResult(
 public record GetCommissionStudentsForStageQueryResultStudent(
     Guid Id,
     string FullName,
+    bool Blocked,
     GetCommissionStudentsForStageQueryResultAcademicGroup? AcademicGroup,
-    GetCommissionStudentsForStageQueryResultCommission? Commission);
+    GetCommissionStudentsForStageQueryResultCommission? Commission,
+    GetCommissionStudentsForStageQueryResultCommission? PrevCommission);
 
 public record GetCommissionStudentsForStageQueryResultAcademicGroup(Guid Id, string Name);
 

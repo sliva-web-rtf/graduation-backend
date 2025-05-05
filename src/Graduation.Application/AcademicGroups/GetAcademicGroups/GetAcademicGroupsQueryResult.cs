@@ -8,4 +8,6 @@ public record GetAcademicGroupsQueryResultAcademicGroup(
     Guid Id,
     string Name,
     string? AcademicProgram,
-    bool Blocked);
+    bool Blocked,
+    Guid? CommissionId,
+    string? CommissionName);

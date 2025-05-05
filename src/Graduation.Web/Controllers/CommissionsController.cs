@@ -33,11 +33,13 @@ public class CommissionsController(IMediator mediator) : ControllerBase
         [FromHeader(Name = "X-Year")] string year,
         [Required] string stage,
         string? query,
+        Guid commissionId,
         [Required] [Range(0, int.MaxValue)] int page,
         [Required] [Range(1, 1000)] int size,
         [FromQuery] List<string> sortByAcademicGroups)
     {
-        var request = new GetCommissionStudentsForStageQuery(year, stage, query, page, size, sortByAcademicGroups);
+        var request =
+            new GetCommissionStudentsForStageQuery(year, stage, query, commissionId, page, size, sortByAcademicGroups);
         return Ok(await mediator.Send(request));
     }
 
