@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Graduation.Application.Commissions.CreateCommission;
+using Graduation.Application.Commissions.DeleteCommission;
 using Graduation.Application.Commissions.EditCommissionCommand;
 using Graduation.Application.Commissions.GetCommission;
 using Graduation.Application.Commissions.GetCommissions;
@@ -56,6 +57,15 @@ public class CommissionsController(IMediator mediator) : ControllerBase
     [ProducesResponseType<EditCommissionCommandResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> EditCommission(EditCommissionCommand request)
     {
+        return Ok(await mediator.Send(request));
+    }
+    
+    [Authorize(Roles = $"{WellKnownRoles.HeadSecretary},{WellKnownRoles.Admin}")]
+    [HttpDelete("{id:guid}")]
+    [ProducesResponseType<DeleteCommissionCommandResult>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> DeleteCommission(Guid id)
+    {
+        var request = new DeleteCommissionCommand(id);   
         return Ok(await mediator.Send(request));
     }
 
