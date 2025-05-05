@@ -42,7 +42,7 @@ public class TestController(IAppDbContext appDbContext, UserManager<User> userMa
 
         foreach (var student in students)
         {
-            if (student.AcademicGroup.CommissionId == null)
+            if (student.AcademicGroup?.CommissionId == null)
                 continue;
             foreach (var commissionStudent in student.CommissionStudents)
             {
