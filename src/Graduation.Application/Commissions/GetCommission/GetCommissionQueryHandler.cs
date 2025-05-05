@@ -28,7 +28,8 @@ public class GetCommissionQueryHandler(IAppDbContext dbContext)
                              .Include(c => c.AcademicGroups)
                              .ThenInclude(ag => ag.Students)
                              .ThenInclude(s => s.CommissionStudents)
-                             .ThenInclude(s => s.Commission)
+                             .ThenInclude(cs => cs.Commission)
+                             .ThenInclude(c => c!.Secretary)
                              .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken)
                          ?? throw new NotFoundException("Commission not found");
 
@@ -61,7 +62,7 @@ public class GetCommissionQueryHandler(IAppDbContext dbContext)
                 .Where(cs => cs.StageId == stage.Id)
                 .Select(s => new GetCommissionQueryResultMovedStudent(
                     s.Student!.Id, s.Student.User!.FullName,
-                    s.CommissionId, s.Commission!.Name))
+                    s.CommissionId, $"{s.Commission!.Name} ({s.Commission.Secretary!.GetInitials()})"))
                 .Distinct()
                 .ToList();
 
