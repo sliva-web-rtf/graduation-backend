@@ -17,6 +17,7 @@ public class GetAcademicGroupsQueryHandler(IAppDbContext dbContext)
         var academicGroups = await GetAcademicGroupsQuery(request)
             .Include(ag => ag.AcademicProgram)
             .Include(ag => ag.Commission!.Secretary)
+            .Include(ag => ag.FormattingReviewer)
             .OrderByDescending(ag => request.CommissionId != null && ag.CommissionId == request.CommissionId)
             .ThenBy(ag => ag.Name)
             .Skip(request.Page * request.PageSize)
@@ -28,6 +29,8 @@ public class GetAcademicGroupsQueryHandler(IAppDbContext dbContext)
                 ag.Id,
                 ag.Name,
                 ag.AcademicProgram?.Name,
+                ag.FormattingReviewerId,
+                ag.FormattingReviewer?.FullName,
                 ag.CommissionId != null && request.CommissionId != ag.CommissionId,
                 ag.CommissionId,
                 ag.Commission == null ? null : $"{ag.Commission?.Name} ({ag.Commission?.Secretary!.GetInitials()})"))
