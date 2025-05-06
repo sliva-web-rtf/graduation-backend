@@ -52,24 +52,24 @@ public class CommissionsController(IMediator mediator) : ControllerBase
         return Ok(await mediator.Send(request));
     }
 
-    [Authorize(Roles = $"{WellKnownRoles.HeadSecretary},{WellKnownRoles.Admin}")]
+    [Authorize(Roles = $"{WellKnownRoles.HeadSecretary},{WellKnownRoles.Admin},{WellKnownRoles.Secretary}")]
     [HttpPut]
     [ProducesResponseType<EditCommissionCommandResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> EditCommission(EditCommissionCommand request)
     {
         return Ok(await mediator.Send(request));
     }
-    
+
     [Authorize(Roles = $"{WellKnownRoles.HeadSecretary},{WellKnownRoles.Admin}")]
     [HttpDelete("{id:guid}")]
     [ProducesResponseType<DeleteCommissionCommandResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> DeleteCommission(Guid id)
     {
-        var request = new DeleteCommissionCommand(id);   
+        var request = new DeleteCommissionCommand(id);
         return Ok(await mediator.Send(request));
     }
 
-    [Authorize(Roles = $"{WellKnownRoles.HeadSecretary},{WellKnownRoles.Admin}")]
+    [Authorize(Roles = $"{WellKnownRoles.HeadSecretary},{WellKnownRoles.Admin},{WellKnownRoles.Secretary}")]
     [HttpGet("{id:guid}")]
     [ProducesResponseType<GetCommissionQueryResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCommission(Guid id)
@@ -78,7 +78,7 @@ public class CommissionsController(IMediator mediator) : ControllerBase
         return Ok(await mediator.Send(request));
     }
 
-    [Authorize(Roles = $"{WellKnownRoles.HeadSecretary},{WellKnownRoles.Admin}")]
+    [Authorize(Roles = $"{WellKnownRoles.HeadSecretary},{WellKnownRoles.Admin},{WellKnownRoles.Secretary}")]
     [HttpGet("for-editing")]
     [ProducesResponseType<GetCommissionsForEditingQueryResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCommissionsForEditing(
