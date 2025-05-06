@@ -14,10 +14,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
-        // We need to set the application name to data protection, since the default token
-        // provider uses this data to create the token. If it is not specified explicitly,
-        // tokens from different instances will be incompatible.
-        services.AddDataProtection().SetApplicationName("Application")
+        services.AddDataProtection().SetApplicationName("Graduation")
             .PersistKeysToDbContext<AppDbContext>();
 
         services
@@ -37,9 +34,11 @@ public static class DependencyInjection
             options.User.RequireUniqueEmail = false;
             options.User.AllowedUserNameCharacters = null;
             options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireUppercase = false;
+            options.Password.RequireDigit = false;
             options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
         });
-        
+
         services.AddIdentity<User, AppIdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();

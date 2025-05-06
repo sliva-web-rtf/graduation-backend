@@ -2,4 +2,4 @@
 
 public record GetCommissionsQueryResult(IList<GetCommissionsQueryResultCommission> Commissions);
 
-public record GetCommissionsQueryResultCommission(string Name, string SecretaryName);
+public record GetCommissionsQueryResultCommission(Guid Id, string Name, string SecretaryName);

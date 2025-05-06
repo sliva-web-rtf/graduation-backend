@@ -2,6 +2,7 @@
 using Graduation.Domain.AcademicPrograms;
 using Graduation.Domain.Commissions;
 using Graduation.Domain.Documents;
+using Graduation.Domain.Events;
 using Graduation.Domain.QualificationWorkRoles;
 using Graduation.Domain.QualificationWorks;
 using Graduation.Domain.Requests;
@@ -25,6 +26,7 @@ public interface IAppDbContext : IDbContextWithSets, IDisposable
     DbSet<ScientificInterest> ScientificInterests { get; }
     DbSet<Commission> Commissions { get; }
     DbSet<CommissionExpert> CommissionExperts { get; }
+    DbSet<CommissionStudent> CommissionStudents { get; }
     DbSet<Student> Students { get; }
     DbSet<QualificationWorkStage> QualificationWorkStages { get; }
     DbSet<Stage> Stages { get; }
@@ -39,6 +41,7 @@ public interface IAppDbContext : IDbContextWithSets, IDisposable
     DbSet<Request> Request { get; }
     DbSet<TopicChangeRequest> TopicChangeRequest { get; }
     DbSet<ApplicationUserRole> UserRoles { get; }
-    DbSet<AppIdentityRole> Roles { get; set; }
-    DbSet<User> Users { get; set; }
+    DbSet<AppIdentityRole> Roles { get; }
+    DbSet<User> Users { get; }
+    DbSet<Event> Events { get; }
 }

@@ -100,6 +100,9 @@ namespace Graduation.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("ChairpersonId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -112,6 +115,8 @@ namespace Graduation.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ChairpersonId");
 
                     b.HasIndex("SecretaryId");
 
@@ -193,6 +198,37 @@ namespace Graduation.Infrastructure.Migrations
                     b.HasIndex("QualificationWorkId");
 
                     b.ToTable("Documents");
+                });
+
+            modelBuilder.Entity("Graduation.Domain.Events.Event", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<object>("Data")
+                        .HasColumnType("jsonb");
+
+                    b.Property<string>("Exception")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Path")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("Graduation.Domain.QualificationWorkRoles.QualificationWorkRole", b =>
@@ -908,8 +944,9 @@ namespace Graduation.Infrastructure.Migrations
                         .HasForeignKey("AcademicProgramId");
 
                     b.HasOne("Graduation.Domain.Commissions.Commission", "Commission")
-                        .WithMany()
-                        .HasForeignKey("CommissionId");
+                        .WithMany("AcademicGroups")
+                        .HasForeignKey("CommissionId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Graduation.Domain.Users.User", "FormattingReviewer")
                         .WithMany()
@@ -954,6 +991,10 @@ namespace Graduation.Infrastructure.Migrations
 
             modelBuilder.Entity("Graduation.Domain.Commissions.Commission", b =>
                 {
+                    b.HasOne("Graduation.Domain.Users.User", "Chairperson")
+                        .WithMany()
+                        .HasForeignKey("ChairpersonId");
+
                     b.HasOne("Graduation.Domain.Users.User", "Secretary")
                         .WithMany()
                         .HasForeignKey("SecretaryId")
@@ -966,18 +1007,20 @@ namespace Graduation.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Chairperson");
+
                     b.Navigation("Secretary");
                 });
 
             modelBuilder.Entity("Graduation.Domain.Commissions.CommissionExpert", b =>
                 {
                     b.HasOne("Graduation.Domain.Commissions.Commission", null)
-                        .WithMany()
+                        .WithMany("CommissionExperts")
                         .HasForeignKey("CommissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Graduation.Domain.Stages.Stage", null)
+                    b.HasOne("Graduation.Domain.Stages.Stage", "Stage")
                         .WithMany()
                         .HasForeignKey("StageId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -990,29 +1033,35 @@ namespace Graduation.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Expert");
+
+                    b.Navigation("Stage");
                 });
 
             modelBuilder.Entity("Graduation.Domain.Commissions.CommissionStudent", b =>
                 {
                     b.HasOne("Graduation.Domain.Commissions.Commission", "Commission")
-                        .WithMany()
+                        .WithMany("CommissionStudents")
                         .HasForeignKey("CommissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Graduation.Domain.Stages.Stage", null)
+                    b.HasOne("Graduation.Domain.Stages.Stage", "Stage")
                         .WithMany()
                         .HasForeignKey("StageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Graduation.Domain.Students.Student", null)
+                    b.HasOne("Graduation.Domain.Students.Student", "Student")
                         .WithMany("CommissionStudents")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Commission");
+
+                    b.Navigation("Stage");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("Graduation.Domain.Documents.Document", b =>
@@ -1020,6 +1069,15 @@ namespace Graduation.Infrastructure.Migrations
                     b.HasOne("Graduation.Domain.QualificationWorks.QualificationWork", null)
                         .WithMany("Documents")
                         .HasForeignKey("QualificationWorkId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Graduation.Domain.Events.Event", b =>
+                {
+                    b.HasOne("Graduation.Domain.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -1144,7 +1202,8 @@ namespace Graduation.Infrastructure.Migrations
                 {
                     b.HasOne("Graduation.Domain.Commissions.Commission", "Commission")
                         .WithMany()
-                        .HasForeignKey("CommissionId");
+                        .HasForeignKey("CommissionId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Graduation.Domain.QualificationWorks.QualificationWork", null)
                         .WithMany("Stages")
@@ -1193,7 +1252,7 @@ namespace Graduation.Infrastructure.Migrations
             modelBuilder.Entity("Graduation.Domain.Students.Student", b =>
                 {
                     b.HasOne("Graduation.Domain.AcademicGroups.AcademicGroup", "AcademicGroup")
-                        .WithMany()
+                        .WithMany("Students")
                         .HasForeignKey("AcademicGroupId");
 
                     b.HasOne("Graduation.Domain.Users.User", "User")
@@ -1344,6 +1403,20 @@ namespace Graduation.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Graduation.Domain.AcademicGroups.AcademicGroup", b =>
+                {
+                    b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("Graduation.Domain.Commissions.Commission", b =>
+                {
+                    b.Navigation("AcademicGroups");
+
+                    b.Navigation("CommissionExperts");
+
+                    b.Navigation("CommissionStudents");
                 });
 
             modelBuilder.Entity("Graduation.Domain.QualificationWorks.QualificationWork", b =>

@@ -1,4 +1,5 @@
 ﻿using Graduation.Domain.Common;
+using Graduation.Domain.Stages;
 using Graduation.Domain.Users;
 
 namespace Graduation.Domain.Commissions;
@@ -9,6 +10,7 @@ public class CommissionExpert : Entity
     public User? Expert { get; set; }
     public Guid CommissionId { get; set; }
     public Guid StageId { get; set; }
+    public Stage? Stage { get; set; }
     public bool IsInvited { get; set; }
 
     public override IEnumerable<object?> GetEqualityComponents()

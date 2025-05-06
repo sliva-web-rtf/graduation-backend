@@ -11,7 +11,7 @@ namespace Graduation.Web.Controllers;
 public class QualificationWorksController(IMediator mediator) : ControllerBase
 {
     [Authorize]
-    [HttpGet]
+    [HttpGet("{id:guid}")]
     [ProducesResponseType<GetQualificationWorkQueryResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetQualificationWork(Guid id, string stage)
     {

@@ -20,9 +20,9 @@ public class GetCommissionsQueryHandler : IRequestHandler<GetCommissionsQuery, G
             .Include(c => c.Secretary)
             .Where(c => c.Year == request.Year)
             .ToListAsync(cancellationToken);
-        
+
         var formattedCommissions = commissions
-            .Select(c => new GetCommissionsQueryResultCommission(c.Name, c.Secretary!.GetInitials()))
+            .Select(c => new GetCommissionsQueryResultCommission(c.Id, c.Name, c.Secretary!.GetInitials()))
             .ToList();
 
         return new GetCommissionsQueryResult(formattedCommissions);

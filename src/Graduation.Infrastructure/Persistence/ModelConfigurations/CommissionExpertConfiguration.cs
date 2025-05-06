@@ -13,7 +13,7 @@ public class CommissionExpertConfiguration : IEntityTypeConfiguration<Commission
         builder.HasKey(x => new { x.UserId, x.CommissionId, x.StageId });
 
         builder.HasOne<User>(x => x.Expert).WithMany().HasForeignKey(x => x.UserId);
-        builder.HasOne<Commission>().WithMany().HasForeignKey(x => x.CommissionId);
-        builder.HasOne<Stage>().WithMany().HasForeignKey(x => x.StageId);
+        builder.HasOne<Commission>().WithMany(x => x.CommissionExperts).HasForeignKey(x => x.CommissionId);
+        builder.HasOne<Stage>(x => x.Stage).WithMany().HasForeignKey(x => x.StageId);
     }
 }

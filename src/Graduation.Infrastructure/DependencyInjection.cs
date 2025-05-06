@@ -10,6 +10,7 @@ public static class DependencyInjection
     {
         services.AddScoped<ICurrentYearProvider, CurrentYearProvider>();
         services.AddScoped<IUserRoleAssignmentProcessorProvider, UserRoleAssignmentProcessorProvider>();
+        services.AddScoped<IEventsCreator, EventCreator>();
         services.AddScoped<StudentUserRoleAssignmentProcessor>();
 
         return services;

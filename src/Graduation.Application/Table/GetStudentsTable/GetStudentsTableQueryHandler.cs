@@ -114,8 +114,6 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
     [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract")]
     private IQueryable<Student> Sort(IQueryable<Student> query, IList<SortStatus> sortStatuses, Stage stage)
     {
-        if (sortStatuses.Count == 0)
-            return query;
         var orderedQuery = query.OrderBy(x => 0);
         foreach (var sortStatus in sortStatuses)
         {
@@ -217,6 +215,9 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
 #pragma warning restore CS0472 // The result of the expression is always the same since a value of this type is never equal to 'null'
         }
 
+        orderedQuery = orderedQuery.ThenBy(s =>
+            string.Join(' ', s.User!.LastName, s.User.FirstName, s.User.Patronymic));
+
         return orderedQuery;
     }
 
@@ -299,9 +300,7 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
                 academicGroupCommission?.Secretary?.GetInitials(),
                 "Default");
 
-        var movementStatus = commissions.Count > 0
-            ? GetMovementStatus(realCommission, academicGroupCommission, commissions)
-            : "Default";
+        var movementStatus = GetMovementStatus(realCommission, academicGroupCommission, commissions);
 
         return new GetStudentsTableQueryCommission(
             realCommission.Name,
@@ -322,8 +321,9 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
         if (realCommission.Name == academicGroupCommission.Name)
             return "Default";
 
-        if (commissions.Contains(academicGroupCommission.Name) && commissions.Contains(realCommission.Name))
-            return "Default";
+        if (commissions.Count == 0 || (commissions.Contains(academicGroupCommission.Name) &&
+                                       commissions.Contains(realCommission.Name)))
+            return "Transferred";
 
         return commissions.Contains(realCommission.Name) ? "Ingoing" : "Outgoing";
     }

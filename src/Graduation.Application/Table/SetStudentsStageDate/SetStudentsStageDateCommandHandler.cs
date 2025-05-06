@@ -1,21 +1,18 @@
 ﻿using Graduation.Application.Interfaces.DataAccess;
+using Graduation.Application.Interfaces.Services;
 using Graduation.Domain.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Graduation.Application.Table.SetStudentsStageDate;
 
-public class SetStudentsStageDateCommandHandler : IRequestHandler<SetStudentsStageDateCommand>
+public class SetStudentsStageDateCommandHandler(IAppDbContext dbContext, IEventsCreator eventsCreator)
+    : IRequestHandler<SetStudentsStageDateCommand>
 {
-    private readonly IAppDbContext dbContext;
-
-    public SetStudentsStageDateCommandHandler(IAppDbContext dbContext)
-    {
-        this.dbContext = dbContext;
-    }
-
     public async Task Handle(SetStudentsStageDateCommand request, CancellationToken cancellationToken)
     {
+        await eventsCreator.Create("User tried to set defence date", request);
+
         var stage = await dbContext.Stages.SingleOrDefaultAsync(s => s.Name == request.Stage, cancellationToken)
                     ?? throw new DomainException("Stage not found");
 
