@@ -60,7 +60,7 @@ public class CommissionsController(IMediator mediator) : ControllerBase
         return Ok(await mediator.Send(request));
     }
 
-    [Authorize(Roles = $"{WellKnownRoles.HeadSecretary},{WellKnownRoles.Admin}")]
+    [Authorize(Roles = $"{WellKnownRoles.HeadSecretary},{WellKnownRoles.Admin},{WellKnownRoles.Secretary}")]
     [HttpDelete("{id:guid}")]
     [ProducesResponseType<DeleteCommissionCommandResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> DeleteCommission(Guid id)

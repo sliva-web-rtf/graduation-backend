@@ -19,14 +19,6 @@ public class DeleteCommissionCommandResultHandler(IAppDbContext dbContext, IEven
                          ?? throw new NotFoundException("Commission not found");
 
         dbContext.Commissions.Remove(commission);
-        var academicGroups = await dbContext.AcademicGroups
-            .Where(ag => ag.CommissionId == request.Id)
-            .ToListAsync(cancellationToken);
-
-        foreach (var academicGroup in academicGroups)
-        {
-            academicGroup.CommissionId = null;
-        }
 
         await dbContext.SaveChangesAsync(cancellationToken);
 

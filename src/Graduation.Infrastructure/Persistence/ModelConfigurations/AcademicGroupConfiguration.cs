@@ -15,7 +15,7 @@ public class AcademicGroupConfiguration : IEntityTypeConfiguration<AcademicGroup
         builder.HasKey(x => x.Id);
 
         builder.HasOne<Commission>(x => x.Commission).WithMany(x => x.AcademicGroups)
-            .HasForeignKey(x => x.CommissionId);
+            .HasForeignKey(x => x.CommissionId).OnDelete(DeleteBehavior.SetNull);
         builder.HasOne<AcademicProgram>(x => x.AcademicProgram).WithMany().HasForeignKey(x => x.AcademicProgramId);
         builder.HasOne<User>(x => x.FormattingReviewer).WithMany().HasForeignKey(x => x.FormattingReviewerId);
         builder.HasOne<Year>().WithMany().HasForeignKey(x => x.Year);
