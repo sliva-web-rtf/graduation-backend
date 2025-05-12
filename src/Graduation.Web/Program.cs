@@ -22,9 +22,12 @@ builder.Services.AddApi(environment, configuration)
 
 
 var app = builder.Build();
+if (environment.IsDevelopment())
+    app
+        .UseSwagger()
+        .UseSwaggerUI(new SwaggerUIOptionsSetup().Setup);
+
 app
-    .UseSwagger()
-    .UseSwaggerUI(new SwaggerUIOptionsSetup().Setup)
     .UseMiddleware<ApiExceptionMiddleware>()
     .UseRouting()
     .UseCors(CorsOptionsSetup.CorsPolicyName)
