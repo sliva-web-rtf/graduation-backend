@@ -23,16 +23,19 @@ builder.Services.AddApi(environment, configuration)
 
 
 var app = builder.Build();
-app
-    .UseSwagger(c =>
-    {
-        c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
+if (environment.IsDevelopment())
+    app
+        .UseSwagger(c =>
         {
-            swaggerDoc.Servers = new List<OpenApiServer>
-                { new() { Url = $"https://{httpReq.Host.Value}/api" } };
-        });
-    })
-    .UseSwaggerUI(new SwaggerUIOptionsSetup().Setup)
+            c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
+            {
+                swaggerDoc.Servers = new List<OpenApiServer>
+                    { new() { Url = $"https://{httpReq.Host.Value}/api" } };
+            });
+        })
+        .UseSwaggerUI(new SwaggerUIOptionsSetup().Setup);
+
+app
     .UseMiddleware<ApiExceptionMiddleware>()
     .UseRouting()
     .UseCors(CorsOptionsSetup.CorsPolicyName)

@@ -137,7 +137,7 @@ public class GetQualificationWorkQueryHandler(IAppDbContext dbContext)
         {
             var experts = await dbContext.CommissionExperts
                 .Include(c => c.Expert)
-                .Where(c => c.CommissionId == academicGroupCommission.Id)
+                .Where(c => c.CommissionId == academicGroupCommission.Id && c.StageId == stage.Id)
                 .ToListAsync();
             commission = new GetQualificationWorkQueryCommission(
                 academicGroupCommission.Name,
