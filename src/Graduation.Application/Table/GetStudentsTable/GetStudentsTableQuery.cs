@@ -6,6 +6,8 @@ namespace Graduation.Application.Table.GetStudentsTable;
 public record GetStudentsTableQuery(
     string Year,
     string Stage,
+    DateOnly? FromDate,
+    DateOnly? ToDate,
     IList<string> Commissions,
     IList<StudentStatus> StudentStatuses,
     int Page,

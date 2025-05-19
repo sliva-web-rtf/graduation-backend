@@ -45,6 +45,8 @@ public class StudentsController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> GetStudentsTable(
         [FromHeader(Name = "X-Year")] string year,
         [Required] string stage,
+        DateOnly? fromDate,
+        DateOnly? toDate,
         [FromQuery] List<string> commissions,
         [FromQuery] List<StudentStatus> studentStatuses,
         [Required] [Range(0, int.MaxValue)] int page,
@@ -52,7 +54,8 @@ public class StudentsController(IMediator mediator) : ControllerBase
         string? query,
         [FromBody] List<SortStatus> sort)
     {
-        var request = new GetStudentsTableQuery(year, stage, commissions, studentStatuses, page, size, query, sort);
+        var request = new GetStudentsTableQuery(year, stage, fromDate, toDate, commissions, studentStatuses, page, size,
+            query, sort);
         return Ok(await mediator.Send(request));
     }
 
