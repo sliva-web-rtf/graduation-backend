@@ -167,19 +167,23 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
                     orderedQuery = orderedQuery
                         .ThenBy(s =>
                             s.QualificationWork!.Stages.SingleOrDefault(qws => qws.StageId == stage.Id)!.Date == null)
-                        .ThenBy(s => s.QualificationWork!.Stages
-                            .SingleOrDefault(qws => qws.StageId == stage.Id)!.Date, sortStatus.Sort);
-                    break;
-                case "time":
-                    orderedQuery = orderedQuery
-                        .ThenBy(s =>
-                            s.QualificationWork!.Stages.SingleOrDefault(qws => qws.StageId == stage.Id)!.Date == null)
                         .ThenBy(s =>
                             s.QualificationWork!.Stages.SingleOrDefault(qws => qws.StageId == stage.Id)!.Time == null)
                         .ThenBy(s => s.QualificationWork!.Stages
                             .SingleOrDefault(qws => qws.StageId == stage.Id)!.Date, sortStatus.Sort)
                         .ThenBy(s => s.QualificationWork!.Stages
                             .SingleOrDefault(qws => qws.StageId == stage.Id)!.Time, sortStatus.Sort);
+                    break;
+                case "time":
+                    orderedQuery = orderedQuery
+                        .ThenBy(s =>
+                            s.QualificationWork!.Stages.SingleOrDefault(qws => qws.StageId == stage.Id)!.Time == null)
+                        .ThenBy(s =>
+                            s.QualificationWork!.Stages.SingleOrDefault(qws => qws.StageId == stage.Id)!.Date == null)
+                        .ThenBy(s => s.QualificationWork!.Stages
+                            .SingleOrDefault(qws => qws.StageId == stage.Id)!.Time, sortStatus.Sort)
+                        .ThenBy(s => s.QualificationWork!.Stages
+                            .SingleOrDefault(qws => qws.StageId == stage.Id)!.Date, sortStatus.Sort);
                     break;
                 case "isCommand":
                     orderedQuery = orderedQuery
@@ -242,6 +246,10 @@ public class GetStudentsTableQueryHandler : IRequestHandler<GetStudentsTableQuer
                                 EF.Functions.ILike(u.LastName!, p) ||
                                 EF.Functions.ILike(u.Patronymic!, p)))
             ))
+            .Where(s => request.FromDate == null || s.QualificationWork!.Stages.Where(st => st.StageId == stage.Id)
+                .Any(st => st.Date >= request.FromDate))
+            .Where(s => request.ToDate == null || s.QualificationWork!.Stages.Where(st => st.StageId == stage.Id)
+                .Any(st => st.Date <= request.ToDate))
             .Where(s => request.StudentStatuses.Count == 0 || request.StudentStatuses.Any(status => s.Status == status))
             .Where(s => request.Commissions.Count == 0 || request.Commissions
                 .Any(c => s.AcademicGroup!.Commission!.Name == c ||
