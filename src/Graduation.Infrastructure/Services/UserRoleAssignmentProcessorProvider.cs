@@ -3,15 +3,17 @@ using Graduation.Domain;
 
 namespace Graduation.Infrastructure.Services;
 
-public class UserRoleAssignmentProcessorProvider(IServiceProvider serviceProvider)
+public class UserRoleAssignmentProcessorProvider(
+    StudentUserRoleAssignmentProcessor studentUserRoleAssignmentProcessor,
+    SupervisorUserRoleAssignmentProcessor supervisorUserRoleAssignmentProcessor)
     : IUserRoleAssignmentProcessorProvider
 {
     public IUserRoleAssignmentProcessor? GetProcessor(string role)
     {
         return role switch
         {
-            WellKnownRoles.Student => (serviceProvider.GetService(typeof(StudentUserRoleAssignmentProcessor)) as
-                IUserRoleAssignmentProcessor)!,
+            WellKnownRoles.Student => studentUserRoleAssignmentProcessor,
+            WellKnownRoles.Supervisor => supervisorUserRoleAssignmentProcessor,
             _ => null
         };
     }

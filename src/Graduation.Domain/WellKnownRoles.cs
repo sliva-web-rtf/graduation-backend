@@ -8,4 +8,14 @@ public static class WellKnownRoles
     public const string HeadSecretary = "HeadSecretary";
     public const string Expert = "Expert";
     public const string Admin = "Admin";
+
+    public static List<string> Roles = new()
+    {
+        Student,
+        Supervisor,
+        Secretary,
+        HeadSecretary,
+        Expert,
+        Admin
+    };
 }
