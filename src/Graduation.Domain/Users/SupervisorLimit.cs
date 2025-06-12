@@ -6,6 +6,7 @@ public class SupervisorLimit : Entity
 {
     public SupervisorLimit(User user)
     {
+        User = user;
     }
 
     public SupervisorLimit()
