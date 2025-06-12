@@ -1,4 +1,5 @@
 ﻿using Graduation.Application.Interfaces.DataAccess;
+using Graduation.Application.Interfaces.Services;
 using Graduation.Domain.Exceptions;
 using Graduation.Domain.Stages;
 using MediatR;
@@ -6,12 +7,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Graduation.Application.QualificationWorks.CopyStageData;
 
-public class CopyStageDataCommandHandler(IAppDbContext appDbContext)
+public class CopyStageDataCommandHandler(IAppDbContext appDbContext, IEventsCreator eventsCreator)
     : IRequestHandler<CopyStageDataCommand, CopyStageDataCommandResult>
 {
     public async Task<CopyStageDataCommandResult> Handle(CopyStageDataCommand request,
         CancellationToken cancellationToken)
     {
+        await eventsCreator.Create("User tried to copy stage data", request);
+
         var stageTo = await appDbContext.Stages.FirstOrDefaultAsync(s => s.Name == request.StageTo, cancellationToken)
                       ?? throw new NotFoundException("StageTo not found");
 

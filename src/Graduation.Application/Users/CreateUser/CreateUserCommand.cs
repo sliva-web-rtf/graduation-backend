@@ -11,8 +11,6 @@ public record CreateUserCommand(
     string? About,
     List<string> Roles,
     int? SupervisorLimits,
-    Guid? AcademicGroupId)
-    : IRequest<CreateUserCommandResult>
-{
-    public string Year { get; set; }
-}
+    Guid? AcademicGroupId,
+    string Year)
+    : IRequest<CreateUserCommandResult>;

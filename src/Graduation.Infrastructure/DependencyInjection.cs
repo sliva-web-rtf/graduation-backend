@@ -9,10 +9,7 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         services.AddScoped<ICurrentYearProvider, CurrentYearProvider>();
-        services.AddScoped<IUserRoleAssignmentProcessorProvider, UserRoleAssignmentProcessorProvider>();
         services.AddScoped<IEventsCreator, EventCreator>();
-        services.AddScoped<StudentUserRoleAssignmentProcessor>();
-        services.AddScoped<SupervisorUserRoleAssignmentProcessor>();
 
         return services;
     }

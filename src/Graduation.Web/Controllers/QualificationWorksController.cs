@@ -22,7 +22,7 @@ public class QualificationWorksController(IMediator mediator) : ControllerBase
         return Ok(await mediator.Send(request));
     }
 
-    [Authorize(Roles = WellKnownRoles.Admin)]
+    [Authorize(Roles = $"{WellKnownRoles.HeadSecretary},{WellKnownRoles.Admin}")]
     [HttpPost("copy-stage-data")]
     [ProducesResponseType<CopyStageDataCommandResult>(StatusCodes.Status200OK)]
     public async Task<IActionResult> CopyStageData(
