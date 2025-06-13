@@ -41,12 +41,12 @@ public class CopyStageDataCommandHandler(IAppDbContext appDbContext, IEventsCrea
                 StageId = stageTo.Id,
                 QualificationWorkId = qualificationWork.Id,
                 CommissionId = oldQwStage.CommissionId,
-                TopicId = qualificationWork.TopicId,
-                SupervisorId = qualificationWork.SupervisorId,
-                QualificationWorkRoleId = qualificationWork.QualificationWorkRoleId,
-                TopicName = qualificationWork.Name,
-                CompanyName = qualificationWork.CompanyName,
-                CompanySupervisorName = qualificationWork.CompanySupervisorName,
+                TopicId = oldQwStage.TopicId,
+                SupervisorId = oldQwStage.SupervisorId,
+                QualificationWorkRoleId = oldQwStage.QualificationWorkRoleId,
+                TopicName = oldQwStage.TopicName,
+                CompanyName = oldQwStage.CompanyName,
+                CompanySupervisorName = oldQwStage.CompanySupervisorName,
                 IsCommand = oldQwStage.IsCommand
             };
             appDbContext.QualificationWorkStages.Add(qwStage);
