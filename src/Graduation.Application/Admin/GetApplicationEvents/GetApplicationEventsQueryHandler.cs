@@ -16,6 +16,7 @@ public class GetApplicationEventsQueryHandler(IAppDbContext appDbContext)
 
         var events = await GetEventsQuery(request)
             .Include(e => e.User)
+            .OrderByDescending(e => e.CreatedAt)
             .Skip(request.Page * request.PageSize)
             .Take(request.PageSize)
             .ToListAsync(cancellationToken);
