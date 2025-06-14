@@ -11,6 +11,6 @@ public class EventConfiguration : IEntityTypeConfiguration<Event>
     {
         builder.HasKey(x => x.Id);
 
-        builder.HasOne<User>().WithMany().HasForeignKey(x => x.UserId);
+        builder.HasOne<User>(x => x.User).WithMany().HasForeignKey(x => x.UserId);
     }
 }

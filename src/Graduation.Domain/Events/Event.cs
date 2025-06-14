@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Graduation.Domain.Common;
+using Graduation.Domain.Users;
 
 namespace Graduation.Domain.Events;
 
@@ -16,6 +17,7 @@ public class Event : Entity<Guid>
     public string? Path { get; set; }
     public DateTime CreatedAt { get; set; }
     public Guid UserId { get; set; }
+    public User? User { get; set; }
     public string? Message { get; set; }
 
     [Column(TypeName = "jsonb")]
